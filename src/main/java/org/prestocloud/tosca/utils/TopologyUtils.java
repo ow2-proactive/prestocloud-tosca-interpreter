@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.prestocloud.tosca.model.definitions.Interface;
 import org.prestocloud.tosca.model.definitions.Operation;
 import org.prestocloud.tosca.model.definitions.ScalarPropertyValue;
@@ -21,14 +23,16 @@ import org.prestocloud.tosca.model.templates.SubstitutionTarget;
 import org.prestocloud.tosca.model.templates.Topology;
 import org.prestocloud.tosca.normative.constants.NormativeCapabilityTypes;
 import org.prestocloud.tosca.normative.constants.NormativeComputeConstants;
-import org.apache.commons.collections4.MapUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.elasticsearch.common.collect.Lists;
 import org.yaml.snakeyaml.error.Mark;
 import org.yaml.snakeyaml.nodes.Node;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import prestocloud.exceptions.NotFoundException;
 import prestocloud.tosca.parser.ParsingError;
 import prestocloud.tosca.parser.ParsingErrorLevel;
@@ -36,10 +40,6 @@ import prestocloud.tosca.parser.impl.ErrorCode;
 import prestocloud.utils.MapUtil;
 import prestocloud.utils.NameValidationUtils;
 import prestocloud.utils.PropertyUtil;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class TopologyUtils {

@@ -2,8 +2,6 @@ package org.prestocloud.tosca.model.definitions;
 
 import java.util.Map;
 
-import org.elasticsearch.annotation.ObjectField;
-
 import com.google.common.collect.Maps;
 
 import lombok.Getter;
@@ -16,14 +14,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-//@FormProperties({ "operations" })
 public class Interface {
     /** The type of the interface. */
     private String type;
     /** Description of the interface. */
     private String description;
     /** Defines an operation available to manage particular aspects of the Node Type. */
-    @ObjectField(enabled = false)
     private Map<String, Operation> operations = Maps.newHashMap();
 
     /**

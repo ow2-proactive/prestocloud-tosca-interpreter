@@ -4,14 +4,12 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.elasticsearch.annotation.ObjectField;
-
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import prestocloud.json.deserializer.PropertyConstraintDeserializer;
-import prestocloud.tosca.container.validation.ToscaPropertyConstraintDuplicate;
 import lombok.Getter;
 import lombok.Setter;
+import prestocloud.json.deserializer.PropertyConstraintDeserializer;
+import prestocloud.tosca.container.validation.ToscaPropertyConstraintDuplicate;
 
 /**
  * Defines the condition to be applied on the policy attribute.
@@ -19,7 +17,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PolicyCondition {
-    @ObjectField(enabled = false)
     @Valid
     @ToscaPropertyConstraintDuplicate
     @JsonDeserialize(contentUsing = PropertyConstraintDeserializer.class)

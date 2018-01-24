@@ -5,14 +5,15 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
-import org.elasticsearch.common.collect.Maps;
+import org.prestocloud.tosca.model.definitions.Interface;
 import org.springframework.stereotype.Component;
 import org.yaml.snakeyaml.nodes.MappingNode;
 import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.nodes.ScalarNode;
 import org.yaml.snakeyaml.nodes.SequenceNode;
 
-import org.prestocloud.tosca.model.definitions.Interface;
+import com.google.common.collect.Maps;
+
 import prestocloud.tosca.parser.ParserUtils;
 import prestocloud.tosca.parser.ParsingContextExecution;
 import prestocloud.tosca.parser.impl.base.BaseParserFactory;

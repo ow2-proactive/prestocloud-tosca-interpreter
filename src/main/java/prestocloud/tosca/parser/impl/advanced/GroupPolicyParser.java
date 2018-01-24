@@ -5,7 +5,6 @@ import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 
-import org.elasticsearch.common.collect.Maps;
 import org.prestocloud.tosca.model.templates.AbstractPolicy;
 import org.prestocloud.tosca.model.templates.GenericPolicy;
 import org.prestocloud.tosca.model.templates.HaPolicy;
@@ -14,6 +13,8 @@ import org.springframework.stereotype.Component;
 import org.yaml.snakeyaml.nodes.MappingNode;
 import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.nodes.ScalarNode;
+
+import com.google.common.collect.Maps;
 
 import prestocloud.tosca.parser.INodeParser;
 import prestocloud.tosca.parser.ParserUtils;

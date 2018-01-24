@@ -4,17 +4,15 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.prestocloud.tosca.model.definitions.PropertyConstraint;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-
-import org.prestocloud.tosca.model.definitions.PropertyConstraint;
-import org.elasticsearch.annotation.ESObject;
-
 import prestocloud.json.deserializer.PropertyConstraintDeserializer;
 import prestocloud.tosca.container.validation.ToscaPropertyConstraintDuplicate;
-
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 /**
  * Complex data type used for property definition
@@ -22,7 +20,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 @Getter
 @Setter
 @EqualsAndHashCode(of = {}, callSuper = true)
-@ESObject
 public class PrimitiveDataType extends DataType {
 
     /**

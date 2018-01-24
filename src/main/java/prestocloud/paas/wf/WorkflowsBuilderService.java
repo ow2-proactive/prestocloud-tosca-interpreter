@@ -22,10 +22,12 @@ import org.prestocloud.tosca.model.types.AbstractToscaType;
 import org.prestocloud.tosca.model.workflow.Workflow;
 import org.prestocloud.tosca.model.workflow.activities.AbstractWorkflowActivity;
 import org.prestocloud.tosca.model.workflow.declarative.DefaultDeclarativeWorkflows;
-import org.elasticsearch.common.collect.Lists;
-import org.elasticsearch.common.collect.Maps;
 import org.springframework.stereotype.Component;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
+import lombok.extern.slf4j.Slf4j;
 import prestocloud.component.ICSARRepositorySearchService;
 import prestocloud.exceptions.NotFoundException;
 import prestocloud.paas.wf.exception.BadWorkflowOperationException;
@@ -36,7 +38,6 @@ import prestocloud.topology.task.WorkflowTask;
 import prestocloud.tosca.parser.ToscaParser;
 import prestocloud.utils.AlienUtils;
 import prestocloud.utils.YamlParserUtil;
-import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j

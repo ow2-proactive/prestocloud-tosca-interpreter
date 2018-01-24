@@ -19,10 +19,8 @@ import prestocloud.tosca.container.validation.ToscaPropertyType;
 @ToscaPropertyConstraint
 @ToscaPropertyDefaultValueConstraints(groups = { ToscaPropertyPostValidationGroup.class })
 @JsonIgnoreProperties(ignoreUnknown = true)
-//@FormProperties({ "type", "default", "description" })
 public class AttributeDefinition implements IValue {
     @ToscaPropertyType
-    //@FormValidValues({ "boolean", "string", "float", "integer", "version" })
     private String type;
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)

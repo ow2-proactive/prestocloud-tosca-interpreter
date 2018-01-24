@@ -2,7 +2,6 @@ package prestocloud.tosca.parser.impl.base;
 
 import java.util.Map;
 
-import org.elasticsearch.common.collect.Maps;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -11,6 +10,8 @@ import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.nodes.NodeTuple;
 import org.yaml.snakeyaml.nodes.ScalarNode;
 import org.yaml.snakeyaml.nodes.SequenceNode;
+
+import com.google.common.collect.Maps;
 
 import lombok.AllArgsConstructor;
 import prestocloud.tosca.parser.INodeParser;

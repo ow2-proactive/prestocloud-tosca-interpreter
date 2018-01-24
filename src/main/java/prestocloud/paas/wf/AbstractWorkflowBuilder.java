@@ -16,8 +16,8 @@ import org.prestocloud.tosca.model.workflow.WorkflowStep;
 import org.prestocloud.tosca.model.workflow.activities.AbstractWorkflowActivity;
 import org.prestocloud.tosca.model.workflow.activities.DelegateWorkflowActivity;
 import org.apache.commons.lang3.StringUtils;
-import org.elasticsearch.common.collect.Lists;
-import org.elasticsearch.common.collect.Maps;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import prestocloud.exceptions.AlreadyExistException;
 import prestocloud.paas.wf.exception.BadWorkflowOperationException;

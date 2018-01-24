@@ -1,63 +1,37 @@
 package org.prestocloud.tosca.model;
 
-import static prestocloud.dao.model.FetchContext.SUMMARY;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import org.elasticsearch.annotation.ESObject;
-import org.elasticsearch.annotation.Id;
-import org.elasticsearch.annotation.NestedObject;
-import org.elasticsearch.annotation.ObjectField;
-import org.elasticsearch.annotation.StringField;
-import org.elasticsearch.annotation.query.FetchContext;
-import org.elasticsearch.annotation.query.TermFilter;
-import org.elasticsearch.annotation.query.TermsFacet;
-import org.elasticsearch.mapping.IndexType;
-
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import prestocloud.exceptions.IndexingServiceException;
 import prestocloud.model.common.IWorkspaceResource;
 import prestocloud.model.common.Tag;
 import prestocloud.security.IManagedSecuredResource;
 import prestocloud.tosca.parser.ParsingContextExecution;
 import prestocloud.utils.version.Version;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 @Setter
 @EqualsAndHashCode(of = { "name", "version" })
-@ESObject
 public class Csar implements IManagedSecuredResource, IWorkspaceResource {
-    @TermFilter
-    @StringField(indexType = IndexType.not_analyzed)
-    @FetchContext(contexts = { SUMMARY }, include = { true })
     private String name;
 
-    @TermFilter
-    @StringField(indexType = IndexType.not_analyzed)
-    @FetchContext(contexts = { SUMMARY }, include = { true })
     private String version;
 
-    @ObjectField
-    @TermFilter(paths = { "majorVersion", "minorVersion", "incrementalVersion", "buildNumber", "qualifier" })
     private Version nestedVersion;
 
-    @TermFilter
-    @StringField(indexType = IndexType.not_analyzed)
-    @TermsFacet
     private String workspace;
 
     /** This is the hashcode of all files in the archive. */
-    @StringField(indexType = IndexType.not_analyzed)
-    @FetchContext(contexts = { SUMMARY }, include = { true })
+
     private String hash;
 
     /** This is the hashcode of the definition file only (yaml). */
-    @StringField(indexType = IndexType.not_analyzed)
-    @FetchContext(contexts = { SUMMARY }, include = { true })
+
     private String definitionHash;
 
     /** Eventually the id of the application. */
@@ -72,23 +46,18 @@ public class Csar implements IManagedSecuredResource, IWorkspaceResource {
 
     private String toscaDefaultNamespace;
 
-    @TermsFacet
-    @StringField(indexType = IndexType.not_analyzed, includeInAll = false)
     private String templateAuthor;
 
     private String description;
 
-    @NestedObject(nestedClass = CSARDependency.class)
     private Set<CSARDependency> dependencies;
 
     private String license;
 
     /** Archive metadata. */
-    @NestedObject(nestedClass = Tag.class)
     private List<Tag> tags;
 
     /** Alien 4 Cloud meta-data to know how the archive has been imported. */
-    @TermsFacet
     private String importSource;
     /** Date on which the archive has been imported or updated in alien4cloud. */
     private Date importDate;
@@ -109,9 +78,6 @@ public class Csar implements IManagedSecuredResource, IWorkspaceResource {
         this.nestedVersion = new Version(version);
     }
 
-    @Id
-    @StringField(indexType = IndexType.not_analyzed, includeInAll = false)
-    @FetchContext(contexts = { SUMMARY }, include = { true })
     public String getId() {
         return createId(name, version);
     }

@@ -1,7 +1,5 @@
 package org.prestocloud.tosca.model.templates;
 
-import static prestocloud.dao.model.FetchContext.SUMMARY;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -13,15 +11,6 @@ import org.prestocloud.tosca.model.Csar;
 import org.prestocloud.tosca.model.definitions.DeploymentArtifact;
 import org.prestocloud.tosca.model.definitions.PropertyDefinition;
 import org.prestocloud.tosca.model.workflow.Workflow;
-import org.elasticsearch.annotation.ESObject;
-import org.elasticsearch.annotation.Id;
-import org.elasticsearch.annotation.MapKeyValue;
-import org.elasticsearch.annotation.NestedObject;
-import org.elasticsearch.annotation.ObjectField;
-import org.elasticsearch.annotation.StringField;
-import org.elasticsearch.annotation.query.FetchContext;
-import org.elasticsearch.annotation.query.TermFilter;
-import org.elasticsearch.mapping.IndexType;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -30,6 +19,10 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.collect.Sets;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import prestocloud.json.deserializer.NodeTemplateDeserializer;
 import prestocloud.model.common.IDatableResource;
 import prestocloud.model.common.IWorkspaceResource;
@@ -39,35 +32,22 @@ import prestocloud.utils.jackson.ConditionalOnAttribute;
 import prestocloud.utils.jackson.JSonMapEntryArrayDeSerializer;
 import prestocloud.utils.jackson.JSonMapEntryArraySerializer;
 import prestocloud.utils.version.Version;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
 @Setter
-@ESObject
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Topology implements IDatableResource, IWorkspaceResource {
-    @StringField(indexType = IndexType.not_analyzed)
-    @TermFilter
     private String archiveName;
 
-    @StringField(indexType = IndexType.not_analyzed)
-    @TermFilter
     private String archiveVersion;
 
-    @ObjectField
     private Version nestedVersion;
 
-    @TermFilter
-    @StringField(indexType = IndexType.not_analyzed)
     private String workspace;
 
-    @StringField(indexType = IndexType.no)
     private String description;
 
     private Date creationDate;
@@ -75,26 +55,18 @@ public class Topology implements IDatableResource, IWorkspaceResource {
     private Date lastUpdateDate = new Date();
 
     /** The list of dependencies of this topology. */
-    @NestedObject(nestedClass = CSARDependency.class)
-    @FetchContext(contexts = { SUMMARY }, include = { false })
     private Set<CSARDependency> dependencies = Sets.newHashSet();
 
-    @MapKeyValue
     @ConditionalOnAttribute(ConditionalAttributes.ES)
     @JsonDeserialize(using = JSonMapEntryArrayDeSerializer.class, contentUsing = NodeTemplateDeserializer.class)
     @JsonSerialize(using = JSonMapEntryArraySerializer.class)
-    @FetchContext(contexts = { SUMMARY }, include = { false })
     private Map<String, NodeTemplate> nodeTemplates;
 
-    @MapKeyValue
     @ConditionalOnAttribute(ConditionalAttributes.ES)
     @JsonDeserialize(using = JSonMapEntryArrayDeSerializer.class)
     @JsonSerialize(using = JSonMapEntryArraySerializer.class)
-    @FetchContext(contexts = { SUMMARY }, include = { false })
     private Map<String, PolicyTemplate> policies;
 
-    @ObjectField(enabled = false)
-    @FetchContext(contexts = { SUMMARY }, include = { false })
     private Map<String, PropertyDefinition> inputs;
 
     /**
@@ -104,8 +76,6 @@ public class Topology implements IDatableResource, IWorkspaceResource {
      * <li>value is a list of node template property names.</li>
      * </ul>
      */
-    @ObjectField(enabled = false)
-    @FetchContext(contexts = { SUMMARY }, include = { false })
     private Map<String, Set<String>> outputProperties;
 
     /**
@@ -116,8 +86,6 @@ public class Topology implements IDatableResource, IWorkspaceResource {
      * <li>value is a list of output property names.</li>
      * </ul>
      */
-    @ObjectField(enabled = false)
-    @FetchContext(contexts = { SUMMARY }, include = { false })
     private Map<String, Map<String, Set<String>>> outputCapabilityProperties;
 
     /**
@@ -127,48 +95,35 @@ public class Topology implements IDatableResource, IWorkspaceResource {
      * <li>value is a list of node template attribute names.</li>
      * </ul>
      */
-    @ObjectField(enabled = false)
-    @FetchContext(contexts = { SUMMARY }, include = { false })
     private Map<String, Set<String>> outputAttributes;
 
     /**
      * These artifacts will be given at deployment time and can be shared by several nodes.
      */
-    @ObjectField(enabled = false)
-    @FetchContext(contexts = { SUMMARY }, include = { false })
     private Map<String, DeploymentArtifact> inputArtifacts;
 
-    @ObjectField(enabled = false)
-    @FetchContext(contexts = { SUMMARY }, include = { false })
     private Map<String, NodeGroup> groups;
 
     /**
      * When not null, describe how this topology can be used to substitute a node type in another topology (topology composition).
      */
-    @ObjectField(enabled = false)
-    @FetchContext(contexts = { SUMMARY }, include = { false })
     private SubstitutionMapping substitutionMapping;
 
     /**
      * All the workflows associated with this topology.
      */
-    @ObjectField(enabled = false)
-    @FetchContext(contexts = { SUMMARY }, include = { false })
     private Map<String, Workflow> workflows;
 
     /**
      * This fields save workflows as it's declared in declarative workflows without any post processing.
      * This is necessary as post processing (flatten, remove unnecessary links, nodes) may change the workflow and make the declarative workflows not working.
      */
-    @ObjectField(enabled = false)
-    @FetchContext(contexts = { SUMMARY }, include = { false })
     private Map<String, Workflow> unprocessedWorkflows = new HashMap<>();
 
     /* Archive meta-data are also set as topology tags. */
-    @NestedObject(nestedClass = Tag.class)
     private List<Tag> tags;
 
-    @Id
+    //@Id
     public String getId() {
         return Csar.createId(archiveName, archiveVersion);
     }

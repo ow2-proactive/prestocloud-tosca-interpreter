@@ -18,7 +18,6 @@ import prestocloud.tosca.properties.constraints.ConstraintUtil;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 @EqualsAndHashCode(callSuper = false, of = { "inRange" })
-//@FormProperties({ "rangeMinValue", "rangeMaxValue" })
 public class InRangeConstraint extends AbstractPropertyConstraint {
 
     @Getter

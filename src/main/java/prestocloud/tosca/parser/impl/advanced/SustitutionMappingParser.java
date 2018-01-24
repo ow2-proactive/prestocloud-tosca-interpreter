@@ -1,5 +1,7 @@
 package prestocloud.tosca.parser.impl.advanced;
 
+import static prestocloud.tosca.parser.ToscaParser.ALIEN_DSL_140;
+
 import java.util.List;
 import java.util.Map;
 
@@ -9,12 +11,14 @@ import javax.annotation.Resource;
 import org.prestocloud.tosca.model.templates.SubstitutionMapping;
 import org.prestocloud.tosca.model.templates.SubstitutionTarget;
 import org.prestocloud.tosca.model.templates.Topology;
-import org.elasticsearch.common.collect.Maps;
 import org.springframework.stereotype.Component;
 import org.yaml.snakeyaml.nodes.MappingNode;
 import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.nodes.NodeTuple;
 
+import com.google.common.collect.Maps;
+
+import lombok.extern.slf4j.Slf4j;
 import prestocloud.tosca.parser.INodeParser;
 import prestocloud.tosca.parser.ParsingContextExecution;
 import prestocloud.tosca.parser.ParsingError;
@@ -23,9 +27,6 @@ import prestocloud.tosca.parser.impl.ErrorCode;
 import prestocloud.tosca.parser.impl.base.BaseParserFactory;
 import prestocloud.tosca.parser.impl.base.ListParser;
 import prestocloud.tosca.parser.impl.base.ScalarParser;
-import lombok.extern.slf4j.Slf4j;
-
-import static prestocloud.tosca.parser.ToscaParser.ALIEN_DSL_140;
 
 @Component
 @Slf4j

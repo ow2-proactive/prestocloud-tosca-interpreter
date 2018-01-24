@@ -2,9 +2,6 @@ package org.prestocloud.tosca.model.definitions;
 
 import java.util.Map;
 
-import org.elasticsearch.annotation.ObjectField;
-import org.elasticsearch.annotation.query.TermsFacet;
-
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -25,12 +22,10 @@ import prestocloud.json.serializer.BoundSerializer;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = { "id" })
-//@FormProperties({ "type", "lowerBound", "upperBound" })
 public class CapabilityDefinition implements UpperBoundedDefinition {
     private String id;
     private String description;
     /** Identifies the type of the capability. */
-    //@FormSuggestion(fromClass = CapabilityType.class, path = "elementId")
     private String type;
 
     /**
@@ -42,11 +37,9 @@ public class CapabilityDefinition implements UpperBoundedDefinition {
     private int upperBound = Integer.MAX_VALUE;
 
     /** Map of properties value(s) to define the capability. */
-    @ObjectField(enabled = false)
     @JsonDeserialize(contentUsing = PropertyValueDeserializer.class)
     private Map<String, AbstractPropertyValue> properties;
 
-    @TermsFacet
     private String[] validSources;
 
     /** Constructor for single line parsing definition based on type. */

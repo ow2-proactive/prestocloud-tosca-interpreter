@@ -1,17 +1,16 @@
 package org.prestocloud.tosca.model.templates;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.util.Map;
+
 import org.prestocloud.tosca.model.definitions.AbstractPropertyValue;
 import org.prestocloud.tosca.model.definitions.DeploymentArtifact;
 import org.prestocloud.tosca.model.definitions.IValue;
 import org.prestocloud.tosca.model.definitions.Interface;
 import org.prestocloud.tosca.model.instances.NodeInstance;
-import org.elasticsearch.annotation.StringField;
-import org.elasticsearch.mapping.IndexType;
 
-import java.util.Map;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * A {@link NodeTemplate} that binds to an exiting running service.
@@ -23,7 +22,6 @@ public class ServiceNodeTemplate extends NodeTemplate {
 
     private String serviceResourceId;
 
-    @StringField(indexType = IndexType.not_analyzed, includeInAll = false)
     private Map<String, String> attributeValues;
 
     public ServiceNodeTemplate(NodeInstance nodeInstance) {

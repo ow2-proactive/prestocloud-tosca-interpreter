@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.prestocloud.tosca.model.workflow.Workflow;
-import org.elasticsearch.common.collect.Lists;
 
-import prestocloud.paas.wf.model.Path;
+import com.google.common.collect.Lists;
+
 import prestocloud.paas.wf.TopologyContext;
+import prestocloud.paas.wf.model.Path;
 import prestocloud.paas.wf.util.WorkflowGraphUtils;
 
 /**

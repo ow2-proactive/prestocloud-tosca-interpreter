@@ -2,8 +2,6 @@ package org.prestocloud.tosca.model.templates;
 
 import java.util.Map;
 
-import org.elasticsearch.annotation.MapKeyValue;
-import org.elasticsearch.annotation.ObjectField;
 import org.prestocloud.tosca.model.definitions.DeploymentArtifact;
 import org.prestocloud.tosca.model.definitions.IValue;
 import org.prestocloud.tosca.model.definitions.Interface;
@@ -32,7 +30,6 @@ public abstract class AbstractInstantiableTemplate extends AbstractTemplate {
     /**
      * Attributes of the node template
      */
-    @ObjectField(enabled = false)
     @ConditionalOnAttribute(ConditionalAttributes.REST)
     @JsonDeserialize(using = JSonMapEntryArrayDeSerializer.class, contentUsing = AttributeDeserializer.class)
     @JsonSerialize(using = JSonMapEntryArraySerializer.class)
@@ -41,7 +38,6 @@ public abstract class AbstractInstantiableTemplate extends AbstractTemplate {
     /**
      * The deployment artifacts
      */
-    @MapKeyValue
     @ConditionalOnAttribute(value = { ConditionalAttributes.ES_1_2 })
     @JsonDeserialize(using = JSonMapEntryArrayDeSerializer.class)
     @JsonSerialize(using = JSonMapEntryArraySerializer.class)
@@ -50,7 +46,6 @@ public abstract class AbstractInstantiableTemplate extends AbstractTemplate {
     /**
      * The interfaces that are defined at the template level (overriding type's one).
      */
-    @MapKeyValue
     @ConditionalOnAttribute(value = { ConditionalAttributes.REST, ConditionalAttributes.ES_1_2 })
     private Map<String, Interface> interfaces;
 }

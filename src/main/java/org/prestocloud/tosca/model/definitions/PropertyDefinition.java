@@ -6,11 +6,6 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import org.elasticsearch.annotation.BooleanField;
-import org.elasticsearch.annotation.ObjectField;
-import org.elasticsearch.annotation.StringField;
-import org.elasticsearch.mapping.IndexType;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -42,20 +37,15 @@ import prestocloud.tosca.container.validation.ToscaPropertyType;
 @ToscaPropertyConstraint
 @ToscaPropertyDefaultValueConstraints(groups = { ToscaPropertyPostValidationGroup.class })
 @JsonIgnoreProperties(ignoreUnknown = true)
-//@FormProperties({ "type", "required", "default", "description" })
 @ToString
 public class PropertyDefinition implements IValue {
-    @StringField(indexType = IndexType.not_analyzed)
     @ToscaPropertyType
-    //@FormValidValues({ "string", "integer", "float", "boolean", "version" })
     @NotNull
     private String type;
 
-    @ObjectField(enabled = false)
     private PropertyDefinition entrySchema;
 
     @NotNull
-    @BooleanField(index = IndexType.no)
     private boolean required = true;
 
     @JsonProperty("default")
@@ -63,30 +53,15 @@ public class PropertyDefinition implements IValue {
     @Setter(AccessLevel.NONE)
     private PropertyValue defaultValue;
 
-    @StringField(indexType = IndexType.no)
     private String description;
 
-    @StringField(indexType = IndexType.no)
     private String suggestionId;
 
-    @ObjectField(enabled = false)
     @Valid
     @ToscaPropertyConstraintDuplicate
     @JsonDeserialize(contentUsing = PropertyConstraintDeserializer.class)
-    /*@FormContentTypes({ @FormType(discriminantProperty = "equal", label = "CONSTRAINT.EQUAL", implementation = EqualConstraint.class),
-            @FormType(discriminantProperty = "greaterThan", label = "CONSTRAINT.GREATER_THAN", implementation = GreaterThanConstraint.class),
-            @FormType(discriminantProperty = "greaterOrEqual", label = "CONSTRAINT.GREATER_OR_EQUAL", implementation = GreaterOrEqualConstraint.class),
-            @FormType(discriminantProperty = "lessThan", label = "CONSTRAINT.LESS_THAN", implementation = LessThanConstraint.class),
-            @FormType(discriminantProperty = "lessOrEqual", label = "CONSTRAINT.LESS_OR_EQUAL", implementation = LessOrEqualConstraint.class),
-            @FormType(discriminantProperty = "inRange", label = "CONSTRAINT.IN_RANGE", implementation = InRangeConstraint.class),
-            @FormType(discriminantProperty = "length", label = "CONSTRAINT.LENGTH", implementation = LengthConstraint.class),
-            @FormType(discriminantProperty = "maxLength", label = "CONSTRAINT.MAX_LENGTH", implementation = MaxLengthConstraint.class),
-            @FormType(discriminantProperty = "minLength", label = "CONSTRAINT.MIN_LENGTH", implementation = MinLengthConstraint.class),
-            @FormType(discriminantProperty = "pattern", label = "CONSTRAINT.PATTERN", implementation = PatternConstraint.class),
-            @FormType(discriminantProperty = "validValues", label = "CONSTRAINT.VALID_VALUES", implementation = ValidValuesConstraint.class) })*/
     private List<PropertyConstraint> constraints;
 
-    @BooleanField(index = IndexType.no)
     private boolean isPassword;
 
     public PropertyDefinition(PropertyDefinition from) {
@@ -101,7 +76,6 @@ public class PropertyDefinition implements IValue {
     }
 
     @JsonDeserialize(using = PropertyValueDeserializer.class)
-    @ObjectField(enabled = false)
     public PropertyValue getDefault() {
         return this.defaultValue;
     }

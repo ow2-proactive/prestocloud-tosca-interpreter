@@ -23,7 +23,6 @@ import prestocloud.json.deserializer.OperationParameterDeserializer;
 @Getter
 @Setter
 @NoArgsConstructor
-//@FormProperties({ "description" })
 public class Operation {
     /** Implementation artifact for the interface. */
     private ImplementationArtifact implementationArtifact;

@@ -73,12 +73,6 @@
   <dependencies>
 
     <dependency>
-      <groupId>org.elasticsearch</groupId>
-      <artifactId>elasticsearch</artifactId>
-      <version>${elasticsearch.version}</version>
-    </dependency>
-
-    <dependency>
       <groupId>uk.com.robust-it</groupId>
       <artifactId>cloning</artifactId>
       <version>${cloning.version}</version>
@@ -121,18 +115,6 @@
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-compress</artifactId>
       <version>${commons-compress.version}</version>
-    </dependency>
-
-    <!-- ALIEN4CLOUD ELASTOCSEARCH CUSTOM -->
-    <dependency>
-      <groupId>org.alien4cloud</groupId>
-      <artifactId>elasticsearch-mapping</artifactId>
-      <version>${es-mapping.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.alien4cloud</groupId>
-      <artifactId>elasticsearch-annotations</artifactId>
-      <version>${es-mapping.version}</version>
     </dependency>
 
     <dependency>
@@ -296,14 +278,6 @@
   </dependencies>
 
   <repositories>
-      <repository>
-          <id>repo.opensource.fastconnect.org</id>
-          <url>http://fastconnect.org/maven/content/repositories/opensource</url>
-      </repository>
-      <repository>
-          <id>repo.opensource.snapshot.fastconnect.org</id>
-          <url>http://fastconnect.org/maven/content/repositories/opensource-snapshot</url>
-      </repository>
     <repository>
       <id>projectlombok.org</id>
       <name>Lombok Repository</name>

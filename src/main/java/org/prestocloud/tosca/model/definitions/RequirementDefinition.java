@@ -1,6 +1,5 @@
 package org.prestocloud.tosca.model.definitions;
 
-import org.elasticsearch.annotation.ObjectField;
 import org.prestocloud.tosca.model.types.CapabilityType;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -22,7 +21,6 @@ import prestocloud.json.serializer.BoundSerializer;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = { "id" })
-//@FormProperties({ "type", "lowerBound", "upperBound" })
 public class RequirementDefinition implements LowerBoundedDefinition, UpperBoundedDefinition {
     private String id;
     /**
@@ -34,7 +32,6 @@ public class RequirementDefinition implements LowerBoundedDefinition, UpperBound
      * {@link RequirementDefinition definition}.
      * </p>
      */
-    //@FormSuggestion(fromClass = CapabilityType.class, path = "elementId")
     private String type;
     /** Restriction to the node type that can fullfill the requirement. */
     private String nodeType;
@@ -57,7 +54,6 @@ public class RequirementDefinition implements LowerBoundedDefinition, UpperBound
     @JsonSerialize(using = BoundSerializer.class)
     private int upperBound = 1;
 
-    @ObjectField(enabled = false)
     /** Constraints to specify on the target capability or node's properties. */
     private NodeFilter nodeFilter;
 

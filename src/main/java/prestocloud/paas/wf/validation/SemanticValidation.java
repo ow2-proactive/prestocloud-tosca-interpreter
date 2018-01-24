@@ -2,17 +2,18 @@ package prestocloud.paas.wf.validation;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.prestocloud.tosca.model.templates.NodeTemplate;
 import org.prestocloud.tosca.model.workflow.RelationshipWorkflowStep;
 import org.prestocloud.tosca.model.workflow.Workflow;
 import org.prestocloud.tosca.model.workflow.WorkflowStep;
 import org.prestocloud.tosca.model.workflow.activities.InlineWorkflowActivity;
-import org.apache.commons.lang3.StringUtils;
-import org.elasticsearch.common.collect.Lists;
 
+import com.google.common.collect.Lists;
+
+import lombok.extern.slf4j.Slf4j;
 import prestocloud.paas.wf.TopologyContext;
 import prestocloud.paas.wf.exception.WorkflowException;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class SemanticValidation implements Rule {

@@ -13,6 +13,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.junit.Assert;
+import org.junit.Test;
+import org.mockito.Mockito;
 import org.prestocloud.tosca.model.CSARDependency;
 import org.prestocloud.tosca.model.Csar;
 import org.prestocloud.tosca.model.definitions.AttributeDefinition;
@@ -40,11 +43,8 @@ import org.prestocloud.tosca.model.types.RelationshipType;
 import org.prestocloud.tosca.normative.constants.NormativeCapabilityTypes;
 import org.prestocloud.tosca.normative.constants.NormativeCredentialConstant;
 import org.prestocloud.tosca.normative.constants.NormativeTypesConstant;
-import org.elasticsearch.common.collect.ImmutableMap;
-import org.junit.Assert;
-import org.junit.Test;
-import org.mockito.Mockito;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 
 import prestocloud.paas.plan.ToscaNodeLifecycleConstants;

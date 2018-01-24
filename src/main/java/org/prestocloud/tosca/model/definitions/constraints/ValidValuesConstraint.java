@@ -19,7 +19,6 @@ import prestocloud.tosca.properties.constraints.ConstraintUtil;
 
 @Getter
 @Setter
-//@FormProperties("validValues")
 @EqualsAndHashCode(callSuper = false, of = { "validValues" })
 public class ValidValuesConstraint extends AbstractPropertyConstraint {
     @NotNull

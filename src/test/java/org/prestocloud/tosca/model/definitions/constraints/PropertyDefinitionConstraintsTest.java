@@ -2,14 +2,15 @@ package org.prestocloud.tosca.model.definitions.constraints;
 
 import java.util.List;
 
-import org.elasticsearch.common.collect.Lists;
 import org.junit.Test;
-
-import prestocloud.model.components.IncompatiblePropertyDefinitionException;
+import org.prestocloud.tosca.exceptions.ConstraintViolationException;
 import org.prestocloud.tosca.model.definitions.PropertyConstraint;
 import org.prestocloud.tosca.model.definitions.PropertyDefinition;
 import org.prestocloud.tosca.normative.types.ToscaTypes;
-import org.prestocloud.tosca.exceptions.ConstraintViolationException;
+
+import com.google.common.collect.Lists;
+
+import prestocloud.model.components.IncompatiblePropertyDefinitionException;
 
 public class PropertyDefinitionConstraintsTest {
 

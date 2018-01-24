@@ -13,7 +13,6 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-//@FormProperties({ "value" })
 @ToString(callSuper = true)
 public class ScalarPropertyValue extends PropertyValue<String> {
 

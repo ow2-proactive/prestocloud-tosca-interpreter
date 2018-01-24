@@ -3,7 +3,6 @@ package org.prestocloud.tosca.model.templates;
 import java.util.Map;
 import java.util.Set;
 
-import org.elasticsearch.annotation.MapKeyValue;
 import org.prestocloud.tosca.model.definitions.AbstractPropertyValue;
 import org.prestocloud.tosca.model.definitions.DeploymentArtifact;
 import org.prestocloud.tosca.model.definitions.IValue;
@@ -36,7 +35,6 @@ public class NodeTemplate extends AbstractInstantiableTemplate {
     /**
      * The requirement that this node template defines
      */
-    @MapKeyValue
     @ConditionalOnAttribute(value = { ConditionalAttributes.REST, ConditionalAttributes.ES_1_2 })
     @JsonDeserialize(using = JSonMapEntryArrayDeSerializer.class)
     @JsonSerialize(using = JSonMapEntryArraySerializer.class)
@@ -45,7 +43,6 @@ public class NodeTemplate extends AbstractInstantiableTemplate {
     /**
      * Relationships between node templates
      */
-    @MapKeyValue
     @ConditionalOnAttribute(value = { ConditionalAttributes.REST, ConditionalAttributes.ES_1_2 })
     @JsonDeserialize(using = JSonMapEntryArrayDeSerializer.class)
     @JsonSerialize(using = JSonMapEntryArraySerializer.class)
@@ -54,7 +51,6 @@ public class NodeTemplate extends AbstractInstantiableTemplate {
     /**
      * The capabilities that this node template defines
      */
-    @MapKeyValue
     @ConditionalOnAttribute(value = { ConditionalAttributes.REST, ConditionalAttributes.ES_1_2 })
     @JsonDeserialize(using = JSonMapEntryArrayDeSerializer.class)
     @JsonSerialize(using = JSonMapEntryArraySerializer.class)

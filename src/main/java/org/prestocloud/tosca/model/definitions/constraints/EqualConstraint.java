@@ -16,7 +16,6 @@ import prestocloud.tosca.properties.constraints.ConstraintUtil;
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = false, of = { "equal" })
-//@FormProperties("equal")
 public class EqualConstraint extends AbstractPropertyConstraint implements IMatchPropertyConstraint {
     @NotNull
     private String equal;
