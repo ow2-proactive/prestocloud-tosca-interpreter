@@ -1,0 +1,19 @@
+# Mapping definitions for tosca simple profile imports only
+
+- import_definition: prestocloud.tosca.parser.impl.advanced.LaxImportParser
+# declare standard mapping based parsers
+
+- metadata: org.prestocloud.tosca.model.CSARDependency
+  template_name: name
+  template_version: version
+
+- definition: org.prestocloud.tosca.model.CsarDependenciesBean
+  template_name: self.name
+  template_version: self.version
+  metadata:
+    reference: self
+    type: metadata
+  imports:
+    set: dependencies
+    type: import_definition
+ 
