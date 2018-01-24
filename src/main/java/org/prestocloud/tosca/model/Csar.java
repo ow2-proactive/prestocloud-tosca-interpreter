@@ -10,14 +10,13 @@ import lombok.Setter;
 import prestocloud.exceptions.IndexingServiceException;
 import prestocloud.model.common.IWorkspaceResource;
 import prestocloud.model.common.Tag;
-import prestocloud.security.IManagedSecuredResource;
 import prestocloud.tosca.parser.ParsingContextExecution;
 import prestocloud.utils.version.Version;
 
 @Getter
 @Setter
 @EqualsAndHashCode(of = { "name", "version" })
-public class Csar implements IManagedSecuredResource, IWorkspaceResource {
+public class Csar implements IWorkspaceResource {
     private String name;
 
     private String version;
