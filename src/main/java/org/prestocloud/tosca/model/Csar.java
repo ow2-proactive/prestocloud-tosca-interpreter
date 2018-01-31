@@ -35,6 +35,7 @@ public class Csar implements IWorkspaceResource {
 
     /** Eventually the id of the application. */
     private String delegateId;
+
     /** Type of delegate if the archive is an application archive. */
     private String delegateType;
 

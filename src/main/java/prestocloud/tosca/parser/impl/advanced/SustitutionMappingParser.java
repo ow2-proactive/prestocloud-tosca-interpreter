@@ -1,7 +1,5 @@
 package prestocloud.tosca.parser.impl.advanced;
 
-import static prestocloud.tosca.parser.ToscaParser.ALIEN_DSL_140;
-
 import java.util.List;
 import java.util.Map;
 
@@ -103,8 +101,7 @@ public class SustitutionMappingParser implements INodeParser<SubstitutionMapping
 
     private SubstitutionTarget parseSubstitutionTarget(Node valueNode, ParsingContextExecution context) {
         List<String> values = (List<String>) stringListParser.parse(valueNode, context);
-        if (values.size() == 3 && (ParsingContextExecution.get().getDefinitionVersion() != null
-                && ALIEN_DSL_140.equals(ParsingContextExecution.get().getDefinitionVersion()))) {
+        if (values.size() == 3 && (ParsingContextExecution.get().getDefinitionVersion() != null)) {
             // DSL 1.4.0 allows to specify services relationship types
             return new SubstitutionTarget(values.get(0), values.get(1), values.get(2));
         }

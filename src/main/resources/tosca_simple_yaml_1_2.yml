@@ -1,4 +1,4 @@
-# Mapping definitions for tosca simple profile 1.0
+# Mapping definitions for tosca simple profile 1.2
 
 # declare custom parsers for complex types that requires specific parser.
 - scalar: prestocloud.tosca.parser.impl.base.ScalarParser
@@ -19,7 +19,6 @@
 - tosca_definitions_version: prestocloud.tosca.parser.impl.advanced.ToscaDefinitionVersionParser
 - string_list: prestocloud.tosca.parser.impl.advanced.StringListParser
 - relationship_template: prestocloud.tosca.parser.impl.advanced.RelationshipTemplateParser
-#- fail_get_artifact: prestocloud.tosca.parser.impl.advanced.FailGetArtifactParser
 
 # declare standard mapping based parsers
 - definition: prestocloud.tosca.model.ArchiveRoot

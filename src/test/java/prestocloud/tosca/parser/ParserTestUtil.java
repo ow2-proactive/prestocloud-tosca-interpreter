@@ -50,7 +50,7 @@ public class ParserTestUtil {
     }
 
     /**
-     * Utility method to mock the acess to some normative types nodes and capabilities.
+     * Utility method to mock the access to some normative types nodes and capabilities.
      * 
      * @param repositorySearchService The repositorySearchService to mock.
      */

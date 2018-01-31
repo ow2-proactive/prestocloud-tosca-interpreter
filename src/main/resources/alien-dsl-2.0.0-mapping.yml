@@ -17,7 +17,9 @@
 - meta_data: prestocloud.tosca.parser.impl.advanced.MetaDataParser
 - fail_get_artifact: prestocloud.tosca.parser.impl.advanced.FailGetArtifactParser
 - string_list: prestocloud.tosca.parser.impl.advanced.StringListParser
-- relationship_template: prestocloud.tosca.parser.impl.v20.RelationshipTemplateParser
+#- relationship_template: prestocloud.tosca.parser.impl.v20.RelationshipTemplateParser
+- relationship_template: prestocloud.tosca.parser.impl.advanced.RelationshipTemplateParser
+
 
 # declare standard mapping based parsers
 - definition: prestocloud.tosca.model.ArchiveRoot

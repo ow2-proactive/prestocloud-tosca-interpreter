@@ -14,7 +14,7 @@ public class DeclarativeWorkflowTest {
     @Test
     public void default_declarative_workflow_could_be_parsed_from_configuration() throws IOException {
         DefaultDeclarativeWorkflows defaultDeclarativeWorkflows = YamlParserUtil.parse(
-                DefaultDeclarativeWorkflows.class.getClassLoader().getResourceAsStream("declarative-workflows-2.0.0.yml"), DefaultDeclarativeWorkflows.class);
+                DefaultDeclarativeWorkflows.class.getClassLoader().getResourceAsStream("declarative-workflows.yml"), DefaultDeclarativeWorkflows.class);
 
         Assert.assertNotNull(defaultDeclarativeWorkflows.getNodeWorkflows());
         Assert.assertNotNull(defaultDeclarativeWorkflows.getRelationshipWorkflows());
