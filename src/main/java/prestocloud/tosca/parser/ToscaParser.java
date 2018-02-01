@@ -52,7 +52,7 @@ public class ToscaParser extends YamlParser<ArchiveRoot> {
     public void setNewArchiveDSL(String newArchiveDSL) {
         if (newArchiveDSL != null) {
             log.warn(
-                    "User has explicitly configured a TOSCA dsl version ({}) to override the default new archive dsl ({}). Some alien4cloud feature may not be supported.",
+                    "User has explicitly configured a TOSCA dsl version ({}) to override the default new archive dsl ({}).",
                     newArchiveDSL, LATEST_DSL);
             LATEST_DSL = newArchiveDSL;
         }
@@ -104,7 +104,7 @@ public class ToscaParser extends YamlParser<ArchiveRoot> {
             if (registry == null) {
                 throw new ParsingException(context.getFileName(),
                         new ParsingError(ErrorCode.UNKNOWN_TOSCA_VERSION, "Definition version is not supported",
-                                definitionVersionInfo.definitionVersionTuple.getKeyNode().getStartMark(), "Version is not supported by Alien4Cloud",
+                                definitionVersionInfo.definitionVersionTuple.getKeyNode().getStartMark(), "Version is not supported",
                                 definitionVersionInfo.definitionVersionTuple.getValueNode().getStartMark(), definitionVersionInfo.definitionVersion));
             }
 

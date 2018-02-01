@@ -37,7 +37,7 @@ public class ImportParser implements INodeParser<CSARDependency> {
         if (csar == null) {
             // error is not a blocker, as long as no type is missing we just mark it as a warning.
             context.getParsingErrors().add(new ParsingError(ParsingErrorLevel.WARNING, ErrorCode.MISSING_DEPENDENCY, "Import definition is not valid",
-                    node.getStartMark(), "Specified dependency is not found in Alien 4 Cloud repository.", node.getEndMark(), valueAsString));
+                    node.getStartMark(), "Specified dependency is not found in repository.", node.getEndMark(), valueAsString));
             return null;
         } else {
             if (!VersionUtil.isSnapshot(currentArchiveVersion) && VersionUtil.isSnapshot(dependency.getVersion())) {

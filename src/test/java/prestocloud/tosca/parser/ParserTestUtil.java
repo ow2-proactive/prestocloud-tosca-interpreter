@@ -55,7 +55,7 @@ public class ParserTestUtil {
      * @param repositorySearchService The repositorySearchService to mock.
      */
     public static void mockNormativeTypes(ICSARRepositorySearchService repositorySearchService) {
-        Csar csar = new Csar("tosca-normative-types", "1.0.0-ALIEN12");
+        Csar csar = new Csar("tosca-normative-types", "1.0");
         Mockito.when(repositorySearchService.getArchive(csar.getName(), csar.getVersion())).thenReturn(csar);
         NodeType mockedNodeRoot = new NodeType();
         Mockito.when(repositorySearchService.getElementInDependencies(Mockito.eq(NodeType.class), Mockito.eq(NormativeTypesConstant.ROOT_NODE_TYPE),

@@ -45,7 +45,7 @@ public final class VersionUtil {
     }
 
     /**
-     * Check if a version is valid or throw a alien4cloud.utils.version.InvalidVersionException
+     * Check if a version is valid or throw a InvalidVersionException
      *
      * @param version version text to check
      * @throws prestocloud.utils.version.InvalidVersionException if the version text is not following the defined version pattern
@@ -90,7 +90,7 @@ public final class VersionUtil {
     }
 
     /**
-     * Check if a qualifier is valid or throw a alien4cloud.utils.version.InvalidVersionException
+     * Check if a qualifier is valid or throw a InvalidVersionException
      *
      * @param qualifier qualifier text to check
      * @throws prestocloud.utils.version.InvalidVersionException if the qualifier text is not following the defined pattern

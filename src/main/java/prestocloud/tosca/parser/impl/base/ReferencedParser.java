@@ -30,7 +30,7 @@ public class ReferencedParser<T> implements INodeParser<T> {
         if (delegate == null) {
             log.error("No parser found for yaml type {}", typeName);
             context.getParsingErrors().add(
-                    new ParsingError(ErrorCode.ALIEN_MAPPING_ERROR, "No parser found for yaml type", node.getStartMark(), "", node.getEndMark(), typeName));
+                    new ParsingError(ErrorCode.MAPPING_ERROR, "No parser found for yaml type", node.getStartMark(), "", node.getEndMark(), typeName));
             return null;
         }
         return (T) delegate.parse(node, context);

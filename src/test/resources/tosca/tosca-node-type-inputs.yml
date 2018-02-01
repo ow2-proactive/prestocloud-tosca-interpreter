@@ -8,7 +8,7 @@ template_version: 1.0.0-SNAPSHOT
 description: This is an example of a single line description (no folding).
 
 imports:
-  - tosca-normative-types:1.0.0-SNAPSHOT-wd03
+  - tosca-normative-types:1.0
 
 dsl_definitions:
   # list of YAML alias anchors (or macros)
@@ -27,7 +27,7 @@ topology_template:
     # list of output parameters
 
 node_types:
-  alien.test.TestComputeConcat:
+  prestocloud.test.TestComputeConcat:
     derived_from: tosca.nodes.Compute
     properties:
       customHostName:

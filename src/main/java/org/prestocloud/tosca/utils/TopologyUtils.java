@@ -350,7 +350,6 @@ public class TopologyUtils {
     }
 
     /**
-     * In alien 4 Cloud we try
      * Rename the node template with an invalid name on the topology.
      * 
      * @param topology

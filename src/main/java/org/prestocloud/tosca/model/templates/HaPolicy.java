@@ -22,6 +22,5 @@ public class HaPolicy extends AbstractPolicy {
     
     @Override
     public void setType(String type) {
-        // for json serialization
     }
 }

@@ -1,7 +1,7 @@
 package prestocloud.exceptions;
 
 /**
- * Base class for all Alien technical exceptions
+ * Base class for all technical exceptions
  *
  * @author mkv
  *

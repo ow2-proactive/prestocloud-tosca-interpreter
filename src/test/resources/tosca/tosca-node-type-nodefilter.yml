@@ -8,7 +8,7 @@ template_version:          # Optional version of this service template
 description: This is an example of a single line description (no folding).
 
 imports:
-  - tosca-normative-types:1.0.0.wd03-SNAPSHOT
+  - tosca-normative-types:1.0
 
 dsl_definitions:
   # list of YAML alias anchors (or macros)

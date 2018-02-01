@@ -8,7 +8,6 @@ import java.util.function.Function;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.collect.Maps;
 
 import prestocloud.exceptions.InvalidArgumentException;
@@ -189,7 +188,7 @@ public final class MapUtil {
         }
     }
 
-    public static Map<String, String> toString(Map<String, Object> stringObjectMap) throws JsonProcessingException {
+    public static Map<String, String> toString(Map<String, Object> stringObjectMap) {
         Map<String, String> stringStringMap = Maps.newHashMap();
         for (Map.Entry<String, Object> stringObjectEntry : stringObjectMap.entrySet()) {
             if (stringObjectEntry.getValue() != null) {

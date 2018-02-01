@@ -1,11 +1,11 @@
 package prestocloud.model.components;
 
 /**
- * Enumeration of alien csars sources.
+ * Enumeration of csars sources.
  */
 public enum CSARSource {
-    /** Alien out of the box archives. */
-    ALIEN,
+    /** Out of the box archives. */
+    ARCHIVE,
     /** Orchestrator archives. */
     ORCHESTRATOR,
     /** Generated from topology substitution. */

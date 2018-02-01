@@ -14,16 +14,13 @@
     <commons-lang.version>3.5</commons-lang.version>
     <commons-collections.version>4.1</commons-collections.version>
     <commons-compress.version>1.9</commons-compress.version>
-    <httpclient.version>4.3.2</httpclient.version>
     <guava.version>15.0</guava.version>
     <hibernate-validator.version>5.0.2.Final</hibernate-validator.version>
     <velocity.version>1.7</velocity.version>
     <cloning.version>1.9.6</cloning.version>
 
-    <!-- JSON and YAML Parsing -->
+    <!-- YAML Parsing -->
     <jackson.version>2.9.3</jackson.version>
-
-    <!-- Yaml for properties -->
     <snakeyaml.version>1.18</snakeyaml.version>
 
     <!-- Spring (DI / Rest / Security) -->
@@ -64,45 +61,16 @@
       <version>${commons-compress.version}</version>
     </dependency>
 
-    <!-- Jackson -->
+    <!-- Yaml -->
     <dependency>
       <groupId>com.fasterxml.jackson.dataformat</groupId>
       <artifactId>jackson-dataformat-yaml</artifactId>
       <version>${jackson.version}</version>
     </dependency>
     <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-      <version>${jackson.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-core</artifactId>
-      <version>${jackson.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-annotations</artifactId>
-      <version>${jackson.version}</version>
-    </dependency>
-
-    <!-- Yaml -->
-    <dependency>
       <groupId>org.yaml</groupId>
       <artifactId>snakeyaml</artifactId>
       <version>${snakeyaml.version}</version>
-    </dependency>
-
-    <!-- HTTP Client -->
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpclient</artifactId>
-      <version>${httpclient.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpmime</artifactId>
-      <version>${httpclient.version}</version>
     </dependency>
 
     <!-- Guava -->

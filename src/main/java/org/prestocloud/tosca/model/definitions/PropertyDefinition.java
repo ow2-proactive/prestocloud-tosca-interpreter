@@ -6,9 +6,6 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -33,7 +30,6 @@ import prestocloud.tosca.container.validation.ToscaPropertyType;
 @ToscaPropertyDefaultValueType
 @ToscaPropertyConstraint
 @ToscaPropertyDefaultValueConstraints(groups = { ToscaPropertyPostValidationGroup.class })
-@JsonIgnoreProperties(ignoreUnknown = true)
 @ToString
 public class PropertyDefinition implements IValue {
     @ToscaPropertyType
@@ -45,7 +41,6 @@ public class PropertyDefinition implements IValue {
     @NotNull
     private boolean required = true;
 
-    @JsonProperty("default")
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
     private PropertyValue defaultValue;

@@ -3,9 +3,6 @@ package org.prestocloud.tosca.model.types;
 import java.util.Date;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,7 +16,6 @@ import prestocloud.utils.version.Version;
 @Getter
 @Setter
 @EqualsAndHashCode(of = { "elementId", "archiveName", "archiveVersion" })
-@JsonInclude(Include.NON_NULL)
 public abstract class AbstractToscaType implements IDatableResource, IWorkspaceResource, ITaggableResource {
     private String archiveName;
 

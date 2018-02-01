@@ -7,7 +7,7 @@ template_author: prestocloud
 description: This is an example of a single line description (no folding).
 
 imports:
-  - tosca-normative-types:1.0.0-ALIEN12
+  - tosca-normative-types:1.0
 
 data_types:
 

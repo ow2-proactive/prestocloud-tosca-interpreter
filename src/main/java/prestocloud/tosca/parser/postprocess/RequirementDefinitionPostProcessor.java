@@ -7,8 +7,6 @@ import org.prestocloud.tosca.model.types.NodeType;
 import org.prestocloud.tosca.model.types.RelationshipType;
 import org.springframework.stereotype.Component;
 
-import prestocloud.tosca.parser.ParsingContextExecution;
-
 /**
  * Performs validation of a requirement definition.
  */
@@ -16,25 +14,13 @@ import prestocloud.tosca.parser.ParsingContextExecution;
 public class RequirementDefinitionPostProcessor implements IPostProcessor<RequirementDefinition> {
     @Resource
     private ReferencePostProcessor referencePostProcessor;
+
     @Resource
     private CapabilityOrNodeReferencePostProcessor capabilityOrNodeReferencePostProcessor;
-    @Resource
-    private CapabilityReferencePostProcessor capabilityReferencePostProcessor;
 
     @Override
     public void process(RequirementDefinition instance) {
-        String definitionVersion = ParsingContextExecution.getDefinitionVersion();
-        switch (definitionVersion) {
-        case "tosca_simple_yaml_1_0_0_wd03":
-        case "alien_dsl_1_1_0":
-        case "alien_dsl_1_2_0":
-            capabilityOrNodeReferencePostProcessor.process(new ReferencePostProcessor.TypeReference(instance, instance.getType()));
-            break;
-        default:
-            // In latest versions we process the capability only.
-            capabilityReferencePostProcessor.process(new ReferencePostProcessor.TypeReference(instance, instance.getType()));
-            break;
-        }
+        capabilityOrNodeReferencePostProcessor.process(new ReferencePostProcessor.TypeReference(instance, instance.getType()));
         if(instance.getNodeType() != null) {
             referencePostProcessor.process(new ReferencePostProcessor.TypeReference(instance, instance.getNodeType(), NodeType.class));
         }

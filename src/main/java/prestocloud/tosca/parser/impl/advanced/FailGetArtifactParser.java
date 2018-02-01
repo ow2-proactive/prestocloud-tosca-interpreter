@@ -13,7 +13,7 @@ import prestocloud.tosca.parser.ParsingErrorLevel;
 import prestocloud.tosca.parser.impl.ErrorCode;
 
 /**
- * Parser that state that get_artifact is not supported by alien and will be ignored.
+ * Parser that state that get_artifact is not supported and will be ignored.
  */
 @Component
 public class FailGetArtifactParser implements INodeParser<Object> {

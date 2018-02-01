@@ -45,7 +45,7 @@ public class Range implements Comparable<Range> {
             }
             return 0;
         }
-        // Right now there is no need in alien to compare a range against another full range. To be implemented if required.
+        // Right now there is no need to compare a range against another full range. To be implemented if required.
         return 0;
     }
 }

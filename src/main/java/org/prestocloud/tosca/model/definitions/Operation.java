@@ -6,7 +6,6 @@ import java.util.Set;
 
 import org.apache.commons.collections4.CollectionUtils;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.Sets;
 
 import lombok.Getter;
@@ -37,7 +36,6 @@ public class Operation {
      * This OPTIONAL property contains a map of one or more outputs this operation execution might generate.
      * This is not part of TOSCA, and is populated when building the plan, based on the use of the get_operation_output function in the types definition
      */
-    @JsonIgnore
     private Set<OperationOutput> outputs = Sets.newHashSet();
 
     /**
@@ -58,7 +56,6 @@ public class Operation {
         this.implementationArtifact = implementationArtifact;
     }
 
-    @JsonIgnore
     public OperationOutput getOutput(String name) {
         OperationOutput toFind = new OperationOutput(name);
         for (OperationOutput output : outputs) {

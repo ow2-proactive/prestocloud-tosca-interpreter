@@ -80,7 +80,7 @@ public class RelationshipPostProcessor {
             return;
         }
 
-        String capabilityStr = relationshipTemplate.getTargetedCapabilityName(); // alien actually supports a capability type in the TOSCA yaml
+        String capabilityStr = relationshipTemplate.getTargetedCapabilityName(); // supports a capability type in the TOSCA yaml
         Capability capability = null;
         if (capabilityStr == null) {
             // the capability type is not known, we assume that we are parsing a Short notation (node only)

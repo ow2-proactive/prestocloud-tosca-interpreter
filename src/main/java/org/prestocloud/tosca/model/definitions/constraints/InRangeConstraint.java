@@ -8,7 +8,6 @@ import org.prestocloud.tosca.exceptions.ConstraintValueDoNotMatchPropertyTypeExc
 import org.prestocloud.tosca.exceptions.ConstraintViolationException;
 import org.prestocloud.tosca.normative.types.IPropertyType;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.Lists;
 
 import lombok.EqualsAndHashCode;
@@ -54,7 +53,6 @@ public class InRangeConstraint extends AbstractPropertyConstraint {
         }
     }
 
-    @JsonProperty
     @NotNull
     public String getRangeMinValue() {
         if (inRange != null) {
@@ -64,7 +62,6 @@ public class InRangeConstraint extends AbstractPropertyConstraint {
         }
     }
 
-    @JsonProperty
     public void setRangeMinValue(String minValue) {
         if (inRange == null) {
             inRange = Lists.newArrayList(minValue, "");
@@ -73,7 +70,6 @@ public class InRangeConstraint extends AbstractPropertyConstraint {
         }
     }
 
-    @JsonProperty
     @NotNull
     public String getRangeMaxValue() {
         if (inRange != null) {
@@ -83,7 +79,6 @@ public class InRangeConstraint extends AbstractPropertyConstraint {
         }
     }
 
-    @JsonProperty
     public void setRangeMaxValue(String maxValue) {
         if (inRange == null) {
             inRange = Lists.newArrayList("", maxValue);

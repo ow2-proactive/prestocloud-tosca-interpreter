@@ -1,18 +1,16 @@
 package org.prestocloud.tosca.model.definitions.constraints;
 
-import org.prestocloud.tosca.normative.types.IPropertyType;
-import prestocloud.tosca.properties.constraints.ConstraintUtil;
 import org.prestocloud.tosca.exceptions.ConstraintValueDoNotMatchPropertyTypeException;
 import org.prestocloud.tosca.exceptions.ConstraintViolationException;
+import org.prestocloud.tosca.normative.types.IPropertyType;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import prestocloud.tosca.properties.constraints.ConstraintUtil;
 
 @SuppressWarnings("rawtypes")
 public abstract class AbstractComparablePropertyConstraint extends AbstractPropertyConstraint implements IMatchPropertyConstraint {
 
     private Comparable comparable;
 
-    @JsonIgnore
     protected Comparable getComparable() {
         return comparable;
     }

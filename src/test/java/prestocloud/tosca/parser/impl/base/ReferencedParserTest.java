@@ -32,7 +32,7 @@ public class ReferencedParserTest {
             Mockito.when(node.getEndMark()).thenReturn(new Mark("name", 0, 10, 10, "", 0));
             referencedParser.parse(node, contextExecution);
             Assert.assertEquals(ParsingErrorLevel.ERROR, contextExecution.getParsingErrors().get(0).getErrorLevel());
-            Assert.assertEquals(ErrorCode.ALIEN_MAPPING_ERROR, contextExecution.getParsingErrors().get(0).getErrorCode());
+            Assert.assertEquals(ErrorCode.MAPPING_ERROR, contextExecution.getParsingErrors().get(0).getErrorCode());
         } finally {
             ParsingContextExecution.destroy();
         }

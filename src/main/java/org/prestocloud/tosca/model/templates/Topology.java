@@ -10,9 +10,6 @@ import org.prestocloud.tosca.model.Csar;
 import org.prestocloud.tosca.model.definitions.DeploymentArtifact;
 import org.prestocloud.tosca.model.definitions.PropertyDefinition;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.google.common.collect.Sets;
 
 import lombok.AllArgsConstructor;
@@ -28,8 +25,6 @@ import prestocloud.utils.version.Version;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonInclude(Include.NON_NULL)
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Topology implements IDatableResource, IWorkspaceResource {
     private String archiveName;
 

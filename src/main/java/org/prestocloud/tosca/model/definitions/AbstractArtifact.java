@@ -2,8 +2,6 @@ package org.prestocloud.tosca.model.definitions;
 
 import java.util.Map;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,6 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public abstract class AbstractArtifact implements IArtifact {
+
     /** This attribute specifies the type of this artifact. */
     private String artifactType;
     /** Specifies the reference of the artifact. */
@@ -36,7 +35,6 @@ public abstract class AbstractArtifact implements IArtifact {
     /**
      * The local path to retrieve the artifact. Attention this is normally set before deployment so that the plugin knows where to get artifact.
      */
-    @JsonIgnore
     private String artifactPath;
 
     /**

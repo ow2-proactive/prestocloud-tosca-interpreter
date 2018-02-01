@@ -22,7 +22,7 @@ public enum ErrorCode {
     DEPENDENCY_NOT_VISIBLE_FROM_TARGET_WORKSPACE,
     /** The csar is used in an active deployment (It cannot be overrided). */
     CSAR_USED_IN_ACTIVE_DEPLOYMENT,
-    /** Temporary error, currently Alien supports only a single definition file. */
+    /** Temporary error, supports only a single definition file. */
     SINGLE_DEFINITION_SUPPORTED,
     /** In TOSCA Meta the entry definition was missing. */
     ENTRY_DEFINITION_NOT_FOUND,
@@ -32,11 +32,11 @@ public enum ErrorCode {
     SYNTAX_ERROR,
     /** Tosca version cannot be found in a definition file. */
     MISSING_TOSCA_VERSION,
-    /** Tosca version is not recognized by Alien 4 Cloud. */
+    /** Tosca version is not recognized. */
     UNKNOWN_TOSCA_VERSION,
     /** Tosca version must be the first line of the TOSCA document. */
     TOSCA_VERSION_NOT_FIRST,
-    /** A field is not recognized by Alien 4 Cloud and will be skipped. */
+    /** A field is not recognized and will be skipped. */
     UNRECOGNIZED_PROPERTY,
     /** A discriminator is not known and no failback parser. */
     UNKNWON_DISCRIMINATOR_KEY,
@@ -54,8 +54,8 @@ public enum ErrorCode {
     DERIVED_FROM_NOTHING,
     /** The icon format is not supported. */
     INVALID_ICON_FORMAT,
-    /** Error in Alien Mapping */
-    ALIEN_MAPPING_ERROR,
+    /** Error in Mapping */
+    MAPPING_ERROR,
     /** Error in type validation (may be property constraints or missing mandatory property). */
     VALIDATION_ERROR,
     /** This constraint is not a valid TOSCA constraint. */

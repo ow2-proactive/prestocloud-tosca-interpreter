@@ -1,9 +1,11 @@
 package org.prestocloud.tosca.model.definitions.constraints;
 
-import org.prestocloud.tosca.exceptions.ConstraintViolationException;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.regex.Pattern;
+
 import javax.validation.constraints.NotNull;
+
+import org.prestocloud.tosca.exceptions.ConstraintViolationException;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
@@ -12,7 +14,7 @@ import lombok.Getter;
 public class PatternConstraint extends AbstractStringPropertyConstraint {
     @NotNull
     private String pattern;
-    @JsonIgnore
+
     private Pattern compiledPattern;
 
     public void setPattern(String pattern) {

@@ -36,8 +36,8 @@ public class CapabilityMatcherServiceTest {
         nodeTemplate.setCapabilities(Maps.newHashMap());
 
         capabilityTypeByTypeName = Maps.newHashMap();
-        addCapabilityToNodeTemplateAndToscaContext("db_endpoint","alien.capability.test.MongoEndpoint", "alien.capability.test.Database", "alien.capability.test.Endpoint");
-        addCapabilityToNodeTemplateAndToscaContext("useless","alien.capability.test.Alone");
+        addCapabilityToNodeTemplateAndToscaContext("db_endpoint","prestocloud.capability.test.MongoEndpoint", "prestocloud.capability.test.Database", "prestocloud.capability.test.Endpoint");
+        addCapabilityToNodeTemplateAndToscaContext("useless","prestocloud.capability.test.Alone");
 
         Mockito.when(toscaContextFinder.find(Mockito.any(), Mockito.anyString()))
                 .then(invocationOnMock -> capabilityTypeByTypeName.get(invocationOnMock.getArguments()[1]));
@@ -45,7 +45,7 @@ public class CapabilityMatcherServiceTest {
 
     @Test
     public void capability_should_match_when_type_equals_element_id() throws Exception {
-        Map<String, Capability> compatibleCapabilities = service.getCompatibleCapabilityByType(nodeTemplate, "alien.capability.test.MongoEndpoint");
+        Map<String, Capability> compatibleCapabilities = service.getCompatibleCapabilityByType(nodeTemplate, "prestocloud.capability.test.MongoEndpoint");
 
         assertThat(compatibleCapabilities).hasSize(1);
         assertThat(compatibleCapabilities).containsKeys("db_endpoint");
@@ -53,7 +53,7 @@ public class CapabilityMatcherServiceTest {
 
     @Test
     public void capability_should_match_when_type_is_present_in_derived_from() throws Exception {
-        Map<String, Capability> compatibleCapabilities = service.getCompatibleCapabilityByType(nodeTemplate, "alien.capability.test.Database");
+        Map<String, Capability> compatibleCapabilities = service.getCompatibleCapabilityByType(nodeTemplate, "prestocloud.capability.test.Database");
 
         assertThat(compatibleCapabilities).hasSize(1);
         assertThat(compatibleCapabilities).containsKeys("db_endpoint");
@@ -61,7 +61,7 @@ public class CapabilityMatcherServiceTest {
 
     @Test
     public void capability_should_not_match_when_type_is_unknown() throws Exception {
-        Map<String, Capability> compatibleCapabilities = service.getCompatibleCapabilityByType(nodeTemplate, "alien.capability.test.Unknown");
+        Map<String, Capability> compatibleCapabilities = service.getCompatibleCapabilityByType(nodeTemplate, "prestocloud.capability.test.Unknown");
 
         assertThat(compatibleCapabilities).hasSize(0);
     }
@@ -70,10 +70,10 @@ public class CapabilityMatcherServiceTest {
     public void should_not_crash_even_if_node_template_capacities_is_incorrect() throws Exception {
         nodeTemplate.getCapabilities().clear();
         Capability unknownCapacity = new Capability();
-        unknownCapacity.setType("alien.typo.in.capa");
+        unknownCapacity.setType("prestocloud.typo.in.capa");
         nodeTemplate.getCapabilities().put("incorrect", unknownCapacity);
 
-        Map<String, Capability> compatibleCapabilities = service.getCompatibleCapabilityByType(nodeTemplate, "alien.capability.test.Unknown");
+        Map<String, Capability> compatibleCapabilities = service.getCompatibleCapabilityByType(nodeTemplate, "prestocloud.capability.test.Unknown");
 
         assertThat(compatibleCapabilities).hasSize(0);
     }

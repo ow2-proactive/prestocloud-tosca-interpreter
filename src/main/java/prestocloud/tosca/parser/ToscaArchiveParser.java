@@ -196,7 +196,7 @@ public class ToscaArchiveParser {
                 return toscaParser.parseFile(yamls.get(0));
             }
             throw new ParsingException("Archive", new ParsingError(ErrorCode.SINGLE_DEFINITION_SUPPORTED,
-                    "Alien only supports archives with a single root definition.", null, null, null, String.valueOf(yamls.size())));
+                    "Archives with multiple root definition are not supported.", null, null, null, String.valueOf(yamls.size())));
         } catch (IOException e) {
             throw new ParsingException("Archive", new ParsingError(ErrorCode.FAILED_TO_READ_FILE, "Failed to list root definitions", null, null, null, null));
         }
@@ -211,7 +211,7 @@ public class ToscaArchiveParser {
                 return parser.parseFile(visitor.getDefinitionFiles().get(0));
             }
             throw new ParsingException("Archive",
-                    new ParsingError(ErrorCode.SINGLE_DEFINITION_SUPPORTED, "Alien only supports archives with a single root definition.", null, null, null,
+                    new ParsingError(ErrorCode.SINGLE_DEFINITION_SUPPORTED, "Archives with multiple root definition are not supported.", null, null, null,
                             "Matching file count in root of " + csarFS + ": " + visitor.getDefinitionFiles().size()));
         } catch (IOException e) {
             throw new ParsingException("Archive",

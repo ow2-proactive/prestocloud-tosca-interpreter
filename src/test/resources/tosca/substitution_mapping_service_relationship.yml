@@ -8,7 +8,7 @@ metadata:
 description: Simple test template to check parsing of prestocloud specific relationship type value in a substitution mapping for service relationship support.
 
 imports:
-  - tosca-normative-types:1.0.0-ALIEN14
+  - tosca-normative-types:1.0
 
 capability_types:
   org.prestocloud.capabilities.test.MyCapability:

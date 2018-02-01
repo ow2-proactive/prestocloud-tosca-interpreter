@@ -61,7 +61,7 @@ public class ArchiveRootPostProcessor implements IPostProcessor<ArchiveRoot> {
      */
     public void process(ArchiveRoot archiveRoot) {
         // Register the archive in the context to ensure that all types are mapped to the TOSCA context.
-        // In alien4cloud archives are referenced by id and version however this is not required by TOSCA, the following code set/unset temporary ids and reset
+        // Archives are referenced by id and version however this is not required by TOSCA, the following code set/unset temporary ids and reset
         // them to avoid registration issue.
         String archiveName = archiveRoot.getArchive().getName();
         String archiveVersion = archiveRoot.getArchive().getVersion();

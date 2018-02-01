@@ -217,7 +217,7 @@ public final class ConstraintPropertyService {
         DataType dataType = ToscaContext.get(DataType.class, propertyDefinition.getType());
         if (dataType == null) {
             throw new ConstraintViolationException("Complex type " + propertyDefinition.getType()
-                    + " is not complex or it cannot be found in the archive nor in Alien");
+                    + " is not complex or it cannot be found in the archive");
         }
         for (Map.Entry<String, Object> complexPropertyValueEntry : complexPropertyValue.entrySet()) {
             if (!safe(dataType.getProperties()).containsKey(complexPropertyValueEntry.getKey())) {

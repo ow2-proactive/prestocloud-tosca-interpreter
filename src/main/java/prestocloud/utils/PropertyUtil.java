@@ -171,43 +171,6 @@ public final class PropertyUtil {
         }
     }
 
-    // /**
-    // * Get the value of a given property at a given path. Doesn't manage lists (using spel could be usefull to manage lists index or advanced key selectors).
-    // */
-    // // TODO ALIEN-2589: see alien4cloud.paas.function.FunctionEvaluator.getPropertyValue()
-    // public static AbstractPropertyValue _getPropertyValueFromPath(Map<String, AbstractPropertyValue> values, String propertyPath) {
-    // if (propertyPath.contains(".")) {
-    // String[] paths = propertyPath.split("\\.");
-    // AbstractPropertyValue apv = values.get(paths[0]);
-    // if (apv instanceof ComplexPropertyValue) {
-    // Map<String, Object> currentMap = ((ComplexPropertyValue)apv).getValue();
-    // for (int i=1; i<paths.length; i++) {
-    // Object currentValue = currentMap.get(paths[i]);
-    // if (i == paths.length - 1) {
-    // // this is the last one, can be returned
-    // if (currentValue instanceof AbstractPropertyValue) {
-    // return (AbstractPropertyValue)currentValue;
-    // } else {
-    // return null;
-    // }
-    // } else {
-    // if (currentValue instanceof ComplexPropertyValue) {
-    // ComplexPropertyValue cpv = (ComplexPropertyValue)currentValue;
-    // currentMap = cpv.getValue();
-    // } else {
-    // return null;
-    // }
-    // }
-    // }
-    // return null;
-    // } else {
-    // return null;
-    // }
-    // } else {
-    // return values.get(propertyPath);
-    // }
-    // }
-
     /**
      * Get the value of a given property at a given path. For example, if you try to get <code>my.deep.property</code>,
      * and if <code>my</code> and <code>deep</code> are both <code>ComplexPropertyValue</code> or <code>Map&lt;String, Object&gt;</code>,

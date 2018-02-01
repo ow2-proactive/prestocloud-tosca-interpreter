@@ -348,7 +348,6 @@ public class ToscaSerializerUtils {
         return artifacts.entrySet().stream()
                 .filter(artifact -> (topologyArchiveName.equals(artifact.getValue().getArchiveName())
                         && topologyArchiveVersion.equals(artifact.getValue().getArchiveVersion()))
-                        || "alien_topology".equals(artifact.getValue().getArtifactRepository())
                         || (artifact.getValue().getArtifactRef() != null && GET_INPUT_ARTIFACT_PATTERN.matcher(artifact.getValue().getArtifactRef()).matches()))
                 .collect(Collectors.toMap(Map.Entry::getKey, (Map.Entry::getValue)));
     }

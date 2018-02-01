@@ -9,7 +9,6 @@ import org.prestocloud.tosca.exceptions.ConstraintValueDoNotMatchPropertyTypeExc
 import org.prestocloud.tosca.exceptions.ConstraintViolationException;
 import org.prestocloud.tosca.normative.types.IPropertyType;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.Sets;
 
 import lombok.EqualsAndHashCode;
@@ -23,7 +22,7 @@ import prestocloud.tosca.properties.constraints.ConstraintUtil;
 public class ValidValuesConstraint extends AbstractPropertyConstraint {
     @NotNull
     private List<String> validValues;
-    @JsonIgnore
+
     private Set<Object> validValuesTyped;
 
     @Override

@@ -6,8 +6,6 @@ import org.prestocloud.tosca.exceptions.ConstraintValueDoNotMatchPropertyTypeExc
 import org.prestocloud.tosca.exceptions.ConstraintViolationException;
 import org.prestocloud.tosca.normative.types.IPropertyType;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +18,6 @@ public class EqualConstraint extends AbstractPropertyConstraint implements IMatc
     @NotNull
     private String equal;
 
-    @JsonIgnore
     private Object typed;
 
     @Override

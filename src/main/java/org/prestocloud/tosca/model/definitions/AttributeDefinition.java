@@ -1,7 +1,5 @@
 package org.prestocloud.tosca.model.definitions;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +16,6 @@ import prestocloud.tosca.container.validation.ToscaPropertyType;
 @ToscaPropertyDefaultValueType
 @ToscaPropertyConstraint
 @ToscaPropertyDefaultValueConstraints(groups = { ToscaPropertyPostValidationGroup.class })
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class AttributeDefinition implements IValue {
     @ToscaPropertyType
     private String type;

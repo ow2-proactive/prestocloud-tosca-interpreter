@@ -1,8 +1,8 @@
 tosca_definitions_version: tosca_simple_yaml_1_0
 
 template_name: test-data-types
-template_author: TOSCA TC
-template_version: 1.0.0.alien120
+template_author: prestocloud
+template_version: 1.0.0
 
 description: Contains the normative types definition.
 

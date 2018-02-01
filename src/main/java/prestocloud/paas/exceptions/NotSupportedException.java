@@ -3,7 +3,7 @@ package prestocloud.paas.exceptions;
 import prestocloud.exceptions.TechnicalException;
 
 /**
- * TechnicalException exceptions to be thrown when an operation or something is not yet supported in Alien4Cloud.
+ * TechnicalException exceptions to be thrown when an operation or something is not yet supported.
  */
 public class NotSupportedException extends TechnicalException {
     private static final long serialVersionUID = 1L;

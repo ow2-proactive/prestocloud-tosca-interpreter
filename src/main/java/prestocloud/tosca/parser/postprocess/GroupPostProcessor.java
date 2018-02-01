@@ -3,13 +3,13 @@ package prestocloud.tosca.parser.postprocess;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.prestocloud.tosca.model.templates.NodeGroup;
+import org.prestocloud.tosca.model.templates.NodeTemplate;
 import org.springframework.stereotype.Component;
 import org.yaml.snakeyaml.nodes.Node;
 
 import com.google.common.collect.Sets;
 
-import org.prestocloud.tosca.model.templates.NodeGroup;
-import org.prestocloud.tosca.model.templates.NodeTemplate;
 import prestocloud.tosca.model.ArchiveRoot;
 import prestocloud.tosca.parser.ParsingContextExecution;
 import prestocloud.tosca.parser.ParsingError;
@@ -17,7 +17,7 @@ import prestocloud.tosca.parser.ParsingErrorLevel;
 import prestocloud.tosca.parser.impl.ErrorCode;
 
 /**
- * Group post processor ensure that referenced nodes indeed exists as well as inject the groups into the node as we keep reversed mapping in alien.
+ * Group post processor ensure that referenced nodes indeed exists as well as inject the groups into the node as we keep reversed mapping.
  */
 @Component
 public class GroupPostProcessor implements IPostProcessor<NodeGroup> {

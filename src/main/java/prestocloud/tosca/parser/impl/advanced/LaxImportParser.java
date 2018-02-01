@@ -52,7 +52,7 @@ public class LaxImportParser implements INodeParser<CSARDependency> {
                         node.getStartMark(), "Dependency should be specified as name:version", node.getEndMark(), "Import"));
             } else {
                 context.getParsingErrors()
-                        .add(new ParsingError(ParsingErrorLevel.WARNING, ErrorCode.SYNTAX_ERROR, "Relative import is currently not supported in Alien 4 Cloud",
+                        .add(new ParsingError(ParsingErrorLevel.WARNING, ErrorCode.SYNTAX_ERROR, "Relative import is currently not supported",
                                 node.getStartMark(), "Dependency should be specified as name:version", node.getEndMark(), "Import"));
             }
         }

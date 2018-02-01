@@ -5,8 +5,6 @@ import java.util.List;
 import org.prestocloud.tosca.normative.ToscaNormativeUtil;
 import org.prestocloud.tosca.normative.constants.ToscaFunctionConstants;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,7 +25,6 @@ public class FunctionPropertyValue extends AbstractPropertyValue {
     /**
      * Get the modelable entity's (node or relationship template) name related to the function, represented by the first parameter.
      */
-    @JsonIgnore
     public String getTemplateName() {
         return parameters.get(0);
     }
@@ -35,7 +32,6 @@ public class FunctionPropertyValue extends AbstractPropertyValue {
     /**
      * get the name of the property or attribute or the output we want to retrieve, represented by the last parameter in the list
      */
-    @JsonIgnore
     public String getElementNameToFetch() {
         return parameters.get(parameters.size() - 1);
     }
@@ -43,7 +39,6 @@ public class FunctionPropertyValue extends AbstractPropertyValue {
     /**
      * Get, if provided, the capability/requirement name within the template which contains the prop or attr to retrieve
      */
-    @JsonIgnore
     public String getCapabilityOrRequirementName() {
         if (function != null && parameters.size() > 2) {
             switch (function) {
@@ -61,7 +56,6 @@ public class FunctionPropertyValue extends AbstractPropertyValue {
     /**
      * Get, in case of get_operation_output, the name of the interface related to the function, represented by the second parameter in the list
      */
-    @JsonIgnore
     public String getInterfaceName() {
         if (function != null) {
             switch (function) {
@@ -77,7 +71,6 @@ public class FunctionPropertyValue extends AbstractPropertyValue {
     /**
      * Get, in case of get_operation_output, the name of the operation related to the function, represented by the third parameter in the list
      */
-    @JsonIgnore
     public String getOperationName() {
         if (function != null) {
             switch (function) {

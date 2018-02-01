@@ -67,80 +67,80 @@ public class NodeTemplateUtilsTest {
     @Test
     public void getCapabilityByTypeTest() {
         NodeTemplate nodeTemplate = new NodeTemplate();
-        Capability nodeCapability = new Capability("org.alien4cloud.capabilities.SampleCapability", null);
+        Capability nodeCapability = new Capability("org.prestocloud.capabilities.SampleCapability", null);
         nodeTemplate.setCapabilities(Maps.newHashMap("test", nodeCapability));
         // if the capability type exactly equals then no tosca context and request is required
-        Capability capability = getCapabilityByType(nodeTemplate, "org.alien4cloud.capabilities.SampleCapability");
+        Capability capability = getCapabilityByType(nodeTemplate, "org.prestocloud.capabilities.SampleCapability");
         assertSame(nodeCapability, capability);
 
         // if the capability derives from parent type then a TOSCA context and query is required to fetch the type.
         CapabilityType capabilityType = new CapabilityType();
-        capabilityType.setElementId("org.alien4cloud.capabilities.SampleCapability");
-        capabilityType.setDerivedFrom(Lists.newArrayList("org.alien4cloud.capabilities.TestCapability"));
+        capabilityType.setElementId("org.prestocloud.capabilities.SampleCapability");
+        capabilityType.setDerivedFrom(Lists.newArrayList("org.prestocloud.capabilities.TestCapability"));
         Mockito.reset(csarRepositorySearchService);
         Mockito.when(csarRepositorySearchService.getElementInDependencies(Mockito.eq(CapabilityType.class),
-                Mockito.eq("org.alien4cloud.capabilities.SampleCapability"), Mockito.any(Set.class))).thenReturn(capabilityType);
+                Mockito.eq("org.prestocloud.capabilities.SampleCapability"), Mockito.any(Set.class))).thenReturn(capabilityType);
 
-        capability = toscaContextualAspect.execInToscaContext(() -> getCapabilityByType(nodeTemplate, "org.alien4cloud.capabilities.TestCapability"), false,
-                Sets.newHashSet(new CSARDependency("org.alien4cloud.testArchive", "1.0.0-SNAPSHOT")));
+        capability = toscaContextualAspect.execInToscaContext(() -> getCapabilityByType(nodeTemplate, "org.prestocloud.capabilities.TestCapability"), false,
+                Sets.newHashSet(new CSARDependency("org.prestocloud.testArchive", "1.0.0-SNAPSHOT")));
         assertSame(nodeCapability, capability);
     }
 
     @Test
     public void getMissingCapabilityByTypeTest() {
         NodeTemplate nodeTemplate = new NodeTemplate();
-        Capability nodeCapability = new Capability("org.alien4cloud.capabilities.SampleCapability", null);
+        Capability nodeCapability = new Capability("org.prestocloud.capabilities.SampleCapability", null);
         nodeTemplate.setCapabilities(Maps.newHashMap("test", nodeCapability));
         // if the capability derives from parent type then a TOSCA context and query is required to fetch the type.
         CapabilityType capabilityType = new CapabilityType();
-        capabilityType.setElementId("org.alien4cloud.capabilities.SampleCapability");
-        capabilityType.setDerivedFrom(Lists.newArrayList("org.alien4cloud.capabilities.TestCapability"));
+        capabilityType.setElementId("org.prestocloud.capabilities.SampleCapability");
+        capabilityType.setDerivedFrom(Lists.newArrayList("org.prestocloud.capabilities.TestCapability"));
         Mockito.reset(csarRepositorySearchService);
         Mockito.when(csarRepositorySearchService.getElementInDependencies(Mockito.eq(CapabilityType.class),
-                Mockito.eq("org.alien4cloud.capabilities.SampleCapability"), Mockito.any(Set.class))).thenReturn(capabilityType);
+                Mockito.eq("org.prestocloud.capabilities.SampleCapability"), Mockito.any(Set.class))).thenReturn(capabilityType);
 
-        Capability capability = toscaContextualAspect.execInToscaContext(() -> getCapabilityByType(nodeTemplate, "org.alien4cloud.capabilities.Unknown"), false,
-                Sets.newHashSet(new CSARDependency("org.alien4cloud.testArchive", "1.0.0-SNAPSHOT")));
+        Capability capability = toscaContextualAspect.execInToscaContext(() -> getCapabilityByType(nodeTemplate, "org.prestocloud.capabilities.Unknown"), false,
+                Sets.newHashSet(new CSARDependency("org.prestocloud.testArchive", "1.0.0-SNAPSHOT")));
         assertNull(capability);
     }
 
     @Test
     public void getCapabilityByTypeOrFailTest() {
         NodeTemplate nodeTemplate = new NodeTemplate();
-        Capability nodeCapability = new Capability("org.alien4cloud.capabilities.SampleCapability", null);
+        Capability nodeCapability = new Capability("org.prestocloud.capabilities.SampleCapability", null);
         nodeTemplate.setCapabilities(Maps.newHashMap("test", nodeCapability));
         // if the capability type exactly equals then no tosca context and request is required
-        Capability capability = getCapabilityByTypeOrFail(nodeTemplate, "org.alien4cloud.capabilities.SampleCapability");
+        Capability capability = getCapabilityByTypeOrFail(nodeTemplate, "org.prestocloud.capabilities.SampleCapability");
         assertSame(nodeCapability, capability);
 
         // if the capability derives from parent type then a TOSCA context and query is required to fetch the type.
         CapabilityType capabilityType = new CapabilityType();
-        capabilityType.setElementId("org.alien4cloud.capabilities.SampleCapability");
-        capabilityType.setDerivedFrom(Lists.newArrayList("org.alien4cloud.capabilities.TestCapability"));
+        capabilityType.setElementId("org.prestocloud.capabilities.SampleCapability");
+        capabilityType.setDerivedFrom(Lists.newArrayList("org.prestocloud.capabilities.TestCapability"));
         Mockito.reset(csarRepositorySearchService);
         Mockito.when(csarRepositorySearchService.getElementInDependencies(Mockito.eq(CapabilityType.class),
-                Mockito.eq("org.alien4cloud.capabilities.SampleCapability"), Mockito.any(Set.class))).thenReturn(capabilityType);
+                Mockito.eq("org.prestocloud.capabilities.SampleCapability"), Mockito.any(Set.class))).thenReturn(capabilityType);
 
-        capability = toscaContextualAspect.execInToscaContext(() -> getCapabilityByTypeOrFail(nodeTemplate, "org.alien4cloud.capabilities.TestCapability"),
-                false, Sets.newHashSet(new CSARDependency("org.alien4cloud.testArchive", "1.0.0-SNAPSHOT")));
+        capability = toscaContextualAspect.execInToscaContext(() -> getCapabilityByTypeOrFail(nodeTemplate, "org.prestocloud.capabilities.TestCapability"),
+                false, Sets.newHashSet(new CSARDependency("org.prestocloud.testArchive", "1.0.0-SNAPSHOT")));
         assertSame(nodeCapability, capability);
     }
 
     @Test(expected = NotFoundException.class)
     public void getMissingCapabilityByTypeOrFailTest() {
         NodeTemplate nodeTemplate = new NodeTemplate();
-        Capability nodeCapability = new Capability("org.alien4cloud.capabilities.SampleCapability", null);
+        Capability nodeCapability = new Capability("org.prestocloud.capabilities.SampleCapability", null);
         nodeTemplate.setCapabilities(Maps.newHashMap("test", nodeCapability));
         // if the capability derives from parent type then a TOSCA context and query is required to fetch the type.
         CapabilityType capabilityType = new CapabilityType();
-        capabilityType.setElementId("org.alien4cloud.capabilities.SampleCapability");
-        capabilityType.setDerivedFrom(Lists.newArrayList("org.alien4cloud.capabilities.TestCapability"));
+        capabilityType.setElementId("org.prestocloud.capabilities.SampleCapability");
+        capabilityType.setDerivedFrom(Lists.newArrayList("org.prestocloud.capabilities.TestCapability"));
         Mockito.reset(csarRepositorySearchService);
         Mockito.when(csarRepositorySearchService.getElementInDependencies(Mockito.eq(CapabilityType.class),
-                Mockito.eq("org.alien4cloud.capabilities.SampleCapability"), Mockito.any(Set.class))).thenReturn(capabilityType);
+                Mockito.eq("org.prestocloud.capabilities.SampleCapability"), Mockito.any(Set.class))).thenReturn(capabilityType);
 
-        Capability capability = toscaContextualAspect.execInToscaContext(() -> getCapabilityByTypeOrFail(nodeTemplate, "org.alien4cloud.capabilities.Unknown"),
-                false, Sets.newHashSet(new CSARDependency("org.alien4cloud.testArchive", "1.0.0-SNAPSHOT")));
+        Capability capability = toscaContextualAspect.execInToscaContext(() -> getCapabilityByTypeOrFail(nodeTemplate, "org.prestocloud.capabilities.Unknown"),
+                false, Sets.newHashSet(new CSARDependency("org.prestocloud.testArchive", "1.0.0-SNAPSHOT")));
         assertNull(capability);
     }
 }

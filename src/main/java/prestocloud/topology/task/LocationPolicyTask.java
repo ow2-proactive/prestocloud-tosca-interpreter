@@ -1,6 +1,5 @@
 package prestocloud.topology.task;
 
-import prestocloud.utils.AlienConstants;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,11 +9,14 @@ import lombok.Setter;
 @Getter
 @Setter
 public class LocationPolicyTask extends AbstractTask {
+
+    private final static String GROUP_ALL = "_ALL";
+
     // Name of the node template that needs to be fixed.
     private String groupName;
 
     public LocationPolicyTask() {
-        this.groupName = AlienConstants.GROUP_ALL;
+        this.groupName = GROUP_ALL;
         this.setCode(TaskCode.LOCATION_POLICY);
     }
 

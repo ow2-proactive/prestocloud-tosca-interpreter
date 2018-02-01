@@ -28,6 +28,5 @@ public class LocationPlacementPolicy extends AbstractPolicy {
 
     @Override
     public void setType(String type) {
-        // for json serialization
     }
 }
