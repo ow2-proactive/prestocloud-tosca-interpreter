@@ -65,7 +65,7 @@ public class ToscaParser extends YamlParser<ArchiveRoot> {
         parserRegistriesByVersion.put(NORMATIVE_DSL_1_0, registry);
         parserRegistriesByVersion.put(NORMATIVE_DSL_1_0_URL, registry);
         // experimental
-        registry = mappingGenerator.process("classpath:tosca_simple_yaml_1_2.yml");
+        mappingGenerator.process("classpath:tosca_simple_yaml_1_2.yml");
         parserRegistriesByVersion.put(NORMATIVE_DSL_1_2, registry);
         parserRegistriesByVersion.put(NORMATIVE_DSL_1_2_URL, registry);
     }

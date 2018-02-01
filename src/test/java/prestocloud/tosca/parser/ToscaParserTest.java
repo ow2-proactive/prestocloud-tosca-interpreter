@@ -1,7 +1,6 @@
 package prestocloud.tosca.parser;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -52,15 +51,8 @@ import org.prestocloud.tosca.model.types.DataType;
 import org.prestocloud.tosca.model.types.NodeType;
 import org.prestocloud.tosca.model.types.PolicyType;
 import org.prestocloud.tosca.model.types.RelationshipType;
-import org.prestocloud.tosca.model.workflow.NodeWorkflowStep;
-import org.prestocloud.tosca.model.workflow.RelationshipWorkflowStep;
-import org.prestocloud.tosca.model.workflow.Workflow;
-import org.prestocloud.tosca.model.workflow.WorkflowStep;
-import org.prestocloud.tosca.model.workflow.activities.InlineWorkflowActivity;
 import org.prestocloud.tosca.normative.constants.NormativeCapabilityTypes;
-import org.prestocloud.tosca.normative.constants.NormativeComputeConstants;
 import org.prestocloud.tosca.normative.constants.NormativeCredentialConstant;
-import org.prestocloud.tosca.normative.constants.NormativeRelationshipConstants;
 import org.prestocloud.tosca.normative.constants.NormativeTypesConstant;
 
 import com.google.common.collect.ImmutableMap;
@@ -68,7 +60,6 @@ import com.google.common.collect.Lists;
 
 import prestocloud.component.ICSARRepositorySearchService;
 import prestocloud.paas.plan.ToscaNodeLifecycleConstants;
-import prestocloud.paas.wf.util.WorkflowUtils;
 import prestocloud.rest.utils.JsonUtil;
 import prestocloud.tosca.model.ArchiveRoot;
 import prestocloud.tosca.parser.impl.ErrorCode;
@@ -993,44 +984,6 @@ public class ToscaParserTest extends AbstractToscaParserSimpleProfileTest {
     }
 
     @Test
-    public void testParseTopologyWithWorkflows() throws FileNotFoundException, ParsingException {
-        Csar csar = new Csar("tosca-normative-types", "1.0.0.wd03-SNAPSHOT");
-
-        NodeType mockedCompute = getMockedCompute();
-        NodeType mockedSoftware = getMockedSoftwareComponent();
-        CapabilityType mockedContainer = Mockito.mock(CapabilityType.class);
-        Mockito.when(mockedContainer.getElementId()).thenReturn("tosca.capabilities.Container");
-
-        Mockito.when(csarRepositorySearchService.getElementInDependencies(Mockito.eq(NodeType.class), Mockito.eq("tosca.nodes.SoftwareComponent"),
-                Mockito.any(Set.class))).thenReturn(mockedSoftware);
-        Mockito.when(csarRepositorySearchService.getElementInDependencies(Mockito.eq(CapabilityType.class), Mockito.eq("tosca.capabilities.Container"),
-                Mockito.any(Set.class))).thenReturn(mockedContainer);
-        Mockito.when(
-                csarRepositorySearchService.getElementInDependencies(Mockito.eq(NodeType.class), Mockito.eq("tosca.nodes.Compute"), Mockito.any(Set.class)))
-                .thenReturn(mockedCompute);
-        RelationshipType hostedOn = Mockito.mock(RelationshipType.class);
-        Mockito.when(hostedOn.getElementId()).thenReturn("tosca.relationships.HostedOn");
-        Mockito.when(csarRepositorySearchService.getElementInDependencies(Mockito.eq(RelationshipType.class), Mockito.eq("tosca.relationships.HostedOn"),
-                Mockito.any(Set.class))).thenReturn(hostedOn);
-        Mockito.when(csarRepositorySearchService.getArchive(csar.getName(), csar.getVersion())).thenReturn(csar);
-
-        ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get(getRootDirectory(), "tosca-topology-template-workflows.yml"));
-
-        Mockito.verify(csarRepositorySearchService).getArchive(csar.getName(), csar.getVersion());
-
-        assertNoBlocker(parsingResult);
-
-        Assert.assertEquals(3, parsingResult.getContext().getParsingErrors().size());
-        assertNotNull(parsingResult.getResult().getTopology());
-        Assert.assertEquals(5, parsingResult.getResult().getTopology().getWorkflows().size());
-
-        // check invalid names were renamed
-        assertTrue(parsingResult.getResult().getTopology().getWorkflows().containsKey("invalidName_"));
-        assertTrue(parsingResult.getResult().getTopology().getWorkflows().containsKey("invalid_Name"));
-        assertTrue(parsingResult.getResult().getTopology().getWorkflows().containsKey("invalid_Name_1"));
-    }
-
-    @Test
     public void testDerivedFromNothing() throws ParsingException {
         ParserTestUtil.mockNormativeTypes(csarRepositorySearchService);
         ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get(getRootDirectory(), "derived_from_nothing/template.yml"));
@@ -1435,13 +1388,6 @@ public class ToscaParserTest extends AbstractToscaParserSimpleProfileTest {
     /**************************************/
 
     @Test
-    public void testParseSimpleSecret() throws ParsingException {
-        mockNormativeTypes();
-        ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get(getRootDirectory(), "get-secret.yml"));
-        assertEquals(0, parsingResult.getContext().getParsingErrors().size());
-    }
-
-    @Test
     public void testPolicyTypeParsing() throws ParsingException {
         Mockito.reset(csarRepositorySearchService);
         Mockito.when(csarRepositorySearchService.getArchive("tosca-normative-types", "1.0.0-ALIEN14")).thenReturn(Mockito.mock(Csar.class));
@@ -1655,205 +1601,5 @@ public class ToscaParserTest extends AbstractToscaParserSimpleProfileTest {
         ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get(getRootDirectory(), "tosca-policy-template-fail.yml"));
         assertEquals(1, parsingResult.getContext().getParsingErrors().size());
         assertEquals(1, countErrorByLevelAndCode(parsingResult, ParsingErrorLevel.ERROR, ErrorCode.POLICY_TARGET_NOT_FOUND));
-    }
-
-    @Test
-    public void parseTopologyTemplateWithActivities() throws ParsingException {
-        ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get(getRootDirectory(), "tosca-topology-template-activities.yml"));
-
-        assertFalse(parsingResult.getResult().getTopology().getWorkflows().isEmpty());
-        assertNotNull(parsingResult.getResult().getTopology().getWorkflows().get("install"));
-        Workflow wf = parsingResult.getResult().getTopology().getWorkflows().get("install");
-
-        // check activities
-        assertEquals(1, wf.getSteps().get("Compute_install").getActivities().size());
-        assertEquals(1, wf.getSteps().get("Compute_install_0").getActivities().size());
-        assertEquals(1, wf.getSteps().get("Compute_install_1").getActivities().size());
-
-        // check activities of an other step
-        assertTrue(wf.getSteps().get("Compute_uninstall").getActivities().size() == 1);
-        assertTrue(wf.getSteps().get("Compute_uninstall_0").getActivities().size() == 1);
-
-        assertEquals(1, wf.getSteps().get("Compute_install").getOnSuccess().size());
-        assertEquals(1, wf.getSteps().get("Compute_install_0").getOnSuccess().size());
-        assertEquals(1, wf.getSteps().get("Compute_install_1").getOnSuccess().size());
-
-        assertEquals(1, wf.getSteps().get("Compute_uninstall").getOnSuccess().size());
-        assertEquals(0, wf.getSteps().get("Compute_uninstall_0").getOnSuccess().size());
-
-        // check onSuccess
-        assertTrue(wf.getSteps().get("Compute_install").getOnSuccess().contains("Compute_install_0"));
-        assertTrue(wf.getSteps().get("Compute_install_0").getOnSuccess().contains("Compute_install_1"));
-        assertTrue(wf.getSteps().get("Compute_install_1").getOnSuccess().contains("Compute_uninstall"));
-        assertTrue(wf.getSteps().get("Compute_uninstall").getOnSuccess().contains("Compute_uninstall_0"));
-    }
-
-    @Test
-    public void parseTopologyTemplateWithInlineWorkflow() throws ParsingException {
-        ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get(getRootDirectory(), "tosca-topology-template-inline-workflow.yml"));
-
-        assertFalse(parsingResult.getResult().getTopology().getWorkflows().isEmpty());
-        assertNotNull(parsingResult.getResult().getTopology().getWorkflows().get("install"));
-        Workflow wf = parsingResult.getResult().getTopology().getWorkflows().get("install");
-
-        assertEquals(1, wf.getSteps().get("Compute_install_0").getActivities().size());
-        assertTrue(wf.getSteps().get("Compute_install_0").getActivities().get(0) instanceof InlineWorkflowActivity);
-        InlineWorkflowActivity activity = (InlineWorkflowActivity) wf.getSteps().get("Compute_install_0").getActivities().get(0);
-        assertTrue(activity.getInline().equals("my_custom_wf"));
-
-        WorkflowUtils.processInlineWorkflows(parsingResult.getResult().getTopology().getWorkflows());
-        assertFalse(wf.getSteps().containsKey("Compute_install_0"));
-        assertTrue(wf.getSteps().containsKey("Compute_install_0_Compute_stop"));
-        assertTrue(wf.getSteps().containsKey("Compute_install_0_Compute_uninstall"));
-
-        assertTrue(wf.getSteps().containsKey("Some_other_inline_Compute_stop"));
-        assertTrue(wf.getSteps().containsKey("Some_other_inline_Compute_uninstall"));
-
-        assertTrue(wf.getSteps().get("Compute_install").getOnSuccess().contains("Compute_install_0_Compute_stop"));
-        assertTrue(wf.getSteps().get("Compute_install_0_Compute_stop").getPrecedingSteps().contains("Compute_install"));
-        assertEquals(1, wf.getSteps().get("Compute_install").getOnSuccess().size());
-        assertEquals(0, wf.getSteps().get("Compute_install").getPrecedingSteps().size());
-        assertEquals(1, wf.getSteps().get("Compute_install_0_Compute_stop").getPrecedingSteps().size());
-
-        assertFalse(wf.getSteps().get("Compute_install").getOnSuccess().contains("Compute_install_0_Compute_uninstall"));
-        assertFalse(wf.getSteps().get("Compute_install_0_Compute_uninstall").getPrecedingSteps().contains("Compute_install"));
-
-        assertTrue(wf.getSteps().get("Compute_install_0_Compute_stop").getOnSuccess().contains("Compute_install_0_Compute_uninstall"));
-        assertTrue(wf.getSteps().get("Compute_install_0_Compute_uninstall").getPrecedingSteps().contains("Compute_install_0_Compute_stop"));
-        assertEquals(1, wf.getSteps().get("Compute_install_0_Compute_stop").getOnSuccess().size());
-        assertEquals(1, wf.getSteps().get("Compute_install_0_Compute_uninstall").getPrecedingSteps().size());
-        assertEquals(1, wf.getSteps().get("Compute_install_0_Compute_uninstall").getOnSuccess().size());
-
-        assertTrue(wf.getSteps().get("Compute_install_0_Compute_uninstall").getOnSuccess().contains("Compute_start"));
-        assertTrue(wf.getSteps().get("Compute_start").getPrecedingSteps().contains("Compute_install_0_Compute_uninstall"));
-
-        assertTrue(wf.getSteps().get("Some_other_inline_Compute_stop").getOnSuccess().contains("Some_other_inline_Compute_uninstall"));
-        assertTrue(wf.getSteps().get("Some_other_inline_Compute_uninstall").getPrecedingSteps().contains("Some_other_inline_Compute_stop"));
-
-        assertTrue(wf.getSteps().get("inception_inline_inception_inline_Compute_stop").getOnSuccess()
-                .contains("inception_inline_inception_inline_Compute_uninstall"));
-        assertTrue(wf.getSteps().get("inception_inline_inception_inline_Compute_uninstall").getPrecedingSteps()
-                .contains("inception_inline_inception_inline_Compute_stop"));
-    }
-
-    @Test
-    public void parseTopologyTemplateWithRelationshipWorkflow() throws ParsingException {
-        Mockito.reset(csarRepositorySearchService);
-        Mockito.when(csarRepositorySearchService.getArchive("tosca-normative-types", "1.0.0-ALIEN14")).thenReturn(Mockito.mock(Csar.class));
-
-        NodeType mockCompute = new NodeType();
-        mockCompute.setElementId(NormativeComputeConstants.COMPUTE_TYPE);
-        mockCompute.setArchiveName("tosca-normative-types");
-        mockCompute.setArchiveVersion("1.0.0-ALIEN14");
-        Mockito.when(csarRepositorySearchService.getElementInDependencies(Mockito.eq(NodeType.class), Mockito.eq(NormativeComputeConstants.COMPUTE_TYPE),
-                Mockito.any(Set.class))).thenReturn(mockCompute);
-
-        RelationshipType mockHostedOn = Mockito.mock(RelationshipType.class);
-        Mockito.when(mockHostedOn.getElementId()).thenReturn(NormativeRelationshipConstants.HOSTED_ON);
-        Mockito.when(csarRepositorySearchService.getElementInDependencies(Mockito.eq(RelationshipType.class),
-                Mockito.eq(NormativeRelationshipConstants.HOSTED_ON), Mockito.any(Set.class))).thenReturn(mockHostedOn);
-
-        ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get(getRootDirectory(), "tosca-topology-template-relationship-workflow.yml"));
-
-        Assert.assertFalse(parsingResult.getResult().getTopology().getWorkflows().isEmpty());
-        Assert.assertTrue(parsingResult.getResult().getTopology().getWorkflows().get("install") != null);
-
-        Workflow wf = parsingResult.getResult().getTopology().getWorkflows().get("install");
-        WorkflowStep relStep = wf.getSteps().get("OracleJDK_hostedOnComputeHost_pre_configure_source");
-        Assert.assertNotNull(relStep);
-        Assert.assertTrue(relStep instanceof RelationshipWorkflowStep);
-        RelationshipWorkflowStep relationshipWorkflowStep = (RelationshipWorkflowStep) relStep;
-        Assert.assertNotNull(relationshipWorkflowStep.getTargetRelationship());
-        Assert.assertNotNull(relationshipWorkflowStep.getSourceHostId());
-        Assert.assertNotNull(relationshipWorkflowStep.getTargetHostId());
-        WorkflowStep nStep = wf.getSteps().get("OracleJDK_start");
-        Assert.assertNotNull(nStep);
-        Assert.assertTrue(nStep instanceof NodeWorkflowStep);
-        NodeWorkflowStep nodeWorkflowStep = (NodeWorkflowStep) nStep;
-        Assert.assertNotNull(nodeWorkflowStep.getHostId());
-    }
-
-    @Test
-    public void parseTopologyTemplateWithRelationshipWorkflowMultipleActivities() throws ParsingException {
-        ParsingResult<ArchiveRoot> parsingResult = parser
-                .parseFile(Paths.get(getRootDirectory(), "tosca-topology-template-workflow-relationship-operation.yml"));
-
-        assertFalse(parsingResult.getResult().getTopology().getWorkflows().isEmpty());
-        assertNotNull(parsingResult.getResult().getTopology().getWorkflows().get("install"));
-
-        Workflow wf = parsingResult.getResult().getTopology().getWorkflows().get("install");
-        assertNotNull(wf.getSteps().get("SoftwareComponent_hostedOnComputeHost_pre_configure_source"));
-
-        WorkflowStep step = wf.getSteps().get("SoftwareComponent_hostedOnComputeHost_pre_configure_source");
-        assertTrue(step instanceof RelationshipWorkflowStep);
-        RelationshipWorkflowStep relStep = (RelationshipWorkflowStep) step;
-        assertTrue(relStep.getTarget().equals("SoftwareComponent"));
-        assertTrue(relStep.getTargetRelationship().equals("hostedOnComputeHost"));
-        assertTrue(relStep.getOperationHost().equals("SOURCE"));
-        assertEquals(1, relStep.getActivities().size());
-        assertEquals(1, relStep.getOnSuccess().size());
-        assertTrue(relStep.getOnSuccess().contains("SoftwareComponent_hostedOnComputeHost_pre_configure_source_0"));
-
-        // test the second step, create to split activities into steps
-        WorkflowStep step_0 = wf.getSteps().get("SoftwareComponent_hostedOnComputeHost_pre_configure_source_0");
-        assertTrue(step_0 instanceof RelationshipWorkflowStep);
-        RelationshipWorkflowStep relStep_0 = (RelationshipWorkflowStep) step_0;
-        assertTrue(relStep_0.getTarget().equals("SoftwareComponent"));
-        assertTrue(relStep_0.getTargetRelationship().equals("hostedOnComputeHost"));
-        assertTrue(relStep_0.getOperationHost().equals("SOURCE"));
-        assertEquals(1, relStep_0.getActivities().size());
-        assertEquals(1, relStep_0.getOnSuccess().size());
-        assertTrue(relStep_0.getOnSuccess().contains("SoftwareComponent_install"));
-    }
-
-    @Test
-    public void parsingInvalidTargetInWorkflowStepShouldFail() throws ParsingException {
-        Mockito.reset(csarRepositorySearchService);
-        Mockito.when(csarRepositorySearchService.getArchive("tosca-normative-types", "1.0.0-ALIEN14")).thenReturn(Mockito.mock(Csar.class));
-
-        NodeType mockType = Mockito.mock(NodeType.class);
-        Mockito.when(mockType.isAbstract()).thenReturn(true);
-        Mockito.when(csarRepositorySearchService.getElementInDependencies(Mockito.eq(NodeType.class), Mockito.eq("tosca.nodes.Root"), Mockito.any(Set.class)))
-                .thenReturn(mockType);
-        Mockito.when(
-                csarRepositorySearchService.getElementInDependencies(Mockito.eq(NodeType.class), Mockito.eq("tosca.nodes.Compute"), Mockito.any(Set.class)))
-                .thenReturn(mockType);
-
-        ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get(getRootDirectory(), "tosca-topology-template-workflow-invalid-target.yml"));
-        assertEquals(1, parsingResult.getContext().getParsingErrors().size());
-        Assert.assertEquals(ErrorCode.UNKNWON_WORKFLOW_STEP_TARGET, parsingResult.getContext().getParsingErrors().get(0).getErrorCode());
-    }
-
-    @Test
-    public void parsingInvalidRelationshipTargetInWorkflowStepShouldFail() throws ParsingException {
-        Mockito.reset(csarRepositorySearchService);
-        Mockito.when(csarRepositorySearchService.getArchive("tosca-normative-types", "1.0.0-ALIEN14")).thenReturn(Mockito.mock(Csar.class));
-
-        NodeType mockType = Mockito.mock(NodeType.class);
-        Mockito.when(mockType.isAbstract()).thenReturn(true);
-        Mockito.when(csarRepositorySearchService.getElementInDependencies(Mockito.eq(NodeType.class), Mockito.eq("tosca.nodes.Root"), Mockito.any(Set.class)))
-                .thenReturn(mockType);
-        Mockito.when(mockType.getCapabilities()).thenReturn(Lists.newArrayList(new CapabilityDefinition("host", "tosca.capabilities.Container", 1)));
-        Mockito.when(
-                csarRepositorySearchService.getElementInDependencies(Mockito.eq(NodeType.class), Mockito.eq("tosca.nodes.Compute"), Mockito.any(Set.class)))
-                .thenReturn(mockType);
-        mockType = Mockito.mock(NodeType.class);
-        Mockito.when(mockType.getRequirements()).thenReturn(Lists.newArrayList(new RequirementDefinition("host", "tosca.capabilities.Container")));
-        Mockito.when(csarRepositorySearchService.getElementInDependencies(Mockito.eq(NodeType.class), Mockito.eq("tosca.nodes.SoftwareComponent"),
-                Mockito.any(Set.class))).thenReturn(mockType);
-        CapabilityType mockCapaType = Mockito.mock(CapabilityType.class);
-        Mockito.when(mockCapaType.getElementId()).thenReturn("tosca.capabilities.Container");
-        Mockito.when(csarRepositorySearchService.getElementInDependencies(Mockito.eq(CapabilityType.class), Mockito.eq("tosca.capabilities.Container"),
-                Mockito.any(Set.class))).thenReturn(mockCapaType);
-        RelationshipType mockRelType = Mockito.mock(RelationshipType.class);
-        Mockito.when(mockRelType.getElementId()).thenReturn("tosca.relationships.HostedOn");
-        Mockito.when(csarRepositorySearchService.getElementInDependencies(Mockito.eq(RelationshipType.class), Mockito.eq("tosca.relationships.HostedOn"),
-                Mockito.any(Set.class))).thenReturn(mockRelType);
-
-        ParsingResult<ArchiveRoot> parsingResult = parser
-                .parseFile(Paths.get(getRootDirectory(), "tosca-topology-template-workflow-relationship-operation-invalid-target.yml"));
-        // Same error is duplicated but is it that bad ?
-        assertEquals(2, parsingResult.getContext().getParsingErrors().size());
-        Assert.assertEquals(ErrorCode.UNKNWON_WORKFLOW_STEP_RELATIONSHIP_TARGET, parsingResult.getContext().getParsingErrors().get(0).getErrorCode());
     }
 }

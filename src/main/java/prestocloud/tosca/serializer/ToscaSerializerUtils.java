@@ -13,6 +13,8 @@ import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.prestocloud.tosca.model.definitions.AbstractArtifact;
 import org.prestocloud.tosca.model.definitions.AbstractPropertyValue;
 import org.prestocloud.tosca.model.definitions.DeploymentArtifact;
@@ -36,15 +38,6 @@ import org.prestocloud.tosca.model.templates.NodeTemplate;
 import org.prestocloud.tosca.model.templates.RelationshipTemplate;
 import org.prestocloud.tosca.model.templates.ServiceNodeTemplate;
 import org.prestocloud.tosca.model.templates.Topology;
-import org.prestocloud.tosca.model.workflow.NodeWorkflowStep;
-import org.prestocloud.tosca.model.workflow.WorkflowStep;
-import org.prestocloud.tosca.model.workflow.activities.AbstractWorkflowActivity;
-import org.prestocloud.tosca.model.workflow.activities.CallOperationWorkflowActivity;
-import org.prestocloud.tosca.model.workflow.activities.DelegateWorkflowActivity;
-import org.prestocloud.tosca.model.workflow.activities.InlineWorkflowActivity;
-import org.prestocloud.tosca.model.workflow.activities.SetStateWorkflowActivity;
-import org.apache.commons.collections4.MapUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.collect.Sets;
 
@@ -241,41 +234,6 @@ public class ToscaSerializerUtils {
             builder.append("]");
         }
         return builder.toString();
-    }
-
-    public boolean isNodeActivityStep(WorkflowStep abstractStep) {
-        return abstractStep instanceof NodeWorkflowStep;
-    }
-
-    public String getActivityLabel(AbstractWorkflowActivity activity) {
-        if (activity instanceof CallOperationWorkflowActivity) {
-            return "call_operation";
-        } else if (activity instanceof SetStateWorkflowActivity) {
-            return "set_state";
-        } else if (activity instanceof DelegateWorkflowActivity) {
-            return "delegate";
-        } else if (activity instanceof InlineWorkflowActivity) {
-            return "inline";
-        } else {
-            return activity.getClass().getSimpleName();
-        }
-    }
-
-    public String getInlineActivityArg(AbstractWorkflowActivity activity) {
-        if (activity instanceof CallOperationWorkflowActivity) {
-            CallOperationWorkflowActivity callActivity = (CallOperationWorkflowActivity) activity;
-            return callActivity.getInterfaceName() + "." + callActivity.getOperationName();
-        } else if (activity instanceof SetStateWorkflowActivity) {
-            SetStateWorkflowActivity stateActivity = (SetStateWorkflowActivity) activity;
-            return stateActivity.getStateName();
-        } else if (activity instanceof DelegateWorkflowActivity) {
-            DelegateWorkflowActivity delegateWorkflowActivity = (DelegateWorkflowActivity) activity;
-            return delegateWorkflowActivity.getDelegate();
-        } else if (activity instanceof InlineWorkflowActivity) {
-            return ((InlineWorkflowActivity) activity).getInline();
-        } else {
-            return "void";
-        }
     }
 
     public static boolean hasRepositories(String topologyArchiveName, String topologyArchiveVersion, Topology topology) {

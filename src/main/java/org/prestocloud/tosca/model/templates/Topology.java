@@ -1,7 +1,6 @@
 package org.prestocloud.tosca.model.templates;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -10,7 +9,6 @@ import org.prestocloud.tosca.model.CSARDependency;
 import org.prestocloud.tosca.model.Csar;
 import org.prestocloud.tosca.model.definitions.DeploymentArtifact;
 import org.prestocloud.tosca.model.definitions.PropertyDefinition;
-import org.prestocloud.tosca.model.workflow.Workflow;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -108,17 +106,6 @@ public class Topology implements IDatableResource, IWorkspaceResource {
      * When not null, describe how this topology can be used to substitute a node type in another topology (topology composition).
      */
     private SubstitutionMapping substitutionMapping;
-
-    /**
-     * All the workflows associated with this topology.
-     */
-    private Map<String, Workflow> workflows;
-
-    /**
-     * This fields save workflows as it's declared in declarative workflows without any post processing.
-     * This is necessary as post processing (flatten, remove unnecessary links, nodes) may change the workflow and make the declarative workflows not working.
-     */
-    private Map<String, Workflow> unprocessedWorkflows = new HashMap<>();
 
     /* Archive meta-data are also set as topology tags. */
     private List<Tag> tags;

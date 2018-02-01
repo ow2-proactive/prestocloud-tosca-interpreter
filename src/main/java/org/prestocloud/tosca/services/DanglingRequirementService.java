@@ -1,7 +1,7 @@
 package org.prestocloud.tosca.services;
 
-import static prestocloud.utils.AlienUtils.safe;
 import static com.google.common.collect.Maps.newLinkedHashMap;
+import static prestocloud.utils.AlienUtils.safe;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -30,9 +30,9 @@ import org.prestocloud.tosca.normative.constants.NormativeComputeConstants;
 import org.prestocloud.tosca.normative.constants.NormativeRelationshipConstants;
 import org.prestocloud.tosca.normative.constants.NormativeTypesConstant;
 import org.prestocloud.tosca.normative.types.ToscaTypes;
+import org.prestocloud.tosca.utils.NodeTemplateUtils;
 import org.prestocloud.tosca.utils.NodeTypeUtils;
 import org.prestocloud.tosca.utils.TopologyUtils;
-import org.prestocloud.tosca.utils.NodeTemplateUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -40,8 +40,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import prestocloud.component.ICSARRepositorySearchService;
-import prestocloud.paas.wf.TopologyContext;
-import prestocloud.paas.wf.WorkflowsBuilderService;
 import prestocloud.tosca.context.ToscaContext;
 import prestocloud.tosca.parser.postprocess.ICapabilityMatcherService;
 import prestocloud.tosca.topology.TemplateBuilder;
@@ -53,8 +51,6 @@ import prestocloud.tosca.topology.TemplateBuilder;
  */
 @Component
 public class DanglingRequirementService {
-    @Resource
-    private WorkflowsBuilderService workflowsBuilderService;
     @Resource
     private ICapabilityMatcherService capabilityMatcherService;
     @Resource
@@ -69,7 +65,7 @@ public class DanglingRequirementService {
      * @param topology The topology template
      * @param nodeTemplate The specific node template for which to add dangling requirements.
      */
-    public void addDanglingRequirements(Topology topology, TopologyContext topologyContext, NodeTemplate nodeTemplate, String requirementSkipAutoCompletion) {
+    public void addDanglingRequirements(Topology topology, NodeTemplate nodeTemplate, String requirementSkipAutoCompletion) {
         if (!enabled) {
             return;
         }
@@ -82,13 +78,13 @@ public class DanglingRequirementService {
 
                 if (requirementDefinition.getLowerBound() > relationshipCount) {
                     // we need to add some dangling requirement nodes
-                    addDanglingNodes(topology, topologyContext, nodeTemplate, requirementDefinition, requirementDefinition.getLowerBound() - relationshipCount);
+                    addDanglingNodes(topology, nodeTemplate, requirementDefinition, requirementDefinition.getLowerBound() - relationshipCount);
                 }
             }
         }
     }
 
-    private void addDanglingNodes(Topology topology, TopologyContext topologyContext, NodeTemplate nodeTemplate, RequirementDefinition requirementDefinition,
+    private void addDanglingNodes(Topology topology, NodeTemplate nodeTemplate, RequirementDefinition requirementDefinition,
             int count) {
         // TODO If the TOSCA context does not has the TOSCA normative types then add it automatically
         String danglingTemplateType = requirementDefinition.getNodeType() == null ? NormativeTypesConstant.ROOT_NODE_TYPE : requirementDefinition.getNodeType();
@@ -110,12 +106,12 @@ public class DanglingRequirementService {
 
         if (scalable == null) {
             for (int i = 0; i < count; i++) {
-                NodeTemplate addedNode = addDanglingNode(topology, topologyContext, nodeTemplate, requirementDefinition, danglingNodeType,
+                NodeTemplate addedNode = addDanglingNode(topology, nodeTemplate, requirementDefinition, danglingNodeType,
                         danglingRelationshipType, targetCapabilityDefinition);
                 addedNodes.add(addedNode);
             }
         } else {
-            NodeTemplate danglingTemplate = addDanglingNode(topology, topologyContext, nodeTemplate, requirementDefinition, danglingNodeType,
+            NodeTemplate danglingTemplate = addDanglingNode(topology, nodeTemplate, requirementDefinition, danglingNodeType,
                     danglingRelationshipType, targetCapabilityDefinition);
             Capability scalableCapability = danglingTemplate.getCapabilities().get(scalable.getId());
             TopologyUtils.setScalingProperty(NormativeComputeConstants.SCALABLE_DEFAULT_INSTANCES, count, scalableCapability);
@@ -125,7 +121,7 @@ public class DanglingRequirementService {
 
         // Recursively add dangling nodes.
         for (NodeTemplate addedNode : addedNodes) {
-            addDanglingRequirements(topology, topologyContext, addedNode, null);
+            addDanglingRequirements(topology, addedNode, null);
         }
     }
 
@@ -145,7 +141,7 @@ public class DanglingRequirementService {
         return relationshipType;
     }
 
-    private NodeTemplate addDanglingNode(Topology topology, TopologyContext topologyContext, NodeTemplate nodeTemplate,
+    private NodeTemplate addDanglingNode(Topology topology, NodeTemplate nodeTemplate,
             RequirementDefinition requirementDefinition, NodeType danglingNodeType, RelationshipType danglingRelationshipType,
             CapabilityDefinition targetCapabilityDefinition) {
         NodeTemplate danglingTemplate = TemplateBuilder.buildNodeTemplate(danglingNodeType);
@@ -159,7 +155,6 @@ public class DanglingRequirementService {
         danglingTemplate.setName(danglingTemplateName);
 
         topology.getNodeTemplates().put(danglingTemplateName, danglingTemplate);
-        workflowsBuilderService.addNode(topologyContext, danglingTemplateName);
 
         // Add the dangling requirement relationship
         if (nodeTemplate.getRelationships() == null) {
@@ -186,8 +181,6 @@ public class DanglingRequirementService {
         relationshipTemplate.setProperties(properties);
 
         nodeTemplate.getRelationships().put(danglingRelationshipTemplateName, relationshipTemplate);
-
-        workflowsBuilderService.addRelationship(topologyContext, nodeTemplate.getName(), danglingRelationshipTemplateName);
 
         // TODO remove this workaround as soon as matchin leverages
         setPropertiesFromFilter(danglingTemplate, danglingNodeType);

@@ -41,8 +41,6 @@ public class TopologyPostProcessor implements IPostProcessor<Topology> {
     // Inputs do not define artifact reference so we don't perform validation on them like for types.
     @Resource
     private TypeDeploymentArtifactPostProcessor typeDeploymentArtifactPostProcessor;
-    @Resource
-    private WorkflowPostProcessor workflowPostProcessor;
 
     @Override
     public void process(Topology instance) {
@@ -93,9 +91,6 @@ public class TopologyPostProcessor implements IPostProcessor<Topology> {
 
         // first validate names
         TopologyUtils.normalizeAllNodeTemplateName(instance, ParsingContextExecution.getParsingErrors(), ParsingContextExecution.getObjectToNodeMap());
-
-        // Post process workflows
-        workflowPostProcessor.processWorkflows(instance, node);
     }
 
     private void setDependencies(Topology instance, ArchiveRoot archiveRoot) {

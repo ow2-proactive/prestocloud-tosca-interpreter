@@ -43,7 +43,7 @@ import prestocloud.tosca.parser.impl.ErrorCode;
 import prestocloud.utils.MapUtil;
 
 /**
- * Test tosca parsing for Tosca Simple profile in YAML wd03
+ * Test tosca parsing for Tosca Simple profile in YAML
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class)
