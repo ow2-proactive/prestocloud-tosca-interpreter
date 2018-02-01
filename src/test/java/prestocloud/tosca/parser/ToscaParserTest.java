@@ -60,7 +60,6 @@ import com.google.common.collect.Lists;
 
 import prestocloud.component.ICSARRepositorySearchService;
 import prestocloud.paas.plan.ToscaNodeLifecycleConstants;
-import prestocloud.rest.utils.JsonUtil;
 import prestocloud.tosca.model.ArchiveRoot;
 import prestocloud.tosca.parser.impl.ErrorCode;
 import prestocloud.utils.AlienConstants;
@@ -733,24 +732,6 @@ public class ToscaParserTest extends AbstractToscaParserSimpleProfileTest {
         IValue complexConcat = attributes.get("complex_concat");
 
         // check attributes types
-        assertTrue(simpleDefinition.getClass().equals(AttributeDefinition.class));
-        assertTrue(ipAddressDefinition.getClass().equals(AttributeDefinition.class));
-        assertTrue(simpleConcat.getClass().equals(ConcatPropertyValue.class));
-        assertTrue(complexConcat.getClass().equals(ConcatPropertyValue.class));
-
-        // Test nodeType serialization
-        String nodeTypeJson = JsonUtil.toString(nodeType);
-        // recover node from serialized string
-        NodeType nodeTypeDeserialized = JsonUtil.readObject(nodeTypeJson, NodeType.class);
-        assertNotNull(nodeTypeDeserialized);
-
-        attributes = nodeTypeDeserialized.getAttributes();
-        simpleDefinition = attributes.get("simple_definition");
-        ipAddressDefinition = attributes.get("ip_address");
-        simpleConcat = attributes.get("simple_concat");
-        complexConcat = attributes.get("complex_concat");
-
-        // check attributes types after deserialization
         assertTrue(simpleDefinition.getClass().equals(AttributeDefinition.class));
         assertTrue(ipAddressDefinition.getClass().equals(AttributeDefinition.class));
         assertTrue(simpleConcat.getClass().equals(ConcatPropertyValue.class));

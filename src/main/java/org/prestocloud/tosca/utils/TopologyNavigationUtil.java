@@ -1,6 +1,6 @@
 package org.prestocloud.tosca.utils;
 
-import static prestocloud.utils.AlienUtils.safe;
+import static prestocloud.utils.PrestocloudUtils.safe;
 import static org.prestocloud.tosca.utils.ToscaTypeUtils.isOfType;
 
 import java.util.List;

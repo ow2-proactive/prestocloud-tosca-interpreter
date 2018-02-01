@@ -2,15 +2,13 @@ package org.prestocloud.tosca.model.definitions.constraints;
 
 import javax.validation.constraints.NotNull;
 
+import org.prestocloud.tosca.exceptions.ConstraintValueDoNotMatchPropertyTypeException;
+import org.prestocloud.tosca.exceptions.ConstraintViolationException;
+import org.prestocloud.tosca.normative.types.IPropertyType;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import prestocloud.json.deserializer.TextDeserializer;
-import org.prestocloud.tosca.normative.types.IPropertyType;
-import org.prestocloud.tosca.exceptions.ConstraintValueDoNotMatchPropertyTypeException;
-import org.prestocloud.tosca.exceptions.ConstraintViolationException;
-
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @Getter
 @Setter
@@ -18,7 +16,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 @SuppressWarnings({ "unchecked" })
 public class LessOrEqualConstraint extends AbstractComparablePropertyConstraint {
 
-    @JsonDeserialize(using = TextDeserializer.class)
     @NotNull
     private String lessOrEqual;
 

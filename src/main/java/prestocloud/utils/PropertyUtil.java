@@ -2,18 +2,15 @@ package prestocloud.utils;
 
 import java.util.Map;
 
+import org.apache.commons.collections4.MapUtils;
 import org.prestocloud.tosca.model.definitions.AbstractPropertyValue;
 import org.prestocloud.tosca.model.definitions.ComplexPropertyValue;
 import org.prestocloud.tosca.model.definitions.PropertyDefinition;
-import org.prestocloud.tosca.model.definitions.PropertyValue;
 import org.prestocloud.tosca.model.definitions.ScalarPropertyValue;
-import org.apache.commons.collections4.MapUtils;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.collect.Maps;
 
 import prestocloud.paas.exceptions.NotSupportedException;
-import prestocloud.rest.utils.JsonUtil;
 
 public final class PropertyUtil {
     private PropertyUtil() {
@@ -70,15 +67,6 @@ public final class PropertyUtil {
         }
     }
 
-    public static String getDefaultValueFromPropertyDefinitions(String propertyName, Map<String, PropertyDefinition> propertyDefinitions) {
-        AbstractPropertyValue defaultValue = getDefaultFromPropertyDefinitions(propertyName, propertyDefinitions);
-        if (defaultValue != null) {
-            return serializePropertyValue(defaultValue);
-        } else {
-            return null;
-        }
-    }
-
     public static AbstractPropertyValue getDefaultFromPropertyDefinitions(String propertyName, Map<String, PropertyDefinition> propertyDefinitions) {
         if (MapUtils.isNotEmpty(propertyDefinitions) && propertyDefinitions.containsKey(propertyName)) {
             return propertyDefinitions.get(propertyName).getDefault();
@@ -117,27 +105,6 @@ public final class PropertyUtil {
             return ((ScalarPropertyValue) propertyValue).getValue();
         } else {
             throw new NotSupportedException("Property value is not of type scalar");
-        }
-    }
-
-    public static String serializePropertyValue(Object value) {
-        try {
-            if (value == null) {
-                return null;
-            } else if (value instanceof String) {
-                return (String) value;
-            } else if (value instanceof PropertyValue) {
-                PropertyValue pv = (PropertyValue) value;
-                if (pv instanceof ScalarPropertyValue) {
-                    return ((ScalarPropertyValue) pv).getValue();
-                } else {
-                    return pv.getValue() == null ? null : JsonUtil.toString(pv.getValue());
-                }
-            } else {
-                return JsonUtil.toString(value);
-            }
-        } catch (JsonProcessingException e) {
-            return null;
         }
     }
 

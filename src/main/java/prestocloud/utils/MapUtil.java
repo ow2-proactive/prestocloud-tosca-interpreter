@@ -8,11 +8,10 @@ import java.util.function.Function;
 
 import org.apache.commons.lang3.StringUtils;
 
-import prestocloud.exceptions.InvalidArgumentException;
-import prestocloud.rest.utils.JsonUtil;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.collect.Maps;
+
+import prestocloud.exceptions.InvalidArgumentException;
 
 /**
  * Utility class to ease map manipulation.
@@ -194,11 +193,7 @@ public final class MapUtil {
         Map<String, String> stringStringMap = Maps.newHashMap();
         for (Map.Entry<String, Object> stringObjectEntry : stringObjectMap.entrySet()) {
             if (stringObjectEntry.getValue() != null) {
-                if (stringObjectEntry.getValue() instanceof String) {
-                    stringStringMap.put(stringObjectEntry.getKey(), (String) stringObjectEntry.getValue());
-                } else {
-                    stringStringMap.put(stringObjectEntry.getKey(), JsonUtil.toString(stringObjectEntry.getValue()));
-                }
+                stringStringMap.put(stringObjectEntry.getKey(), (String) stringObjectEntry.getValue());
             } else {
                 stringStringMap.put(stringObjectEntry.getKey(), null);
             }

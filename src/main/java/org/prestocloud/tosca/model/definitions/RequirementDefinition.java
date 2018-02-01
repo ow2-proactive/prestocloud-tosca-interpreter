@@ -2,16 +2,11 @@ package org.prestocloud.tosca.model.definitions;
 
 import org.prestocloud.tosca.model.types.CapabilityType;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import prestocloud.json.deserializer.BoundDeserializer;
-import prestocloud.json.serializer.BoundSerializer;
 
 /**
  * Specifies the requirements that the Node Type exposes.
@@ -50,8 +45,6 @@ public class RequirementDefinition implements LowerBoundedDefinition, UpperBound
      * Specifies the upper boundary by which a requirement MUST be matched for Node Templates according to the current Node Type, or for instances created for
      * those Node Templates. The default value for this attribute is one. A value of "unbounded" indicates that there is no upper boundary.
      */
-    @JsonDeserialize(using = BoundDeserializer.class)
-    @JsonSerialize(using = BoundSerializer.class)
     private int upperBound = 1;
 
     /** Constraints to specify on the target capability or node's properties. */

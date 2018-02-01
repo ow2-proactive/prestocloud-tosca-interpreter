@@ -3,7 +3,7 @@ package org.prestocloud.tosca.exceptions;
 import prestocloud.exceptions.FunctionalException;
 
 /**
- * This exceptions is thrown when Alien cannot deserialize text into property value
+ * This exceptions is thrown when text cannot be deserialized into property value
  * 
  * @author Minh Khang VU
  */

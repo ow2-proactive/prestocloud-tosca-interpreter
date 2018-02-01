@@ -1,6 +1,6 @@
 package prestocloud.tosca.parser.postprocess;
 
-import static prestocloud.utils.AlienUtils.safe;
+import static prestocloud.utils.PrestocloudUtils.safe;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -30,7 +30,7 @@ import prestocloud.tosca.parser.ParsingContextExecution;
 import prestocloud.tosca.parser.ParsingError;
 import prestocloud.tosca.parser.ParsingErrorLevel;
 import prestocloud.tosca.parser.impl.ErrorCode;
-import prestocloud.utils.AlienUtils;
+import prestocloud.utils.PrestocloudUtils;
 import prestocloud.utils.PropertyUtil;
 import prestocloud.utils.VersionUtil;
 
@@ -117,7 +117,7 @@ public class ArchiveRootPostProcessor implements IPostProcessor<ArchiveRoot> {
         Csar archive = archiveRoot.getArchive();
         if (dependencies.contains(new CSARDependency(archive.getName(), archive.getVersion(), archive.getHash()))) {
             ParsingContextExecution.getParsingErrors().add(new ParsingError(ParsingErrorLevel.ERROR, ErrorCode.CSAR_IMPORT_ITSELF,
-                    AlienUtils.prefixWith(":", archive.getVersion(), archive.getName()), null, "Import itself", null, null));
+                    PrestocloudUtils.prefixWith(":", archive.getVersion(), archive.getName()), null, "Import itself", null, null));
         }
 
         /*
@@ -165,8 +165,8 @@ public class ArchiveRootPostProcessor implements IPostProcessor<ArchiveRoot> {
                     // Log the dependency conflict as a warning.
                     ParsingContextExecution.getParsingErrors()
                             .add(new ParsingError(ParsingErrorLevel.WARNING, ErrorCode.TRANSITIVE_DEPENDENCY_VERSION_CONFLICT,
-                                    AlienUtils.prefixWith(":", conflictingDependency.getVersion(), conflictingDependency.getName()), null,
-                                    AlienUtils.prefixWith(":", transitiveDependency.getVersion(), transitiveDependency.getName()), null,
+                                    PrestocloudUtils.prefixWith(":", conflictingDependency.getVersion(), conflictingDependency.getName()), null,
+                                    PrestocloudUtils.prefixWith(":", transitiveDependency.getVersion(), transitiveDependency.getName()), null,
                                     conflictingDependency.getVersion()));
                     // Resolve conflict by using the direct dependency version - delete the transitive dependency
                     return true;
@@ -186,8 +186,8 @@ public class ArchiveRootPostProcessor implements IPostProcessor<ArchiveRoot> {
                     && VersionUtil.compare(dependency.getVersion(), csarDependency.getVersion()) < 0) {
                 ParsingContextExecution.getParsingErrors()
                         .add(new ParsingError(ParsingErrorLevel.WARNING, ErrorCode.DEPENDENCY_VERSION_CONFLICT,
-                                AlienUtils.prefixWith(":", dependency.getVersion(), dependency.getName()), null,
-                                AlienUtils.prefixWith(":", csarDependency.getVersion(), csarDependency.getName()), null, null));
+                                PrestocloudUtils.prefixWith(":", dependency.getVersion(), dependency.getName()), null,
+                                PrestocloudUtils.prefixWith(":", csarDependency.getVersion(), csarDependency.getName()), null, null));
                 return true;
             } else {
                 return false;

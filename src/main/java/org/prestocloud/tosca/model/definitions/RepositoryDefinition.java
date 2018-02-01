@@ -14,7 +14,7 @@ import lombok.Setter;
 public class RepositoryDefinition {
     private String id;
     /**
-     * Type is not tosca, this is an Alien meta data tag to boost artifact resolution
+     * Type is a custom meta data tag to boost artifact resolution
      */
     private String type;
     private String description;

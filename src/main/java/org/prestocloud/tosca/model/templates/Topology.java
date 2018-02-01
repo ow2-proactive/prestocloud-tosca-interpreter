@@ -13,22 +13,15 @@ import org.prestocloud.tosca.model.definitions.PropertyDefinition;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.collect.Sets;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import prestocloud.json.deserializer.NodeTemplateDeserializer;
 import prestocloud.model.common.IDatableResource;
 import prestocloud.model.common.IWorkspaceResource;
 import prestocloud.model.common.Tag;
-import prestocloud.utils.jackson.ConditionalAttributes;
-import prestocloud.utils.jackson.ConditionalOnAttribute;
-import prestocloud.utils.jackson.JSonMapEntryArrayDeSerializer;
-import prestocloud.utils.jackson.JSonMapEntryArraySerializer;
 import prestocloud.utils.version.Version;
 
 @Getter
@@ -55,14 +48,8 @@ public class Topology implements IDatableResource, IWorkspaceResource {
     /** The list of dependencies of this topology. */
     private Set<CSARDependency> dependencies = Sets.newHashSet();
 
-    @ConditionalOnAttribute(ConditionalAttributes.ES)
-    @JsonDeserialize(using = JSonMapEntryArrayDeSerializer.class, contentUsing = NodeTemplateDeserializer.class)
-    @JsonSerialize(using = JSonMapEntryArraySerializer.class)
     private Map<String, NodeTemplate> nodeTemplates;
 
-    @ConditionalOnAttribute(ConditionalAttributes.ES)
-    @JsonDeserialize(using = JSonMapEntryArrayDeSerializer.class)
-    @JsonSerialize(using = JSonMapEntryArraySerializer.class)
     private Map<String, PolicyTemplate> policies;
 
     private Map<String, PropertyDefinition> inputs;

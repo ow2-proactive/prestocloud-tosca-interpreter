@@ -1,6 +1,6 @@
 package prestocloud.tosca.serializer;
 
-import static prestocloud.utils.AlienUtils.safe;
+import static prestocloud.utils.PrestocloudUtils.safe;
 
 import java.io.BufferedReader;
 import java.io.IOException;

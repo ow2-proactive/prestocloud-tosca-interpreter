@@ -3,8 +3,6 @@ package org.prestocloud.tosca.model.definitions;
 import java.util.List;
 import java.util.Map;
 
-import prestocloud.json.deserializer.PropertyConstraintListDeserializer;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.common.collect.Maps;
 
 import lombok.Getter;
@@ -16,6 +14,5 @@ import lombok.Setter;
 @NoArgsConstructor
 public class FilterDefinition {
     /** Property constraint list by property */
-    @JsonDeserialize(contentUsing = PropertyConstraintListDeserializer.class)
     private Map<String, List<PropertyConstraint>> properties = Maps.newHashMap();
 }

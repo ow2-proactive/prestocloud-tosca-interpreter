@@ -1,7 +1,7 @@
 package org.prestocloud.tosca.services;
 
 import static com.google.common.collect.Maps.newLinkedHashMap;
-import static prestocloud.utils.AlienUtils.safe;
+import static prestocloud.utils.PrestocloudUtils.safe;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -24,7 +24,6 @@ import org.prestocloud.tosca.model.templates.Topology;
 import org.prestocloud.tosca.model.types.CapabilityType;
 import org.prestocloud.tosca.model.types.NodeType;
 import org.prestocloud.tosca.model.types.RelationshipType;
-import org.prestocloud.tosca.normative.constants.AlienCapabilityTypes;
 import org.prestocloud.tosca.normative.constants.NormativeCapabilityTypes;
 import org.prestocloud.tosca.normative.constants.NormativeComputeConstants;
 import org.prestocloud.tosca.normative.constants.NormativeRelationshipConstants;
@@ -98,9 +97,6 @@ public class DanglingRequirementService {
 
         // check if the type is scalable (then count is used as a scalability parameter) or if we should add multiple instances
         CapabilityDefinition scalable = NodeTypeUtils.getCapabilityByType(danglingNodeType, NormativeCapabilityTypes.SCALABLE);
-        if (scalable == null) {
-            scalable = NodeTypeUtils.getCapabilityByType(danglingNodeType, AlienCapabilityTypes.CLUSTER_CONTROLLER);
-        }
 
         List<NodeTemplate> addedNodes = Lists.newArrayList();
 

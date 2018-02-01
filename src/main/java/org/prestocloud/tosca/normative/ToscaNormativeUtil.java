@@ -3,7 +3,7 @@ package org.prestocloud.tosca.normative;
 import prestocloud.paas.plan.ToscaNodeLifecycleConstants;
 import prestocloud.paas.plan.ToscaRelationshipLifecycleConstants;
 import prestocloud.utils.AlienConstants;
-import prestocloud.utils.AlienUtils;
+import prestocloud.utils.PrestocloudUtils;
 
 /**
  * Utility to work with normative constants.
@@ -29,6 +29,6 @@ public final class ToscaNormativeUtil {
     }
 
     public static String formatedOperationOutputName(String nodeName, String interfaceName, String operationName, String output) {
-        return AlienUtils.prefixWith(AlienConstants.OPERATION_NAME_SEPARATOR, output, new String[] { nodeName, interfaceName, operationName });
+        return PrestocloudUtils.prefixWith(AlienConstants.OPERATION_NAME_SEPARATOR, output, new String[] { nodeName, interfaceName, operationName });
     }
 }

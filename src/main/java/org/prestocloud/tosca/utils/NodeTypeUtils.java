@@ -6,7 +6,7 @@ import org.prestocloud.tosca.model.types.CapabilityType;
 import org.prestocloud.tosca.model.types.NodeType;
 
 import prestocloud.tosca.context.ToscaContext;
-import prestocloud.utils.AlienUtils;
+import prestocloud.utils.PrestocloudUtils;
 
 public final class NodeTypeUtils {
     private NodeTypeUtils() {
@@ -36,7 +36,7 @@ public final class NodeTypeUtils {
      * @return The capability definition matching the id or null.
      */
     public static CapabilityDefinition getCapabilityById(NodeType nodeType, String capabilityId) {
-        for (CapabilityDefinition capability : AlienUtils.safe(nodeType.getCapabilities())) {
+        for (CapabilityDefinition capability : PrestocloudUtils.safe(nodeType.getCapabilities())) {
             if (capability.getId().equals(capabilityId)) {
                 return capability;
             }
@@ -52,7 +52,7 @@ public final class NodeTypeUtils {
      * @return The capability definition matching the type or null if no capability of the requested type is defined.
      */
     public static CapabilityDefinition getCapabilityByType(NodeType nodeType, String capabilityTypeName) {
-        for (CapabilityDefinition capability : AlienUtils.safe(nodeType.getCapabilities())) {
+        for (CapabilityDefinition capability : PrestocloudUtils.safe(nodeType.getCapabilities())) {
             if (capability.getType().equals(capabilityTypeName)) {
                 return capability;
             }

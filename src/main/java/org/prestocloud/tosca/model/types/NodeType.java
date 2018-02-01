@@ -7,14 +7,9 @@ import org.prestocloud.tosca.model.definitions.AbstractPropertyValue;
 import org.prestocloud.tosca.model.definitions.CapabilityDefinition;
 import org.prestocloud.tosca.model.definitions.RequirementDefinition;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import prestocloud.json.deserializer.PropertyValueDeserializer;
-import prestocloud.utils.jackson.ConditionalAttributes;
-import prestocloud.utils.jackson.ConditionalOnAttribute;
 
 @Getter
 @Setter
@@ -26,13 +21,9 @@ public class NodeType extends AbstractInstantiableToscaType {
 
     private List<String> defaultCapabilities;
 
-    private long alienScore;
-
     /** When the type is created from a topology template (substitution), contains the topology id. */
     private String substitutionTopologyId;
 
     /** Portability information. */
-    @ConditionalOnAttribute({ ConditionalAttributes.ES, ConditionalAttributes.REST })
-    @JsonDeserialize(contentUsing = PropertyValueDeserializer.class)
     private Map<String, AbstractPropertyValue> portability;
 }

@@ -17,7 +17,7 @@ public interface IArtifact {
     String getArtifactRepository();
 
     /**
-     * The path of artifact should be resolved just before the deployment by Alien for orchestrator plugins
+     * The path of artifact should be resolved just before the deployment
      * 
      * @return local path to the artifact
      */

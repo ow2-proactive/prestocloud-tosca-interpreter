@@ -1,6 +1,6 @@
 package org.prestocloud.tosca.utils;
 
-import static prestocloud.utils.AlienUtils.safe;
+import static prestocloud.utils.PrestocloudUtils.safe;
 
 import java.util.Map;
 import java.util.Map.Entry;

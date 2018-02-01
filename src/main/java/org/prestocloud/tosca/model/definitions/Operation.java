@@ -7,13 +7,11 @@ import java.util.Set;
 import org.apache.commons.collections4.CollectionUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.common.collect.Sets;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import prestocloud.json.deserializer.OperationParameterDeserializer;
 
 /**
  * Defines an operation available to manage particular aspects of the Node Type.
@@ -31,7 +29,6 @@ public class Operation {
     /** Description of the operation. */
     private String description;
     /** This OPTIONAL property contains a list of one or more input parameter definitions. */
-    @JsonDeserialize(contentUsing = OperationParameterDeserializer.class)
     private Map<String, IValue> inputParameters;
     /** This element is not part of TOSCA but allows to specifies some portability meta-data on the operation. */
     private Map<String, AbstractPropertyValue> portability;

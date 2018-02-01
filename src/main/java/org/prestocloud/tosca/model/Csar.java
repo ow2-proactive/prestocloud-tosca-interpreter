@@ -57,13 +57,15 @@ public class Csar implements IWorkspaceResource {
     /** Archive metadata. */
     private List<Tag> tags;
 
-    /** Alien 4 Cloud meta-data to know how the archive has been imported. */
+    /** Meta-data to know how the archive has been imported. */
     private String importSource;
-    /** Date on which the archive has been imported or updated in alien4cloud. */
+
+    /** Date on which the archive has been imported or updated */
     private Date importDate;
 
     /* Whether or not this archive contains a topology */
     private boolean hasTopology;
+
     /* Node types count in this archive */
     private long nodeTypesCount;
 

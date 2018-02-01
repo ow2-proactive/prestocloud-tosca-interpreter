@@ -1,6 +1,6 @@
 package prestocloud.utils.services;
 
-import static prestocloud.utils.AlienUtils.safe;
+import static prestocloud.utils.PrestocloudUtils.safe;
 
 import java.beans.IntrospectionException;
 import java.util.List;

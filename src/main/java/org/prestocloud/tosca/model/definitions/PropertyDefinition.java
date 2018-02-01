@@ -8,7 +8,6 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -16,8 +15,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import prestocloud.json.deserializer.PropertyConstraintDeserializer;
-import prestocloud.json.deserializer.PropertyValueDeserializer;
 import prestocloud.model.components.IncompatiblePropertyDefinitionException;
 import prestocloud.tosca.container.validation.ToscaPropertyConstraint;
 import prestocloud.tosca.container.validation.ToscaPropertyConstraintDuplicate;
@@ -59,7 +56,6 @@ public class PropertyDefinition implements IValue {
 
     @Valid
     @ToscaPropertyConstraintDuplicate
-    @JsonDeserialize(contentUsing = PropertyConstraintDeserializer.class)
     private List<PropertyConstraint> constraints;
 
     private boolean isPassword;
@@ -75,7 +71,6 @@ public class PropertyDefinition implements IValue {
         this.isPassword = from.isPassword;
     }
 
-    @JsonDeserialize(using = PropertyValueDeserializer.class)
     public PropertyValue getDefault() {
         return this.defaultValue;
     }
