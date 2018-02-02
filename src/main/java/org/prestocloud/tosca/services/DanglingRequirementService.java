@@ -32,7 +32,6 @@ import org.prestocloud.tosca.normative.types.ToscaTypes;
 import org.prestocloud.tosca.utils.NodeTemplateUtils;
 import org.prestocloud.tosca.utils.NodeTypeUtils;
 import org.prestocloud.tosca.utils.TopologyUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
@@ -55,9 +54,6 @@ public class DanglingRequirementService {
     @Resource
     private ICSARRepositorySearchService repositorySearchService;
 
-    @Value("${features.editor_auto_completion:#{false}}")
-    private boolean enabled;
-
     /**
      * Add dangling requirement nodes for the specified node in the topology.
      *
@@ -65,9 +61,6 @@ public class DanglingRequirementService {
      * @param nodeTemplate The specific node template for which to add dangling requirements.
      */
     public void addDanglingRequirements(Topology topology, NodeTemplate nodeTemplate, String requirementSkipAutoCompletion) {
-        if (!enabled) {
-            return;
-        }
         // Get the node type
         NodeType nodeType = ToscaContext.get(NodeType.class, nodeTemplate.getType());
         for (RequirementDefinition requirementDefinition : nodeType.getRequirements()) {

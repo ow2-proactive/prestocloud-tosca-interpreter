@@ -2,15 +2,26 @@ package prestocloud.tosca.parser.impl.advanced;
 
 import org.springframework.stereotype.Component;
 import org.yaml.snakeyaml.nodes.Node;
+import org.yaml.snakeyaml.nodes.ScalarNode;
 
 import org.prestocloud.tosca.model.definitions.ImplementationArtifact;
+import prestocloud.tosca.parser.INodeParser;
+import prestocloud.tosca.parser.ParserUtils;
 import prestocloud.tosca.parser.ParsingContextExecution;
 
-@Deprecated
-@Component
-public class ImplementationArtifactParser extends ArtifactParser<ImplementationArtifact> {
+@Component("implementationArtifactParser")
+public class ImplementationArtifactParser implements INodeParser<ImplementationArtifact> {
+
     @Override
     public ImplementationArtifact parse(Node node, ParsingContextExecution context) {
-        return doParse(new ImplementationArtifact(), node, context);
+        if (node instanceof ScalarNode) {
+            String artifactReference = ((ScalarNode) node).getValue();
+            ImplementationArtifact artifact = new ImplementationArtifact();
+            artifact.setArtifactRef(artifactReference);
+            return artifact;
+        } else {
+            ParserUtils.addTypeError(node, context.getParsingErrors(), "Artifact definition");
+        }
+        return null;
     }
 }

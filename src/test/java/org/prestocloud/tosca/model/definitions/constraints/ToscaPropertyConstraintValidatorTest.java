@@ -1,21 +1,18 @@
 package org.prestocloud.tosca.model.definitions.constraints;
 
-import java.util.List;
-import java.util.Set;
+import com.google.common.collect.Lists;
+import org.junit.Assert;
+import org.junit.Test;
+import org.prestocloud.tosca.model.definitions.PropertyConstraint;
+import org.prestocloud.tosca.model.definitions.PropertyDefinition;
+import org.prestocloud.tosca.normative.types.ToscaTypes;
+import prestocloud.tosca.container.validation.ToscaSequence;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
-
-import prestocloud.tosca.container.validation.ToscaSequence;
-import org.junit.Assert;
-import org.junit.Test;
-
-import org.prestocloud.tosca.model.definitions.PropertyConstraint;
-import org.prestocloud.tosca.normative.types.ToscaTypes;
-import org.prestocloud.tosca.model.definitions.PropertyDefinition;
-
-import com.google.common.collect.Lists;
+import java.util.List;
+import java.util.Set;
 
 public class ToscaPropertyConstraintValidatorTest {
     private Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
@@ -52,7 +49,7 @@ public class ToscaPropertyConstraintValidatorTest {
         return createDefinitions(propertyType, constraint);
     }
 
-    private PropertyDefinition createLenghtDefinition(String propertyType, int value) {
+    private PropertyDefinition createLengthDefinition(String propertyType, int value) {
         LengthConstraint constraint = new LengthConstraint();
         constraint.setLength(value);
         return createDefinitions(propertyType, constraint);
@@ -70,13 +67,13 @@ public class ToscaPropertyConstraintValidatorTest {
         return createDefinitions(propertyType, constraint);
     }
 
-    private PropertyDefinition createMaxLenghtDefinition(String propertyType, int value) {
+    private PropertyDefinition createMaxLengthDefinition(String propertyType, int value) {
         MaxLengthConstraint constraint = new MaxLengthConstraint();
         constraint.setMaxLength(value);
         return createDefinitions(propertyType, constraint);
     }
 
-    private PropertyDefinition createMinLenghtDefinition(String propertyType, int value) {
+    private PropertyDefinition createMinLengthDefinition(String propertyType, int value) {
         MinLengthConstraint constraint = new MinLengthConstraint();
         constraint.setMinLength(value);
         return createDefinitions(propertyType, constraint);
@@ -236,14 +233,14 @@ public class ToscaPropertyConstraintValidatorTest {
 
     @Test
     public void validStringLengthConstraintShouldNotCreateViolations() {
-        Set<ConstraintViolation<PropertyDefinition>> violations = validator.validate(createLenghtDefinition(ToscaTypes.STRING.toString(), 2),
+        Set<ConstraintViolation<PropertyDefinition>> violations = validator.validate(createLengthDefinition(ToscaTypes.STRING.toString(), 2),
                 ToscaSequence.class);
         Assert.assertEquals(0, violations.size());
     }
 
     @Test
     public void invalidIntegerLengthConstraintShouldCreateViolations() {
-        Set<ConstraintViolation<PropertyDefinition>> violations = validator.validate(createLenghtDefinition(ToscaTypes.INTEGER.toString(), 2),
+        Set<ConstraintViolation<PropertyDefinition>> violations = validator.validate(createLengthDefinition(ToscaTypes.INTEGER.toString(), 2),
                 ToscaSequence.class);
         Assert.assertEquals(2, violations.size());
     }
@@ -320,28 +317,28 @@ public class ToscaPropertyConstraintValidatorTest {
 
     @Test
     public void validStringMaxLengthConstraintShouldNotCreateViolations() {
-        Set<ConstraintViolation<PropertyDefinition>> violations = validator.validate(createMaxLenghtDefinition(ToscaTypes.STRING.toString(), 2),
+        Set<ConstraintViolation<PropertyDefinition>> violations = validator.validate(createMaxLengthDefinition(ToscaTypes.STRING.toString(), 2),
                 ToscaSequence.class);
         Assert.assertEquals(0, violations.size());
     }
 
     @Test
     public void invalidIntegerMaxLengthConstraintShouldCreateViolations() {
-        Set<ConstraintViolation<PropertyDefinition>> violations = validator.validate(createMaxLenghtDefinition(ToscaTypes.INTEGER.toString(), 2),
+        Set<ConstraintViolation<PropertyDefinition>> violations = validator.validate(createMaxLengthDefinition(ToscaTypes.INTEGER.toString(), 2),
                 ToscaSequence.class);
         Assert.assertEquals(2, violations.size());
     }
 
     @Test
     public void validStringMinLengthConstraintShouldNotCreateViolations() {
-        Set<ConstraintViolation<PropertyDefinition>> violations = validator.validate(createMinLenghtDefinition(ToscaTypes.STRING.toString(), 2),
+        Set<ConstraintViolation<PropertyDefinition>> violations = validator.validate(createMinLengthDefinition(ToscaTypes.STRING.toString(), 2),
                 ToscaSequence.class);
         Assert.assertEquals(0, violations.size());
     }
 
     @Test
     public void invalidIntegerMinLengthConstraintShouldCreateViolations() {
-        Set<ConstraintViolation<PropertyDefinition>> violations = validator.validate(createMinLenghtDefinition(ToscaTypes.INTEGER.toString(), 2),
+        Set<ConstraintViolation<PropertyDefinition>> violations = validator.validate(createMinLengthDefinition(ToscaTypes.INTEGER.toString(), 2),
                 ToscaSequence.class);
         Assert.assertEquals(2, violations.size());
     }

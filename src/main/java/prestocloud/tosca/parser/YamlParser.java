@@ -100,7 +100,7 @@ public abstract class YamlParser<T> {
     private ParsingResult<T> doParsing(String fileName, Node rootNode, T instance) throws ParsingException {
         boolean createContext = !ParsingContextExecution.exist();
         try {
-            if (createContext) { // parser can reuse an existing context if provided.
+            if (createContext) { // tosca can reuse an existing context if provided.
                 ParsingContextExecution.init();
             }
             ParsingContextExecution.setFileName(fileName);
@@ -129,11 +129,11 @@ public abstract class YamlParser<T> {
     }
 
     /**
-     * Allow to find the parser to use based on the root node.
+     * Allow to find the tosca to use based on the root node.
      * 
-     * @param rootNode The root node from which to get a parser implementation.
+     * @param rootNode The root node from which to get a tosca implementation.
      * @param context The parsing context.
-     * @return The parser to use.
+     * @return The tosca to use.
      */
     protected abstract INodeParser<T> getParser(Node rootNode, ParsingContextExecution context) throws ParsingException;
 

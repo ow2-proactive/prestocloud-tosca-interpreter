@@ -55,7 +55,7 @@ public abstract class AbstractToscaParserSimpleProfileTest {
     @Configuration
     @EnableAutoConfiguration(exclude = { HypermediaAutoConfiguration.class })
     @EnableAspectJAutoProxy(proxyTargetClass = true)
-    @ComponentScan(basePackages = { "prestocloud.tosca.context", "prestocloud.tosca.parser", "prestocloud.paas.wf" })
+    @ComponentScan(basePackages = { "prestocloud.tosca.context", "prestocloud.tosca.parser" })
     static class ContextConfiguration {
         @Bean
         public ICSARRepositorySearchService repositorySearchService() {
@@ -120,7 +120,7 @@ public abstract class AbstractToscaParserSimpleProfileTest {
         NodeType nodeType = archiveRoot.getNodeTypes().get("my_company.my_types.MyAppNodeType");
         Assert.assertNotNull(nodeType);
         Assert.assertEquals(Lists.newArrayList("tosca.nodes.SoftwareComponent", "tosca.nodes.Root"), nodeType.getDerivedFrom());
-        Assert.assertEquals("My company’s custom applicaton", nodeType.getDescription());
+        Assert.assertEquals("My company's custom applicaton", nodeType.getDescription());
 
         // validate properties parsing
         Assert.assertEquals(4, nodeType.getProperties().size());

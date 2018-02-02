@@ -20,7 +20,7 @@ import prestocloud.tosca.parser.ParsingError;
 import prestocloud.tosca.parser.impl.ErrorCode;
 
 /**
- * Map using a child parser based on a discriminator key (valid only for MappingNode).
+ * Map using a child tosca based on a discriminator key (valid only for MappingNode).
  */
 @Component
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -31,10 +31,10 @@ public class KeyDiscriminatorParser<T> implements INodeParser<T> {
     private INodeParser<T> fallbackParser;
 
     /**
-     * Create a new key discriminator parser instance.
+     * Create a new key discriminator tosca instance.
      * 
-     * @param parserByExistKey A map of existing keys to the parser to use in case the key exists.
-     * @param fallbackParser The parser to use if none of the key is actually found or if the node type is not a MappingNode.
+     * @param parserByExistKey A map of existing keys to the tosca to use in case the key exists.
+     * @param fallbackParser The tosca to use if none of the key is actually found or if the node type is not a MappingNode.
      */
     public KeyDiscriminatorParser(Map<String, INodeParser<T>> parserByExistKey, INodeParser<T> fallbackParser) {
         if (parserByExistKey == null) {
@@ -64,7 +64,7 @@ public class KeyDiscriminatorParser<T> implements INodeParser<T> {
                 }
             }
 
-            // if not we should use the mapping node fallback parser.
+            // if not we should use the mapping node fallback tosca.
             if (mappingNodeFallbackParser != null) {
                 return mappingNodeFallbackParser.parse(node, context);
             }

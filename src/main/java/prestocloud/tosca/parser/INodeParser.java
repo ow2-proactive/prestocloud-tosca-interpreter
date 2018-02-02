@@ -3,9 +3,9 @@ package prestocloud.tosca.parser;
 import org.yaml.snakeyaml.nodes.Node;
 
 /**
- * Interface for a node parser.
+ * Interface for a node tosca.
  *
- * @param <T> The type of returned by the parser.
+ * @param <T> The type of returned by the tosca.
  */
 public interface INodeParser<T> {
     /**

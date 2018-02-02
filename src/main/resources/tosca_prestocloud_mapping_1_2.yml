@@ -1,6 +1,6 @@
-# Mapping definition for tosca simple profile DSL
+# Mapping definitions for tosca simple profile DSL 1.2
 
-# declare custom parsers for complex types that requires specific parser.
+# declare custom parsers for complex types that requires specific tosca.
 - scalar: prestocloud.tosca.parser.impl.base.ScalarParser
 - import_definition: prestocloud.tosca.parser.impl.advanced.ImportParser
 - occurrences: prestocloud.tosca.parser.impl.advanced.OccurrencesParser
@@ -17,9 +17,7 @@
 - meta_data: prestocloud.tosca.parser.impl.advanced.MetaDataParser
 - fail_get_artifact: prestocloud.tosca.parser.impl.advanced.FailGetArtifactParser
 - string_list: prestocloud.tosca.parser.impl.advanced.StringListParser
-#- relationship_template: prestocloud.tosca.parser.impl.v20.RelationshipTemplateParser
 - relationship_template: prestocloud.tosca.parser.impl.advanced.RelationshipTemplateParser
-
 
 # declare standard mapping based parsers
 - definition: prestocloud.tosca.model.ArchiveRoot

@@ -1,9 +1,10 @@
 package org.prestocloud.tosca.normative;
 
-import org.prestocloud.tosca.model.CSARDependency;
-import com.google.common.collect.Maps;
-
 import java.util.Map;
+
+import org.prestocloud.tosca.model.CSARDependency;
+
+import com.google.common.collect.Maps;
 
 /**
  * The definition of the TOSCA version implies an automatic import of dependencies.
@@ -16,7 +17,7 @@ public final class ToscaNormativeImports {
 
     static {
         IMPORTS = Maps.newHashMap();
-        IMPORTS.put("tosca_simple_yaml_1_0", new CSARDependency(TOSCA_NORMATIVE_TYPES, "1.0.0"));
-        IMPORTS.put("http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0", new CSARDependency(TOSCA_NORMATIVE_TYPES, "1.0.0"));
+        IMPORTS.put("tosca_prestocloud_mapping_1_2", new CSARDependency(TOSCA_NORMATIVE_TYPES, "1.2"));
+        IMPORTS.put("http://docs.oasis-open.org/tosca/ns/simple/yaml/1.2", new CSARDependency(TOSCA_NORMATIVE_TYPES, "1.2"));
     }
 }

@@ -39,9 +39,9 @@ public abstract class AbstractMapper<T> {
     public abstract void initMapping();
 
     /**
-     * Return the injected scalar parser.
+     * Return the injected scalar tosca.
      * 
-     * @return The scalar parser.
+     * @return The scalar tosca.
      */
     public ScalarParser getScalarParser() {
         return scalarParser;
@@ -63,10 +63,10 @@ public abstract class AbstractMapper<T> {
     }
 
     /**
-     * Map a field to be parsed with the given parser and mapped to a tosca field that use the same name based on LOWER_CASE_WITH_UNDERSCORES rather than
+     * Map a field to be parsed with the given tosca and mapped to a tosca field that use the same name based on LOWER_CASE_WITH_UNDERSCORES rather than
      * CAMEL_CASE.
      *
-     * @param parser The parser to use to parse the field.
+     * @param parser The tosca to use to parse the field.
      * @param fieldName The name of the field to parse.
      */
     public void quickMap(INodeParser<?> parser, String fieldName) {

@@ -68,82 +68,16 @@ public class ToscaParserTest extends AbstractToscaParserSimpleProfileTest {
 
     @Override
     protected String getRootDirectory() {
-        return "src/test/resources/tosca/";
+        return "src/test/resources/parser/";
     }
 
     @Override
     protected String getToscaVersion() {
-        return "tosca_simple_yaml_1_0";
+        return "tosca_prestocloud_mapping_1_2";
     }
 
     @Resource
     private ICSARRepositorySearchService repositorySearchService;
-
-    private void mockNormativeTypes() {
-        Mockito.reset(csarRepositorySearchService);
-        Mockito.when(csarRepositorySearchService.getArchive("tosca-normative-types", "1.0")).thenReturn(Mockito.mock(Csar.class));
-        NodeType nodeType = new NodeType();
-        nodeType.setElementId("tosca.nodes.Root");
-        nodeType.setArchiveName("tosca-normative-types");
-        nodeType.setArchiveVersion("1.0");
-        nodeType.setAbstract(true);
-        Mockito.when(csarRepositorySearchService.getElementInDependencies(Mockito.eq(NodeType.class), Mockito.eq("tosca.nodes.Root"), Mockito.any(Set.class)))
-                .thenReturn(nodeType);
-    }
-
-    /********************************/
-
-    /*@Test
-    public void testCapabilities() throws ParsingException {
-        NodeType mockedResult = Mockito.mock(NodeType.class);
-        Mockito.when(repositorySearchService.getElementInDependencies(Mockito.eq(NodeType.class), Mockito.eq("tosca.nodes.SoftwareComponent"),
-                Mockito.any(Set.class))).thenReturn(mockedResult);
-        Mockito.when(mockedResult.getDerivedFrom()).thenReturn(Lists.newArrayList("tosca.nodes.Root"));
-        Mockito.when(repositorySearchService.getElementInDependencies(Mockito.eq(NodeType.class), Mockito.eq("tosca.nodes.Root"), Mockito.any(Set.class)))
-                .thenReturn(mockedResult);
-
-        Mockito.when(repositorySearchService.getElementInDependencies(Mockito.eq(NodeType.class), Mockito.eq("tosca.nodes.Compute"), Mockito.any(Set.class)))
-                .thenReturn(mockedResult);
-        CapabilityType mockedCapabilityResult = Mockito.mock(CapabilityType.class);
-        Mockito.when(repositorySearchService.getElementInDependencies(Mockito.eq(CapabilityType.class), Mockito.eq("tosca.capabilities.Endpoint"),
-                Mockito.any(Set.class))).thenReturn(mockedCapabilityResult);
-        Mockito.when(repositorySearchService.getElementInDependencies(Mockito.eq(CapabilityType.class), Mockito.eq("tosca.capabilities.Container"),
-                Mockito.any(Set.class))).thenReturn(mockedCapabilityResult);
-
-        RelationshipType connectsTo = new RelationshipType();
-        Mockito.when(repositorySearchService.getElementInDependencies(Mockito.eq(RelationshipType.class), Mockito.eq("tosca.relationships.ConnectsTo"),
-                Mockito.any(Set.class))).thenReturn(connectsTo);
-
-        ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get(getRootDirectory(), "requirement_capabilities.yaml"));
-        ParserTestUtil.displayErrors(parsingResult);
-        parsingResult.getResult().getNodeTypes().values().forEach(nodeType -> {
-            nodeType.getRequirements().forEach(requirementDefinition -> {
-                switch (requirementDefinition.getId()) {
-                    case "host":
-                        Assert.assertEquals("tosca.capabilities.Container", requirementDefinition.getType());
-                        break;
-                    case "endpoint":
-                    case "another_endpoint":
-                        Assert.assertEquals("tosca.capabilities.Endpoint", requirementDefinition.getType());
-                        Assert.assertEquals(0, requirementDefinition.getLowerBound());
-                        Assert.assertEquals(Integer.MAX_VALUE, requirementDefinition.getUpperBound());
-                        Assert.assertEquals("tosca.relationships.ConnectsTo", requirementDefinition.getRelationshipType());
-                        break;
-                }
-            });
-            nodeType.getCapabilities().forEach(capabilityDefinition -> {
-                switch (capabilityDefinition.getId()) {
-                    case "host":
-                        Assert.assertEquals("tosca.capabilities.Container", capabilityDefinition.getType());
-                        break;
-                    case "endpoint":
-                    case "another_endpoint":
-                        Assert.assertEquals("tosca.capabilities.Endpoint", capabilityDefinition.getType());
-                        Assert.assertNotNull(capabilityDefinition.getDescription());
-                }
-            });
-        });
-    }*/
 
     @SuppressWarnings("unchecked")
     @Test
@@ -220,7 +154,7 @@ public class ToscaParserTest extends AbstractToscaParserSimpleProfileTest {
         Assert.assertTrue(nodeTemplate.getProperties().containsKey("url"));
         AbstractPropertyValue url = nodeTemplate.getProperties().get("url");
         Assert.assertTrue(url instanceof ScalarPropertyValue);
-        Assert.assertEquals("https://kikoo.com", ((ScalarPropertyValue) url).getValue());
+        Assert.assertEquals("https://prestocloud.com", ((ScalarPropertyValue) url).getValue());
         // check ipv6_addresses property
         Assert.assertTrue(nodeTemplate.getProperties().containsKey("ipv6_addresses"));
         AbstractPropertyValue ipv6_addresses = nodeTemplate.getProperties().get("ipv6_addresses");
@@ -489,7 +423,7 @@ public class ToscaParserTest extends AbstractToscaParserSimpleProfileTest {
 
     @Test
     public void testImportDependency() throws FileNotFoundException, ParsingException {
-        Csar csar = new Csar("tosca-normative-types", "1.0");
+        Csar csar = new Csar("tosca-normative-types", "1.2");
         Mockito.when(csarRepositorySearchService.getArchive(csar.getName(), csar.getVersion())).thenReturn(csar);
 
         ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get(getRootDirectory(), "tosca-import-dependency.yml"));
@@ -506,7 +440,7 @@ public class ToscaParserTest extends AbstractToscaParserSimpleProfileTest {
 
     @Test
     public void testImportDependencyMissing() throws FileNotFoundException, ParsingException {
-        Csar csar = new Csar("tosca-normative-types", "1.0");
+        Csar csar = new Csar("tosca-normative-types", "1.2");
         Mockito.when(csarRepositorySearchService.getArchive(csar.getName(), csar.getVersion())).thenReturn(null);
 
         ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get(getRootDirectory(), "tosca-import-dependency.yml"));
@@ -606,7 +540,7 @@ public class ToscaParserTest extends AbstractToscaParserSimpleProfileTest {
         NodeType nodeType = entry.getValue();
 
         Assert.assertEquals(Lists.newArrayList("tosca.nodes.SoftwareComponent", "tosca.nodes.Root"), nodeType.getDerivedFrom());
-        Assert.assertEquals("My company’s custom applicaton", nodeType.getDescription());
+        Assert.assertEquals("My company's custom applicaton", nodeType.getDescription());
 
         // validate properties parsing
         Assert.assertEquals(4, nodeType.getProperties().size());
@@ -700,7 +634,7 @@ public class ToscaParserTest extends AbstractToscaParserSimpleProfileTest {
     @SuppressWarnings("unchecked")
     @Test
     public void testAttributesConcatValid() throws Throwable {
-        Csar csar = new Csar("tosca-normative-types", "1.0");
+        Csar csar = new Csar("tosca-normative-types", "1.2");
         // Mockito.when(csarRepositorySearchService.getArchive(csar.getId())).thenReturn(csar);
 
         NodeType mockedResult = Mockito.mock(NodeType.class);
@@ -793,7 +727,7 @@ public class ToscaParserTest extends AbstractToscaParserSimpleProfileTest {
     @Test
     @SuppressWarnings("unchecked")
     public void testGetOperationOutputFunction() throws Throwable {
-        Csar csar = new Csar("tosca-normative-types", "1.0");
+        Csar csar = new Csar("tosca-normative-types", "1.2");
         // Mockito.when(csarRepositorySearchService.getArchive(csar.getId())).thenReturn(csar);
 
         NodeType mockedResult = Mockito.mock(NodeType.class);
@@ -916,7 +850,7 @@ public class ToscaParserTest extends AbstractToscaParserSimpleProfileTest {
     private NodeType getMockedCompute() {
         NodeType mockedCompute = new NodeType();
         mockedCompute.setArchiveName("tosca-normative-types");
-        mockedCompute.setArchiveVersion("1.0.0.wd03-SNAPSHOT");
+        mockedCompute.setArchiveVersion("1.2");
         CapabilityDefinition capabilityDefinition = new CapabilityDefinition("host", "tosca.capabilities.Container", Integer.MAX_VALUE);
         mockedCompute.setCapabilities(Lists.newArrayList(capabilityDefinition));
         mockedCompute.setElementId("tosca.nodes.Compute");
@@ -926,7 +860,7 @@ public class ToscaParserTest extends AbstractToscaParserSimpleProfileTest {
     private NodeType getMockedSoftwareComponent() {
         NodeType mockedSoftware = new NodeType();
         mockedSoftware.setArchiveName("tosca-normative-types");
-        mockedSoftware.setArchiveVersion("1.0.0.wd03-SNAPSHOT");
+        mockedSoftware.setArchiveVersion("1.2");
         RequirementDefinition hostRequirement = new RequirementDefinition("host", "tosca.capabilities.Container", null, "", "tosca.relationships.HostedOn",
                 "host", 1, Integer.MAX_VALUE, null);
         mockedSoftware.setRequirements(Lists.<RequirementDefinition> newArrayList(hostRequirement));
@@ -936,7 +870,7 @@ public class ToscaParserTest extends AbstractToscaParserSimpleProfileTest {
 
     @Test
     public void testParseTopologyReferenceToNormative() throws FileNotFoundException, ParsingException {
-        Csar csar = new Csar("tosca-normative-types", "1.0.0.wd03-SNAPSHOT");
+        Csar csar = new Csar("tosca-normative-types", "1.2");
 
         NodeType mockedCompute = getMockedCompute();
         NodeType mockedSoftware = getMockedSoftwareComponent();
@@ -1182,12 +1116,10 @@ public class ToscaParserTest extends AbstractToscaParserSimpleProfileTest {
         Assert.assertEquals(0, errors.size());
     }
 
-    /**************************************/
-
     @Test
     public void testServiceRelationshipSubstitution() throws FileNotFoundException, ParsingException {
         Mockito.reset(csarRepositorySearchService);
-        Mockito.when(csarRepositorySearchService.getArchive("tosca-normative-types", "1.0")).thenReturn(Mockito.mock(Csar.class));
+        Mockito.when(csarRepositorySearchService.getArchive("tosca-normative-types", "1.2")).thenReturn(Mockito.mock(Csar.class));
         NodeType mockRoot = Mockito.mock(NodeType.class);
         Mockito.when(mockRoot.isAbstract()).thenReturn(true);
         Mockito.when(csarRepositorySearchService.getElementInDependencies(Mockito.eq(NodeType.class), Mockito.eq("tosca.nodes.Root"), Mockito.any(Set.class)))
@@ -1211,7 +1143,7 @@ public class ToscaParserTest extends AbstractToscaParserSimpleProfileTest {
     public void testCapabilitiesComplexProperty() throws ParsingException {
         Mockito.reset(csarRepositorySearchService);
 
-        Csar csar = new Csar("tosca-normative-types", "1.0");
+        Csar csar = new Csar("tosca-normative-types", "1.2");
         Mockito.when(csarRepositorySearchService.getArchive(csar.getName(), csar.getVersion())).thenReturn(csar);
         NodeType mockedResult = Mockito.mock(NodeType.class);
         Mockito.when(csarRepositorySearchService.getElementInDependencies(Mockito.eq(NodeType.class), Mockito.eq("tosca.nodes.Root"), Mockito.any(Set.class)))
@@ -1326,7 +1258,7 @@ public class ToscaParserTest extends AbstractToscaParserSimpleProfileTest {
     @Test
     public void testInterfaceInputs() throws ParsingException {
         Mockito.reset(csarRepositorySearchService);
-        Mockito.when(csarRepositorySearchService.getArchive("tosca-normative-types", "1.0")).thenReturn(Mockito.mock(Csar.class));
+        Mockito.when(csarRepositorySearchService.getArchive("tosca-normative-types", "1.2")).thenReturn(Mockito.mock(Csar.class));
         Mockito.when(csarRepositorySearchService.getElementInDependencies(Mockito.eq(NodeType.class), Mockito.eq("tosca.nodes.Root"), Mockito.any(Set.class)))
                 .thenReturn(Mockito.mock(NodeType.class));
 
@@ -1356,7 +1288,7 @@ public class ToscaParserTest extends AbstractToscaParserSimpleProfileTest {
     @Test
     public void testDuplicateNodeTemplate() throws ParsingException {
         Mockito.reset(csarRepositorySearchService);
-        Mockito.when(csarRepositorySearchService.getArchive("tosca-normative-types", "1.0")).thenReturn(Mockito.mock(Csar.class));
+        Mockito.when(csarRepositorySearchService.getArchive("tosca-normative-types", "1.2")).thenReturn(Mockito.mock(Csar.class));
         Mockito.when(csarRepositorySearchService.getElementInDependencies(Mockito.eq(NodeType.class), Mockito.eq("tosca.nodes.Root"), Mockito.any(Set.class)))
                 .thenReturn(Mockito.mock(NodeType.class));
 
@@ -1365,12 +1297,10 @@ public class ToscaParserTest extends AbstractToscaParserSimpleProfileTest {
 
     }
 
-    /**************************************/
-
     @Test
     public void testPolicyTypeParsing() throws ParsingException {
         Mockito.reset(csarRepositorySearchService);
-        Mockito.when(csarRepositorySearchService.getArchive("tosca-normative-types", "1.0")).thenReturn(Mockito.mock(Csar.class));
+        Mockito.when(csarRepositorySearchService.getArchive("tosca-normative-types", "1.2")).thenReturn(Mockito.mock(Csar.class));
         PolicyType mockRoot = Mockito.mock(PolicyType.class);
         Mockito.when(mockRoot.isAbstract()).thenReturn(true);
         Mockito.when(
@@ -1396,7 +1326,7 @@ public class ToscaParserTest extends AbstractToscaParserSimpleProfileTest {
         PolicyType minPolicyType = archiveRoot.getPolicyTypes().get("org.prestocloud.sample.MinimalPolicyType");
         assertNotNull(minPolicyType);
         assertEquals("org.prestocloud.test.policies.PolicyTypes", minPolicyType.getArchiveName());
-        assertEquals("2.0.0-SNAPSHOT", minPolicyType.getArchiveVersion());
+        assertEquals("1.0.0-SNAPSHOT", minPolicyType.getArchiveVersion());
         assertEquals("org.prestocloud.sample.MinimalPolicyType", minPolicyType.getElementId());
         assertEquals("This is a sample policy type with minimal definition", minPolicyType.getDescription());
         assertEquals(1, minPolicyType.getDerivedFrom().size());
@@ -1405,7 +1335,7 @@ public class ToscaParserTest extends AbstractToscaParserSimpleProfileTest {
         PolicyType simplePolicyType = archiveRoot.getPolicyTypes().get("org.prestocloud.sample.SimpleConditionPolicyType");
         assertNotNull(simplePolicyType);
         assertEquals("org.prestocloud.test.policies.PolicyTypes", simplePolicyType.getArchiveName());
-        assertEquals("2.0.0-SNAPSHOT", simplePolicyType.getArchiveVersion());
+        assertEquals("1.0.0-SNAPSHOT", simplePolicyType.getArchiveVersion());
         assertEquals("org.prestocloud.sample.SimpleConditionPolicyType", simplePolicyType.getElementId());
         assertEquals("This is a sample policy type with simple definition", simplePolicyType.getDescription());
         assertEquals(1, simplePolicyType.getDerivedFrom().size());
@@ -1425,7 +1355,7 @@ public class ToscaParserTest extends AbstractToscaParserSimpleProfileTest {
         PolicyType policyType = archiveRoot.getPolicyTypes().get("org.prestocloud.sample.PolicyType");
         assertNotNull(policyType);
         assertEquals("org.prestocloud.test.policies.PolicyTypes", policyType.getArchiveName());
-        assertEquals("2.0.0-SNAPSHOT", policyType.getArchiveVersion());
+        assertEquals("1.0.0-SNAPSHOT", policyType.getArchiveVersion());
         assertEquals("org.prestocloud.sample.PolicyType", policyType.getElementId());
         assertEquals("This is a sample policy type", policyType.getDescription());
         assertEquals(1, policyType.getDerivedFrom().size());
@@ -1446,7 +1376,7 @@ public class ToscaParserTest extends AbstractToscaParserSimpleProfileTest {
     @Test
     public void policyParsingWithUnknownTargetTypeShouldFail() throws ParsingException {
         Mockito.reset(csarRepositorySearchService);
-        Mockito.when(csarRepositorySearchService.getArchive("tosca-normative-types", "1.0")).thenReturn(Mockito.mock(Csar.class));
+        Mockito.when(csarRepositorySearchService.getArchive("tosca-normative-types", "1.2")).thenReturn(Mockito.mock(Csar.class));
         PolicyType mockRoot = Mockito.mock(PolicyType.class);
         Mockito.when(mockRoot.isAbstract()).thenReturn(true);
         Mockito.when(
@@ -1460,12 +1390,12 @@ public class ToscaParserTest extends AbstractToscaParserSimpleProfileTest {
     @Test
     public void testPolicyTemplateParsing() throws ParsingException {
         Mockito.reset(csarRepositorySearchService);
-        Mockito.when(csarRepositorySearchService.getArchive("tosca-normative-types", "1.0")).thenReturn(Mockito.mock(Csar.class));
+        Mockito.when(csarRepositorySearchService.getArchive("tosca-normative-types", "1.2")).thenReturn(Mockito.mock(Csar.class));
 
         NodeType nodeType = new NodeType();
         nodeType.setElementId("tosca.nodes.Root");
         nodeType.setArchiveName("tosca-normative-types");
-        nodeType.setArchiveVersion("1.0");
+        nodeType.setArchiveVersion("1.2");
         nodeType.setDerivedFrom(Lists.newArrayList("tosca.nodes.Root"));
         Mockito.when(
                 csarRepositorySearchService.getElementInDependencies(Mockito.eq(NodeType.class), Mockito.eq("tosca.nodes.Compute"), Mockito.any(Set.class)))
@@ -1474,14 +1404,14 @@ public class ToscaParserTest extends AbstractToscaParserSimpleProfileTest {
         nodeType = new NodeType();
         nodeType.setElementId("tosca.nodes.Root");
         nodeType.setArchiveName("tosca-normative-types");
-        nodeType.setArchiveVersion("1.0");
+        nodeType.setArchiveVersion("1.2");
         Mockito.when(csarRepositorySearchService.getElementInDependencies(Mockito.eq(NodeType.class), Mockito.eq("tosca.nodes.Root"), Mockito.any(Set.class)))
                 .thenReturn(nodeType);
 
         PolicyType policyType = Mockito.mock(PolicyType.class);
         policyType.setElementId("tosca.nodes.Root");
         policyType.setArchiveName("tosca-normative-types");
-        policyType.setArchiveVersion("1.0");
+        policyType.setArchiveVersion("1.2");
         Mockito.when(policyType.isAbstract()).thenReturn(true);
         Mockito.when(
                 csarRepositorySearchService.getElementInDependencies(Mockito.eq(PolicyType.class), Mockito.eq("tosca.policies.Root"), Mockito.any(Set.class)))
@@ -1526,12 +1456,12 @@ public class ToscaParserTest extends AbstractToscaParserSimpleProfileTest {
     @Test
     public void policyTemplateParsingWithUnknownTypesShouldFail() throws ParsingException {
         Mockito.reset(csarRepositorySearchService);
-        Mockito.when(csarRepositorySearchService.getArchive("tosca-normative-types", "1.0")).thenReturn(Mockito.mock(Csar.class));
+        Mockito.when(csarRepositorySearchService.getArchive("tosca-normative-types", "1.2")).thenReturn(Mockito.mock(Csar.class));
 
         NodeType nodeType = new NodeType();
         nodeType.setElementId("tosca.nodes.Compute");
         nodeType.setArchiveName("tosca-normative-types");
-        nodeType.setArchiveVersion("1.0");
+        nodeType.setArchiveVersion("1.2");
         nodeType.setDerivedFrom(Lists.newArrayList("tosca.nodes.Root"));
         Mockito.when(
                 csarRepositorySearchService.getElementInDependencies(Mockito.eq(NodeType.class), Mockito.eq("tosca.nodes.Compute"), Mockito.any(Set.class)))
@@ -1540,7 +1470,7 @@ public class ToscaParserTest extends AbstractToscaParserSimpleProfileTest {
         nodeType = new NodeType();
         nodeType.setElementId("tosca.nodes.Root");
         nodeType.setArchiveName("tosca-normative-types");
-        nodeType.setArchiveVersion("1.0");
+        nodeType.setArchiveVersion("1.2");
         Mockito.when(csarRepositorySearchService.getElementInDependencies(Mockito.eq(NodeType.class), Mockito.eq("tosca.nodes.Root"), Mockito.any(Set.class)))
                 .thenReturn(nodeType);
 
@@ -1552,12 +1482,12 @@ public class ToscaParserTest extends AbstractToscaParserSimpleProfileTest {
     @Test
     public void policyTemplateParsingWithUnknownTargetShouldFail() throws ParsingException {
         Mockito.reset(csarRepositorySearchService);
-        Mockito.when(csarRepositorySearchService.getArchive("tosca-normative-types", "1.0")).thenReturn(Mockito.mock(Csar.class));
+        Mockito.when(csarRepositorySearchService.getArchive("tosca-normative-types", "1.2")).thenReturn(Mockito.mock(Csar.class));
 
         NodeType nodeType = new NodeType();
         nodeType.setElementId("tosca.nodes.Compute");
         nodeType.setArchiveName("tosca-normative-types");
-        nodeType.setArchiveVersion("1.0");
+        nodeType.setArchiveVersion("1.2");
         nodeType.setDerivedFrom(Lists.newArrayList("tosca.nodes.Root"));
         Mockito.when(
                 csarRepositorySearchService.getElementInDependencies(Mockito.eq(NodeType.class), Mockito.eq("tosca.nodes.Compute"), Mockito.any(Set.class)))
@@ -1566,7 +1496,7 @@ public class ToscaParserTest extends AbstractToscaParserSimpleProfileTest {
         nodeType = new NodeType();
         nodeType.setElementId("tosca.nodes.Root");
         nodeType.setArchiveName("tosca-normative-types");
-        nodeType.setArchiveVersion("1.0");
+        nodeType.setArchiveVersion("1.2");
         Mockito.when(csarRepositorySearchService.getElementInDependencies(Mockito.eq(NodeType.class), Mockito.eq("tosca.nodes.Root"), Mockito.any(Set.class)))
                 .thenReturn(nodeType);
 
@@ -1574,7 +1504,7 @@ public class ToscaParserTest extends AbstractToscaParserSimpleProfileTest {
         policyType.setAbstract(true);
         policyType.setElementId("org.prestocloud.sample.SamplePolicy");
         policyType.setArchiveName("org.prestocloud.test.policies.PolicyTemplate");
-        policyType.setArchiveVersion("2.0.0-SNAPSHOT");
+        policyType.setArchiveVersion("1.0.0-SNAPSHOT");
         Mockito.when(csarRepositorySearchService.getElementInDependencies(Mockito.eq(PolicyType.class), Mockito.eq("org.prestocloud.sample.SamplePolicy"),
                 Mockito.any(Set.class))).thenReturn(policyType);
 

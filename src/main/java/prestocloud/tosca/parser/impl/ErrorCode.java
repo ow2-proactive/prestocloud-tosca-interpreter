@@ -38,7 +38,7 @@ public enum ErrorCode {
     TOSCA_VERSION_NOT_FIRST,
     /** A field is not recognized and will be skipped. */
     UNRECOGNIZED_PROPERTY,
-    /** A discriminator is not known and no failback parser. */
+    /** A discriminator is not known and no failback tosca. */
     UNKNWON_DISCRIMINATOR_KEY,
     /** A referenced file (definition, icon, artifact is missing). */
     MISSING_FILE,

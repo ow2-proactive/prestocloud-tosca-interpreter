@@ -115,7 +115,8 @@ public class LocalRepositoryImpl implements ICSARRepositorySearchService {
     @SneakyThrows
     private ParsingResult<ArchiveRoot> parse(CSARDependency dependency) {
         String archiveFileName = dependency.getName().concat("-").concat(dependency.getVersion()).concat(".csar");
-        Path archivePath = localRepositoryPath.resolve(dependency.getName()).resolve(dependency.getVersion()).resolve(archiveFileName);
+        //Path archivePath = localRepositoryPath.resolve(dependency.getName()).resolve(dependency.getVersion()).resolve(archiveFileName);
+        Path archivePath = localRepositoryPath.resolve(archiveFileName);
 
         ParsingContextExecution.Context previousContext = ParsingContextExecution.get();
         try {

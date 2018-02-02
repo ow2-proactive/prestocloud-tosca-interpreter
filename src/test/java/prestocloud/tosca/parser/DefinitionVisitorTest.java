@@ -1,4 +1,4 @@
-package prestocloud.tosca;
+package prestocloud.tosca.parser;
 
 import java.io.IOException;
 import java.nio.file.FileSystem;
@@ -9,7 +9,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.EnumSet;
 
-import prestocloud.tosca.parser.DefinitionVisitor;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -17,7 +16,7 @@ public class DefinitionVisitorTest {
 
     @Test
     public void testVisitorInZip() throws IOException {
-        Path path = Paths.get("src/test/resources/tosca/visitor/zipped.zip");
+        Path path = Paths.get("src/test/resources/parser/visitor/zipped.zip");
         FileSystem fs = FileSystems.newFileSystem(path, null);
         doTest(fs);
     }

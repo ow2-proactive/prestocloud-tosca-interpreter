@@ -16,7 +16,7 @@ public class ListParser<T> extends CollectionParser<T> {
     /**
      * Constructor called by spring (see BaseParserFactory).
      * 
-     * @param valueParser The parser to use to parse list values.
+     * @param valueParser The tosca to use to parse list values.
      * @param toscaType The expected type name to generate error messages.
      */
     public ListParser(INodeParser<T> valueParser, String toscaType) {
@@ -26,7 +26,7 @@ public class ListParser<T> extends CollectionParser<T> {
     /**
      * Constructor called by spring (see BaseParserFactory).
      *
-     * @param valueParser The parser to use to parse list values.
+     * @param valueParser The tosca to use to parse list values.
      * @param toscaType The expected type name to generate error messages.
      * @param keyPath In case the list is created from a map, optional value to inject the key into the value object.
      */

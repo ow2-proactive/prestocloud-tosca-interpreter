@@ -35,7 +35,7 @@ public class NodeTemplateRelationshipPostProcessor implements IPostProcessor<Nod
             relationshipPostProcessor.process(nodeType, entry);
             String relationshipTemplateName = entry.getValue().getName();
             if (StringUtils.isEmpty(relationshipTemplateName)) {
-                // from 2.0.0 the relationship's name is filled by the parser
+                // the relationship's name is filled by the tosca
                 relationshipTemplateName = buildRelationShipTemplateName(entry.getValue());
             }
             relationshipTemplateName = getUniqueKey(updated, relationshipTemplateName);

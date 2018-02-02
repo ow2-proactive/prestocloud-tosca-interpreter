@@ -25,7 +25,7 @@ public class ToscaImportParser extends YamlParser<CsarDependenciesBean> {
 
     @PostConstruct
     public void initialize() throws ParsingException {
-        parsers = mappingGenerator.process("classpath:tosca-simple-profile-import-mapping.yml");
+        parsers = mappingGenerator.process("classpath:tosca-import-mapping.yml");
     }
 
     @Override

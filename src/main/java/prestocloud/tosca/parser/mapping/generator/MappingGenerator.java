@@ -133,7 +133,7 @@ public class MappingGenerator implements INodeParser<Map<String, INodeParser>> {
             if (mappingNode.getValue().size() > 0) {
                 NodeTuple tuple = mappingNode.getValue().get(0);
                 yamlType = ParserUtils.getScalar(tuple.getKeyNode(), context);
-                // it's value design the java parser to be used to build the java type.
+                // it's value design the java tosca to be used to build the java type.
                 if (!(tuple.getValueNode() instanceof ScalarNode)) {
                     log.debug("Ignore mapping for yaml type <" + yamlType + ">");
                     return null;
@@ -143,13 +143,13 @@ public class MappingGenerator implements INodeParser<Map<String, INodeParser>> {
                     parser = getWrapperParser(type, mappingNode, context);
                     return new AbstractMap.SimpleEntry<String, INodeParser<?>>(yamlType, parser);
                 }
-                // try to find a registered parser for the type. Direct parser reference.
+                // try to find a registered tosca for the type. Direct tosca reference.
                 parser = this.parsers.get(type);
                 if (parser != null) {
-                    log.debug("Mapping yaml type <" + yamlType + "> using parser <" + type + ">");
+                    log.debug("Mapping yaml type <" + yamlType + "> using tosca <" + type + ">");
                     return new AbstractMap.SimpleEntry<String, INodeParser<?>>(yamlType, parser);
                 }
-                // The value for this mapping is not an exising parser, that may be either a java type either the reference to a mapping builder (a
+                // The value for this mapping is not an exising tosca, that may be either a java type either the reference to a mapping builder (a
                 // collection for example).
                 IMappingBuilder builder = mappingBuilders.get(type);
                 if (builder != null) {
@@ -160,7 +160,7 @@ public class MappingGenerator implements INodeParser<Map<String, INodeParser>> {
                     parser = builder.buildMapping(mappingNode, context).getParser();
                     return new AbstractMap.SimpleEntry<String, INodeParser<?>>(yamlType, parser);
                 } else {
-                    // If the type doesn't design a referenced parser then we should try to build it.
+                    // If the type doesn't design a referenced tosca then we should try to build it.
                     parser = buildTypeNodeParser(yamlType, type);
                 }
                 processTypeMappingKeys(mappingNode, context, parser);
@@ -219,7 +219,7 @@ public class MappingGenerator implements INodeParser<Map<String, INodeParser>> {
             String value = ParserUtils.getScalar(mappingNode, context);
             return new MappingTarget(value, parsers.get(ScalarParser.class.getName()));
         } else if (mappingNode instanceof MappingNode) {
-            // if this is a mapping node then it can be either a collection or reference to a complex object mapping (through reference parser).
+            // if this is a mapping node then it can be either a collection or reference to a complex object mapping (through reference tosca).
             return mapMappingNode((MappingNode) mappingNode, context);
         }
         return null;

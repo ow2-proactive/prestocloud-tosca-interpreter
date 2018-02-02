@@ -18,7 +18,7 @@ import prestocloud.utils.VersionUtil;
 import prestocloud.utils.version.InvalidVersionException;
 
 /**
- * Import parser that doesn't validate anything
+ * Import tosca that doesn't validate anything
  * For validation of version or presence in catalog, see {@link ImportParser}
  */
 @Slf4j

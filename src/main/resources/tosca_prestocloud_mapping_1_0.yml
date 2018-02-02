@@ -1,6 +1,6 @@
-# Mapping definitions for tosca simple profile 1.2
+# Mapping definitions for tosca simple profile DSL 1.0
 
-# declare custom parsers for complex types that requires specific parser.
+# declare custom parsers for complex types that requires specific tosca.
 - scalar: prestocloud.tosca.parser.impl.base.ScalarParser
 - import_definition: prestocloud.tosca.parser.impl.advanced.ImportParser
 - occurrences: prestocloud.tosca.parser.impl.advanced.OccurrencesParser
@@ -86,41 +86,6 @@
     map: groups
     key: name
     type: node_group
-#  workflows:
-#    map: workflows
-#    key: name
-#    type: workflow
-#
-#- workflow: prestocloud.paas.wf.Workflow
-#  description: description
-#  steps:
-#    map: steps
-#    key: name
-#    type: workflow_step
-#
-#- workflow_step : prestocloud.paas.wf.NodeActivityStep
-#  node: nodeId
-#  activity:
-#    reference: activity
-#    type: workflow_activity
-#  on-success:
-#    set: followingSteps
-#    type: scalar
-#
-#- workflow_activity: __discriminator
-#  keys:
-#    set_state: set_state_activity
-#    call_operation: call_operation_activity
-#    delegate: delegate_activity
-#
-#- set_state_activity: prestocloud.paas.wf.SetStateActivity
-#  set_state: stateName
-#
-#- call_operation_activity: prestocloud.paas.wf.OperationCallActivity
-#  call_operation: operationFqn
-#
-#- delegate_activity: prestocloud.paas.wf.DelegateWorkflowActivity
-#  delegate: workflowName
 
 - node_group: org.prestocloud.tosca.model.templates.NodeGroup
   members:
@@ -409,5 +374,7 @@
 - repository_definition: org.prestocloud.tosca.model.definitions.RepositoryDefinition
   description: description
   url: url
-  credentials: credentials
+  credential:
+    reference: credential
+    type: abstract_property_value
   type: type

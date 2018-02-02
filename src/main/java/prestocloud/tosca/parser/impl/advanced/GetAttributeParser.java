@@ -8,7 +8,7 @@ import prestocloud.tosca.parser.INodeParser;
 import prestocloud.tosca.parser.ParsingContextExecution;
 
 /**
- * Specific get_attribute parser
+ * Specific get_attribute tosca
  * { get_attribute: [TARGET, protocol] }: fetch from the node
  * { get_attribute: [TARGET, protocol] }: fetch from the capability.
  */

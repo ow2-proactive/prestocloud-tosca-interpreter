@@ -21,7 +21,7 @@ import prestocloud.tosca.parser.impl.base.ScalarParser;
 import prestocloud.utils.VersionUtil;
 
 /**
- * Specific parser to enrich the Csar archive object with meta-data
+ * Specific tosca to enrich the Csar archive object with meta-data
  */
 @Component
 public class MetaDataParser implements INodeParser<Csar> {

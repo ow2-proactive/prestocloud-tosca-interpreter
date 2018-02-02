@@ -1,6 +1,6 @@
-# Mapping definition for alien 4 cloud specific dsl 2.0.0
+# Mapping definitions for tosca simple profile DSL 1.2
 
-# declare custom parsers for complex types that requires specific parser.
+# declare custom parsers for complex types that requires specific tosca.
 - scalar: prestocloud.tosca.parser.impl.base.ScalarParser
 - import_definition: prestocloud.tosca.parser.impl.advanced.ImportParser
 - occurrences: prestocloud.tosca.parser.impl.advanced.OccurrencesParser
@@ -17,9 +17,6 @@
 - meta_data: prestocloud.tosca.parser.impl.advanced.MetaDataParser
 - fail_get_artifact: prestocloud.tosca.parser.impl.advanced.FailGetArtifactParser
 - string_list: prestocloud.tosca.parser.impl.advanced.StringListParser
-#- relationship_template: prestocloud.tosca.parser.impl.v20.RelationshipTemplateParser
-- relationship_template: prestocloud.tosca.parser.impl.advanced.RelationshipTemplateParser
-
 
 # declare standard mapping based parsers
 - definition: prestocloud.tosca.model.ArchiveRoot
@@ -95,62 +92,6 @@
     node_is_value: false
     # key: name
     type: policy_template
-  workflows:
-    map: workflows
-    key: name
-    type: workflow
-
-- workflow: org.prestocloud.tosca.model.workflow.Workflow
-  description: description
-  steps:
-    map: steps
-    key: name
-    type: workflow_step
-
-- workflow_step: __discriminator
-  keys:
-    target_relationship: relationship_workflow_step
-  default: node_workflow_step
-
-- node_workflow_step : org.prestocloud.tosca.model.workflow.NodeWorkflowStep
-  target: target
-  operation_host: operationHost
-  activities:
-    list: activities
-    type: workflow_activity
-  on_success:
-    set: onSuccess
-    type: scalar
-
-- relationship_workflow_step : org.prestocloud.tosca.model.workflow.RelationshipWorkflowStep
-  target: target
-  target_relationship: targetRelationship
-  operation_host: operationHost
-  activities:
-    list: activities
-    type: workflow_activity
-  on_success:
-    set: onSuccess
-    type: scalar
-
-- workflow_activity: __discriminator
-  keys:
-    set_state: set_state_activity
-    call_operation: call_operation_activity
-    delegate: delegate_activity
-    inline: inline_activity
-
-- set_state_activity: org.prestocloud.tosca.model.workflow.activities.SetStateWorkflowActivity
-  set_state: stateName
-
-- call_operation_activity: org.prestocloud.tosca.model.workflow.activities.CallOperationWorkflowActivity
-  call_operation: operationFqn
-
-- delegate_activity: org.prestocloud.tosca.model.workflow.activities.DelegateWorkflowActivity
-  delegate: delegate
-
-- inline_activity: org.prestocloud.tosca.model.workflow.activities.InlineWorkflowActivity
-  inline: inline
 
 - abstract_template: &abstract_template
     type: type
@@ -182,9 +123,9 @@
 - node_template: org.prestocloud.tosca.model.templates.NodeTemplate
   <<: *abstract_instantiable_template
   requirements:
-    sequence_to_map: relationships
-    type: relationship_template
-    allow_duplicate: false
+    list: requirements
+    key: id
+    type: requirement_definition
   capabilities:
     map: capabilities
     type: node_template_capability_definition
@@ -285,7 +226,6 @@
     type: property_definition
     get_input: tosca_function
     get_property: tosca_function
-    get_secret: tosca_function
     get_attribute: get_attribute
     concat: tosca_concat
   default: abstract_property_value
@@ -296,7 +236,6 @@
     get_artifact: fail_get_artifact
     get_input: tosca_function
     get_property: tosca_function
-    get_secret: tosca_function
     get_attribute: get_attribute
     get_operation_output: tosca_function
     concat: tosca_concat
@@ -309,7 +248,6 @@
     get_operation_output: tosca_function
     get_attribute: get_attribute
     get_property: tosca_function
-    get_secret: tosca_function
   default: attribute_definition
 
 - deployment_artifact: org.prestocloud.tosca.model.definitions.DeploymentArtifact

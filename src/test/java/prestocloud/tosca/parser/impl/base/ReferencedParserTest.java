@@ -15,7 +15,7 @@ import prestocloud.tosca.parser.ParsingErrorLevel;
 import prestocloud.tosca.parser.impl.ErrorCode;
 
 /**
- * Internal junit tests to check yaml mapping framework management for reference parser.
+ * Internal junit tests to check yaml mapping framework management for reference tosca.
  */
 // @Ignore
 public class ReferencedParserTest {

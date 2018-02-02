@@ -3,19 +3,19 @@ package prestocloud.tosca.model;
 import java.util.List;
 import java.util.Map;
 
-import org.prestocloud.tosca.model.types.PolicyType;
 import org.apache.commons.collections4.MapUtils;
-
-import com.google.common.collect.Maps;
-
 import org.prestocloud.tosca.model.Csar;
+import org.prestocloud.tosca.model.definitions.RepositoryDefinition;
+import org.prestocloud.tosca.model.templates.Topology;
 import org.prestocloud.tosca.model.types.ArtifactType;
 import org.prestocloud.tosca.model.types.CapabilityType;
 import org.prestocloud.tosca.model.types.DataType;
 import org.prestocloud.tosca.model.types.NodeType;
+import org.prestocloud.tosca.model.types.PolicyType;
 import org.prestocloud.tosca.model.types.RelationshipType;
-import org.prestocloud.tosca.model.definitions.RepositoryDefinition;
-import org.prestocloud.tosca.model.templates.Topology;
+
+import com.google.common.collect.Maps;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,6 +28,7 @@ public class ArchiveRoot {
 
     /** An archive can embed topology template (TOSCA meaning). */
     private Topology topology;
+
     /** The description of the topology template is not a property of the topology. */
     private String topologyTemplateDescription;
 

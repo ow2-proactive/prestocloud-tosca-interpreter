@@ -32,12 +32,12 @@ import prestocloud.tosca.parser.postprocess.ArchiveRootPostProcessor;
 @Component
 public class ToscaParser extends YamlParser<ArchiveRoot> {
 
-    public static final String NORMATIVE_DSL_1_0 = "tosca_simple_yaml_1_0";
-    public static final String NORMATIVE_DSL_1_0_URL = "http://docs.oasis-open.org/tosca/ns/simple/yaml/1.0";
-    public static final String NORMATIVE_DSL_1_2 = "tosca_simple_yaml_1_2";
     public static final String NORMATIVE_DSL_1_2_URL = "http://docs.oasis-open.org/tosca/ns/simple/yaml/1.2";
+    public static final String PRESTOCLOUD_DSL_1_0 = "tosca_prestocloud_mapping_1_0";
+    public static final String PRESTOCLOUD_DSL_1_1 = "tosca_prestocloud_mapping_1_1";
+    public static final String PRESTOCLOUD_DSL_1_2 = "tosca_prestocloud_mapping_1_2";
 
-    public static String LATEST_DSL = NORMATIVE_DSL_1_2;
+    public static String LATEST_DSL = PRESTOCLOUD_DSL_1_2;
 
     private static final String DEFINITION_TYPE = "definition";
     private Map<String, Map<String, INodeParser>> parserRegistriesByVersion = Maps.newHashMap();
@@ -61,13 +61,15 @@ public class ToscaParser extends YamlParser<ArchiveRoot> {
     @PostConstruct
     public void initialize() throws ParsingException {
         // Initialize the supported DSL.
-        Map<String, INodeParser> registry = mappingGenerator.process("classpath:tosca_simple_yaml_1_0.yml");
-        parserRegistriesByVersion.put(NORMATIVE_DSL_1_0, registry);
-        parserRegistriesByVersion.put(NORMATIVE_DSL_1_0_URL, registry);
-        // experimental
-        mappingGenerator.process("classpath:tosca_simple_yaml_1_2.yml");
-        parserRegistriesByVersion.put(NORMATIVE_DSL_1_2, registry);
+        Map<String, INodeParser> registry = mappingGenerator.process("classpath:tosca_prestocloud_mapping_1_0.yml");
+        parserRegistriesByVersion.put(PRESTOCLOUD_DSL_1_0, registry);
         parserRegistriesByVersion.put(NORMATIVE_DSL_1_2_URL, registry);
+        // v1.1
+        registry = mappingGenerator.process("classpath:tosca_prestocloud_mapping_1_1.yml");
+        parserRegistriesByVersion.put(PRESTOCLOUD_DSL_1_1, registry);
+        // v2.2
+        registry = mappingGenerator.process("classpath:tosca_prestocloud_mapping_1_2.yml");
+        parserRegistriesByVersion.put(PRESTOCLOUD_DSL_1_2, registry);
     }
 
     @Override
@@ -99,7 +101,7 @@ public class ToscaParser extends YamlParser<ArchiveRoot> {
         if (rootNode instanceof MappingNode) {
             // try to find the tosca version
             DefinitionVersionInfo definitionVersionInfo = getToscaDefinitionVersion(((MappingNode) rootNode).getValue(), context);
-            // call the parser for the given tosca version
+            // call the tosca for the given tosca version
             Map<String, INodeParser> registry = parserRegistriesByVersion.get(definitionVersionInfo.definitionVersion);
             if (registry == null) {
                 throw new ParsingException(context.getFileName(),

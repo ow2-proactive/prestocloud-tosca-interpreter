@@ -19,7 +19,7 @@ public class BaseParserFactory {
     /**
      * Get a new instance of a ReferencedParser.
      *
-     * @param typeName The name of the type in the parser registry to use for the parsing.
+     * @param typeName The name of the type in the tosca registry to use for the parsing.
      * @return a new instance of the ReferencedParser.
      */
     public ReferencedParser getReferencedParser(String typeName) {
@@ -42,7 +42,7 @@ public class BaseParserFactory {
      * Get a new instance of a KeyDiscriminatorParser with the given parameters for key discrimined parsers and fallback.
      * 
      * @param parsersByKey The parsers to associate based on key found in the parsed node.
-     * @param fallbackParser The fallback parser in case no key matches.
+     * @param fallbackParser The fallback tosca in case no key matches.
      * @return a new instance of the KeyDiscriminatorParser
      */
     public KeyDiscriminatorParser getKeyDiscriminatorParser(Map<String, INodeParser<?>> parsersByKey, INodeParser<?> fallbackParser) {
@@ -52,7 +52,7 @@ public class BaseParserFactory {
     /**
      * Get a new instance of a ListParser.
      *
-     * @param valueParser The parser to use to parse list values.
+     * @param valueParser The tosca to use to parse list values.
      * @param toscaType The expected type name to generate error messages.
      * @param <T> The type of the list values.
      * @return a new instance of the ListParser
@@ -64,7 +64,7 @@ public class BaseParserFactory {
     /**
      * Get a new instance of a ListParser.
      *
-     * @param valueParser The parser to use to parse list values.
+     * @param valueParser The tosca to use to parse list values.
      * @param toscaType The expected type name to generate error messages.
      * @param keyPath In case the list is created from a map, optional value to inject the key into the value object.
      * @param <T> The type of the list values.
@@ -77,7 +77,7 @@ public class BaseParserFactory {
     /**
      * Get a new instance of a SetParser.
      *
-     * @param valueParser The parser to use to parse set values.
+     * @param valueParser The tosca to use to parse set values.
      * @param toscaType The tosca type of the set.
      * @param <T> The type of the set values.
      * @return a new instance of the SetParser
@@ -89,7 +89,7 @@ public class BaseParserFactory {
     /**
      * Get a new instance of a SetParser.
      *
-     * @param valueParser The parser to use to parse set values.
+     * @param valueParser The tosca to use to parse set values.
      * @param toscaType The tosca type of the set.
      * @param keyPath In case the list is created from a map, optional value to inject the key into the value object.
      * @param <T> The type of the set values.
@@ -102,7 +102,7 @@ public class BaseParserFactory {
     /**
      * Get a new instance of a MapParser.
      *
-     * @param valueParser The parser to use to parse map values.
+     * @param valueParser The tosca to use to parse map values.
      * @param toscaType The expected type name to generate error messages.
      * @param <T> The type of the map values.
      * @return a new instance of the MapParser
@@ -114,7 +114,7 @@ public class BaseParserFactory {
     /**
      * Get a new instance of a MapParser.
      * 
-     * @param valueParser The parser to use to parse map values.
+     * @param valueParser The tosca to use to parse map values.
      * @param toscaType The expected type name to generate error messages.
      * @param keyPath Optional value to inject the key into the value object.
      * @param <T> The type of the map values.
@@ -127,10 +127,10 @@ public class BaseParserFactory {
     /**
      * Get a new instance of a SequenceToMapParser.
      *
-     * @param valueParser The parser to use to parse map values.
+     * @param valueParser The tosca to use to parse map values.
      * @param toscaType The tosca type of the map.
      * @param nodeIsValue If the sequence element mapping node is also the node of the value (both key and value).
-     * @param allowDuplicate Allow duplicate flag to know the the sequence to map parser should trigger errors in case of duplicated elements.
+     * @param allowDuplicate Allow duplicate flag to know the the sequence to map tosca should trigger errors in case of duplicated elements.
      * @param <T> The type of the map values.
      * @return a new instance of the SequenceToMapParser
      */

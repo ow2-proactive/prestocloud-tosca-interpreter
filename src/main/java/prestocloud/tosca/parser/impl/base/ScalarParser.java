@@ -8,7 +8,7 @@ import prestocloud.tosca.parser.ParserUtils;
 import prestocloud.tosca.parser.ParsingContextExecution;
 
 /**
- * Very simple scalar parser that just returns the value as string.
+ * Very simple scalar tosca that just returns the value as string.
  */
 @Component
 public class ScalarParser implements INodeParser<String> {
