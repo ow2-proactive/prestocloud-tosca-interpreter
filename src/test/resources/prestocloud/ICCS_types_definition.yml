@@ -1,0 +1,222 @@
+tosca_definitions_version: tosca_prestocloud_mapping_1_2
+
+metadata:
+  template_name: ICCS types definition
+  template_author: ICCS
+  template_version: 1.0.0-SNAPSHOT
+
+description: Types definition for ICCS needs
+
+imports:
+  - tosca-normative-types:1.2
+
+# Nodes
+node_types:
+  prestocloud.nodes.fragment:
+    derived_from: tosca.nodes.Root
+    description: A TOSCA description of an application's fragment
+    properties:
+      id:
+        type: integer
+        required: true
+      name:
+        type: string
+        required: true
+      onloadable:
+        type: boolean
+        required: true
+    requirements:
+      - execute:
+          capability: prestocloud.capabilities.jppf.fragmentExecution
+          node: prestocloud.nodes.jppf.Agent
+          relationship: prestocloud.relationships.jppf.ExecutedBy
+          occurrences: [1, 1] # [min, max]
+
+  prestocloud.nodes.jppf.Agent:
+    description: A TOSCA description of a JPPF processing node
+    derived_from: tosca.nodes.Root
+    capabilities:
+      - fragments:
+          type: prestocloud.capabilities.jppf.fragmentExecution
+    properties:
+      component_version:
+        type: version
+        required: false
+    requirements:
+      - master:
+          capability: prestocloud.capabilities.jppf.endpoint
+          node: prestocloud.nodes.jppf.Master
+          relationship: prestocloud.relationships.jppf.ConnectsTo
+          occurrences: [1, 1] # [min, max]
+
+  prestocloud.nodes.jppf.Master:
+    description: A TOSCA description of a JPPF master node
+    derived_from: tosca.nodes.Root
+    capabilities:
+      - jppf_endpoint:
+          type: prestocloud.capabilities.jppf.endpoint
+    requirements:
+      - host:
+          node: tosca.nodes.Compute
+          capability: tosca.capabilities.Container
+          relationship: tosca.relationships.HostedOn
+    properties:
+      component_version:
+        type: version
+        required: false
+
+  # The JPPF master of the topology
+  jppf_server_type:
+    description: A TOSCA description of a JPPF master node
+    derived_from: prestocloud.nodes.jppf.Master
+    requirements:
+      - host:
+          capability: tosca.capabilities.Container
+          node: tosca.nodes.Compute
+          relationship: tosca.relationships.HostedOn
+          occurrences: [1,1]
+          node_filter:
+            # Here we can also set specific properties to filter on
+            #properties:
+            capabilities:
+              - host:
+                  properties:
+                    - num_cpus: { equal: 8 }
+                    - mem_size: { greater_or_equal: 16 GB }
+              - os:
+                  properties:
+                    - architecture: { equal: x86_64 }
+                    - type: { equal: linux }
+                    - distribution: { equal: debian }
+
+  # JPPF agents of the topology
+  jppf_agent_medium:
+    description: A TOSCA description of a JPPF master node
+    derived_from: prestocloud.nodes.jppf.Agent
+    requirements:
+      - host:
+          capability: tosca.capabilities.Container
+          node: tosca.nodes.Compute
+          relationship: tosca.relationships.HostedOn
+          occurrences: [1,1]
+          node_filter:
+            capabilities:
+              - host:
+                  properties:
+                    - num_cpus: { equal: 2 }
+                    - mem_size: { greater_or_equal: 4 GB }
+              - os:
+                  properties:
+                    - architecture: { equal: x86_64 }
+                    - type: { equal: linux }
+                    - distribution: { equal: ubuntu }
+  jppf_agent_high:
+    description: A TOSCA description of a JPPF master node
+    derived_from: prestocloud.nodes.jppf.Agent
+    requirements:
+      - host:
+          capability: tosca.capabilities.Container
+          node: tosca.nodes.Compute
+          relationship: tosca.relationships.HostedOn
+          occurrences: [1,1]
+          node_filter:
+            capabilities:
+              - host:
+                  properties:
+                    - num_cpus: { equal: 2 }
+                    - mem_size: { greater_or_equal: 4 GB }
+              - os:
+                  properties:
+                    - architecture: { equal: x86_64 }
+                    - type: { equal: linux }
+                    - distribution:  { equal: ubuntu }
+
+# Capabilities
+capability_types:
+
+  prestocloud.capabilities.jppf.endpoint:
+    derived_from: tosca.capabilities.Root
+    description: Provide JPPF master endpoint
+    properties:
+      protocol:
+        type: string
+        required: true
+        default: tcp
+      port:
+        type: tosca.datatypes.network.PortDef
+        required: true
+      secure:
+        type: boolean
+        required: false
+        default: false
+      ip_address:
+        type: string
+    valid_source_types: [ prestocloud.nodes.jppf.Agent ]
+
+  prestocloud.capabilities.jppf.fragmentExecution:
+    derived_from: tosca.capabilities.Root
+    description: Capability to execute a fragment
+    properties:
+      # Properties needed to execute a fragment
+    valid_source_types: [ prestocloud.nodes.fragment ]
+
+# Relationships
+relationship_types:
+  prestocloud.relationships.jppf.ConnectsTo:
+    derived_from: tosca.relationships.Root
+    valid_target_types: [ prestocloud.capabilities.jppf.endpoint ]
+    properties:
+      credential:
+        type: tosca.datatypes.Credential
+        required: false
+#    interfaces:
+#      configure:
+#        pre_configure_source:
+#          implementation: scripts/connects_to_JPPF_master.sh
+#          inputs:
+#            MASTER_IP: { get_attribute: [ TARGET, ip_address ] }
+#            MASTER_PORT: { get_property: [ TARGET, port ] }
+
+  prestocloud.relationships.jppf.ExecutedBy:
+    derived_from: tosca.relationships.Root
+    valid_target_types: [ prestocloud.capabilities.jppf.fragmentExecution ]
+    # Here we can add interfaces lifecycle to manage fragment execution
+
+
+# Templates
+topology_template:
+  node_templates:
+
+    # The JPPF master of the topology
+    jppf_master:
+      type: jppf_server_type
+
+    # JPPF agents of the topology
+    jppf_agent1:
+      type: jppf_agent_medium
+      properties:
+        component_version: 1
+    jppf_agent2:
+      type: jppf_agent_medium
+      properties:
+        component_version: 2
+
+    # Application fragments
+    fragment1:
+      type: prestocloud.nodes.fragment
+      properties:
+        id: 1
+        name: main_processing_fragment
+        onloadable: false
+      requirements:
+        - dependency: jppf_agent1
+        - execute: jppf_agent1
+    fragment2:
+      type: prestocloud.nodes.fragment
+      properties:
+        id: 2
+        name: second_processing_fragment
+        onloadable: true
+      requirements:
+        - dependency: jppf_agent2
+        - execute: jppf_agent2

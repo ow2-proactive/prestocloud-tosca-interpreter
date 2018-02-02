@@ -1,0 +1,14 @@
+tosca_definitions_version: tosca_prestocloud_mapping_1_2
+
+template_name: range_type
+template_author: prestocloud
+template_version: 1.0.0-SNAPSHOT
+
+node_types:
+  org.prestocloud.tests.nodes.RangeProperty:
+    derived_from: tosca.nodes.Root
+    properties:
+      range_property:
+        type: range
+        default: [1, 25]
+        required: false

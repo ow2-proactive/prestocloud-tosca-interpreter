@@ -1,0 +1,16 @@
+tosca_definitions_version: tosca_prestocloud_mapping_1_2
+
+imports:
+  - tosca-normative-types:1.2
+
+node_types:
+  my_company.my_types.MyAppNodeType:
+    derived_from: tosca.nodes.SoftwareComponent
+    description: My company’s custom applicaton
+    requirements:
+      - host: tosca.nodes.Compute
+        relationship_type: tosca.relationships.HostedOn
+        capability: host
+        occurrences: [1, 2, 3]
+      - other: tosca.capabilities.Endpoint
+        occurrences: [0]        

@@ -1,0 +1,128 @@
+tosca_definitions_version: tosca_prestocloud_mapping_1_2
+
+template_name: test-data-types
+template_author: prestocloud
+template_version: 1.0.0-SNAPSHOT
+
+description: Contains the normative types definition.
+
+node_types:
+  tosca.nodes.Root:
+    description: root type
+  prestocloud.test.Command:
+    derived_from: tosca.nodes.Root
+    properties:
+      id:
+        type: integer
+        constraints:
+          - greater_than: 0
+      client:
+        type: prestocloud.test.Client
+      client_family:
+        type: list
+        entry_schema:
+          type: prestocloud.test.Client
+      tags:
+        type: map
+        entry_schema:
+          type: string
+
+data_types:
+  tosca.datatypes.Root:
+    description: root type
+  prestocloud.test.Address:
+    derived_from: tosca.datatypes.Root
+    properties:
+      number:
+        type: integer
+        constraints:
+          - greater_than: 0
+      street:
+        type: string
+      city:
+        type: string
+      country:
+        type: string
+        constraints:
+          - valid_values: ["France", "Germany", "Italy"]
+
+  prestocloud.test.Person:
+    derived_from: tosca.datatypes.Root
+    properties:
+      name:
+        type: string
+      address:
+        type: prestocloud.test.Address
+        required: false
+      friends:
+        type: list
+        entry_schema:
+          type: prestocloud.test.Person
+        required: false
+      emails:
+        type: list
+        entry_schema:
+          type: string
+          constraints:
+            - pattern: ".+@.+"
+        required: false
+      misc:
+        type: map
+        entry_schema:
+          type: string
+          constraints:
+            - min_length: 10
+        required: false
+      hierarchy:
+        type: map
+        entry_schema:
+          type: prestocloud.test.Person
+        required: false
+
+  prestocloud.test.Client:
+    derived_from: prestocloud.test.Person
+    properties:
+      id:
+        type: integer
+        constraints:
+          - greater_than: 0
+
+topology_template:
+
+  node_templates:
+    command:
+      type: prestocloud.test.Command
+      properties:
+        id: 5
+        client:
+          id: 1
+          name: prestocloud
+          address:
+            number: 1001
+            street: Algorithmes
+            city: Sophia Antipolis
+            country: France
+          emails:
+            - client1@prestocloud.com
+            - client2@prestocloud.com
+          friends:
+            - name: vincent
+              address:
+                number: 1002
+                street: Algorithmes
+                city: Sophia Antipolis
+                country: France
+            - name: pascal
+              address:
+                number: 1003
+                street: Algorithmes
+                city: Sophia Antipolis
+                country: France
+          misc:
+            favorite_song: Medieval songs
+            dog_name: pif le chien
+          hierarchy:
+            n_plug_one:
+              name: coordinator prestocloud
+            n_plus_two:
+              name: manager prestocloud

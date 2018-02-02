@@ -1,0 +1,17 @@
+tosca_definitions_version: tosca_prestocloud_mapping_1_2
+
+description: This is an example of relationship type
+
+imports:
+  - tosca-normative-types:1.2
+
+relationship_types:
+  mycompany.mytypes.myapplication.MyRelationship:
+    derived_from: tosca.relationships.Relationship
+    description: a custom relationship
+    properties:
+      my_feature_setting:
+        type: string
+      my_feature_value:
+        type: integer
+    valid_target_types: [tosca.capabilities.Feature1, tosca.capabilities.Feature2]

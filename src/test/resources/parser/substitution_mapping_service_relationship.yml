@@ -1,0 +1,38 @@
+tosca_definitions_version: tosca_prestocloud_mapping_1_2
+
+metadata:
+  template_name: Template name value
+  template_author: Temlate author value
+  template_version: 1.0.0-SNAPSHOT
+
+description: Simple test template to check parsing of prestocloud specific relationship type value in a substitution mapping for service relationship support.
+
+imports:
+  - tosca-normative-types:1.2
+
+capability_types:
+  org.prestocloud.capabilities.test.MyCapability:
+    derived_from: tosca.capabilities.Root
+    properties:
+      my_prop:
+        type: string
+
+node_types:
+  org.prestocloud.nodes.test.MyNode:
+    derived_from: tosca.nodes.Root
+    capabilities:
+      my_capa:
+        type: org.prestocloud.capabilities.test.MyCapability
+
+relationship_types:
+  org.prestocloud.relationships.test.MyRelationship:
+    derived_from: tosca.relationships.Root
+
+topology_template:
+  substitution_mappings:
+    node_type: tosca.nodes.Root
+    capabilities:
+      subst_capa: [ node, my_capa, org.prestocloud.relationships.test.MyRelationship ]
+  node_templates:
+    node:
+      type: org.prestocloud.nodes.test.MyNode
