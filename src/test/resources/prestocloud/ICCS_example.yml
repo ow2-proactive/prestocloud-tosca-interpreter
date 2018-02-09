@@ -169,19 +169,10 @@ relationship_types:
       credential:
         type: tosca.datatypes.Credential
         required: false
-#    interfaces:
-#      configure:
-#        pre_configure_source:
-#          implementation: scripts/connects_to_JPPF_master.sh
-#          inputs:
-#            MASTER_IP: { get_attribute: [ TARGET, ip_address ] }
-#            MASTER_PORT: { get_property: [ TARGET, port ] }
 
   prestocloud.relationships.jppf.ExecutedBy:
     derived_from: tosca.relationships.Root
     valid_target_types: [ prestocloud.capabilities.jppf.fragmentExecution ]
-    # Here we can add interfaces lifecycle to manage fragment execution
-
 
 # Templates
 topology_template:
@@ -194,10 +185,17 @@ topology_template:
     # JPPF agents of the topology
     jppf_agent1:
       type: jppf_agent_medium
+      requirements:
+        - master: jppf_master
+        - dependency: jppf_master
       properties:
         component_version: 1
+
     jppf_agent2:
-      type: jppf_agent_medium
+      type: jppf_agent_high
+      requirements:
+        - master: jppf_master
+        - dependency: jppf_master
       properties:
         component_version: 2
 
@@ -211,6 +209,7 @@ topology_template:
       requirements:
         - dependency: jppf_agent1
         - execute: jppf_agent1
+
     fragment2:
       type: prestocloud.nodes.fragment
       properties:

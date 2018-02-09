@@ -17,6 +17,7 @@ import prestocloud.utils.version.Version;
 @Setter
 @EqualsAndHashCode(of = { "name", "version" })
 public class Csar implements IWorkspaceResource {
+
     private String name;
 
     private String version;

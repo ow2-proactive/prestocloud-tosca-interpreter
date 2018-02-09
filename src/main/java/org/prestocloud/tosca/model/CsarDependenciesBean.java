@@ -17,5 +17,4 @@ public class CsarDependenciesBean {
     private CSARDependency self = new CSARDependency();
     private Set<CSARDependency> dependencies;
     private Set<CsarDependenciesBean> dependents = Sets.newHashSet();
-
 }

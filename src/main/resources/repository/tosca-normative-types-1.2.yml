@@ -206,14 +206,14 @@ capability_types:
         default: source
         constraints:
           - valid_values: [ source, target, peer ]
-      # ports:
-      #   type: map
-      #   description: The optional map of ports the Endpoint supports (if more than one).
-      #   required: false
-      #   constraints:
-      #     - min_length: 1
-      #   entry_schema:
-      #     type: tosca.datatypes.network.PortSpec
+      ports:
+        type: map
+        description: The optional map of ports the Endpoint supports (if more than one).
+        required: false
+        constraints:
+          - min_length: 1
+        entry_schema:
+          type: tosca.datatypes.network.PortSpec
       #attributes:
       #ip_address:
       #type: string
@@ -462,14 +462,15 @@ node_types:
       public_address:
         type: string
         description: The primary public IP address assigned by the cloud provider that applications may use to access the Compute node.
-      # networks:
-      #   type: map
-      #   entry_schema:
-      #     type: tosca.datatypes.network.NetworkInfo
-      # ports:
-      #   type: map
-      #   entry_schema:
-      #     type: tosca.datatypes.network.PortInfo
+    properties:
+      networks:
+        type: map
+        entry_schema:
+          type: tosca.datatypes.network.NetworkInfo
+      ports:
+        type: map
+        entry_schema:
+           type: tosca.datatypes.network.PortInfo
     requirements:
       - network:
           capability: tosca.capabilities.Connectivity
@@ -718,12 +719,12 @@ node_types:
       connection:
         type: tosca.capabilities.Connectivity
 
-        #group_types:
-        #  tosca.groups.Root:
-        #    description: The TOSCA Group Type all other TOSCA Group Types derive from
-        #    interfaces:
-        #      Standard:
-        #        type: tosca.interfaces.node.lifecycle.Standard
+#group_types:
+#  tosca.groups.Root:
+#    description: The TOSCA Group Type all other TOSCA Group Types derive from
+#    interfaces:
+#      Standard:
+#        type: tosca.interfaces.node.lifecycle.Standard
 
 policy_types:
   tosca.policies.Root:

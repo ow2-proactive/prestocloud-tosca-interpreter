@@ -6,7 +6,6 @@ import java.nio.file.Paths;
 import javax.annotation.Resource;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -67,19 +66,9 @@ public class PrEstoCloudTest {
         Assert.assertEquals(0, parsingResult.getContext().getParsingErrors().size());
     }
 
-    @Ignore
-    @Test
-    public void testParsingICCSOrig() throws IOException, ParsingException {
-        ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "ICCS_types_definition-ORIG.yml"));
-        Assert.assertEquals(0, parsingResult.getContext().getParsingErrors().size());
-    }
-
     @Test
     public void testParsingICCS() throws IOException, ParsingException {
-        ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "ICCS_types_definition.yml"));
+        ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "ICCS_example.yml"));
         Assert.assertEquals(0, parsingResult.getContext().getParsingErrors().size());
     }
-
-
-
 }
