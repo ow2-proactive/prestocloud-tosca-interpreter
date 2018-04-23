@@ -38,6 +38,8 @@ public enum ErrorCode {
     TOSCA_VERSION_NOT_FIRST,
     /** A field is not recognized and will be skipped. */
     UNRECOGNIZED_PROPERTY,
+    /** A required property is missing. */
+    MISSING_PROPERTY,
     /** A discriminator is not known and no failback tosca. */
     UNKNWON_DISCRIMINATOR_KEY,
     /** A referenced file (definition, icon, artifact is missing). */
@@ -101,6 +103,7 @@ public enum ErrorCode {
     UNKNWON_WORKFLOW_STEP_TARGET,
     UNKNWON_WORKFLOW_STEP_RELATIONSHIP_TARGET,
     POLICY_TARGET_NOT_FOUND,
+    INVALID_POLICY_TARGET,
     /** Invalid node template name (contains dot, dash or accent) **/
     INVALID_NODE_TEMPLATE_NAME,
     /** Invalid workflow name (contains dot, dash or accent) **/

@@ -39,14 +39,20 @@ public class PolicyTemplatePostProcessor implements IPostProcessor<PolicyTemplat
 
         final Topology topology = ((ArchiveRoot) ParsingContextExecution.getRoot().getWrappedInstance()).getTopology();
 
-        // check that the targets are exiting node templates
-        // TODO should we also check the type of the target, see if it matches with one provided in PolicyType.getTargets() ?
         safe(instance.getTargets()).forEach(target -> {
             if (!safe((topology.getNodeTemplates())).containsKey(target)) {
                 // Dispatch an error.
                 Node node = ParsingContextExecution.getObjectToNodeMap().get(instance.getTargets());
                 ParsingContextExecution.getParsingErrors().add(new ParsingError(ParsingErrorLevel.ERROR, ErrorCode.POLICY_TARGET_NOT_FOUND, instance.getName(),
-                        node.getStartMark(), null, node.getEndMark(), target));
+                        node.getStartMark(), "The target " + target + " is not found", node.getEndMark(), target));
+            }
+            else {
+                // Check that the targets match with policy type targets definition
+                if (!policyType.getTargets().contains(safe((topology.getNodeTemplates())).get(target).getType())) {
+                    Node node = ParsingContextExecution.getObjectToNodeMap().get(instance.getTargets());
+                    ParsingContextExecution.getParsingErrors().add(new ParsingError(ParsingErrorLevel.ERROR, ErrorCode.INVALID_POLICY_TARGET, instance.getName(),
+                            node.getStartMark(), "The target " + target + " does not match with required target types: " + policyType.getTargets(), node.getEndMark(), target));
+                }
             }
         });
 

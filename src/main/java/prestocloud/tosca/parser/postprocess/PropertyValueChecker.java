@@ -41,6 +41,25 @@ public class PropertyValueChecker {
         ArchiveRoot archiveRoot = (ArchiveRoot) ParsingContextExecution.getRoot().getWrappedInstance();
         Topology topology = archiveRoot.getTopology();
 
+        // Check missing properties first
+        if (type.getProperties() != null) {
+            for (String property : type.getProperties().keySet()) {
+                if (type.getProperties().get(property).isRequired()) {
+                    for (Map.Entry<String, AbstractPropertyValue> propertyEntry : safe(propertyValues).entrySet()) {
+                        if (propertyEntry.getKey().equalsIgnoreCase(property)) {
+                            if (propertyEntry.getValue() == null) {
+                                Node propertyNode = ParsingContextExecution.getObjectToNodeMap().get(propertyEntry.getKey());
+                                ParsingContextExecution.getParsingErrors()
+                                        .add(new ParsingError(ParsingErrorLevel.ERROR, ErrorCode.MISSING_PROPERTY, templateName, propertyNode.getStartMark(),
+                                                "Property " + property + " is not defined but required by type " + type.getId(), propertyNode.getEndMark(), property));
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
         for (Map.Entry<String, AbstractPropertyValue> propertyEntry : safe(propertyValues).entrySet()) {
             String propertyName = propertyEntry.getKey();
             AbstractPropertyValue propertyValue = propertyEntry.getValue();

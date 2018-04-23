@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 public final class NameValidationUtils {
 
     /**
-     * The default for naming resources is to use only alphanumeric ann underscore (_) characters
+     * The default for naming resources is to use only alphanumeric and underscore (_) characters
      */
     public static final String DEFAULT_NAME_REGEX = "^\\w+$";
     public static final Pattern DEFAULT_NAME_REPLACE_PATTERN = Pattern.compile("\\W");
