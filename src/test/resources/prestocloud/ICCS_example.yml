@@ -95,8 +95,8 @@ node_types:
     derived_from: prestocloud.nodes.jppf.Agent
     requirements:
       - host:
-          capability: tosca.capabilities.Container
           node: tosca.nodes.Compute
+          capability: tosca.capabilities.Container
           relationship: tosca.relationships.HostedOn
           occurrences: [1,1]
           node_filter:
@@ -107,7 +107,7 @@ node_types:
                     - mem_size: { greater_or_equal: 4 GB }
               - os:
                   properties:
-                    - architecture: { equal: x86_64 }
+                    - architecture: { valid_values: [ x86_64, arm64 ] }
                     - type: { equal: linux }
                     - distribution: { equal: ubuntu }
   jppf_agent_high:
@@ -144,13 +144,14 @@ capability_types:
         default: tcp
       port:
         type: tosca.datatypes.network.PortDef
-        required: true
+        required: false
       secure:
         type: boolean
         required: false
         default: false
       ip_address:
         type: string
+        required: false
     valid_source_types: [ prestocloud.nodes.jppf.Agent ]
 
   prestocloud.capabilities.jppf.fragmentExecution:
