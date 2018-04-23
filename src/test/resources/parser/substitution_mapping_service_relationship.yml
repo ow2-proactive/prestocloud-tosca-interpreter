@@ -15,6 +15,7 @@ capability_types:
     derived_from: tosca.capabilities.Root
     properties:
       my_prop:
+        required: false
         type: string
 
 node_types:

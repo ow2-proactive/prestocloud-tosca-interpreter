@@ -703,7 +703,6 @@ node_types:
         default: 4
         constraints:
           - valid_values: [ 4, 6 ]
-          - valid_values: [ 4, 6 ]
       cidr:
         type: string
         required: false

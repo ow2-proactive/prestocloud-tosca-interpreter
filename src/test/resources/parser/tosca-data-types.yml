@@ -19,10 +19,12 @@ node_types:
       client:
         type: prestocloud.test.Client
       client_family:
+        required: false
         type: list
         entry_schema:
           type: prestocloud.test.Client
       tags:
+        required: false
         type: map
         entry_schema:
           type: string

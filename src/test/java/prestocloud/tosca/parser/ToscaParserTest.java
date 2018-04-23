@@ -823,28 +823,28 @@ public class ToscaParserTest extends AbstractToscaParserSimpleProfileTest {
     public void testDataTypesWithError1() throws ParsingException {
         ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get(getRootDirectory(), "tosca-data-types-error1.yml"));
         ParserTestUtil.displayErrors(parsingResult);
-        Assert.assertEquals(1, parsingResult.getContext().getParsingErrors().size());
+        Assert.assertEquals(3, parsingResult.getContext().getParsingErrors().size());
     }
 
     @Test
     public void testDataTypesWithError2() throws ParsingException {
         ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get(getRootDirectory(), "tosca-data-types-error2.yml"));
         ParserTestUtil.displayErrors(parsingResult);
-        Assert.assertEquals(1, parsingResult.getContext().getParsingErrors().size());
+        Assert.assertEquals(3, parsingResult.getContext().getParsingErrors().size());
     }
 
     @Test
     public void testDataTypesWithError3() throws ParsingException {
         ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get(getRootDirectory(), "tosca-data-types-error3.yml"));
         ParserTestUtil.displayErrors(parsingResult);
-        Assert.assertEquals(1, parsingResult.getContext().getParsingErrors().size());
+        Assert.assertEquals(3, parsingResult.getContext().getParsingErrors().size());
     }
 
     @Test
     public void testDataTypesWithError4() throws ParsingException {
         ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get(getRootDirectory(), "tosca-data-types-error4.yml"));
         ParserTestUtil.displayErrors(parsingResult);
-        Assert.assertEquals(1, parsingResult.getContext().getParsingErrors().size());
+        Assert.assertEquals(3, parsingResult.getContext().getParsingErrors().size());
     }
 
     private NodeType getMockedCompute() {
@@ -1509,7 +1509,7 @@ public class ToscaParserTest extends AbstractToscaParserSimpleProfileTest {
                 Mockito.any(Set.class))).thenReturn(policyType);
 
         ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get(getRootDirectory(), "tosca-policy-template-fail.yml"));
-        assertEquals(1, parsingResult.getContext().getParsingErrors().size());
+        assertEquals(2, parsingResult.getContext().getParsingErrors().size());
         assertEquals(1, countErrorByLevelAndCode(parsingResult, ParsingErrorLevel.ERROR, ErrorCode.POLICY_TARGET_NOT_FOUND));
     }
 }

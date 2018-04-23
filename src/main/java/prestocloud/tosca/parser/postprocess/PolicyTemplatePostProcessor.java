@@ -48,7 +48,7 @@ public class PolicyTemplatePostProcessor implements IPostProcessor<PolicyTemplat
             }
             else {
                 // Check that the targets match with policy type targets definition
-                if (!policyType.getTargets().contains(safe((topology.getNodeTemplates())).get(target).getType())) {
+                if (policyType.getTargets() == null || !policyType.getTargets().contains(safe((topology.getNodeTemplates())).get(target).getType())) {
                     Node node = ParsingContextExecution.getObjectToNodeMap().get(instance.getTargets());
                     ParsingContextExecution.getParsingErrors().add(new ParsingError(ParsingErrorLevel.ERROR, ErrorCode.INVALID_POLICY_TARGET, instance.getName(),
                             node.getStartMark(), "The target " + target + " does not match with required target types: " + policyType.getTargets(), node.getEndMark(), target));

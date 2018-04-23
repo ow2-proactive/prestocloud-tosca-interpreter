@@ -23,7 +23,7 @@ public class NormativeTypesTest extends AbstractToscaParserSimpleProfileTest {
     @Test
     public void testParsingNormativeTypesv12() throws IOException, ParsingException {
 
-        ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get("src/main/resources/repository/", "tosca-normative-types-1.2.yml"));
+        ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/types/", "tosca-normative-types-1.2.yml"));
         ParserTestUtil.displayErrors(parsingResult);
         Assert.assertEquals(0, parsingResult.getContext().getParsingErrors().size());
         Assert.assertEquals(6, parsingResult.getResult().getDataTypes().size());
