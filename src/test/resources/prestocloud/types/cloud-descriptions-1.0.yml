@@ -1,0 +1,118 @@
+tosca_definitions_version: tosca_prestocloud_mapping_1_2
+
+metadata:
+  template_name: Clouds description
+  template_author: ActiveEon
+  template_version: 1.0.0-SNAPSHOT
+
+description: Clouds description for ActiveEon.
+
+imports:
+  - tosca-normative-types:1.2
+
+
+node_types:
+
+  # Separate by public/private?
+
+  prestocloud.nodes.compute.cloud:
+    derived_from: tosca.nodes.Compute
+    description: PrEstoCloud cloud compute node description.
+    properties:
+      cloud:
+        type: prestocloud.datatypes.cloud
+    capabilities:
+      host:
+        type: prestocloud.capabilities.container
+
+data_types:
+
+  prestocloud.datatypes.cloud:
+    derived_from: tosca.datatypes.Root
+    description: A cloud description
+    properties:
+      cloud_name:
+        type: string
+        description: The name of the cloud.
+        required: true
+      cloud_type:
+        type: string
+        description: The type of the cloud.
+        required: true
+        constraints:
+          valid_values: [ azure, amazon, openstack ]
+      cloud_region:
+        type: string
+        description: The region of the cloud.
+        required: true
+      cloud_credentials:
+        type: prestocloud.datatypes.cloudcredentials
+        description: The credentials to authenticate with cloud API.
+        required: false
+      cloud_network:
+        type: tosca.datatypes.network.NetworkInfo
+        description: The network to setup on cloud.
+        required: false
+
+  prestocloud.datatypes.cloudcredentials:
+    derived_from: tosca.datatypes.Root
+    description: A cloud description.
+    properties:
+      username:
+        type: string
+        description: The user name (or api key) to connect with cloud API.
+        required: true
+      password:
+        type: string
+        description: The password (or api private key) to connect with cloud API.
+        required: true
+      subscription:
+        type: string
+        description: The subscription id to use with the credentials (Azure specific).
+        required: false
+      domain:
+        type: string
+        description: The domain/tenant id to use with the credentials (Azure specific).
+        required: false
+
+# Capabilities
+capability_types:
+
+  prestocloud.capabilities.container:
+    derived_from: tosca.capabilities.Root
+    description: >
+      The Container capability, when included on a Node Type or Template definition, indicates that the node can act as a container for (or a host for)
+      one or more other declared Node Types.
+    properties:
+      num_cpus:
+        type: integer
+        description: Number of (actual or virtual) CPUs associated with the Compute node.
+        required: true
+        constraints:
+          - greater_or_equal: 1
+      disk_size:
+        type: scalar-unit.size
+        description: Size of the local disk available to applications running on the Compute node (default unit is MB).
+        required: false
+        constraints:
+          - greater_or_equal: 0 MB
+      mem_size:
+        type: scalar-unit.size
+        description: Size of memory available to applications running on the Compute node (default unit is MB).
+        required: true
+        constraints:
+          - greater_or_equal: 0 MB
+      cpu_frequency:
+        type: scalar-unit.frequency
+        description: >
+          Specifies the operating frequency of CPU's core.  This property expresses the expected frequency of one (1) CPU as provided by the property
+          "num_cpus".
+        required: false
+        constraints:
+          - greater_or_equal: 0.1 GHz
+      price:
+        type: float
+        description: Price to pay per hour to use the instance in $.
+        required: false
+        constraints:
+          - greater_or_equal: 0

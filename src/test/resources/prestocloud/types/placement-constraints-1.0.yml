@@ -1,0 +1,183 @@
+tosca_definitions_version: tosca_prestocloud_mapping_1_2
+
+metadata:
+  template_name: BtrPlace placement constraints
+  template_author: ActiveEon, CNRS
+  template_version: 1.0.0-SNAPSHOT
+
+description: Placement constraints definition for BtrPlace
+
+imports:
+  - tosca-normative-types:1.2
+
+policy_types:
+
+  prestocloud.placement.Among:
+    derived_from: tosca.policies.Placement
+    description: A constraint to force a set of VMs to be hosted on a single group of nodes.
+    metadata:
+      arguments: a set of VMs and a set of nodes
+    targets: [ tosca.nodes.SoftwareComponent, tosca.nodes.Compute ]
+
+  prestocloud.placement.Ban:
+    derived_from: tosca.policies.Placement
+    description: A constraint to disallow the given VM, when running, to be hosted on a given set of nodes.
+    metadata:
+      arguments: a single VM and a set of nodes
+    targets: [ tosca.nodes.SoftwareComponent, tosca.nodes.Compute ]
+
+  prestocloud.placement.Fence:
+    derived_from: tosca.policies.Placement
+    description: A constraint to force the given VM, when running, to be hosted on a given group of nodes.
+    metadata:
+      arguments: a single VM and a set of nodes
+    targets: [ tosca.nodes.SoftwareComponent, tosca.nodes.Compute ]
+
+  prestocloud.placement.Gather:
+    derived_from: tosca.policies.Placement
+    description: A constraint to force a set of VMs, if running, to be hosted on the same node.
+    metadata:
+      arguments: a set of VMs
+    targets: [ tosca.nodes.SoftwareComponent ]
+
+  prestocloud.placement.Lonely:
+    derived_from: tosca.policies.Placement
+    description: >
+      A constraint to force all the given VMs, when running, to not share their host with other VMs.
+      Co-location between the VMs given as argument is still possible.
+    metadata:
+      arguments: a set of VMs
+    targets: [ tosca.nodes.SoftwareComponent ]
+
+  prestocloud.placement.MaxOnline:
+    derived_from: tosca.policies.Placement
+    description: A constraint to force a set of nodes to have a maximum number of nodes to be online.
+    metadata:
+      arguments: a set of nodes and an integer
+    properties:
+      online_nodes:
+        type: integer
+        description: Maximum amount of online nodes.
+        required: true
+        constraints:
+          - greater_or_equal: 1
+    targets: [ tosca.nodes.Compute ]
+
+  prestocloud.placement.Overbook:
+    derived_from: tosca.policies.Placement
+    description: >
+      A constraint to specify and overbooking factor between the physical resources offered by a node and the virtual
+      resources that are consumed by the VMs it hosts.
+    metadata:
+      arguments: a single node, a resource name, and a floating number
+    properties:
+      resource_name:
+        type: string
+        description: The name/identifier of the resource to target.
+        required: true
+      ratio:
+        type: float
+        description: The overbooking ratio/factor.
+        required: true
+        constraints:
+          - greater_than: 0
+    targets: [ tosca.nodes.Compute ]
+
+  prestocloud.placement.ResourceCapacity:
+    derived_from: tosca.policies.Placement
+    description: Restrict the total amount of virtual resources consumed by the VMs hosted on the given nodes.
+    metadata:
+      arguments: a single node, a resource name, and an integer
+    properties:
+      resource_name:
+        type: string
+        description: The name/identifier of the resource to target.
+        required: true
+      restriction:
+        type: integer
+        description: The restriction for the virtual resources.
+        required: true
+        constraints:
+          - greater_or_equal: 0
+    targets: [ tosca.nodes.Compute ]
+
+  prestocloud.placement.RunningCapacity:
+    derived_from: tosca.policies.Placement
+    description: Restrict to a given value, the total amount of VMs running on the given set of nodes.
+    metadata:
+      arguments: a single node and an integer
+    properties:
+      restriction:
+        type: integer
+        description: The restriction of VMs amount.
+        required: true
+        constraints:
+          - greater_or_equal: 0
+    targets: [ tosca.nodes.Compute ]
+
+  prestocloud.placement.Split:
+    derived_from: tosca.policies.Placement
+    description: A constraint to force several sets of VMs to not share any node when they are running.
+    metadata:
+      arguments: a set of VMs
+    targets: [ tosca.nodes.SoftwareComponent ]
+
+  prestocloud.placement.SplitAmong:
+    derived_from: tosca.policies.Placement
+    description: >
+      A constraint to force sets of running VMs to be hosted on distinct set of nodes.
+      VMs inside a same set may still be collocated.
+    metadata:
+      arguments: a set of VMs and a set of nodes
+    targets: [ tosca.nodes.SoftwareComponent, tosca.nodes.Compute ]
+
+  prestocloud.placement.Spread:
+    derived_from: tosca.policies.Placement
+    description: A constraint to force that the given VMs, if running, to be hosted on distinct nodes.
+    metadata:
+      arguments: a set of VMs
+    targets: [ tosca.nodes.SoftwareComponent ]
+
+  # Constraints on node state
+  prestocloud.placement.Offline:
+    derived_from: tosca.policies.Placement
+    description: A constraint to force a node at being offline.
+    metadata:
+      arguments: a single node
+    targets: [ tosca.nodes.Compute ]
+
+  prestocloud.placement.Online:
+    derived_from: tosca.policies.Placement
+    description: A constraint to force a node at being online.
+    metadata:
+      arguments: a single node
+    targets: [ tosca.nodes.Compute ]
+
+  # Constraints on VM state
+  prestocloud.placement.Ready:
+    derived_from: tosca.policies.Placement
+    description: A constraint to force a VM at being ready for running.
+    metadata:
+      arguments: a single VM
+    targets: [ tosca.nodes.SoftwareComponent ]
+
+  prestocloud.placement.Running:
+    derived_from: tosca.policies.Placement
+    description: A constraint to force a VM at being running.
+    metadata:
+      arguments: a single VM
+    targets: [ tosca.nodes.SoftwareComponent ]
+
+  prestocloud.placement.Sleeping:
+    derived_from: tosca.policies.Placement
+    description: A constraint to force a VM at being sleeping.
+    metadata:
+      arguments: a single VM
+    targets: [ tosca.nodes.SoftwareComponent ]
+
+  prestocloud.placement.Killed:
+    derived_from: tosca.policies.Placement
+    description: A constraint to force a VM to be killed.
+    metadata:
+      arguments: a single VM
+    targets: [ tosca.nodes.SoftwareComponent ]
