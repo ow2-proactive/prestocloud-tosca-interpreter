@@ -10,6 +10,7 @@
 - interfaces: prestocloud.tosca.parser.impl.advanced.InterfacesParser
 - outputs_type: prestocloud.tosca.parser.impl.advanced.OuputsParser
 - group_policy_parser: prestocloud.tosca.parser.impl.advanced.GroupPolicyParser
+#- policy_group_parser: prestocloud.tosca.parser.impl.advanced.PolicyGroupParser
 - artifact_ref_parser: prestocloud.tosca.parser.impl.advanced.ArtifactReferenceParser
 - sustitution_mapping_parser: prestocloud.tosca.parser.impl.advanced.SustitutionMappingParser
 - constraint: prestocloud.tosca.parser.impl.advanced.ConstraintParser
@@ -425,3 +426,6 @@
   triggers:
     map: triggers
     type: policy_trigger
+#  groups:
+#    list: groups
+#    type: policy_group_parser
