@@ -71,4 +71,18 @@ public class PrEstoCloudTest {
         ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "ICCS_example.yml"));
         Assert.assertEquals(0, parsingResult.getContext().getParsingErrors().size());
     }
+
+    @Test
+    public void testParsingPlacementConstraints() throws IOException, ParsingException {
+        ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "placement_example.yml"));
+        Assert.assertEquals(0, parsingResult.getContext().getParsingErrors().size());
+    }
+
+    @Test
+    public void testParsingCloudTemplates() throws IOException, ParsingException {
+        ParsingResult<ArchiveRoot> parsingResultAzure = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "azure-vm-templates.yml"));
+        Assert.assertEquals(0, parsingResultAzure.getContext().getParsingErrors().size());
+        ParsingResult<ArchiveRoot> parsingResultAmazon = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "amazon-vm-templates.yml"));
+        Assert.assertEquals(0, parsingResultAmazon.getContext().getParsingErrors().size());
+    }
 }
