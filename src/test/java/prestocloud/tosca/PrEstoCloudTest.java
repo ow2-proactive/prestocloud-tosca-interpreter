@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 import javax.annotation.Resource;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -78,11 +79,25 @@ public class PrEstoCloudTest {
         Assert.assertEquals(0, parsingResult.getContext().getParsingErrors().size());
     }
 
+    @Ignore
     @Test
     public void testParsingCloudTemplates() throws IOException, ParsingException {
         ParsingResult<ArchiveRoot> parsingResultAzure = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "azure-vm-templates.yml"));
         Assert.assertEquals(0, parsingResultAzure.getContext().getParsingErrors().size());
         ParsingResult<ArchiveRoot> parsingResultAmazon = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "amazon-vm-templates.yml"));
         Assert.assertEquals(0, parsingResultAmazon.getContext().getParsingErrors().size());
+    }
+
+    @Ignore
+    @Test
+    public void testParsingICCS_v2() throws IOException, ParsingException {
+        ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "ICCS_types_definition_v2.yml"));
+        Assert.assertEquals(0, parsingResult.getContext().getParsingErrors().size());
+    }
+
+    @Test
+    public void testParsingICCS_v3() throws IOException, ParsingException {
+        ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "ICCS_types_definition_v3.yml"));
+        Assert.assertEquals(0, parsingResult.getContext().getParsingErrors().size());
     }
 }

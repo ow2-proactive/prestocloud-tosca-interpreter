@@ -1,0 +1,533 @@
+tosca_definitions_version: tosca_prestocloud_mapping_1_2
+
+metadata:
+   template_name: ICCS generated types definition
+   template_author: ICCS
+   template_version: 1.0.0-SNAPSHOT
+   CostThreshold: 1000.0
+   TimePeriod:  720
+   ProviderName_0: Amazon
+   ProviderRequired_0: false
+   ProviderExcluded_0: true
+   ProviderName_1: Google_Cloud_Compute
+   ProviderRequired_1: true
+   ProviderExcluded_1: false
+   MaxInstances: 100
+   MetricToMinimize: Cost
+   MetricToMaximize: Clients_served_under_20ms
+
+description: Types Description
+
+imports:
+   - tosca-normative-types:1.2
+   - iccs_normative-types:1.0
+
+node_types:
+   #Node definitions:
+   prestocloud.nodes.fragment:
+      description: A TOSCA description of an application fragment
+      derived_from: tosca.nodes.Root
+      properties:
+         id:
+            type: integer
+            required: true
+         name:
+            type: string
+            required: true
+         onloadable:
+            type: boolean
+            required: true
+      requirements:
+         - execute:
+            capability: prestocloud.capabilities.jppf.fragmentExecution
+            node: prestocloud.nodes.jppf.Agent
+            relationship: prestocloud.relationships.jppf.ExecutedBy
+
+   prestocloud.nodes.jppf.Agent:
+      description: A basic JPPF-agent node
+      derived_from: tosca.nodes.Root
+      capabilities:
+         - fragments:
+            type: prestocloud.capabilities.jppf.fragmentExecution
+      properties:
+         component_version:
+            type: version
+            required: false
+      requirements:
+         - master:
+            capability: prestocloud.capabilities.jppf.endpoint
+            node: prestocloud.nodes.jppf.Master
+            relationship: prestocloud.relationships.jppf.ConnectsTo
+
+   prestocloud.nodes.jppf.Master:
+      description: A basic JPPF-master node
+      derived_from: tosca.nodes.Root
+      capabilities:
+         - jppf_endpoint:
+            type: prestocloud.capabilities.jppf.endpoint
+      properties:
+         component_version:
+            type: version
+            required: false
+      requirements:
+         - host:
+            node: tosca.nodes.Compute
+            capability: tosca.capabilities.Container
+            relationship: tosca.relationships.HostedOn
+
+   #Concrete node selection:
+   processing_node_eu_prestocloud_application_classes_AudioAnalytics_getData_0:
+      description: A TOSCA description of a node
+      derived_from: prestocloud.nodes.jppf.Agent
+      requirements:
+         - host:
+            capability: tosca.capabilities.Container
+            node: tosca.nodes.Compute
+            relationship: tosca.relationships.HostedOn
+            occurrences: [ 1,4 ]
+            node_filter:
+               capabilities:
+                  - host:
+                     properties:
+                        - num_cpus: { in_range: [ 4,8 ] }
+                        - mem_size: { in_range: [ 4,8 ] }
+                        - disk_size: { in_range: [ 500,2000 ] }
+                  - os:
+                     properties:
+                        - architecture: { valid_values: [ x86_64, i386, arm64, armel, armhf ] }
+                        - type: { equal: linux }
+                        - distribution: { equal: ubuntu }
+                  - execution:
+                     properties:
+                        - type: { valid_values: [ cloud, edge ] }
+
+   processing_node_eu_prestocloud_application_classes_AudioAnalytics_doNothing_1:
+      description: A TOSCA description of a node
+      derived_from: prestocloud.nodes.jppf.Agent
+      requirements:
+         - host:
+            capability: tosca.capabilities.Container
+            node: tosca.nodes.Compute
+            relationship: tosca.relationships.HostedOn
+            occurrences: [ 1,5 ]
+            node_filter:
+               capabilities:
+                  - host:
+                     properties:
+                        - num_cpus: { in_range: [ 16,32 ] }
+                        - mem_size: { in_range: [ 8,16 ] }
+                        - disk_size: { in_range: [ 100,500 ] }
+                  - os:
+                     properties:
+                        - architecture: { valid_values: [ x86_64, arm64, armel, armhf ] }
+                        - type: { equal: linux }
+                        - distribution: { equal: ubuntu }
+                  - execution:
+                     properties:
+                        - type: { valid_values: [ cloud, edge ] }
+
+   processing_node_eu_prestocloud_application_classes_AudioAnalytics_detectShout_2:
+      description: A TOSCA description of a node
+      derived_from: prestocloud.nodes.jppf.Agent
+      requirements:
+         - host:
+            capability: tosca.capabilities.Container
+            node: tosca.nodes.Compute
+            relationship: tosca.relationships.HostedOn
+            occurrences: [ 1,3 ]
+            node_filter:
+               capabilities:
+                  - host:
+                     properties:
+                        - num_cpus: { in_range: [ 16,32 ] }
+                        - mem_size: { in_range: [ 16,32 ] }
+                        - disk_size: { in_range: [ 100,500 ] }
+                  - os:
+                     properties:
+                        - architecture: { valid_values: [ x86_64, arm64, armel, armhf ] }
+                        - type: { equal: linux }
+                        - distribution: { equal: ubuntu }
+                  - execution:
+                     properties:
+                        - type: { valid_values: [ cloud, edge ] }
+
+   processing_node_eu_prestocloud_application_classes_AudioAnalytics_runAlgorithm_3:
+      description: A TOSCA description of a node
+      derived_from: prestocloud.nodes.jppf.Agent
+      requirements:
+         - host:
+            capability: tosca.capabilities.Container
+            node: tosca.nodes.Compute
+            relationship: tosca.relationships.HostedOn
+            occurrences: [ 1,3 ]
+            node_filter:
+               capabilities:
+                  - host:
+                     properties:
+                        - num_cpus: { in_range: [ 8,16 ] }
+                        - mem_size: { in_range: [ 8,16 ] }
+                        - disk_size: { in_range: [ 2000,4000 ] }
+                  - os:
+                     properties:
+                        - architecture: { valid_values: [ x86_64, arm64, armel, armhf ] }
+                        - type: { equal: linux }
+                        - distribution: { equal: ubuntu }
+                  - execution:
+                     properties:
+                        - type: { valid_values: [ cloud, edge ] }
+
+   processing_node_eu_prestocloud_application_classes_AudioAnalytics_testMethod2_4:
+      description: A TOSCA description of a node
+      derived_from: prestocloud.nodes.jppf.Agent
+      requirements:
+         - host:
+            capability: tosca.capabilities.Container
+            node: tosca.nodes.Compute
+            relationship: tosca.relationships.HostedOn
+            occurrences: [ 1,1 ]
+            node_filter:
+               capabilities:
+                  - host:
+                     properties:
+                        - num_cpus: { in_range: [ 4,8 ] }
+                        - mem_size: { in_range: [ 4,8 ] }
+                        - disk_size: { in_range: [ 40,100 ] }
+                  - os:
+                     properties:
+                        - architecture: { valid_values: [ x86_64, i386, arm64, armel, armhf ] }
+                        - type: { equal: linux }
+                        - distribution: { equal: ubuntu }
+                  - execution:
+                     properties:
+                        - type: { valid_values: [ cloud, edge ] }
+
+   processing_node_eu_prestocloud_application_classes_AudioAnalytics_testMethod1_5:
+      description: A TOSCA description of a node
+      derived_from: prestocloud.nodes.jppf.Agent
+      requirements:
+         - host:
+            capability: tosca.capabilities.Container
+            node: tosca.nodes.Compute
+            relationship: tosca.relationships.HostedOn
+            occurrences: [ 1,1 ]
+            node_filter:
+               capabilities:
+                  - host:
+                     properties:
+                        - num_cpus: { in_range: [ 4,8 ] }
+                        - mem_size: { in_range: [ 4,8 ] }
+                        - disk_size: { in_range: [ 40,100 ] }
+                  - os:
+                     properties:
+                        - architecture: { valid_values: [ x86_64, i386, arm64, armel, armhf ] }
+                        - type: { equal: linux }
+                        - distribution: { equal: ubuntu }
+                  - execution:
+                     properties:
+                        - type: { valid_values: [ cloud, edge ] }
+
+   processing_node_eu_prestocloud_application_classes_AudioAnalytics_detectSilence_6:
+      description: A TOSCA description of a node
+      derived_from: prestocloud.nodes.jppf.Agent
+      requirements:
+         - host:
+            capability: tosca.capabilities.Container
+            node: tosca.nodes.Compute
+            relationship: tosca.relationships.HostedOn
+            occurrences: [ 1,1 ]
+            node_filter:
+               capabilities:
+                  - host:
+                     properties:
+                        - num_cpus: { in_range: [ 4,8 ] }
+                        - mem_size: { in_range: [ 4,8 ] }
+                        - disk_size: { in_range: [ 40,100 ] }
+                  - os:
+                     properties:
+                        - architecture: { valid_values: [ x86_64, i386, arm64, armel, armhf ] }
+                        - type: { equal: linux }
+                        - distribution: { equal: ubuntu }
+                  - execution:
+                     properties:
+                        - type: { valid_values: [ cloud, edge ] }
+
+   processing_node_eu_prestocloud_application_classes_AudioAnalytics_detectActiveIncidents_7:
+      description: A TOSCA description of a node
+      derived_from: prestocloud.nodes.jppf.Agent
+      requirements:
+         - host:
+            capability: tosca.capabilities.Container
+            node: tosca.nodes.Compute
+            relationship: tosca.relationships.HostedOn
+            occurrences: [ 1,5 ]
+            node_filter:
+               capabilities:
+                  - host:
+                     properties:
+                        - num_cpus: { in_range: [ 8,16 ] }
+                        - mem_size: { in_range: [ 8,16 ] }
+                        - disk_size: { in_range: [ 2000,4000 ] }
+                  - os:
+                     properties:
+                        - architecture: { valid_values: [ x86_64, arm64, armel, armhf ] }
+                        - type: { equal: linux }
+                        - distribution: { equal: ubuntu }
+                  - execution:
+                     properties:
+                        - type: { valid_values: [ cloud, edge ] }
+
+   eu_prestocloud_application_classes_AudioAnalytics_overloaded_1:
+      description: A TOSCA description of a node
+      derived_from: prestocloud.nodes.jppf.Agent
+      requirements:
+         - host:
+            capability: tosca.capabilities.Container
+            node: tosca.nodes.Compute
+            relationship: tosca.relationships.HostedOn
+            occurrences: [ 1,1 ]
+            node_filter:
+               capabilities:
+                  - host:
+                     properties:
+                        - num_cpus: { in_range: [ 16,32 ] }
+                        - mem_size: { in_range: [ 8,16 ] }
+                        - disk_size: { in_range: [ 100,500 ] }
+                  - os:
+                     properties:
+                        - architecture: { equal: x86_64 }
+                        - type: { equal: linux }
+                        - distribution: { equal: ubuntu }
+                  - execution:
+                     properties:
+                        - type: { equal: cloud }
+
+   eu_prestocloud_application_classes_AudioAnalytics_overloaded_2:
+      description: A TOSCA description of a node
+      derived_from: prestocloud.nodes.jppf.Agent
+      requirements:
+         - host:
+            capability: tosca.capabilities.Container
+            node: tosca.nodes.Compute
+            relationship: tosca.relationships.HostedOn
+            occurrences: [ 1,1 ]
+            node_filter:
+               capabilities:
+                  - host:
+                     properties:
+                        - num_cpus: { in_range: [ 16,32 ] }
+                        - mem_size: { in_range: [ 8,16 ] }
+                        - disk_size: { in_range: [ 100,500 ] }
+                  - os:
+                     properties:
+                        - architecture: { equal: x86_64 }
+                        - type: { equal: linux }
+                        - distribution: { equal: ubuntu }
+                  - execution:
+                     properties:
+                        - type: { equal: cloud }
+
+   jppf_master_node_10:
+      description: A master node of the topology
+      derived_from: prestocloud.nodes.jppf.Master
+      requirements:
+         - host:
+            capability: tosca.capabilities.Container
+            node: tosca.nodes.Compute
+            relationship: tosca.relationships.HostedOn
+            occurrences: [ 1,2 ]
+            node_filter:
+               capabilities:
+                  - host:
+                     properties:
+                        - num_cpus: { in_range: [ 2,4 ] }
+                        - mem_size: { in_range: [ 4,8 ] }
+                        - disk_size: { in_range: [ 4,8 ] }
+                  - os:
+                     properties:
+                        - architecture: { equal: x86_64 }
+                        - type: { equal: linux }
+                        - distribution: { equal: ubuntu }
+                  - execution:
+                     properties:
+                        - type: { equal: cloud }
+
+
+capability_types:
+   prestocloud.capabilities.jppf.endpoint:
+      description: Provide JPPF master endpoint
+      derived_from: tosca.capabilities.Root
+      properties:
+         protocol:
+            type: string
+            required: true
+            default: tcp
+         port:
+            type: tosca.datatypes.network.PortDef
+            required: false
+         secure:
+            type: boolean
+            required: false
+            default: false
+         ip_address:
+            type: string
+            required: false
+      valid_source_types: [ prestocloud.nodes.jppf.Agent ]
+
+   prestocloud.capabilities.jppf.fragmentExecution:
+      description: Capability to execute a fragment
+      derived_from: tosca.capabilities.Root
+      properties:
+      valid_source_types: [ prestocloud.nodes.fragment ]
+
+
+relationship_types:
+   prestocloud.relationships.jppf.ConnectsTo:
+      derived_from: tosca.relationships.Root
+      valid_target_types: [ prestocloud.nodes.jppf.endpoint ]
+      properties:
+         credential:
+            type: tosca.datatypes.Credential
+            required: false
+   prestocloud.relationships.jppf.ExecutedBy:
+      derived_from: tosca.relationships.Root
+      valid_target_types: [ prestocloud.capabilities.jppf.fragmentExecution ]
+
+topology_template:
+   policies:
+      - collocation_policy_group_0:
+         type: prestocloud.policies.Collocation
+         targets: [ eu_prestocloud_application_classes_AudioAnalytics_detectActiveIncidents, eu_prestocloud_application_classes_AudioAnalytics_getData, eu_prestocloud_application_classes_AudioAnalytics_runAlgorithm ]
+
+      - collocation_policy_group_1:
+         type: prestocloud.policies.Collocation
+         targets: [ eu_prestocloud_application_classes_AudioAnalytics_detectSilence, eu_prestocloud_application_classes_AudioAnalytics_testMethod2, eu_prestocloud_application_classes_AudioAnalytics_testMethod1, eu_prestocloud_application_classes_AudioAnalytics_detectShout, eu_prestocloud_application_classes_AudioAnalytics_overloaded_1 ]
+
+      - anti_affinity_group_0:
+         type: prestocloud.policies.AntiAffinity
+         targets: [ eu_prestocloud_application_classes_AudioAnalytics_runAlgorithm, eu_prestocloud_application_classes_AudioAnalytics_detectShout, eu_prestocloud_application_classes_AudioAnalytics_detectSilence, eu_prestocloud_application_classes_AudioAnalytics_testMethod2, eu_prestocloud_application_classes_AudioAnalytics_testMethod1, eu_prestocloud_application_classes_AudioAnalytics_overloaded_1 ]
+
+   node_templates:
+      getData_0:
+         type: processing_node_eu_prestocloud_application_classes_AudioAnalytics_getData_0
+
+      eu_prestocloud_application_classes_AudioAnalytics_getData:
+         type: prestocloud.nodes.fragment
+         properties:
+            id: 0
+            name: eu.prestocloud.application_classes.AudioAnalytics.getData
+            onloadable: true
+         requirements:
+            - execute: getData_0
+
+      doNothing_1:
+         type: processing_node_eu_prestocloud_application_classes_AudioAnalytics_doNothing_1
+
+      eu_prestocloud_application_classes_AudioAnalytics_doNothing:
+         type: prestocloud.nodes.fragment
+         properties:
+            id: 1
+            name: eu.prestocloud.application_classes.AudioAnalytics.doNothing
+            onloadable: true
+         requirements:
+            - execute: doNothing_1
+
+      detectShout_2:
+         type: processing_node_eu_prestocloud_application_classes_AudioAnalytics_detectShout_2
+
+      eu_prestocloud_application_classes_AudioAnalytics_detectShout:
+         type: prestocloud.nodes.fragment
+         properties:
+            id: 2
+            name: eu.prestocloud.application_classes.AudioAnalytics.detectShout
+            onloadable: true
+         requirements:
+            - execute: detectShout_2
+
+      runAlgorithm_3:
+         type: processing_node_eu_prestocloud_application_classes_AudioAnalytics_runAlgorithm_3
+
+      eu_prestocloud_application_classes_AudioAnalytics_runAlgorithm:
+         type: prestocloud.nodes.fragment
+         properties:
+            id: 3
+            name: eu.prestocloud.application_classes.AudioAnalytics.runAlgorithm
+            onloadable: true
+         requirements:
+            - execute: runAlgorithm_3
+
+      testMethod2_4:
+         type: processing_node_eu_prestocloud_application_classes_AudioAnalytics_testMethod2_4
+
+      eu_prestocloud_application_classes_AudioAnalytics_testMethod2:
+         type: prestocloud.nodes.fragment
+         properties:
+            id: 4
+            name: eu.prestocloud.application_classes.AudioAnalytics.testMethod2
+            onloadable: true
+         requirements:
+            - execute: testMethod2_4
+
+      testMethod1_5:
+         type: processing_node_eu_prestocloud_application_classes_AudioAnalytics_testMethod1_5
+
+      eu_prestocloud_application_classes_AudioAnalytics_testMethod1:
+         type: prestocloud.nodes.fragment
+         properties:
+            id: 5
+            name: eu.prestocloud.application_classes.AudioAnalytics.testMethod1
+            onloadable: true
+         requirements:
+            - execute: testMethod1_5
+
+      detectSilence_6:
+         type: processing_node_eu_prestocloud_application_classes_AudioAnalytics_detectSilence_6
+
+      eu_prestocloud_application_classes_AudioAnalytics_detectSilence:
+         type: prestocloud.nodes.fragment
+         properties:
+            id: 6
+            name: eu.prestocloud.application_classes.AudioAnalytics.detectSilence
+            onloadable: true
+         requirements:
+            - execute: detectSilence_6
+
+      detectActiveIncidents_7:
+         type: processing_node_eu_prestocloud_application_classes_AudioAnalytics_detectActiveIncidents_7
+
+      eu_prestocloud_application_classes_AudioAnalytics_detectActiveIncidents:
+         type: prestocloud.nodes.fragment
+         properties:
+            id: 7
+            name: eu.prestocloud.application_classes.AudioAnalytics.detectActiveIncidents
+            onloadable: true
+         requirements:
+            - execute: detectActiveIncidents_7
+
+      eu_prestocloud_application_classes_AudioAnalytics_8:
+         type: eu_prestocloud_application_classes_AudioAnalytics_overloaded_1
+
+      eu_prestocloud_application_classes_AudioAnalytics_overloaded_1:
+         type: prestocloud.nodes.fragment
+         properties:
+            id: 8
+            name: eu.prestocloud.application_classes.AudioAnalytics
+            onloadable: false
+         requirements:
+            - execute: eu_prestocloud_application_classes_AudioAnalytics_8
+
+      eu_prestocloud_application_classes_AudioAnalytics_9:
+         type: eu_prestocloud_application_classes_AudioAnalytics_overloaded_2
+
+      eu_prestocloud_application_classes_AudioAnalytics_overloaded_2:
+         type: prestocloud.nodes.fragment
+         properties:
+            id: 9
+            name: eu.prestocloud.application_classes.AudioAnalytics
+            onloadable: false
+         requirements:
+            - execute: eu_prestocloud_application_classes_AudioAnalytics_9
+
+      coordinator_node:
+         type: jppf_master_node_10
+
+
