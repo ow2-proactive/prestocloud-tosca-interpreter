@@ -1,0 +1,60 @@
+tosca_definitions_version: tosca_prestocloud_mapping_1_2
+
+metadata:
+  template_name: ICCS types definition
+  template_author: ICCS
+  template_version: 1.0.0-SNAPSHOT
+
+description: Types definition for ICCS needs
+
+imports:
+   - tosca-normative-types:1.2
+   - iccs-normative-types:1.0
+   - resource-descriptions:1.0
+
+topology_template:
+
+  node_templates:
+
+    # Host (cloud VM), here we prepend "host_" to the original node type
+    cloud_amazon_us_east_1_vm_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type M1 General Purpose Extra Large (m1.xlarge) in region us-east-1.
+      properties:
+        type: cloud
+      capabilities:
+        resource:
+          properties:
+            type: cloud
+            cloud:
+              cloud_name: amazon_public1
+              cloud_type: amazon
+              cloud_region: us-east-1
+              cloud_network:
+                network_id: s-gbdpnc4s
+                network_name: subnet1
+                addresses:
+                  - 192.168.1.1
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: 15.0 GB
+            disk_size: 1680 GB
+            price: 0.350000
+
+    # JPPF agent
+    getData_0:
+      # Use the type where processing_node_eu_prestocloud_application_classes_AudioAnalytics_getData_0 derives from
+      type: prestocloud.nodes.jppf.Agent
+      requirements:
+        - host: cloud_amazon_us_east_1_vm_1
+
+    # Fragment
+    eu_prestocloud_application_classes_AudioAnalytics_getData:
+       type: prestocloud.nodes.fragment
+       properties:
+          id: 0
+          name: eu.prestocloud.application_classes.AudioAnalytics.getData
+          onloadable: true
+       requirements:
+          - execute: getData_0

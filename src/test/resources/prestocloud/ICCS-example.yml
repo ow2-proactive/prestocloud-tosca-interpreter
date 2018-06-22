@@ -9,7 +9,7 @@ metadata:
    ProviderName_0: Amazon
    ProviderRequired_0: false
    ProviderExcluded_0: true
-   ProviderName_1: Google_Cloud_Compute
+   ProviderName_1: Google_Cloud_compute
    ProviderRequired_1: true
    ProviderExcluded_1: false
    MaxInstances: 100
@@ -20,69 +20,19 @@ description: Types Description
 
 imports:
    - tosca-normative-types:1.2
-   - iccs_normative-types:1.0
+   - iccs-normative-types:1.0
+   - resource-descriptions:1.0
+   - placement-constraints:1.0
 
 node_types:
-   #Node definitions:
-   prestocloud.nodes.fragment:
-      description: A TOSCA description of an application fragment
-      derived_from: tosca.nodes.Root
-      properties:
-         id:
-            type: integer
-            required: true
-         name:
-            type: string
-            required: true
-         onloadable:
-            type: boolean
-            required: true
-      requirements:
-         - execute:
-            capability: prestocloud.capabilities.jppf.fragmentExecution
-            node: prestocloud.nodes.jppf.Agent
-            relationship: prestocloud.relationships.jppf.ExecutedBy
 
-   prestocloud.nodes.jppf.Agent:
-      description: A basic JPPF-agent node
-      derived_from: tosca.nodes.Root
-      capabilities:
-         - fragments:
-            type: prestocloud.capabilities.jppf.fragmentExecution
-      properties:
-         component_version:
-            type: version
-            required: false
-      requirements:
-         - master:
-            capability: prestocloud.capabilities.jppf.endpoint
-            node: prestocloud.nodes.jppf.Master
-            relationship: prestocloud.relationships.jppf.ConnectsTo
-
-   prestocloud.nodes.jppf.Master:
-      description: A basic JPPF-master node
-      derived_from: tosca.nodes.Root
-      capabilities:
-         - jppf_endpoint:
-            type: prestocloud.capabilities.jppf.endpoint
-      properties:
-         component_version:
-            type: version
-            required: false
-      requirements:
-         - host:
-            node: tosca.nodes.Compute
-            capability: tosca.capabilities.Container
-            relationship: tosca.relationships.HostedOn
-
-   #Concrete node selection:
    processing_node_eu_prestocloud_application_classes_AudioAnalytics_getData_0:
       description: A TOSCA description of a node
       derived_from: prestocloud.nodes.jppf.Agent
       requirements:
          - host:
             capability: tosca.capabilities.Container
-            node: tosca.nodes.Compute
+            node: prestocloud.nodes.compute
             relationship: tosca.relationships.HostedOn
             occurrences: [ 1,4 ]
             node_filter:
@@ -97,7 +47,7 @@ node_types:
                         - architecture: { valid_values: [ x86_64, i386, arm64, armel, armhf ] }
                         - type: { equal: linux }
                         - distribution: { equal: ubuntu }
-                  - execution:
+                  - resource:
                      properties:
                         - type: { valid_values: [ cloud, edge ] }
 
@@ -107,7 +57,7 @@ node_types:
       requirements:
          - host:
             capability: tosca.capabilities.Container
-            node: tosca.nodes.Compute
+            node: prestocloud.nodes.compute
             relationship: tosca.relationships.HostedOn
             occurrences: [ 1,5 ]
             node_filter:
@@ -122,7 +72,7 @@ node_types:
                         - architecture: { valid_values: [ x86_64, arm64, armel, armhf ] }
                         - type: { equal: linux }
                         - distribution: { equal: ubuntu }
-                  - execution:
+                  - resource:
                      properties:
                         - type: { valid_values: [ cloud, edge ] }
 
@@ -132,7 +82,7 @@ node_types:
       requirements:
          - host:
             capability: tosca.capabilities.Container
-            node: tosca.nodes.Compute
+            node: prestocloud.nodes.compute
             relationship: tosca.relationships.HostedOn
             occurrences: [ 1,3 ]
             node_filter:
@@ -147,7 +97,7 @@ node_types:
                         - architecture: { valid_values: [ x86_64, arm64, armel, armhf ] }
                         - type: { equal: linux }
                         - distribution: { equal: ubuntu }
-                  - execution:
+                  - resource:
                      properties:
                         - type: { valid_values: [ cloud, edge ] }
 
@@ -157,7 +107,7 @@ node_types:
       requirements:
          - host:
             capability: tosca.capabilities.Container
-            node: tosca.nodes.Compute
+            node: prestocloud.nodes.compute
             relationship: tosca.relationships.HostedOn
             occurrences: [ 1,3 ]
             node_filter:
@@ -172,7 +122,7 @@ node_types:
                         - architecture: { valid_values: [ x86_64, arm64, armel, armhf ] }
                         - type: { equal: linux }
                         - distribution: { equal: ubuntu }
-                  - execution:
+                  - resource:
                      properties:
                         - type: { valid_values: [ cloud, edge ] }
 
@@ -182,7 +132,7 @@ node_types:
       requirements:
          - host:
             capability: tosca.capabilities.Container
-            node: tosca.nodes.Compute
+            node: prestocloud.nodes.compute
             relationship: tosca.relationships.HostedOn
             occurrences: [ 1,1 ]
             node_filter:
@@ -197,7 +147,7 @@ node_types:
                         - architecture: { valid_values: [ x86_64, i386, arm64, armel, armhf ] }
                         - type: { equal: linux }
                         - distribution: { equal: ubuntu }
-                  - execution:
+                  - resource:
                      properties:
                         - type: { valid_values: [ cloud, edge ] }
 
@@ -207,7 +157,7 @@ node_types:
       requirements:
          - host:
             capability: tosca.capabilities.Container
-            node: tosca.nodes.Compute
+            node: prestocloud.nodes.compute
             relationship: tosca.relationships.HostedOn
             occurrences: [ 1,1 ]
             node_filter:
@@ -222,7 +172,7 @@ node_types:
                         - architecture: { valid_values: [ x86_64, i386, arm64, armel, armhf ] }
                         - type: { equal: linux }
                         - distribution: { equal: ubuntu }
-                  - execution:
+                  - resource:
                      properties:
                         - type: { valid_values: [ cloud, edge ] }
 
@@ -232,7 +182,7 @@ node_types:
       requirements:
          - host:
             capability: tosca.capabilities.Container
-            node: tosca.nodes.Compute
+            node: prestocloud.nodes.compute
             relationship: tosca.relationships.HostedOn
             occurrences: [ 1,1 ]
             node_filter:
@@ -247,7 +197,7 @@ node_types:
                         - architecture: { valid_values: [ x86_64, i386, arm64, armel, armhf ] }
                         - type: { equal: linux }
                         - distribution: { equal: ubuntu }
-                  - execution:
+                  - resource:
                      properties:
                         - type: { valid_values: [ cloud, edge ] }
 
@@ -257,7 +207,7 @@ node_types:
       requirements:
          - host:
             capability: tosca.capabilities.Container
-            node: tosca.nodes.Compute
+            node: prestocloud.nodes.compute
             relationship: tosca.relationships.HostedOn
             occurrences: [ 1,5 ]
             node_filter:
@@ -272,7 +222,7 @@ node_types:
                         - architecture: { valid_values: [ x86_64, arm64, armel, armhf ] }
                         - type: { equal: linux }
                         - distribution: { equal: ubuntu }
-                  - execution:
+                  - resource:
                      properties:
                         - type: { valid_values: [ cloud, edge ] }
 
@@ -282,7 +232,7 @@ node_types:
       requirements:
          - host:
             capability: tosca.capabilities.Container
-            node: tosca.nodes.Compute
+            node: prestocloud.nodes.compute
             relationship: tosca.relationships.HostedOn
             occurrences: [ 1,1 ]
             node_filter:
@@ -297,7 +247,7 @@ node_types:
                         - architecture: { equal: x86_64 }
                         - type: { equal: linux }
                         - distribution: { equal: ubuntu }
-                  - execution:
+                  - resource:
                      properties:
                         - type: { equal: cloud }
 
@@ -307,7 +257,7 @@ node_types:
       requirements:
          - host:
             capability: tosca.capabilities.Container
-            node: tosca.nodes.Compute
+            node: prestocloud.nodes.compute
             relationship: tosca.relationships.HostedOn
             occurrences: [ 1,1 ]
             node_filter:
@@ -322,7 +272,7 @@ node_types:
                         - architecture: { equal: x86_64 }
                         - type: { equal: linux }
                         - distribution: { equal: ubuntu }
-                  - execution:
+                  - resource:
                      properties:
                         - type: { equal: cloud }
 
@@ -332,7 +282,7 @@ node_types:
       requirements:
          - host:
             capability: tosca.capabilities.Container
-            node: tosca.nodes.Compute
+            node: prestocloud.nodes.compute
             relationship: tosca.relationships.HostedOn
             occurrences: [ 1,2 ]
             node_filter:
@@ -347,63 +297,23 @@ node_types:
                         - architecture: { equal: x86_64 }
                         - type: { equal: linux }
                         - distribution: { equal: ubuntu }
-                  - execution:
+                  - resource:
                      properties:
                         - type: { equal: cloud }
 
-
-capability_types:
-   prestocloud.capabilities.jppf.endpoint:
-      description: Provide JPPF master endpoint
-      derived_from: tosca.capabilities.Root
-      properties:
-         protocol:
-            type: string
-            required: true
-            default: tcp
-         port:
-            type: tosca.datatypes.network.PortDef
-            required: false
-         secure:
-            type: boolean
-            required: false
-            default: false
-         ip_address:
-            type: string
-            required: false
-      valid_source_types: [ prestocloud.nodes.jppf.Agent ]
-
-   prestocloud.capabilities.jppf.fragmentExecution:
-      description: Capability to execute a fragment
-      derived_from: tosca.capabilities.Root
-      properties:
-      valid_source_types: [ prestocloud.nodes.fragment ]
-
-
-relationship_types:
-   prestocloud.relationships.jppf.ConnectsTo:
-      derived_from: tosca.relationships.Root
-      valid_target_types: [ prestocloud.nodes.jppf.endpoint ]
-      properties:
-         credential:
-            type: tosca.datatypes.Credential
-            required: false
-   prestocloud.relationships.jppf.ExecutedBy:
-      derived_from: tosca.relationships.Root
-      valid_target_types: [ prestocloud.capabilities.jppf.fragmentExecution ]
-
 topology_template:
+
    policies:
       - collocation_policy_group_0:
-         type: prestocloud.policies.Collocation
+         type: prestocloud.placement.Gather
          targets: [ eu_prestocloud_application_classes_AudioAnalytics_detectActiveIncidents, eu_prestocloud_application_classes_AudioAnalytics_getData, eu_prestocloud_application_classes_AudioAnalytics_runAlgorithm ]
 
       - collocation_policy_group_1:
-         type: prestocloud.policies.Collocation
+         type: prestocloud.placement.Gather
          targets: [ eu_prestocloud_application_classes_AudioAnalytics_detectSilence, eu_prestocloud_application_classes_AudioAnalytics_testMethod2, eu_prestocloud_application_classes_AudioAnalytics_testMethod1, eu_prestocloud_application_classes_AudioAnalytics_detectShout, eu_prestocloud_application_classes_AudioAnalytics_overloaded_1 ]
 
       - anti_affinity_group_0:
-         type: prestocloud.policies.AntiAffinity
+         type: prestocloud.placement.Lonely
          targets: [ eu_prestocloud_application_classes_AudioAnalytics_runAlgorithm, eu_prestocloud_application_classes_AudioAnalytics_detectShout, eu_prestocloud_application_classes_AudioAnalytics_detectSilence, eu_prestocloud_application_classes_AudioAnalytics_testMethod2, eu_prestocloud_application_classes_AudioAnalytics_testMethod1, eu_prestocloud_application_classes_AudioAnalytics_overloaded_1 ]
 
    node_templates:
@@ -529,5 +439,3 @@ topology_template:
 
       coordinator_node:
          type: jppf_master_node_10
-
-

@@ -9,6 +9,8 @@ description: Placement constraints definition for BtrPlace
 
 imports:
   - tosca-normative-types:1.2
+  - iccs-normative-types:1.0
+  - resource-descriptions:1.0
 
 policy_types:
 
@@ -17,28 +19,28 @@ policy_types:
     description: A constraint to force a set of VMs to be hosted on a single group of nodes.
     metadata:
       arguments: a set of VMs and a set of nodes
-    targets: [ tosca.nodes.SoftwareComponent, tosca.nodes.Compute ]
+    targets: [ prestocloud.nodes.fragment, prestocloud.nodes.compute ]
 
   prestocloud.placement.Ban:
     derived_from: tosca.policies.Placement
     description: A constraint to disallow the given VM, when running, to be hosted on a given set of nodes.
     metadata:
       arguments: a single VM and a set of nodes
-    targets: [ tosca.nodes.SoftwareComponent, tosca.nodes.Compute ]
+    targets: [ prestocloud.nodes.fragment, prestocloud.nodes.compute ]
 
   prestocloud.placement.Fence:
     derived_from: tosca.policies.Placement
     description: A constraint to force the given VM, when running, to be hosted on a given group of nodes.
     metadata:
-      arguments: a single VM and a set of nodes
-    targets: [ tosca.nodes.SoftwareComponent, tosca.nodes.Compute ]
+      arguments: a single VM and a set of nodesbon c'est pas tout mais faut que
+    targets: [ prestocloud.nodes.fragment, prestocloud.nodes.compute ]
 
   prestocloud.placement.Gather:
     derived_from: tosca.policies.Placement
     description: A constraint to force a set of VMs, if running, to be hosted on the same node.
     metadata:
       arguments: a set of VMs
-    targets: [ tosca.nodes.SoftwareComponent ]
+    targets: [ prestocloud.nodes.fragment ]
 
   prestocloud.placement.Lonely:
     derived_from: tosca.policies.Placement
@@ -47,7 +49,7 @@ policy_types:
       Co-location between the VMs given as argument is still possible.
     metadata:
       arguments: a set of VMs
-    targets: [ tosca.nodes.SoftwareComponent ]
+    targets: [ prestocloud.nodes.fragment ]
 
   prestocloud.placement.MaxOnline:
     derived_from: tosca.policies.Placement
@@ -61,7 +63,7 @@ policy_types:
         required: true
         constraints:
           - greater_or_equal: 1
-    targets: [ tosca.nodes.Compute ]
+    targets: [ prestocloud.nodes.compute ]
 
   prestocloud.placement.Overbook:
     derived_from: tosca.policies.Placement
@@ -81,7 +83,7 @@ policy_types:
         required: true
         constraints:
           - greater_than: 0
-    targets: [ tosca.nodes.Compute ]
+    targets: [ prestocloud.nodes.compute ]
 
   prestocloud.placement.ResourceCapacity:
     derived_from: tosca.policies.Placement
@@ -99,7 +101,7 @@ policy_types:
         required: true
         constraints:
           - greater_or_equal: 0
-    targets: [ tosca.nodes.Compute ]
+    targets: [ prestocloud.nodes.fragment ]
 
   prestocloud.placement.RunningCapacity:
     derived_from: tosca.policies.Placement
@@ -113,14 +115,14 @@ policy_types:
         required: true
         constraints:
           - greater_or_equal: 0
-    targets: [ tosca.nodes.Compute ]
+    targets: [ prestocloud.nodes.compute ]
 
   prestocloud.placement.Split:
     derived_from: tosca.policies.Placement
     description: A constraint to force several sets of VMs to not share any node when they are running.
     metadata:
       arguments: a set of VMs
-    targets: [ tosca.nodes.SoftwareComponent ]
+    targets: [ prestocloud.nodes.fragment ]
 
   prestocloud.placement.SplitAmong:
     derived_from: tosca.policies.Placement
@@ -129,14 +131,14 @@ policy_types:
       VMs inside a same set may still be collocated.
     metadata:
       arguments: a set of VMs and a set of nodes
-    targets: [ tosca.nodes.SoftwareComponent, tosca.nodes.Compute ]
+    targets: [ prestocloud.nodes.fragment, prestocloud.nodes.compute ]
 
   prestocloud.placement.Spread:
     derived_from: tosca.policies.Placement
     description: A constraint to force that the given VMs, if running, to be hosted on distinct nodes.
     metadata:
       arguments: a set of VMs
-    targets: [ tosca.nodes.SoftwareComponent ]
+    targets: [ prestocloud.nodes.fragment ]
 
   # Constraints on node state
   prestocloud.placement.Offline:
@@ -144,14 +146,14 @@ policy_types:
     description: A constraint to force a node at being offline.
     metadata:
       arguments: a single node
-    targets: [ tosca.nodes.Compute ]
+    targets: [ prestocloud.nodes.compute ]
 
   prestocloud.placement.Online:
     derived_from: tosca.policies.Placement
     description: A constraint to force a node at being online.
     metadata:
       arguments: a single node
-    targets: [ tosca.nodes.Compute ]
+    targets: [ prestocloud.nodes.compute ]
 
   # Constraints on VM state
   prestocloud.placement.Ready:
@@ -159,25 +161,25 @@ policy_types:
     description: A constraint to force a VM at being ready for running.
     metadata:
       arguments: a single VM
-    targets: [ tosca.nodes.SoftwareComponent ]
+    targets: [ prestocloud.nodes.fragment ]
 
   prestocloud.placement.Running:
     derived_from: tosca.policies.Placement
     description: A constraint to force a VM at being running.
     metadata:
       arguments: a single VM
-    targets: [ tosca.nodes.SoftwareComponent ]
+    targets: [ prestocloud.nodes.fragment ]
 
   prestocloud.placement.Sleeping:
     derived_from: tosca.policies.Placement
     description: A constraint to force a VM at being sleeping.
     metadata:
       arguments: a single VM
-    targets: [ tosca.nodes.SoftwareComponent ]
+    targets: [ prestocloud.nodes.fragment ]
 
   prestocloud.placement.Killed:
     derived_from: tosca.policies.Placement
     description: A constraint to force a VM to be killed.
     metadata:
       arguments: a single VM
-    targets: [ tosca.nodes.SoftwareComponent ]
+    targets: [ prestocloud.nodes.fragment ]
