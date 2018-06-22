@@ -2,13 +2,20 @@ package prestocloud.tosca;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.prestocloud.tosca.model.definitions.AbstractPropertyValue;
+import org.prestocloud.tosca.model.definitions.ComplexPropertyValue;
+import org.prestocloud.tosca.model.definitions.ScalarPropertyValue;
+import org.prestocloud.tosca.model.templates.Capability;
+import org.prestocloud.tosca.model.templates.NodeTemplate;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.hateoas.HypermediaAutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -68,18 +75,23 @@ public class PrEstoCloudTest {
     }
 
     @Test
-    public void testParsingICCS() throws IOException, ParsingException {
-        ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "ICCS_example.yml"));
+    public void testParsingPlacementConstraints() throws IOException, ParsingException {
+        ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "placement-example.yml"));
         Assert.assertEquals(0, parsingResult.getContext().getParsingErrors().size());
     }
 
     @Test
-    public void testParsingPlacementConstraints() throws IOException, ParsingException {
-        ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "placement_example.yml"));
+    public void testParsingTypes() throws IOException, ParsingException {
+        ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/types/", "tosca-normative-types-1.2.yml"));
+        Assert.assertEquals(0, parsingResult.getContext().getParsingErrors().size());
+        parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/types/", "resource-descriptions-1.0.yml"));
+        Assert.assertEquals(0, parsingResult.getContext().getParsingErrors().size());
+        parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/types/", "iccs-normative-types-1.0.yml"));
+        Assert.assertEquals(0, parsingResult.getContext().getParsingErrors().size());
+        parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/types/", "placement-constraints-1.0.yml"));
         Assert.assertEquals(0, parsingResult.getContext().getParsingErrors().size());
     }
 
-    @Ignore
     @Test
     public void testParsingCloudTemplates() throws IOException, ParsingException {
         ParsingResult<ArchiveRoot> parsingResultAzure = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "azure-vm-templates.yml"));
@@ -88,16 +100,108 @@ public class PrEstoCloudTest {
         Assert.assertEquals(0, parsingResultAmazon.getContext().getParsingErrors().size());
     }
 
-    @Ignore
     @Test
-    public void testParsingICCS_v2() throws IOException, ParsingException {
-        ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "ICCS_types_definition_v2.yml"));
+    public void testParsingICCS() throws IOException, ParsingException {
+        ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "ICCS-example.yml"));
         Assert.assertEquals(0, parsingResult.getContext().getParsingErrors().size());
     }
 
     @Test
-    public void testParsingICCS_v3() throws IOException, ParsingException {
-        ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "ICCS_types_definition_v3.yml"));
+    public void testParsingActiveEon() throws IOException, ParsingException {
+        ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "ActiveEon-example.yml"));
         Assert.assertEquals(0, parsingResult.getContext().getParsingErrors().size());
+
+        // Look for fragments in the node templates
+        Map<String, NodeTemplate> nodeTemplates = parsingResult.getResult().getTopology().getNodeTemplates();
+        for (Map.Entry<String, NodeTemplate> nodeTemplateFragment : nodeTemplates.entrySet()) {
+            // Fragment detected
+            if (nodeTemplateFragment.getValue().getType().equalsIgnoreCase("prestocloud.nodes.fragment")) {
+                // Look for the corresponding JPPF agent
+                for (Map.Entry<String, NodeTemplate> nodeTemplateJPPF  : nodeTemplates.entrySet()) {
+                    // Corresponding JPPF agent found
+                    if (nodeTemplateJPPF.getValue().getType().equalsIgnoreCase("prestocloud.nodes.jppf.Agent") &&  nodeTemplateJPPF.getKey().equalsIgnoreCase(nodeTemplateFragment.getValue().getRelationships().get("execute").getTarget())) {
+                        // Look for the corresponding host
+                        for (Map.Entry<String, NodeTemplate> nodeTemplateHost : nodeTemplates.entrySet()) {
+                            // Corresponding host found
+                            if (nodeTemplateHost.getKey().equalsIgnoreCase(nodeTemplateJPPF.getValue().getRelationships().get("host").getTarget())) {
+                                // Complete dependency found: fragment -> JPPF agent -> host
+                                System.out.println("Found fragment: '" + nodeTemplateFragment.getValue().getName() + "' executed on JPPF agent '" + nodeTemplateFragment.getValue().getRelationships().get("execute").getTarget() + "' hosted on '" + nodeTemplateJPPF.getValue().getRelationships().get("host").getTarget() + "'");
+                                // Look for capabilities
+                                for (Map.Entry<String, Capability> capabilities : nodeTemplateHost.getValue().getCapabilities().entrySet()) {
+                                    // Get 'host' capability properties
+                                    if (capabilities.getKey().equalsIgnoreCase("host")) {
+                                        System.out.println("Host properties: ");
+                                        for (Map.Entry<String, AbstractPropertyValue> properties : capabilities.getValue().getProperties().entrySet()) {
+                                            if (properties.getKey().equalsIgnoreCase("num_cpus")) {
+                                                String num_cpus = ((ScalarPropertyValue)properties.getValue()).getValue();
+                                                System.out.println("- " + properties.getKey() + " = " + num_cpus);
+                                            }
+                                            if (properties.getKey().equalsIgnoreCase("mem_size")) {
+                                                String mem_size = ((ScalarPropertyValue)properties.getValue()).getValue();
+                                                System.out.println("- " + properties.getKey() + " = " + mem_size);
+                                            }
+                                            if (properties.getKey().equalsIgnoreCase("disk_size")) {
+                                                String disk_size = ((ScalarPropertyValue)properties.getValue()).getValue();
+                                                System.out.println("- " + properties.getKey() + " = " + disk_size);
+                                            }
+                                            if (properties.getKey().equalsIgnoreCase("price")) {
+                                                String price = ((ScalarPropertyValue)properties.getValue()).getValue();
+                                                System.out.println("- " + properties.getKey() + " = " + price);
+                                            }
+                                        }
+                                    }
+                                    // Get 'resource' capability properties
+                                    if (capabilities.getKey().equalsIgnoreCase("resource")) {
+                                        System.out.println("Resource properties: ");
+                                        String type = null;
+                                        for (Map.Entry<String, AbstractPropertyValue> properties : capabilities.getValue().getProperties().entrySet()) {
+                                            if (properties.getKey().equalsIgnoreCase("type")) {
+                                                type = ((ScalarPropertyValue) properties.getValue()).getValue();
+                                                System.out.println("- " + properties.getKey() + " = " + type);
+                                            }
+                                            // Cloud based resource detected
+                                            if (type != null && type.equalsIgnoreCase("cloud") && properties.getKey().equalsIgnoreCase("cloud")) {
+                                                System.out.println("- " + properties.getKey() + ":");
+                                                ComplexPropertyValue cloud = (ComplexPropertyValue) properties.getValue();
+                                                for (Map.Entry<String, Object> cloudProperties : cloud.getValue().entrySet()) {
+                                                    if (cloudProperties.getKey().equalsIgnoreCase("cloud_type")) {
+                                                        System.out.println(" - " + cloudProperties.getKey() + " = " + cloudProperties.getValue());
+                                                    }
+                                                    if (cloudProperties.getKey().equalsIgnoreCase("cloud_region")) {
+                                                        System.out.println(" - " + cloudProperties.getKey() + " = " + cloudProperties.getValue());
+                                                    }
+                                                    if (cloudProperties.getKey().equalsIgnoreCase("cloud_name")) {
+                                                        System.out.println(" - " + cloudProperties.getKey() + " = " + cloudProperties.getValue());
+                                                    }
+                                                    // Get networking informations
+                                                    if (cloudProperties.getKey().equalsIgnoreCase("cloud_network")) {
+                                                        System.out.println(" - " + cloudProperties.getKey() + ":");
+                                                        HashMap<String, Object> cloud_network = (HashMap<String, Object>) cloudProperties.getValue();
+                                                        for (Map.Entry<String, Object> cloudNetworkProperties : cloud_network.entrySet()) {
+                                                            if (cloudNetworkProperties.getKey().equalsIgnoreCase("network_id")) {
+                                                                System.out.println("  - " + cloudNetworkProperties.getKey() + " = " + cloudNetworkProperties.getValue());
+                                                            }
+                                                            if (cloudNetworkProperties.getKey().equalsIgnoreCase("network_name")) {
+                                                                System.out.println("  - " + cloudNetworkProperties.getKey() + " = " + cloudNetworkProperties.getValue());
+                                                            }
+                                                            if (cloudNetworkProperties.getKey().equalsIgnoreCase("addresses")) {
+                                                                System.out.println("  - " + cloudNetworkProperties.getKey());
+                                                                for (String address : (List<String>) cloudNetworkProperties.getValue()) {
+                                                                    System.out.println("    - " + address);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
