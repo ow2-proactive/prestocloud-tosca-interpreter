@@ -97,6 +97,7 @@ public class CMinUsed implements CObjective {
 
   private void injectPlacementHeuristic(ReconfigurationProblem rp, Parameters ps, IntVar cost) {
 
+    //TODO : heuristic to rank the nodes. 1st: current node, 2nd: nodes not in minUsed, 3rd: nodes in minUsed.
     List<CShareableResource> rcs = rp.getSourceModel().getViews().stream()
         .filter(v -> v instanceof ShareableResource)
         .map(v -> (CShareableResource) rp.getView(v.getIdentifier()))
