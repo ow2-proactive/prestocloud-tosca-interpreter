@@ -21,6 +21,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import prestocloud.component.ICSARRepositorySearchService;
+import prestocloud.model.common.Tag;
 import prestocloud.tosca.model.ArchiveRoot;
 import prestocloud.tosca.parser.ParsingException;
 import prestocloud.tosca.parser.ParsingResult;
@@ -163,8 +164,8 @@ public class BtrPlaceTest {
         // Look for placement constraints
         Map<String, PolicyTemplate> policyTemplates = parsingResult.getResult().getTopology().getPolicies();
         for (Map.Entry<String, PolicyTemplate> policyTemplate : policyTemplates.entrySet()) {
-            Constraint constraint = new Constraint(policyTemplate.getValue().getName());
-            constraint.setType(policyTemplate.getKey());
+            Constraint constraint = new Constraint(policyTemplate.getKey());
+            constraint.setType(policyTemplate.getValue().getType());
             constraint.setTargets(policyTemplate.getValue().getTargets());
             constraints.add(constraint);
         }
@@ -201,7 +202,7 @@ public class BtrPlaceTest {
                                                     List<String> constraints = new ArrayList<>();
                                                     for (PropertyConstraint propertyConstraint : properties.getValue()) {
                                                         if (propertyConstraint instanceof InRangeConstraint) {
-                                                            constraints.add("RangeMin: " + ((InRangeConstraint) propertyConstraint).getInRange().get(0) + "RangeMax: " + ((InRangeConstraint) propertyConstraint).getInRange().get(1));
+                                                            constraints.add("RangeMin: " + ((InRangeConstraint) propertyConstraint).getInRange().get(0) + ", RangeMax: " + ((InRangeConstraint) propertyConstraint).getInRange().get(1));
                                                         } else if (propertyConstraint instanceof EqualConstraint) {
                                                             constraints.add("Equal: " + ((EqualConstraint) propertyConstraint).getEqual());
                                                         } else {
@@ -225,6 +226,14 @@ public class BtrPlaceTest {
         return relationships;
     }
 
+    public Map<String, String> getMetadata(ParsingResult<ArchiveRoot> parsingResult) {
+        Map<String, String> metadata = new HashMap<>();
+        for (Tag tag : parsingResult.getResult().getArchive().getTags()) {
+            metadata.put(tag.getName(), tag.getValue());
+        }
+        return metadata;
+    }
+
     @Test
     public void testParsingVMTypes() throws IOException, ParsingException {
         Map<String, Map<String, Map<String, String>>> AmazonVMTypes = getCloudNodesTemplates("amazon-vm-templates.yml");
@@ -238,11 +247,14 @@ public class BtrPlaceTest {
         ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "ICCS-example.yml"));
         Assert.assertEquals(0, parsingResult.getContext().getParsingErrors().size());
 
+        Map<String, String> metadata = getMetadata(parsingResult);
+        Assert.assertEquals(11, metadata.size());
+
         List<Constraint> constraints = getConstraints(parsingResult);
         Assert.assertEquals(3, constraints.size());
 
         List<Relationship> relationships = getRelationships(parsingResult);
-        System.out.println("ok");
+        Assert.assertEquals(10, relationships.size());
     }
 }
 
@@ -256,6 +268,7 @@ class Constraint {
     public Set<String> targets;
 
     Constraint(String name) {
+        this.name = name;
         targets = new HashSet<>();
     }
 }
@@ -273,6 +286,7 @@ class Relationship {
     Relationship(String fragment, String jppf, String host) {
         this.fragment = fragment;
         this.jppf = jppf;
+        this.host = host;
         hostingConstraints = new HashMap<>();
     }
 
