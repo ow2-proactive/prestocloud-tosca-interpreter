@@ -37,6 +37,10 @@
     <log4j.version>2.8.2</log4j.version>
     <slf4j.version>1.7.24</slf4j.version>
 
+
+    <!-- BtrPlace -->
+    <btrplace.version>1.9.2</btrplace.version>
+
     <!-- Build tools -->
     <java.version>1.8</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -141,6 +145,24 @@
       <artifactId>hibernate-validator</artifactId>
       <version>${hibernate-validator.version}</version>
     </dependency>
+
+    <!-- BtrPlace -->
+    <dependency>
+      <groupId>org.btrplace</groupId>
+      <artifactId>scheduler-api</artifactId>
+      <version>${btrplace.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.btrplace</groupId>
+      <artifactId>scheduler-choco</artifactId>
+      <version>${btrplace.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.btrplace</groupId>
+      <artifactId>scheduler-json</artifactId>
+      <version>${btrplace.version}</version>
+    </dependency>
+
 
     <!-- Tests -->
     <dependency>
