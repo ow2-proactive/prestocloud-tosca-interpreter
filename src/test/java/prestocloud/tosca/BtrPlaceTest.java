@@ -163,8 +163,8 @@ public class BtrPlaceTest {
         // Look for placement constraints
         Map<String, PolicyTemplate> policyTemplates = parsingResult.getResult().getTopology().getPolicies();
         for (Map.Entry<String, PolicyTemplate> policyTemplate : policyTemplates.entrySet()) {
-            Constraint constraint = new Constraint(policyTemplate.getValue().getName());
-            constraint.setType(policyTemplate.getKey());
+            Constraint constraint = new Constraint(policyTemplate.getKey());
+            constraint.setType(policyTemplate.getValue().getType());
             constraint.setTargets(policyTemplate.getValue().getTargets());
             constraints.add(constraint);
         }
@@ -256,6 +256,7 @@ class Constraint {
     public Set<String> targets;
 
     Constraint(String name) {
+        this.name = name;
         targets = new HashSet<>();
     }
 }
