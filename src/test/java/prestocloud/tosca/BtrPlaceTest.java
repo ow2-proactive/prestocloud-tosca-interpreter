@@ -242,7 +242,7 @@ public class BtrPlaceTest {
         Assert.assertEquals(3, constraints.size());
 
         List<Relationship> relationships = getRelationships(parsingResult);
-        System.out.println("ok");
+        Assert.assertEquals(10, relationships.size());
     }
 }
 
