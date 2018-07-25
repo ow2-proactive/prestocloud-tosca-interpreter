@@ -50,6 +50,7 @@ node_types:
                   - resource:
                      properties:
                         - type: { valid_values: [ cloud, edge ] }
+         - master: jppf_master_node_10
 
    processing_node_eu_prestocloud_application_classes_AudioAnalytics_doNothing_1:
       description: A TOSCA description of a node
@@ -75,6 +76,7 @@ node_types:
                   - resource:
                      properties:
                         - type: { valid_values: [ cloud, edge ] }
+         - master: jppf_master_node_10
 
    processing_node_eu_prestocloud_application_classes_AudioAnalytics_detectShout_2:
       description: A TOSCA description of a node
@@ -100,6 +102,7 @@ node_types:
                   - resource:
                      properties:
                         - type: { valid_values: [ cloud, edge ] }
+         - master: jppf_master_node_10
 
    processing_node_eu_prestocloud_application_classes_AudioAnalytics_runAlgorithm_3:
       description: A TOSCA description of a node
@@ -125,6 +128,7 @@ node_types:
                   - resource:
                      properties:
                         - type: { valid_values: [ cloud, edge ] }
+         - master: jppf_master_node_10
 
    processing_node_eu_prestocloud_application_classes_AudioAnalytics_testMethod2_4:
       description: A TOSCA description of a node
@@ -150,6 +154,7 @@ node_types:
                   - resource:
                      properties:
                         - type: { valid_values: [ cloud, edge ] }
+         - master: jppf_master_node_10
 
    processing_node_eu_prestocloud_application_classes_AudioAnalytics_testMethod1_5:
       description: A TOSCA description of a node
@@ -175,6 +180,7 @@ node_types:
                   - resource:
                      properties:
                         - type: { valid_values: [ cloud, edge ] }
+         - master: jppf_master_node_10
 
    processing_node_eu_prestocloud_application_classes_AudioAnalytics_detectSilence_6:
       description: A TOSCA description of a node
@@ -200,6 +206,7 @@ node_types:
                   - resource:
                      properties:
                         - type: { valid_values: [ cloud, edge ] }
+         - master: jppf_master_node_10
 
    processing_node_eu_prestocloud_application_classes_AudioAnalytics_detectActiveIncidents_7:
       description: A TOSCA description of a node
@@ -225,6 +232,7 @@ node_types:
                   - resource:
                      properties:
                         - type: { valid_values: [ cloud, edge ] }
+         - master: jppf_master_node_10
 
    processing_node_eu_prestocloud_application_classes_AudioAnalytics_overloaded_1:
       description: A TOSCA description of a node
@@ -250,6 +258,7 @@ node_types:
                   - resource:
                      properties:
                         - type: { equal: cloud }
+         - master: jppf_master_node_10
 
    processing_node_eu_prestocloud_application_classes_AudioAnalytics_overloaded_2:
       description: A TOSCA description of a node
@@ -275,7 +284,7 @@ node_types:
                   - resource:
                      properties:
                         - type: { equal: cloud }
-         #- master: jppf_master_node_10
+         - master: jppf_master_node_10
 
 
    jppf_master_node_10:
