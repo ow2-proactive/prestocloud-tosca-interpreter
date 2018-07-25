@@ -45,13 +45,13 @@ topology_template:
     # JPPF agent
     getData_0:
       # Use the type where processing_node_eu_prestocloud_application_classes_AudioAnalytics_getData_0 derives from
-      type: prestocloud.nodes.jppf.Agent
+      type: prestocloud.nodes.agent.jppf
       requirements:
         - host: cloud_amazon_us_east_1_vm_1
 
     # Fragment
     eu_prestocloud_application_classes_AudioAnalytics_getData:
-       type: prestocloud.nodes.fragment
+       type: prestocloud.nodes.fragment.jppf
        properties:
           id: 0
           name: eu.prestocloud.application_classes.AudioAnalytics.getData
