@@ -46,9 +46,15 @@ public class PolicyTemplatePostProcessor implements IPostProcessor<PolicyTemplat
                 ParsingContextExecution.getParsingErrors().add(new ParsingError(ParsingErrorLevel.ERROR, ErrorCode.POLICY_TARGET_NOT_FOUND, instance.getName(),
                         node.getStartMark(), "The target " + target + " is not found", node.getEndMark(), target));
             }
+            else if (policyType.getTargets() == null) {
+                // Dispatch an error
+                Node node = ParsingContextExecution.getObjectToNodeMap().get(instance.getName());
+                ParsingContextExecution.getParsingErrors().add(new ParsingError(ParsingErrorLevel.ERROR, ErrorCode.INVALID_POLICY_TARGET, instance.getName(),
+                        node.getStartMark(), "The target " + target + " does not match with 'null' target types: ", node.getEndMark(), target));
+            }
             else {
-                // Check that the targets match with policy type targets definition
-                if (policyType.getTargets() == null || !policyType.getTargets().contains(safe((topology.getNodeTemplates())).get(target).getType())) {
+                // Check that the policy targets match with node template target type or their derived (derived naming should match parent name subparts)
+                if (!policyType.getTargets().contains(safe((topology.getNodeTemplates())).get(target).getType()) && policyType.getTargets().stream().noneMatch(policyTypeTarget -> safe((topology.getNodeTemplates())).get(target).getType().startsWith(policyTypeTarget))) {
                     Node node = ParsingContextExecution.getObjectToNodeMap().get(instance.getTargets());
                     ParsingContextExecution.getParsingErrors().add(new ParsingError(ParsingErrorLevel.ERROR, ErrorCode.INVALID_POLICY_TARGET, instance.getName(),
                             node.getStartMark(), "The target " + target + " does not match with required target types: " + policyType.getTargets(), node.getEndMark(), target));
