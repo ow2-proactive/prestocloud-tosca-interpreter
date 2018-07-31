@@ -26,10 +26,6 @@ node_types:
   prestocloud.nodes.fragment.jppf:
    description: A TOSCA description of a JPPF fragment
    derived_from: prestocloud.nodes.fragment
-   properties:
-     onloadable:
-       type: boolean
-       required: false
    requirements:
      - execute:
         node: prestocloud.nodes.agent.jppf
@@ -45,6 +41,9 @@ node_types:
        required: true
      name:
        type: string
+       required: false
+     onloadable:
+       type: boolean
        required: false
 
   # Agent nodes
