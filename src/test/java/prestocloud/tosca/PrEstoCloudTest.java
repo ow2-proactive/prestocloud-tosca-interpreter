@@ -115,11 +115,11 @@ public class PrEstoCloudTest {
         Map<String, NodeTemplate> nodeTemplates = parsingResult.getResult().getTopology().getNodeTemplates();
         for (Map.Entry<String, NodeTemplate> nodeTemplateFragment : nodeTemplates.entrySet()) {
             // Fragment detected
-            if (nodeTemplateFragment.getValue().getType().equalsIgnoreCase("prestocloud.nodes.fragment")) {
+            if (nodeTemplateFragment.getValue().getType().equalsIgnoreCase("prestocloud.nodes.fragment.jppf")) {
                 // Look for the corresponding JPPF agent
                 for (Map.Entry<String, NodeTemplate> nodeTemplateJPPF  : nodeTemplates.entrySet()) {
                     // Corresponding JPPF agent found
-                    if (nodeTemplateJPPF.getValue().getType().equalsIgnoreCase("prestocloud.nodes.jppf.Agent") &&  nodeTemplateJPPF.getKey().equalsIgnoreCase(nodeTemplateFragment.getValue().getRelationships().get("execute").getTarget())) {
+                    if (nodeTemplateJPPF.getValue().getType().equalsIgnoreCase("prestocloud.nodes.agent.jppf") &&  nodeTemplateJPPF.getKey().equalsIgnoreCase(nodeTemplateFragment.getValue().getRelationships().get("execute").getTarget())) {
                         // Look for the corresponding host
                         for (Map.Entry<String, NodeTemplate> nodeTemplateHost : nodeTemplates.entrySet()) {
                             // Corresponding host found
