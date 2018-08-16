@@ -337,95 +337,95 @@ topology_template:
          type: prestocloud.placement.Spread
          targets: [ eu_prestocloud_application_classes_TestFragmentC,eu_prestocloud_application_classes_TestFragmentJ ]
 
-      - anti_affinity_fragment_to_host_0:
-         type: prestocloud.placement.excludeDevices
+      - ban_fragment_to_hosts_0:
+         type: prestocloud.placement.Ban
          properties:
-           fragment_name: processing_node_eu_prestocloud_application_classes_TestFragmentA_0
            excluded_devices:
              - acfdgex98
              - kdsfk31fw
              - f2553fdfs
              - bd5fgdx32
+         targets: [ eu_prestocloud_application_classes_TestFragmentA ]
 
-      - anti_affinity_fragment_to_host_1:
-         type: prestocloud.placement.excludeDevices
+      - ban_fragment_to_hosts_1:
+         type: prestocloud.placement.Ban
          properties:
-           fragment_name: processing_node_eu_prestocloud_application_classes_TestFragmentB_1
            excluded_devices:
              - acfdgex98
              - kdsfk31fw
              - f2553fdfs
              - bd5fgdx32
+         targets: [ eu_prestocloud_application_classes_TestFragmentB ]
 
-      - anti_affinity_fragment_to_host_2:
-         type: prestocloud.placement.excludeDevices
+      - ban_fragment_to_hosts_2:
+         type: prestocloud.placement.Ban
          properties:
-           fragment_name: processing_node_eu_prestocloud_application_classes_TestFragmentC_2
            excluded_devices:
              - acfdgex98
              - kdsfk31fw
              - f2553fdfs
              - bd5fgdx32
+         targets: [ eu_prestocloud_application_classes_TestFragmentC ]
 
-      - anti_affinity_fragment_to_host_3:
-         type: prestocloud.placement.excludeDevices
+      - ban_fragment_to_hosts_3:
+         type: prestocloud.placement.Ban
          properties:
-           fragment_name: processing_node_eu_prestocloud_application_classes_TestFragmentD_3
            excluded_devices:
              - acfdgex98
              - kdsfk31fw
              - f2553fdfs
              - bd5fgdx32
+         targets: [ eu_prestocloud_application_classes_TestFragmentD ]
 
-      - anti_affinity_fragment_to_host_4:
-         type: prestocloud.placement.excludeDevices
+      - ban_fragment_to_hosts_4:
+         type: prestocloud.placement.Ban
          properties:
-           fragment_name: processing_node_eu_prestocloud_application_classes_TestFragmentE_4
            excluded_devices:
              - acfdgex98
              - kdsfk31fw
              - f2553fdfs
              - bd5fgdx32
+         targets: [ eu_prestocloud_application_classes_TestFragmentE ]
 
-      - anti_affinity_fragment_to_host_5:
-         type: prestocloud.placement.excludeDevices
+      - ban_fragment_to_hosts_5:
+         type: prestocloud.placement.Ban
          properties:
-           fragment_name: processing_node_eu_prestocloud_application_classes_TestFragmentF_5
            excluded_devices:
              - acfdgex98
              - kdsfk31fw
              - f2553fdfs
              - bd5fgdx32
+         targets: [ eu_prestocloud_application_classes_TestFragmentF ]
 
-      - anti_affinity_fragment_to_host_6:
-         type: prestocloud.placement.excludeDevices
+      - ban_fragment_to_hosts_6:
+         type: prestocloud.placement.Ban
          properties:
-           fragment_name: processing_node_eu_prestocloud_application_classes_TestFragmentG_6
            excluded_devices:
              - acfdgex98
              - kdsfk31fw
              - f2553fdfs
              - bd5fgdx32
+         targets: [ eu_prestocloud_application_classes_TestFragmentG ]
 
-      - anti_affinity_fragment_to_host_7:
-         type: prestocloud.placement.excludeDevices
+      - ban_fragment_to_hosts_7:
+         type: prestocloud.placement.Ban
          properties:
-           fragment_name: processing_node_eu_prestocloud_application_classes_TestFragmentH_7
            excluded_devices:
              - acfdgex98
              - kdsfk31fw
              - f2553fdfs
              - bd5fgdx32
+         targets: [ eu_prestocloud_application_classes_TestFragmentH ]
 
-      - anti_affinity_fragment_to_host_8:
-         type: prestocloud.placement.excludeDevices
+      - ban_fragment_to_hosts_8:
+         type: prestocloud.placement.Ban
          properties:
-           fragment_name: processing_node_eu_prestocloud_application_classes_TestFragmentI_8
            excluded_devices:
              - acfdgex98
              - kdsfk31fw
              - f2553fdfs
              - bd5fgdx32
+         targets: [ eu_prestocloud_application_classes_TestFragmentI ]
 
    node_templates:
       eu_prestocloud_application_classes_TestFragmentA_0:
@@ -456,7 +456,7 @@ topology_template:
          type: processing_node_eu_prestocloud_application_classes_TestFragmentC_2
 
       eu_prestocloud_application_classes_TestFragmentC:
-         type: prestocloud.nodes.fragment.faas
+         type: prestocloud.nodes.fragment.jppf
          properties:
             id: 2
             name: eu.prestocloud.application_classes.TestFragmentC
@@ -468,7 +468,7 @@ topology_template:
          type: processing_node_eu_prestocloud_application_classes_TestFragmentD_3
 
       eu_prestocloud_application_classes_TestFragmentD:
-         type: prestocloud.nodes.fragment.faas
+         type: prestocloud.nodes.fragment.jppf
          properties:
             id: 3
             name: eu.prestocloud.application_classes.TestFragmentD
@@ -480,7 +480,7 @@ topology_template:
          type: processing_node_eu_prestocloud_application_classes_TestFragmentE_4
 
       eu_prestocloud_application_classes_TestFragmentE:
-         type: prestocloud.nodes.fragment.faas
+         type: prestocloud.nodes.fragment.jppf
          properties:
             id: 4
             name: eu.prestocloud.application_classes.TestFragmentE

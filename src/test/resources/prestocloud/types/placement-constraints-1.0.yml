@@ -14,28 +14,6 @@ imports:
 
 policy_types:
 
-  # PrEstoCloud specific constraints
-  prestocloud.placement.excludeDevices:
-    derived_from: tosca.policies.Placement
-    description: >
-      A PrEstoCloud constraint to exclude a set of devices (usually edge devices) from executing a specific fragment.
-    metadata:
-      arguments: A single fragment and a list of device ids/names
-    properties:
-      fragment_name:
-        type: string
-        description: The name/identifier of the fragment.
-        required: true
-      excluded_devices:
-        type: list
-        description: The optional list of machines id/name to exclude.
-        required: true
-        constraints:
-          - min_length: 1
-        entry_schema:
-          type: string
-    #targets: [ prestocloud.nodes.compute ]
-
   # BtrPlace constraints
   prestocloud.placement.Among:
     derived_from: tosca.policies.Placement
@@ -49,7 +27,16 @@ policy_types:
     description: A constraint to disallow the given VM, when running, to be hosted on a given set of nodes.
     metadata:
       arguments: a single VM and a set of nodes
-    targets: [ prestocloud.nodes.fragment, prestocloud.nodes.compute ]
+    properties:
+      excluded_devices:
+        type: list
+        description: The list of machines id/name to exclude.
+        required: true
+        constraints:
+          - min_length: 1
+        entry_schema:
+          type: string
+    targets: [ prestocloud.nodes.fragment ]
 
   prestocloud.placement.Fence:
     derived_from: tosca.policies.Placement
