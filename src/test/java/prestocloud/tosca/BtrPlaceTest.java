@@ -1,12 +1,27 @@
 package prestocloud.tosca;
 
-import lombok.Getter;
-import lombok.Setter;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.annotation.Resource;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.prestocloud.tosca.model.definitions.*;
+import org.prestocloud.tosca.model.definitions.AbstractPropertyValue;
+import org.prestocloud.tosca.model.definitions.ComplexPropertyValue;
+import org.prestocloud.tosca.model.definitions.FilterDefinition;
+import org.prestocloud.tosca.model.definitions.PropertyConstraint;
+import org.prestocloud.tosca.model.definitions.RequirementDefinition;
+import org.prestocloud.tosca.model.definitions.ScalarPropertyValue;
 import org.prestocloud.tosca.model.definitions.constraints.EqualConstraint;
+import org.prestocloud.tosca.model.definitions.constraints.GreaterOrEqualConstraint;
 import org.prestocloud.tosca.model.definitions.constraints.InRangeConstraint;
 import org.prestocloud.tosca.model.templates.Capability;
 import org.prestocloud.tosca.model.templates.NodeTemplate;
@@ -14,12 +29,19 @@ import org.prestocloud.tosca.model.templates.PolicyTemplate;
 import org.prestocloud.tosca.model.types.NodeType;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.hateoas.HypermediaAutoConfiguration;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.context.annotation.Profile;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
+
+import lombok.Getter;
+import lombok.Setter;
 import prestocloud.component.ICSARRepositorySearchService;
 import prestocloud.model.common.Tag;
 import prestocloud.tosca.model.ArchiveRoot;
@@ -27,11 +49,6 @@ import prestocloud.tosca.parser.ParsingException;
 import prestocloud.tosca.parser.ParsingResult;
 import prestocloud.tosca.parser.ToscaParser;
 import prestocloud.tosca.repository.LocalRepositoryImpl;
-
-import javax.annotation.Resource;
-import java.io.IOException;
-import java.nio.file.Paths;
-import java.util.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class)
@@ -183,21 +200,18 @@ public class BtrPlaceTest {
             if (nodeTemplateFragment.getValue().getType().equalsIgnoreCase("prestocloud.nodes.fragment.jppf")) {
                 // Look for the corresponding JPPF agent
                 for (Map.Entry<String, NodeTemplate> nodeTemplateJPPF : nodeTemplates.entrySet()) {
-                    // Corresponding JPPF agent found
                     if (nodeTemplateJPPF.getKey().equalsIgnoreCase(nodeTemplateFragment.getValue().getRelationships().get("execute").getTarget())) {
-                        System.out.println("JPPF node type pointer found: " + nodeTemplateJPPF.getValue().getType());
                         // Look for the corresponding node type
                         for (Map.Entry<String, NodeType> nodeTypeJPPF : parsingResult.getResult().getNodeTypes().entrySet()) {
                             if (nodeTypeJPPF.getKey().equalsIgnoreCase(nodeTemplateJPPF.getValue().getType())) {
-                                System.out.println("Node type found for type: " + nodeTemplateJPPF.getValue().getType());
                                 Relationship relationship = new Relationship(nodeTemplateFragment.getKey(), nodeTemplateJPPF.getKey(), nodeTypeJPPF.getKey());
                                 // Look for requirements
                                 for (RequirementDefinition requirement : nodeTypeJPPF.getValue().getRequirements()) {
                                     // Look for requirement capabilities if present
                                     if (requirement.getNodeFilter() != null) {
                                         for (Map.Entry<String, FilterDefinition> capability : requirement.getNodeFilter().getCapabilities().entrySet()) {
+                                            // Find the host properties
                                             if (capability.getKey().equalsIgnoreCase("host")) {
-                                                System.out.println("Host properties: ");
                                                 for (Map.Entry<String, List<PropertyConstraint>> properties : capability.getValue().getProperties().entrySet()) {
                                                     List<String> constraints = new ArrayList<>();
                                                     for (PropertyConstraint propertyConstraint : properties.getValue()) {
@@ -205,8 +219,10 @@ public class BtrPlaceTest {
                                                             constraints.add("RangeMin: " + ((InRangeConstraint) propertyConstraint).getInRange().get(0) + ", RangeMax: " + ((InRangeConstraint) propertyConstraint).getInRange().get(1));
                                                         } else if (propertyConstraint instanceof EqualConstraint) {
                                                             constraints.add("Equal: " + ((EqualConstraint) propertyConstraint).getEqual());
+                                                        } else if (propertyConstraint instanceof GreaterOrEqualConstraint) {
+                                                            constraints.add("GreaterOrEqual: " + ((GreaterOrEqualConstraint) propertyConstraint).getGreaterOrEqual());
                                                         } else {
-                                                            // Contraint not yet managed
+                                                            // Constraint not yet managed
                                                             System.out.println("Constraint not managed: " + propertyConstraint.toString());
                                                         }
                                                     }
@@ -251,7 +267,7 @@ public class BtrPlaceTest {
         Assert.assertEquals(11, metadata.size());
 
         List<Constraint> constraints = getConstraints(parsingResult);
-        Assert.assertEquals(3, constraints.size());
+        Assert.assertEquals(15, constraints.size());
 
         List<Relationship> relationships = getRelationships(parsingResult);
         Assert.assertEquals(10, relationships.size());
