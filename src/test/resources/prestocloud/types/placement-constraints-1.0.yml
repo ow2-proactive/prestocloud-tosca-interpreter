@@ -14,6 +14,7 @@ imports:
 
 policy_types:
 
+  # BtrPlace constraints
   prestocloud.placement.Among:
     derived_from: tosca.policies.Placement
     description: A constraint to force a set of VMs to be hosted on a single group of nodes.
@@ -26,7 +27,16 @@ policy_types:
     description: A constraint to disallow the given VM, when running, to be hosted on a given set of nodes.
     metadata:
       arguments: a single VM and a set of nodes
-    targets: [ prestocloud.nodes.fragment, prestocloud.nodes.compute ]
+    properties:
+      excluded_devices:
+        type: list
+        description: The list of machines id/name to exclude.
+        required: true
+        constraints:
+          - min_length: 1
+        entry_schema:
+          type: string
+    targets: [ prestocloud.nodes.fragment ]
 
   prestocloud.placement.Fence:
     derived_from: tosca.policies.Placement

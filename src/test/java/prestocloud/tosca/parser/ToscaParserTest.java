@@ -1476,7 +1476,7 @@ public class ToscaParserTest extends AbstractToscaParserSimpleProfileTest {
 
         ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get(getRootDirectory(), "tosca-policy-template-fail.yml"));
         assertEquals(1, parsingResult.getContext().getParsingErrors().size());
-        assertEquals(1, countErrorByLevelAndCode(parsingResult, ParsingErrorLevel.ERROR, ErrorCode.TYPE_NOT_FOUND));
+        assertEquals(1, countErrorByLevelAndCode(parsingResult, ParsingErrorLevel.ERROR, ErrorCode.POLICY_TARGET_NOT_FOUND));
     }
 
     @Test
