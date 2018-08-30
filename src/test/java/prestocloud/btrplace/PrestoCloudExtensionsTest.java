@@ -1,6 +1,8 @@
 package prestocloud.btrplace;
 
-import com.google.common.collect.Sets;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.btrplace.model.DefaultModel;
 import org.btrplace.model.Instance;
 import org.btrplace.model.Mapping;
@@ -18,10 +20,10 @@ import org.btrplace.plan.ReconfigurationPlan;
 import org.btrplace.scheduler.choco.ChocoScheduler;
 import org.junit.Assert;
 import org.junit.Test;
-import prestocloud.btrplace.minUsed.MinUsed;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.google.common.collect.Sets;
+
+import prestocloud.btrplace.minUsed.MinUsed;
 
 /**
  * Basic tests.
@@ -30,8 +32,10 @@ public class PrestoCloudExtensionsTest {
 
   @Test
   public void testMinUsed() {
+
     Model mo = new DefaultModel();
     Mapping map = mo.getMapping();
+
     // 3 code fragments.
     final VM vm0 = mo.newVM();
     final VM vm1 = mo.newVM();
@@ -63,13 +67,13 @@ public class PrestoCloudExtensionsTest {
     mem.setCapacity(ec2_2, Integer.MAX_VALUE / 1000);
 
     //Initial placement. VMs waiting for being deployed.
-
     map.on(n0, n1, n2, n3, ec2_1, ec2_2);
     map.ready(vm0, vm1, vm2);
 
     final List<SatConstraint> cstrs = new ArrayList<>();
     cstrs.addAll(Running.newRunning(mo.getMapping().getAllVMs()));
     cstrs.addAll(Online.newOnline(mo.getMapping().getAllNodes()));
+
     //VM 1 & VM2 on distinct location (distinct edge or public clouds etc.)
     cstrs.add(new Spread(Sets.newHashSet(vm1, vm2)));
 
