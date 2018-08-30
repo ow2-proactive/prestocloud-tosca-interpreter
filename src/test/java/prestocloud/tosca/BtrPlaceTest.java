@@ -17,12 +17,14 @@ import org.junit.runner.RunWith;
 import org.prestocloud.tosca.model.definitions.AbstractPropertyValue;
 import org.prestocloud.tosca.model.definitions.ComplexPropertyValue;
 import org.prestocloud.tosca.model.definitions.FilterDefinition;
+import org.prestocloud.tosca.model.definitions.ListPropertyValue;
 import org.prestocloud.tosca.model.definitions.PropertyConstraint;
 import org.prestocloud.tosca.model.definitions.RequirementDefinition;
 import org.prestocloud.tosca.model.definitions.ScalarPropertyValue;
 import org.prestocloud.tosca.model.definitions.constraints.EqualConstraint;
 import org.prestocloud.tosca.model.definitions.constraints.GreaterOrEqualConstraint;
 import org.prestocloud.tosca.model.definitions.constraints.InRangeConstraint;
+import org.prestocloud.tosca.model.definitions.constraints.ValidValuesConstraint;
 import org.prestocloud.tosca.model.templates.Capability;
 import org.prestocloud.tosca.model.templates.NodeTemplate;
 import org.prestocloud.tosca.model.templates.PolicyTemplate;
@@ -184,6 +186,12 @@ public class BtrPlaceTest {
             Constraint constraint = new Constraint(policyTemplate.getKey());
             constraint.setType(policyTemplate.getValue().getType());
             constraint.setTargets(policyTemplate.getValue().getTargets());
+            if (policyTemplate.getValue().getType().equalsIgnoreCase("prestocloud.placement.Ban")) {
+                List<Object> excludedDevices = ((ListPropertyValue)policyTemplate.getValue().getProperties().get("excluded_devices")).getValue();
+                for (Object excludedDevice : excludedDevices) {
+                    constraint.addDevice((String)excludedDevice);
+                }
+            }
             constraints.add(constraint);
         }
         return constraints;
@@ -207,7 +215,10 @@ public class BtrPlaceTest {
                                 Relationship relationship = new Relationship(nodeTemplateFragment.getKey(), nodeTemplateJPPF.getKey(), nodeTypeJPPF.getKey());
                                 // Look for requirements
                                 for (RequirementDefinition requirement : nodeTypeJPPF.getValue().getRequirements()) {
-                                    // Look for requirement capabilities if present
+                                    if (requirement.getId().equalsIgnoreCase("master")) {
+                                        relationship.setMaster(requirement.getType());
+                                    }
+                                    // Look for a requirement with nodeFilter's capabilities (hosting)
                                     if (requirement.getNodeFilter() != null) {
                                         for (Map.Entry<String, FilterDefinition> capability : requirement.getNodeFilter().getCapabilities().entrySet()) {
                                             // Find the host properties
@@ -223,10 +234,44 @@ public class BtrPlaceTest {
                                                             constraints.add("GreaterOrEqual: " + ((GreaterOrEqualConstraint) propertyConstraint).getGreaterOrEqual());
                                                         } else {
                                                             // Constraint not yet managed
-                                                            System.out.println("Constraint not managed: " + propertyConstraint.toString());
+                                                            System.out.println("Host constraint not managed: " + propertyConstraint.toString());
                                                         }
                                                     }
                                                     relationship.addHostingConstraint(properties.getKey(), constraints);
+                                                }
+                                            }
+                                            // Find the OS properties
+                                            if (capability.getKey().equalsIgnoreCase("os")) {
+                                                for (Map.Entry<String, List<PropertyConstraint>> properties : capability.getValue().getProperties().entrySet()) {
+                                                    List<String> constraints = new ArrayList<>();
+                                                    for (PropertyConstraint propertyConstraint : properties.getValue()) {
+                                                        if (propertyConstraint instanceof EqualConstraint) {
+                                                            constraints.add(((EqualConstraint) propertyConstraint).getEqual());
+                                                        } else if (propertyConstraint instanceof ValidValuesConstraint) {
+                                                            constraints.addAll(((ValidValuesConstraint) propertyConstraint).getValidValues());
+                                                        } else {
+                                                            // Constraint not yet managed
+                                                            System.out.println("OS constraint not managed: " + propertyConstraint.toString());
+                                                        }
+                                                    }
+                                                    relationship.addOSConstraint(properties.getKey(), constraints);
+                                                }
+                                            }
+                                            // Find the resource properties
+                                            if (capability.getKey().equalsIgnoreCase("resource")) {
+                                                for (Map.Entry<String, List<PropertyConstraint>> properties : capability.getValue().getProperties().entrySet()) {
+                                                    List<String> constraints = new ArrayList<>();
+                                                    for (PropertyConstraint propertyConstraint : properties.getValue()) {
+                                                        if (propertyConstraint instanceof EqualConstraint) {
+                                                            constraints.add(((EqualConstraint) propertyConstraint).getEqual());
+                                                        } else if (propertyConstraint instanceof ValidValuesConstraint) {
+                                                            constraints.addAll(((ValidValuesConstraint) propertyConstraint).getValidValues());
+                                                        } else {
+                                                            // Constraint not yet managed
+                                                            System.out.println("Resource constraint not managed: " + propertyConstraint.toString());
+                                                        }
+                                                    }
+                                                    relationship.addResourceConstraint(properties.getKey(), constraints);
                                                 }
                                             }
                                         }
@@ -250,6 +295,34 @@ public class BtrPlaceTest {
         return metadata;
     }
 
+    public List<String> getListOfCloudsFromMetadata(Map<String, String> metadata) {
+        List<String> clouds = new ArrayList<>();
+        for (Map.Entry<String, String> entry : metadata.entrySet()) {
+            if (entry.getKey().contains("ProviderName")) {
+                String cloud_id = entry.getKey().split("_")[1];
+                for (Map.Entry<String, String> entryCloud : metadata.entrySet()) {
+                    if (entryCloud.getKey().contains("ProviderRequired" + "_" + cloud_id)) {
+                        if (entryCloud.getValue().equalsIgnoreCase("true")) {
+                            clouds.add(entry.getValue().toLowerCase());
+                        }
+                        break;
+                    }
+                    if (entryCloud.getKey().contains("ProviderExcluded" + "_" + cloud_id)) {
+                        if (entryCloud.getValue().equalsIgnoreCase("false")) {
+                            clouds.add(entry.getValue().toLowerCase());
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+        return clouds;
+    }
+
+    public String findBestSuitableVMType(String type, String region, Map<String, List<String>> hostingConstraints) {
+        return null;
+    }
+
     @Test
     public void testParsingVMTypes() throws IOException, ParsingException {
         Map<String, Map<String, Map<String, String>>> AmazonVMTypes = getCloudNodesTemplates("amazon-vm-templates.yml");
@@ -259,7 +332,23 @@ public class BtrPlaceTest {
     }
 
     @Test
-    public void testParsing() throws IOException, ParsingException {
+    public void testParsingICCSExample() throws IOException, ParsingException {
+        ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "ICCS-example.yml"));
+        Assert.assertEquals(0, parsingResult.getContext().getParsingErrors().size());
+
+        Map<String, String> metadata = getMetadata(parsingResult);
+        Assert.assertEquals(11, metadata.size());
+        List<String> clouds = getListOfCloudsFromMetadata(metadata);
+
+        List<Constraint> constraints = getConstraints(parsingResult);
+        Assert.assertEquals(15, constraints.size());
+
+        List<Relationship> relationships = getRelationships(parsingResult);
+        Assert.assertEquals(10, relationships.size());
+    }
+
+    @Test
+    public void testBtrPlaceComputation() throws IOException, ParsingException {
         ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "ICCS-example.yml"));
         Assert.assertEquals(0, parsingResult.getContext().getParsingErrors().size());
 
@@ -282,10 +371,17 @@ class Constraint {
     public String type;
     @Getter @Setter
     public Set<String> targets;
+    @Getter @Setter
+    public Set<String> devices;
 
     Constraint(String name) {
         this.name = name;
         targets = new HashSet<>();
+        devices = new HashSet<>();
+    }
+
+    public void addDevice(String device) {
+        devices.add(device);
     }
 }
 
@@ -297,16 +393,33 @@ class Relationship {
     @Getter @Setter
     public String host;
     @Getter @Setter
+    public String master;
+    @Getter @Setter
     public Map<String, List<String>> hostingConstraints;
+    @Getter @Setter
+    public Map<String, List<String>> resourceConstraints;
+    @Getter @Setter
+    public Map<String, List<String>> osConstraints;
 
     Relationship(String fragment, String jppf, String host) {
         this.fragment = fragment;
         this.jppf = jppf;
         this.host = host;
+        this.master = null;
         hostingConstraints = new HashMap<>();
+        resourceConstraints = new HashMap<>();
+        osConstraints = new HashMap<>();
     }
 
     public void addHostingConstraint(String name, List<String> hostingConstraint) {
         hostingConstraints.put(name, hostingConstraint);
+    }
+
+    public void addResourceConstraint(String name, List<String> resourceConstraint) {
+        resourceConstraints.put(name, resourceConstraint);
+    }
+
+    public void addOSConstraint(String name, List<String> osConstraint) {
+        osConstraints.put(name, osConstraint);
     }
 }
