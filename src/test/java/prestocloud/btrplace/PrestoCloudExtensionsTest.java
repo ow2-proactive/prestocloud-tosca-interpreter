@@ -1,8 +1,6 @@
 package prestocloud.btrplace;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.google.common.collect.Sets;
 import org.btrplace.model.DefaultModel;
 import org.btrplace.model.Instance;
 import org.btrplace.model.Mapping;
@@ -20,16 +18,12 @@ import org.btrplace.plan.ReconfigurationPlan;
 import org.btrplace.scheduler.choco.ChocoScheduler;
 import org.junit.Assert;
 import org.junit.Test;
+import prestocloud.btrplace.minUsed.MinUsed;
 
-<<<<<<< HEAD
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-=======
-import com.google.common.collect.Sets;
 
-import prestocloud.btrplace.minUsed.MinUsed;
->>>>>>> 477183c8f3de8f8f0b42edd57f5bda6532a0bcbd
 
 /**
  * Basic tests.
@@ -119,7 +113,7 @@ public class PrestoCloudExtensionsTest {
     cstrs.add(new Ready(vm3));
     ii = new Instance(mo, cstrs, new MinUsed(Sets.newHashSet(ec2_1, ec2_2)));
     p = sched.solve(ii);
-    System.out.println(" -- VM3 disappears everyone go back to the edge --");
+    System.out.println(" -- VM3 disappears everyone go back to the edge to reduce the costs--");
     System.out.println(p);
   }
 }
