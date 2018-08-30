@@ -1509,7 +1509,7 @@ public class ToscaParserTest extends AbstractToscaParserSimpleProfileTest {
                 Mockito.any(Set.class))).thenReturn(policyType);
 
         ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get(getRootDirectory(), "tosca-policy-template-fail.yml"));
-        assertEquals(2, parsingResult.getContext().getParsingErrors().size());
+        assertEquals(1, parsingResult.getContext().getParsingErrors().size());
         assertEquals(1, countErrorByLevelAndCode(parsingResult, ParsingErrorLevel.ERROR, ErrorCode.POLICY_TARGET_NOT_FOUND));
     }
 }
