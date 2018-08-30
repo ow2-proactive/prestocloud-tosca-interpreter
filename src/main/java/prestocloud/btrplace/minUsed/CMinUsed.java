@@ -81,6 +81,7 @@ public class CMinUsed implements CObjective {
   @Override
   public boolean inject(final Parameters ps, final ReconfigurationProblem rp) throws SchedulerException {
     this.rp = rp;
+    /*
     final IntVar[] cards = new IntVar[mu.nodes().size()];
     final IntVar total = rp.getModel().intVar(rp.makeVarLabel(mu), 0, rp.getSourceModel().getMapping().getNbVMs());
     int i = 0;
@@ -90,6 +91,44 @@ public class CMinUsed implements CObjective {
     }
 
     final Constraint cstr  = rp.getModel().sum(cards, "=", total);
+    cstr.post();
+    rp.setObjective(true, total);
+    */
+    final Mapping now = rp.getSourceModel().getMapping();
+
+    /*
+     *
+     */
+    // One cost per VM.
+    List<IntVar> allCosts = new ArrayList<>();
+    for (final VM vm: rp.getFutureRunningVMs()) {
+      final int[] costs = new int[rp.getNodes().size()];
+      if (now.isReady(vm)) {
+        // The VM is not running. a 0 cost for an edge. a XX cost for the public cloud.
+        for (final Node node : rp.getNodes()) {
+          costs[rp.getNode(node)]= mu.nodes().contains(node) ? 10 : 0;
+        }
+      } else {
+        final Node cur = now.getVMLocation(vm);
+        if (!mu.nodes().contains(cur)) {
+          // currently on the edge.
+          // 0 if stays, 1 if on other edge node, XX on public cloud.
+          for (final Node node: rp.getNodes()) {
+            if (node.equals(cur)) {
+              costs[rp.getNode(node)] = 0;
+            } else {
+              // public cloud: big cost. Edge, small.
+              costs[rp.getNode(node)] = mu.nodes().contains(node) ? 10 : 1;
+            }
+          }
+        }
+      }
+      IntVar myCost = rp.getModel().intVar("cost(" + vm + ")", 0, 10);
+      rp.getModel().element(myCost, costs, rp.getVMAction(vm).getDSlice().getHoster()).post();
+      allCosts.add(myCost);
+    }
+    final IntVar total = rp.getModel().intVar(rp.makeVarLabel(mu), 0, Integer.MAX_VALUE / 100);
+    final Constraint cstr  = rp.getModel().sum(allCosts.toArray(new IntVar[0]), "=", total);
     cstr.post();
     rp.setObjective(true, total);
     return true;

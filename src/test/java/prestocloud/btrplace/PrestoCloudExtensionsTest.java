@@ -21,6 +21,7 @@ import org.junit.Test;
 import prestocloud.btrplace.minUsed.MinUsed;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -47,7 +48,10 @@ public class PrestoCloudExtensionsTest {
     final Node ec2_1 = mo.newNode();
     final Node ec2_2 = mo.newNode();
 
-    final ShareableResource mem = new ShareableResource("memory");
+    System.out.println("Edge nodes: " + Arrays.asList(n0, n1, n2, n3));
+    System.out.println("public clouds: " + Arrays.asList(ec2_1, ec2_2));
+
+    ShareableResource mem = new ShareableResource("memory");
     mo.attach(mem);
     mem.setCapacity(n0, 4);
     mem.setCapacity(n1, 4);
@@ -81,12 +85,13 @@ public class PrestoCloudExtensionsTest {
     Assert.assertNotNull(p);
 
     // All fits on edge nodes.
-    System.out.println("-- Initial deployment, everyone fit on the edge nodes (n0 - n1)");
+    System.out.println("-- Initial deployment, everyone fit on the edge nodes");
     System.out.println(p);
 
     mo = p.getResult();
     // On big VM.
     final VM vm3 = mo.newVM();
+    mem = ShareableResource.get(mo, mem.getResourceIdentifier());
     mem.setConsumption(vm3, 32);
     mo.getMapping().ready(vm3);
 
@@ -96,7 +101,7 @@ public class PrestoCloudExtensionsTest {
     ii = new Instance(mo, cstrs, new MinUsed(Sets.newHashSet(ec2_1, ec2_2)));
     p = sched.solve(ii);
     Assert.assertNotNull(p);
-    System.out.println(" -- with the arrival of the big VM, public clouds must be used (n2 - n3) --");
+    System.out.println(" -- with the arrival of the big VM (" + vm3 + "), public clouds must be used. " + vm2 + " follows because of the gather --");
     System.out.println(p);
 
     // VM3 disappears, VM2 should go back to the edge.
