@@ -1,0 +1,248 @@
+tosca_definitions_version: tosca_prestocloud_mapping_1_2
+
+metadata:
+   template_name: ICCS generated types definition
+   template_author: ICCS
+   template_version: 1.0.0-SNAPSHOT
+   CostThreshold: 1000.0
+   TimePeriod:  720
+   ProviderName_0: Google_Cloud_Compute
+   ProviderRequired_0: false
+   ProviderExcluded_0: true
+   MaxInstances: 100
+   MetricToMinimize: Cost
+
+description: Types Description
+
+imports:
+   - tosca-normative-types:1.2
+   - iccs-normative-types:1.0
+   - resource-descriptions:1.0
+   - placement-constraints:1.0
+
+node_types:
+   #Concrete node selection:
+   processing_node_fragments_AudioCaptor_0:
+      description: A TOSCA description of a node
+      derived_from: prestocloud.nodes.agent.faas
+      requirements:
+         - host:
+            capability: tosca.capabilities.Container
+            node: prestocloud.nodes.compute
+            relationship: tosca.relationships.HostedOn
+            occurrences: [ 1,10 ]
+            node_filter:
+               capabilities:
+                  - host:
+                     properties:
+                        - num_cpus: { in_range: [ 1,2 ] }
+                        - mem_size: { in_range: [ 2,4 ] }
+                        - disk_size: { in_range: [ 20,40 ] }
+                  - os:
+                     properties:
+                        - architecture: { valid_values: [ arm64, armel, armhf ] }
+                        - type: { equal: linux }
+                        - distribution: { equal: ubuntu }
+                  - resource:
+                     properties:
+                        - type: { valid_values: [ edge ] }
+
+   processing_node_fragments_FaceDetector_1:
+      description: A TOSCA description of a node
+      derived_from: prestocloud.nodes.agent.faas
+      requirements:
+         - host:
+            capability: tosca.capabilities.Container
+            node: prestocloud.nodes.compute
+            relationship: tosca.relationships.HostedOn
+            occurrences: [ 1,10 ]
+            node_filter:
+               capabilities:
+                  - host:
+                     properties:
+                        - num_cpus: { in_range: [ 2,4 ] }
+                        - mem_size: { in_range: [ 4,8 ] }
+                        - disk_size: { in_range: [ 40,100 ] }
+                  - os:
+                     properties:
+                        - architecture: { valid_values: [ x86_64, i386 ] }
+                        - type: { equal: linux }
+                        - distribution: { equal: ubuntu }
+                  - resource:
+                     properties:
+                        - type: { equal: cloud }
+
+   processing_node_fragments_MultimediaManager_2:
+      description: A TOSCA description of a node
+      derived_from: prestocloud.nodes.agent.faas
+      requirements:
+         - host:
+            capability: tosca.capabilities.Container
+            node: prestocloud.nodes.compute
+            relationship: tosca.relationships.HostedOn
+            occurrences: [ 1,10 ]
+            node_filter:
+               capabilities:
+                  - host:
+                     properties:
+                        - num_cpus: { in_range: [ 2,4 ] }
+                        - mem_size: { in_range: [ 4,8 ] }
+                        - disk_size: { in_range: [ 100,500 ] }
+                  - os:
+                     properties:
+                        - architecture: { valid_values: [ x86_64, i386 ] }
+                        - type: { equal: linux }
+                        - distribution: { equal: ubuntu }
+                  - resource:
+                     properties:
+                        - type: { equal: cloud }
+
+   processing_node_fragments_VideoTranscoder_3:
+      description: A TOSCA description of a node
+      derived_from: prestocloud.nodes.agent.faas
+      requirements:
+         - host:
+            capability: tosca.capabilities.Container
+            node: prestocloud.nodes.compute
+            relationship: tosca.relationships.HostedOn
+            occurrences: [ 1,10 ]
+            node_filter:
+               capabilities:
+                  - host:
+                     properties:
+                        - num_cpus: { in_range: [ 2,4 ] }
+                        - mem_size: { in_range: [ 4,8 ] }
+                        - disk_size: { in_range: [ 40,100 ] }
+                  - os:
+                     properties:
+                        - architecture: { valid_values: [ x86_64, i386 ] }
+                        - type: { equal: linux }
+                        - distribution: { equal: ubuntu }
+                  - resource:
+                     properties:
+                        - type: { equal: cloud }
+
+   processing_node_fragments_PercussionDetector_4:
+      description: A TOSCA description of a node
+      derived_from: prestocloud.nodes.agent.faas
+      requirements:
+         - host:
+            capability: tosca.capabilities.Container
+            node: prestocloud.nodes.compute
+            relationship: tosca.relationships.HostedOn
+            occurrences: [ 1,10 ]
+            node_filter:
+               capabilities:
+                  - host:
+                     properties:
+                        - num_cpus: { in_range: [ 1,2 ] }
+                        - mem_size: { in_range: [ 2,4 ] }
+                        - disk_size: { in_range: [ 20,40 ] }
+                  - os:
+                     properties:
+                        - architecture: { valid_values: [ arm64, armel, armhf ] }
+                        - type: { equal: linux }
+                        - distribution: { equal: ubuntu }
+                  - resource:
+                     properties:
+                        - type: { valid_values: [ edge ] }
+
+   processing_node_fragments_VideoCaptor_5:
+      description: A TOSCA description of a node
+      derived_from: prestocloud.nodes.agent.faas
+      requirements:
+         - host:
+            capability: tosca.capabilities.Container
+            node: prestocloud.nodes.compute
+            relationship: tosca.relationships.HostedOn
+            occurrences: [ 3,10 ]
+            node_filter:
+               capabilities:
+                  - host:
+                     properties:
+                        - num_cpus: { in_range: [ 1,2 ] }
+                        - mem_size: { in_range: [ 2,4 ] }
+                        - disk_size: { in_range: [ 20,40 ] }
+                  - os:
+                     properties:
+                        - architecture: { valid_values: [ arm64, armel, armhf ] }
+                        - type: { equal: linux }
+                        - distribution: { equal: ubuntu }
+                  - resource:
+                     properties:
+                        - type: { valid_values: [ edge ] }
+
+
+topology_template:
+   node_templates:
+      fragments_AudioCaptor_0:
+         type: processing_node_fragments_AudioCaptor_0
+
+      fragments_AudioCaptor:
+         type: prestocloud.nodes.fragment.faas
+         properties:
+            id: 0
+            name: fragments.AudioCaptor
+            onloadable: true
+         requirements:
+            - execute: fragments_AudioCaptor_0
+
+      fragments_FaceDetector_1:
+         type: processing_node_fragments_FaceDetector_1
+
+      fragments_FaceDetector:
+         type: prestocloud.nodes.fragment.faas
+         properties:
+            id: 1
+            name: fragments.FaceDetector
+            onloadable: false
+         requirements:
+            - execute: fragments_FaceDetector_1
+
+      fragments_MultimediaManager_2:
+         type: processing_node_fragments_MultimediaManager_2
+
+      fragments_MultimediaManager:
+         type: prestocloud.nodes.fragment.faas
+         properties:
+            id: 2
+            name: fragments.MultimediaManager
+            onloadable: false
+         requirements:
+            - execute: fragments_MultimediaManager_2
+
+      fragments_VideoTranscoder_3:
+         type: processing_node_fragments_VideoTranscoder_3
+
+      fragments_VideoTranscoder:
+         type: prestocloud.nodes.fragment.faas
+         properties:
+            id: 3
+            name: fragments.VideoTranscoder
+            onloadable: false
+         requirements:
+            - execute: fragments_VideoTranscoder_3
+
+      fragments_PercussionDetector_4:
+         type: processing_node_fragments_PercussionDetector_4
+
+      fragments_PercussionDetector:
+         type: prestocloud.nodes.fragment.faas
+         properties:
+            id: 4
+            name: fragments.PercussionDetector
+            onloadable: true
+         requirements:
+            - execute: fragments_PercussionDetector_4
+
+      fragments_VideoCaptor_5:
+         type: processing_node_fragments_VideoCaptor_5
+
+      fragments_VideoCaptor:
+         type: prestocloud.nodes.fragment.faas
+         properties:
+            id: 5
+            name: fragments.VideoCaptor
+            onloadable: true
+         requirements:
+            - execute: fragments_VideoCaptor_5
