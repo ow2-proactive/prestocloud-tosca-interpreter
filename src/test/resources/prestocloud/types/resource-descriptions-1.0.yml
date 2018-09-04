@@ -64,6 +64,10 @@ node_types:
     derived_from: prestocloud.nodes.compute
     description: PrEstoCloud OpenStack compute node description.
 
+  prestocloud.nodes.compute.edge:
+    derived_from: prestocloud.nodes.compute
+    description: PrEstoCloud edge device.
+
 data_types:
 
   prestocloud.datatypes.cloud:
