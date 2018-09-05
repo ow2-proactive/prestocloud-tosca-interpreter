@@ -22,7 +22,7 @@ imports:
 
 node_types:
    #Concrete node selection:
-   processing_node_fragments_AudioCaptor_0:
+   processing_node_fragments_AudioCaptor:
       description: A TOSCA description of a node
       derived_from: prestocloud.nodes.agent.faas
       requirements:
@@ -47,7 +47,7 @@ node_types:
                      properties:
                         - type: { valid_values: [ edge ] }
 
-   processing_node_fragments_FaceDetector_1:
+   processing_node_fragments_FaceDetector:
       description: A TOSCA description of a node
       derived_from: prestocloud.nodes.agent.faas
       requirements:
@@ -72,7 +72,7 @@ node_types:
                      properties:
                         - type: { equal: cloud }
 
-   processing_node_fragments_MultimediaManager_2:
+   processing_node_fragments_MultimediaManager:
       description: A TOSCA description of a node
       derived_from: prestocloud.nodes.agent.faas
       requirements:
@@ -97,7 +97,7 @@ node_types:
                      properties:
                         - type: { equal: cloud }
 
-   processing_node_fragments_VideoTranscoder_3:
+   processing_node_fragments_VideoTranscoder:
       description: A TOSCA description of a node
       derived_from: prestocloud.nodes.agent.faas
       requirements:
@@ -122,7 +122,7 @@ node_types:
                      properties:
                         - type: { equal: cloud }
 
-   processing_node_fragments_PercussionDetector_4:
+   processing_node_fragments_PercussionDetector:
       description: A TOSCA description of a node
       derived_from: prestocloud.nodes.agent.faas
       requirements:
@@ -147,7 +147,7 @@ node_types:
                      properties:
                         - type: { valid_values: [ edge ] }
 
-   processing_node_fragments_VideoCaptor_5:
+   processing_node_fragments_VideoCaptor:
       description: A TOSCA description of a node
       derived_from: prestocloud.nodes.agent.faas
       requirements:
@@ -175,8 +175,8 @@ node_types:
 
 topology_template:
    node_templates:
-      fragments_AudioCaptor_0:
-         type: processing_node_fragments_AudioCaptor_0
+      deployment_node_fragments_AudioCaptor:
+         type: processing_node_fragments_AudioCaptor
 
       fragments_AudioCaptor:
          type: prestocloud.nodes.fragment.faas
@@ -185,10 +185,10 @@ topology_template:
             name: fragments.AudioCaptor
             onloadable: true
          requirements:
-            - execute: fragments_AudioCaptor_0
+            - execute: deployment_node_fragments_AudioCaptor
 
-      fragments_FaceDetector_1:
-         type: processing_node_fragments_FaceDetector_1
+      deployment_node_fragments_FaceDetector:
+         type: processing_node_fragments_FaceDetector
 
       fragments_FaceDetector:
          type: prestocloud.nodes.fragment.faas
@@ -197,10 +197,10 @@ topology_template:
             name: fragments.FaceDetector
             onloadable: false
          requirements:
-            - execute: fragments_FaceDetector_1
+            - execute: deployment_node_fragments_FaceDetector
 
-      fragments_MultimediaManager_2:
-         type: processing_node_fragments_MultimediaManager_2
+      deployment_node_fragments_MultimediaManager:
+         type: processing_node_fragments_MultimediaManager
 
       fragments_MultimediaManager:
          type: prestocloud.nodes.fragment.faas
@@ -209,10 +209,10 @@ topology_template:
             name: fragments.MultimediaManager
             onloadable: false
          requirements:
-            - execute: fragments_MultimediaManager_2
+            - execute: deployment_node_fragments_MultimediaManager
 
-      fragments_VideoTranscoder_3:
-         type: processing_node_fragments_VideoTranscoder_3
+      deployment_node_fragments_VideoTranscoder:
+         type: processing_node_fragments_VideoTranscoder
 
       fragments_VideoTranscoder:
          type: prestocloud.nodes.fragment.faas
@@ -221,10 +221,10 @@ topology_template:
             name: fragments.VideoTranscoder
             onloadable: false
          requirements:
-            - execute: fragments_VideoTranscoder_3
+            - execute: deployment_node_fragments_VideoTranscoder
 
-      fragments_PercussionDetector_4:
-         type: processing_node_fragments_PercussionDetector_4
+      deployment_node_fragments_PercussionDetector:
+         type: processing_node_fragments_PercussionDetector
 
       fragments_PercussionDetector:
          type: prestocloud.nodes.fragment.faas
@@ -233,10 +233,10 @@ topology_template:
             name: fragments.PercussionDetector
             onloadable: true
          requirements:
-            - execute: fragments_PercussionDetector_4
+            - execute: deployment_node_fragments_PercussionDetector
 
-      fragments_VideoCaptor_5:
-         type: processing_node_fragments_VideoCaptor_5
+      deployment_node_fragments_VideoCaptor:
+         type: processing_node_fragments_VideoCaptor
 
       fragments_VideoCaptor:
          type: prestocloud.nodes.fragment.faas
@@ -245,4 +245,4 @@ topology_template:
             name: fragments.VideoCaptor
             onloadable: true
          requirements:
-            - execute: fragments_VideoCaptor_5
+            - execute: deployment_node_fragments_VideoCaptor

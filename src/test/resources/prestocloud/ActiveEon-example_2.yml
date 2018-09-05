@@ -24,7 +24,7 @@ topology_template:
   node_templates:
 
     #Concrete node selection:
-    processing_node_fragments_AudioCaptor_0:
+    processing_node_fragments_AudioCaptor_1:
       type: prestocloud.nodes.compute.edge
       properties:
         type: edge
@@ -73,7 +73,7 @@ topology_template:
             disk_size: 50 GB
             price: 0.120000
 
-    processing_node_fragments_MultimediaManager_2:
+    processing_node_fragments_MultimediaManager_1:
       type: prestocloud.nodes.compute.cloud.amazon
       properties:
         type: cloud
@@ -97,7 +97,7 @@ topology_template:
             disk_size: 100 GB
             price: 0.150000
 
-    processing_node_fragments_VideoTranscoder_3:
+    processing_node_fragments_VideoTranscoder_1:
       type: prestocloud.nodes.compute.cloud.amazon
       properties:
         type: cloud
@@ -121,7 +121,7 @@ topology_template:
             disk_size: 50 GB
             price: 0.120000
 
-    processing_node_fragments_PercussionDetector_4:
+    processing_node_fragments_PercussionDetector_1:
       type: prestocloud.nodes.compute.edge
       properties:
         type: edge
@@ -146,7 +146,7 @@ topology_template:
             mem_size: 2.0 GB
             disk_size: 30 GB
 
-    processing_node_fragments_VideoCaptor_5:
+    processing_node_fragments_VideoCaptor_1:
       type: prestocloud.nodes.compute.edge
       properties:
         type: edge
@@ -171,86 +171,164 @@ topology_template:
             mem_size: 2.0 GB
             disk_size: 30 GB
 
-    fragments_AudioCaptor_0:
+    processing_node_fragments_VideoCaptor_2:
+      type: prestocloud.nodes.compute.edge
+      properties:
+        type: edge
+      capabilities:
+        resource:
+          properties:
+            type: edge
+            edge:
+              edge_type: raspberry
+              edge_location: paris
+              edge_credentials:
+                username: admin
+                password: admin
+              edge_network:
+                network_id: netid1
+                network_name: local-net
+                addresses:
+                  - 10.0.0.4
+        host:
+          properties:
+            num_cpus: 1
+            mem_size: 2.0 GB
+            disk_size: 30 GB
+
+    processing_node_fragments_VideoCaptor_3:
+      type: prestocloud.nodes.compute.edge
+      properties:
+        type: edge
+      capabilities:
+        resource:
+          properties:
+            type: edge
+            edge:
+              edge_type: raspberry
+              edge_location: paris
+              edge_credentials:
+                username: admin
+                password: admin
+              edge_network:
+                network_id: netid1
+                network_name: local-net
+                addresses:
+                  - 10.0.0.5
+        host:
+          properties:
+            num_cpus: 1
+            mem_size: 2.0 GB
+            disk_size: 30 GB
+
+    deployment_node_fragments_AudioCaptor_1:
       type: prestocloud.nodes.agent.faas
       requirements:
-        - host: processing_node_fragments_AudioCaptor_0
+        - host: processing_node_fragments_AudioCaptor_1
 
-    fragments_AudioCaptor:
+    fragments_AudioCaptor_1:
       type: prestocloud.nodes.fragment.faas
       properties:
         id: 0
         name: fragments.AudioCaptor
         onloadable: true
       requirements:
-        - execute: fragments_AudioCaptor_0
+        - execute: deployment_node_fragments_AudioCaptor_1
 
-    fragments_FaceDetector_1:
+    deployment_node_fragments_FaceDetector_1:
       type: prestocloud.nodes.agent.faas
       requirements:
         - host: processing_node_fragments_FaceDetector_1
 
-    fragments_FaceDetector:
+    fragments_FaceDetector_1:
       type: prestocloud.nodes.fragment.faas
       properties:
         id: 1
         name: fragments.FaceDetector
         onloadable: false
       requirements:
-        - execute: fragments_FaceDetector_1
+        - execute: deployment_node_fragments_FaceDetector_1
 
-    fragments_MultimediaManager_2:
+    deployment_node_fragments_MultimediaManager_1:
       type: prestocloud.nodes.agent.faas
       requirements:
-        - host: processing_node_fragments_MultimediaManager_2
+        - host: processing_node_fragments_MultimediaManager_1
 
-    fragments_MultimediaManager:
+    fragments_MultimediaManager_1:
       type: prestocloud.nodes.fragment.faas
       properties:
         id: 2
         name: fragments.MultimediaManager
         onloadable: false
       requirements:
-        - execute: fragments_MultimediaManager_2
+        - execute: deployment_node_fragments_MultimediaManager_1
 
-    fragments_VideoTranscoder_3:
+    deployment_node_fragments_VideoTranscoder_1:
       type: prestocloud.nodes.agent.faas
       requirements:
-        - host: processing_node_fragments_VideoTranscoder_3
+        - host: processing_node_fragments_VideoTranscoder_1
 
-    fragments_VideoTranscoder:
+    fragments_VideoTranscoder_1:
       type: prestocloud.nodes.fragment.faas
       properties:
         id: 3
         name: fragments.VideoTranscoder
         onloadable: false
       requirements:
-        - execute: fragments_VideoTranscoder_3
+        - execute: deployment_node_fragments_VideoTranscoder_1
 
-    fragments_PercussionDetector_4:
+    deployment_node_fragments_PercussionDetector_1:
       type: prestocloud.nodes.agent.faas
       requirements:
-        - host: processing_node_fragments_PercussionDetector_4
+        - host: processing_node_fragments_PercussionDetector_1
 
-    fragments_PercussionDetector:
+    fragments_PercussionDetector_1:
       type: prestocloud.nodes.fragment.faas
       properties:
         id: 4
         name: fragments.PercussionDetector
         onloadable: true
       requirements:
-        - execute: fragments_PercussionDetector_4
+        - execute: deployment_node_fragments_PercussionDetector_1
 
-    fragments_VideoCaptor_5:
+    deployment_node_fragments_VideoCaptor_1:
       type: prestocloud.nodes.agent.faas
       requirements:
-        - host: processing_node_fragments_VideoCaptor_5
+        - host: processing_node_fragments_VideoCaptor_1
 
-    fragments_VideoCaptor:
+    fragments_VideoCaptor_1:
       type: prestocloud.nodes.fragment.faas
       properties:
         id: 5
         name: fragments.VideoCaptor
         onloadable: true
       requirements:
-        - execute: fragments_VideoCaptor_5
+        - execute: deployment_node_fragments_VideoCaptor_1
+
+    deployment_node_fragments_VideoCaptor_2:
+      type: prestocloud.nodes.agent.faas
+      requirements:
+        - host: processing_node_fragments_VideoCaptor_2
+
+    fragments_VideoCaptor_2:
+      type: prestocloud.nodes.fragment.faas
+      properties:
+        id: 5
+        name: fragments.VideoCaptor
+        onloadable: true
+      requirements:
+        - execute: deployment_node_fragments_VideoCaptor_2
+
+    deployment_node_fragments_VideoCaptor_3:
+      type: prestocloud.nodes.agent.faas
+      requirements:
+        - host: processing_node_fragments_VideoCaptor_3
+
+    fragments_VideoCaptor_3:
+      type: prestocloud.nodes.fragment.faas
+      properties:
+        id: 5
+        name: fragments.VideoCaptor
+        onloadable: true
+      requirements:
+        - execute: deployment_node_fragments_VideoCaptor_3
