@@ -1,26 +1,11 @@
 package prestocloud.tosca;
 
-import java.io.IOException;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Resource;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.prestocloud.tosca.model.definitions.AbstractPropertyValue;
-import org.prestocloud.tosca.model.definitions.ComplexPropertyValue;
-import org.prestocloud.tosca.model.definitions.FilterDefinition;
-import org.prestocloud.tosca.model.definitions.ListPropertyValue;
-import org.prestocloud.tosca.model.definitions.PropertyConstraint;
-import org.prestocloud.tosca.model.definitions.RequirementDefinition;
-import org.prestocloud.tosca.model.definitions.ScalarPropertyValue;
+import org.prestocloud.tosca.model.definitions.*;
 import org.prestocloud.tosca.model.definitions.constraints.EqualConstraint;
 import org.prestocloud.tosca.model.definitions.constraints.GreaterOrEqualConstraint;
 import org.prestocloud.tosca.model.definitions.constraints.InRangeConstraint;
@@ -31,19 +16,12 @@ import org.prestocloud.tosca.model.templates.PolicyTemplate;
 import org.prestocloud.tosca.model.types.NodeType;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.hateoas.HypermediaAutoConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.*;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
-
-import lombok.Getter;
-import lombok.Setter;
 import prestocloud.component.ICSARRepositorySearchService;
 import prestocloud.model.common.Tag;
 import prestocloud.tosca.model.ArchiveRoot;
@@ -51,6 +29,11 @@ import prestocloud.tosca.parser.ParsingException;
 import prestocloud.tosca.parser.ParsingResult;
 import prestocloud.tosca.parser.ToscaParser;
 import prestocloud.tosca.repository.LocalRepositoryImpl;
+
+import javax.annotation.Resource;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class)
@@ -93,29 +76,29 @@ public class BtrPlaceTest {
                 // Get 'host' capability properties
                 if (capabilities.getKey().equalsIgnoreCase("host")) {
                     Map<String, String> hostCapabilities = new HashMap<>();
-                    System.out.println("Host properties: ");
+                    //System.out.println("Host properties: ");
                     for (Map.Entry<String, AbstractPropertyValue> properties : capabilities.getValue().getProperties().entrySet()) {
                         if (properties.getKey().equalsIgnoreCase("num_cpus")) {
                             String num_cpus = ((ScalarPropertyValue)properties.getValue()).getValue();
                             hostCapabilities.put("num_cpus", num_cpus);
-                            System.out.println("- " + properties.getKey() + " = " + num_cpus);
+                            //System.out.println("- " + properties.getKey() + " = " + num_cpus);
                         }
                         if (properties.getKey().equalsIgnoreCase("mem_size")) {
                             String mem_size = ((ScalarPropertyValue)properties.getValue()).getValue();
                             hostCapabilities.put("mem_size", mem_size);
-                            System.out.println("- " + properties.getKey() + " = " + mem_size);
+                            //System.out.println("- " + properties.getKey() + " = " + mem_size);
                         }
                         if (properties.getKey().equalsIgnoreCase("disk_size")) {
                             if (properties.getValue() != null) {
                                 String disk_size = ((ScalarPropertyValue) properties.getValue()).getValue();
                                 hostCapabilities.put("disk_size", disk_size);
-                                System.out.println("- " + properties.getKey() + " = " + disk_size);
+                                //System.out.println("- " + properties.getKey() + " = " + disk_size);
                             }
                         }
                         if (properties.getKey().equalsIgnoreCase("price")) {
                             String price = ((ScalarPropertyValue)properties.getValue()).getValue();
                             hostCapabilities.put("price", price);
-                            System.out.println("- " + properties.getKey() + " = " + price);
+                            //System.out.println("- " + properties.getKey() + " = " + price);
                         }
                     }
                     typesCapabilities.put(capabilities.getKey(), hostCapabilities);
@@ -123,45 +106,45 @@ public class BtrPlaceTest {
                 // Get 'resource' capability properties
                 if (capabilities.getKey().equalsIgnoreCase("resource")) {
                     Map<String, String> resourceCapabilities = new HashMap<>();
-                    System.out.println("Resource properties: ");
+                    //System.out.println("Resource properties: ");
                     String type = null;
                     for (Map.Entry<String, AbstractPropertyValue> properties : capabilities.getValue().getProperties().entrySet()) {
                         if (properties.getKey().equalsIgnoreCase("type")) {
                             type = ((ScalarPropertyValue) properties.getValue()).getValue();
-                            System.out.println("- " + properties.getKey() + " = " + type);
+                            //System.out.println("- " + properties.getKey() + " = " + type);
                         }
                         // Cloud based resource detected
                         if (type != null && type.equalsIgnoreCase("cloud") && properties.getKey().equalsIgnoreCase("cloud")) {
-                            System.out.println("- " + properties.getKey() + ":");
+                            //System.out.println("- " + properties.getKey() + ":");
                             ComplexPropertyValue cloud = (ComplexPropertyValue) properties.getValue();
                             for (Map.Entry<String, Object> cloudProperties : cloud.getValue().entrySet()) {
                                 if (cloudProperties.getKey().equalsIgnoreCase("cloud_type")) {
                                     resourceCapabilities.put("cloud_type", cloudProperties.getValue().toString());
-                                    System.out.println(" - " + cloudProperties.getKey() + " = " + cloudProperties.getValue());
+                                    //System.out.println(" - " + cloudProperties.getKey() + " = " + cloudProperties.getValue());
                                 }
                                 if (cloudProperties.getKey().equalsIgnoreCase("cloud_region")) {
                                     resourceCapabilities.put("cloud_region", cloudProperties.getValue().toString());
-                                    System.out.println(" - " + cloudProperties.getKey() + " = " + cloudProperties.getValue());
+                                    //System.out.println(" - " + cloudProperties.getKey() + " = " + cloudProperties.getValue());
                                 }
                                 if (cloudProperties.getKey().equalsIgnoreCase("cloud_name")) {
                                     resourceCapabilities.put("cloud_name", cloudProperties.getValue().toString());
-                                    System.out.println(" - " + cloudProperties.getKey() + " = " + cloudProperties.getValue());
+                                    //System.out.println(" - " + cloudProperties.getKey() + " = " + cloudProperties.getValue());
                                 }
                                 // Get networking informations
                                 if (cloudProperties.getKey().equalsIgnoreCase("cloud_network")) {
-                                    System.out.println(" - " + cloudProperties.getKey() + ":");
+                                    //System.out.println(" - " + cloudProperties.getKey() + ":");
                                     HashMap<String, Object> cloud_network = (HashMap<String, Object>) cloudProperties.getValue();
                                     for (Map.Entry<String, Object> cloudNetworkProperties : cloud_network.entrySet()) {
                                         if (cloudNetworkProperties.getKey().equalsIgnoreCase("network_id")) {
-                                            System.out.println("  - " + cloudNetworkProperties.getKey() + " = " + cloudNetworkProperties.getValue());
+                                            //System.out.println("  - " + cloudNetworkProperties.getKey() + " = " + cloudNetworkProperties.getValue());
                                         }
                                         if (cloudNetworkProperties.getKey().equalsIgnoreCase("network_name")) {
-                                            System.out.println("  - " + cloudNetworkProperties.getKey() + " = " + cloudNetworkProperties.getValue());
+                                            //System.out.println("  - " + cloudNetworkProperties.getKey() + " = " + cloudNetworkProperties.getValue());
                                         }
                                         if (cloudNetworkProperties.getKey().equalsIgnoreCase("addresses")) {
-                                            System.out.println("  - " + cloudNetworkProperties.getKey());
+                                            //System.out.println("  - " + cloudNetworkProperties.getKey());
                                             for (String address : (List<String>) cloudNetworkProperties.getValue()) {
-                                                System.out.println("    - " + address);
+                                                //System.out.println("    - " + address);
                                             }
                                         }
                                     }
@@ -319,7 +302,146 @@ public class BtrPlaceTest {
         return clouds;
     }
 
-    public String findBestSuitableVMType(String type, String region, Map<String, List<String>> hostingConstraints) {
+    public String findBestSuitableVMType(String cloud, String region, Map<String, List<String>> hostingConstraints) throws IOException, ParsingException {
+
+        // TODO: FILTER BY REGION IF NOT NULL
+        // TODO: MAKE A LIST OF CANDIDATES AND SELECT THE LOWEST PRICE
+
+        Map<String, Map<String, Map<String, String>>> VMTypes;
+
+        if (cloud.equalsIgnoreCase("amazon")) {
+            VMTypes = getCloudNodesTemplates("amazon-vm-templates.yml");
+        }
+        else if (cloud.equalsIgnoreCase("azure")) {
+            VMTypes = getCloudNodesTemplates("azure-vm-templates.yml");
+        }
+        else if (cloud.equalsIgnoreCase("openstack")) {
+            System.out.println("OpenStack types not yet defined (flavors must be customized).");
+            return null;
+        }
+        else {
+            System.out.println("Cloud of type " + cloud + " not found.");
+            return null;
+        }
+
+        // Extract hosting infos from local data struct
+        boolean cpu, mem, disk, price;
+        for (Map.Entry<String, Map<String, Map<String, String>>> hostingConstraint : VMTypes.entrySet()) {
+            hostingConstraint.getKey();
+            cpu = false;
+            mem = false;
+            disk = false;
+            price = false;
+
+            if (hostingConstraint.getValue().containsKey("host")) {
+
+                // Compare cpu
+                if (hostingConstraints.containsKey("num_cpus")) {
+                    if (hostingConstraint.getValue().get("host").containsKey("num_cpus")) {
+                        int required, available;
+                        String required_num_cpus = hostingConstraints.get("num_cpus").get(0);
+                        if (required_num_cpus.contains("RangeMin")) {
+                            required = Integer.valueOf(required_num_cpus.split(",")[0].split(" ")[1]);
+                        }
+                        else if (required_num_cpus.contains("GreaterOrEqual")) {
+                            required = Integer.valueOf(required_num_cpus.split(" ")[1]);
+                        }
+                        else {
+                            required = Integer.valueOf(required_num_cpus);
+                        }
+                        available = Integer.valueOf(hostingConstraint.getValue().get("host").get("num_cpus"));
+                        if (required <= available) {
+                            //System.out.println("Good type or cpu: " + hostingConstraint.getKey());
+                            cpu = true;
+                        }
+                    }
+                }
+                else {
+                    System.out.println("No cpu constraint for : " + hostingConstraints);
+                    cpu = true;
+                }
+
+                // Compare memory
+                if (hostingConstraints.containsKey("mem_size")) {
+                    if (hostingConstraint.getValue().get("host").containsKey("mem_size")) {
+                        double required, available;
+                        String required_mem_size = hostingConstraints.get("mem_size").get(0);
+                        if (required_mem_size.contains("RangeMin")) {
+                            required = Double.valueOf(required_mem_size.split(",")[0].split(" ")[1]);
+                        }
+                        else if (required_mem_size.contains("GreaterOrEqual")) {
+                            required = Double.valueOf(required_mem_size.split(" ")[1]);
+                        }
+                        else {
+                            required = Double.valueOf(required_mem_size);
+                        }
+                        available = Double.valueOf(hostingConstraint.getValue().get("host").get("mem_size").split(" ")[0]);
+                        if (required <= available) {
+                            //System.out.println("Good type for mem: " + hostingConstraint.getKey());
+                            mem = true;
+                        }
+                    }
+                }
+                else {
+                    mem = true;
+                }
+
+                // Compare disk
+                if (hostingConstraints.containsKey("disk_size")) {
+                    if (hostingConstraint.getValue().get("host").containsKey("disk_size")) {
+                        double required, available;
+                        String required_disk_size = hostingConstraints.get("disk_size").get(0);
+                        if (required_disk_size.contains("RangeMin")) {
+                            required = Double.valueOf(required_disk_size.split(",")[0].split(" ")[1]);
+                        }
+                        else if (required_disk_size.contains("GreaterOrEqual")) {
+                            required = Double.valueOf(required_disk_size.split(" ")[1]);
+                        }
+                        else {
+                            required = Double.valueOf(required_disk_size);
+                        }
+                        available = Double.valueOf(hostingConstraint.getValue().get("host").get("disk_size").split(" ")[0]);
+                        if (required <= available) {
+                            //System.out.println("Good type for disk: " + hostingConstraint.getKey());
+                            disk = true;
+                        }
+                    }
+                }
+                else {
+                    disk = true;
+                }
+
+                // Compare price
+                if (hostingConstraints.containsKey("price")) {
+                    if (hostingConstraint.getValue().get("host").containsKey("price")) {
+                        double required, available;
+                        String required_price = hostingConstraints.get("price").get(0);
+                        if (required_price.contains("RangeMin")) {
+                            required = Double.valueOf(required_price.split(",")[0].split(" ")[1]);
+                        }
+                        else if (required_price.contains("GreaterOrEqual")) {
+                            required = Double.valueOf(required_price.split(" ")[1]);
+                        }
+                        else {
+                            required = Double.valueOf(required_price);
+                        }
+                        available = Double.valueOf(hostingConstraint.getValue().get("host").get("price"));
+                        if (required <= available) {
+                            //System.out.println("Good type for price: " + hostingConstraint.getKey());
+                            price = true;
+                        }
+                    }
+                }
+                else {
+                    price = true;
+                }
+                if (cpu && mem && disk && price) {
+                    //System.out.println("Best suitable type found: " + hostingConstraint.getKey());
+                    return hostingConstraint.getKey();
+                }
+            }
+        }
+        System.out.println("No suitable type found for hosting constraints: " + hostingConstraints);
         return null;
     }
 
@@ -349,17 +471,41 @@ public class BtrPlaceTest {
 
     @Test
     public void testBtrPlaceComputation() throws IOException, ParsingException {
-        ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "ICCS-example.yml"));
-        Assert.assertEquals(0, parsingResult.getContext().getParsingErrors().size());
 
+        String tosca_file = "ICCS-example.yml";
+
+        // Parse the TOSCA input file
+        ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/", tosca_file));
         Map<String, String> metadata = getMetadata(parsingResult);
-        Assert.assertEquals(11, metadata.size());
-
-        List<Constraint> constraints = getConstraints(parsingResult);
-        Assert.assertEquals(15, constraints.size());
-
+        List<String> supported_clouds = getListOfCloudsFromMetadata(metadata);
         List<Relationship> relationships = getRelationships(parsingResult);
-        Assert.assertEquals(10, relationships.size());
+        List<Constraint> constraints = getConstraints(parsingResult);
+
+        // Header
+        System.out.println("FRAGMENT_NAME -> VM_TYPE");
+
+        // Looking for a VM type for each relationship found
+        for (Relationship relationship : relationships) {
+            // We don't need BtrPlace if the hosting type is fixed
+            if (relationship.getResourceConstraints().get("type").size() == 1) {
+                if (relationship.getResourceConstraints().get("type").get(0).equalsIgnoreCase("cloud")) {
+                    String host_name = relationship.getHost();
+                    String fragment_name = relationship.getFragment();
+                    // TODO: If multiple clouds are supported, get the best type for each cloud and select the lowest price
+                    String selected_type = findBestSuitableVMType(supported_clouds.get(0), null, relationship.getHostingConstraints());
+                    System.out.println(fragment_name + " -> " + selected_type);
+                } else if (relationship.getResourceConstraints().get("type").get(0).equalsIgnoreCase("edge")) {
+                    System.out.println("Edge devices are not yet supported (need to be defined)");
+                } else {
+                    System.out.println("Unknown device type: " + relationship.getResourceConstraints().get("type").get(0));
+                }
+            }
+            // TODO: Do the BtrPlace computation to select the best edge device or cloud
+            else {
+                System.out.println("BtrPlace needed for: " + relationship.getHost());
+                String selected_edge_device_or_cloud;
+            }
+        }
     }
 }
 
