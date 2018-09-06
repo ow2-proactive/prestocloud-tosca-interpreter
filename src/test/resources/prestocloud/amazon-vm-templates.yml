@@ -8,6 +8,7 @@
       capabilities:
         resource:
           properties:
+            name: m1.small
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -27,6 +28,7 @@
       capabilities:
         resource:
           properties:
+            name: m1.medium
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -46,6 +48,7 @@
       capabilities:
         resource:
           properties:
+            name: m1.large
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -65,6 +68,7 @@
       capabilities:
         resource:
           properties:
+            name: m1.xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -84,6 +88,7 @@
       capabilities:
         resource:
           properties:
+            name: c1.medium
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -103,6 +108,7 @@
       capabilities:
         resource:
           properties:
+            name: c1.xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -122,6 +128,7 @@
       capabilities:
         resource:
           properties:
+            name: cc2.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -141,6 +148,7 @@
       capabilities:
         resource:
           properties:
+            name: m2.xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -160,6 +168,7 @@
       capabilities:
         resource:
           properties:
+            name: m2.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -179,6 +188,7 @@
       capabilities:
         resource:
           properties:
+            name: m2.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -198,6 +208,7 @@
       capabilities:
         resource:
           properties:
+            name: hs1.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -217,6 +228,7 @@
       capabilities:
         resource:
           properties:
+            name: t1.micro
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -235,6 +247,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.nano
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -253,6 +266,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.micro
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -271,6 +285,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.small
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -289,6 +304,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.medium
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -307,6 +323,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.large
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -325,6 +342,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -343,6 +361,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -361,6 +380,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.large
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -379,6 +399,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -397,6 +418,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -415,6 +437,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -433,6 +456,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.12xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -451,6 +475,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.24xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -469,6 +494,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.large
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -487,6 +513,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -505,6 +532,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -523,6 +551,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -541,6 +570,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.10xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -559,6 +589,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.16xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -577,6 +608,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.large
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -595,6 +627,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -613,6 +646,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -631,6 +665,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -649,6 +684,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.9xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -667,6 +703,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.18xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -685,6 +722,7 @@
       capabilities:
         resource:
           properties:
+            name: c4.large
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -703,6 +741,7 @@
       capabilities:
         resource:
           properties:
+            name: c4.xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -721,6 +760,7 @@
       capabilities:
         resource:
           properties:
+            name: c4.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -739,6 +779,7 @@
       capabilities:
         resource:
           properties:
+            name: c4.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -757,6 +798,7 @@
       capabilities:
         resource:
           properties:
+            name: c4.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -775,6 +817,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.large
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -793,6 +836,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -811,6 +855,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -829,6 +874,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -847,6 +893,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -865,6 +912,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.16xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -883,6 +931,7 @@
       capabilities:
         resource:
           properties:
+            name: p3.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -901,6 +950,7 @@
       capabilities:
         resource:
           properties:
+            name: p3.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -919,6 +969,7 @@
       capabilities:
         resource:
           properties:
+            name: p3.16xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -937,6 +988,7 @@
       capabilities:
         resource:
           properties:
+            name: p2.xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -955,6 +1007,7 @@
       capabilities:
         resource:
           properties:
+            name: p2.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -973,6 +1026,7 @@
       capabilities:
         resource:
           properties:
+            name: p2.16xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -991,6 +1045,7 @@
       capabilities:
         resource:
           properties:
+            name: g3.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1009,6 +1064,7 @@
       capabilities:
         resource:
           properties:
+            name: g3.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1027,6 +1083,7 @@
       capabilities:
         resource:
           properties:
+            name: g3.16xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1045,6 +1102,7 @@
       capabilities:
         resource:
           properties:
+            name: h1.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1064,6 +1122,7 @@
       capabilities:
         resource:
           properties:
+            name: h1.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1083,6 +1142,7 @@
       capabilities:
         resource:
           properties:
+            name: h1.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1102,6 +1162,7 @@
       capabilities:
         resource:
           properties:
+            name: h1.16xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1121,6 +1182,7 @@
       capabilities:
         resource:
           properties:
+            name: d2.xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1140,6 +1202,7 @@
       capabilities:
         resource:
           properties:
+            name: d2.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1159,6 +1222,7 @@
       capabilities:
         resource:
           properties:
+            name: d2.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1178,6 +1242,7 @@
       capabilities:
         resource:
           properties:
+            name: d2.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1197,6 +1262,7 @@
       capabilities:
         resource:
           properties:
+            name: m3.medium
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1216,6 +1282,7 @@
       capabilities:
         resource:
           properties:
+            name: m3.large
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1235,6 +1302,7 @@
       capabilities:
         resource:
           properties:
+            name: m3.xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1254,6 +1322,7 @@
       capabilities:
         resource:
           properties:
+            name: m3.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1273,6 +1342,7 @@
       capabilities:
         resource:
           properties:
+            name: c3.large
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1292,6 +1362,7 @@
       capabilities:
         resource:
           properties:
+            name: c3.xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1311,6 +1382,7 @@
       capabilities:
         resource:
           properties:
+            name: c3.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1330,6 +1402,7 @@
       capabilities:
         resource:
           properties:
+            name: c3.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1349,6 +1422,7 @@
       capabilities:
         resource:
           properties:
+            name: c3.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1368,6 +1442,7 @@
       capabilities:
         resource:
           properties:
+            name: g2.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1387,6 +1462,7 @@
       capabilities:
         resource:
           properties:
+            name: g2.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1406,6 +1482,7 @@
       capabilities:
         resource:
           properties:
+            name: cr1.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1425,6 +1502,7 @@
       capabilities:
         resource:
           properties:
+            name: x1.16xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1444,6 +1522,7 @@
       capabilities:
         resource:
           properties:
+            name: x1.32xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1463,6 +1542,7 @@
       capabilities:
         resource:
           properties:
+            name: x1e.xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1482,6 +1562,7 @@
       capabilities:
         resource:
           properties:
+            name: x1e.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1501,6 +1582,7 @@
       capabilities:
         resource:
           properties:
+            name: x1e.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1520,6 +1602,7 @@
       capabilities:
         resource:
           properties:
+            name: x1e.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1539,6 +1622,7 @@
       capabilities:
         resource:
           properties:
+            name: x1e.16xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1558,6 +1642,7 @@
       capabilities:
         resource:
           properties:
+            name: x1e.32xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1577,6 +1662,7 @@
       capabilities:
         resource:
           properties:
+            name: r3.large
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1596,6 +1682,7 @@
       capabilities:
         resource:
           properties:
+            name: r3.xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1615,6 +1702,7 @@
       capabilities:
         resource:
           properties:
+            name: r3.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1634,6 +1722,7 @@
       capabilities:
         resource:
           properties:
+            name: r3.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1653,6 +1742,7 @@
       capabilities:
         resource:
           properties:
+            name: r3.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1672,6 +1762,7 @@
       capabilities:
         resource:
           properties:
+            name: i2.xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1691,6 +1782,7 @@
       capabilities:
         resource:
           properties:
+            name: i2.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1710,6 +1802,7 @@
       capabilities:
         resource:
           properties:
+            name: i2.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1729,6 +1822,7 @@
       capabilities:
         resource:
           properties:
+            name: i2.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1748,6 +1842,7 @@
       capabilities:
         resource:
           properties:
+            name: f1.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1767,6 +1862,7 @@
       capabilities:
         resource:
           properties:
+            name: f1.16xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1786,6 +1882,7 @@
       capabilities:
         resource:
           properties:
+            name: i3.large
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1805,6 +1902,7 @@
       capabilities:
         resource:
           properties:
+            name: i3.xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1824,6 +1922,7 @@
       capabilities:
         resource:
           properties:
+            name: i3.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1843,6 +1942,7 @@
       capabilities:
         resource:
           properties:
+            name: i3.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1862,6 +1962,7 @@
       capabilities:
         resource:
           properties:
+            name: i3.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-1
         host:
@@ -1881,6 +1982,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.nano
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -1899,6 +2001,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.micro
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -1917,6 +2020,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.small
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -1935,6 +2039,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.medium
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -1953,6 +2058,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.large
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -1971,6 +2077,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -1989,6 +2096,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2007,6 +2115,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.large
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2025,6 +2134,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2043,6 +2153,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2061,6 +2172,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2079,6 +2191,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.12xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2097,6 +2210,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.24xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2115,6 +2229,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.large
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2133,6 +2248,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2151,6 +2267,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2169,6 +2286,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2187,6 +2305,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.10xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2205,6 +2324,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.16xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2223,6 +2343,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.large
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2241,6 +2362,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2259,6 +2381,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2277,6 +2400,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2295,6 +2419,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.9xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2313,6 +2438,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.18xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2331,6 +2457,7 @@
       capabilities:
         resource:
           properties:
+            name: c4.large
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2349,6 +2476,7 @@
       capabilities:
         resource:
           properties:
+            name: c4.xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2367,6 +2495,7 @@
       capabilities:
         resource:
           properties:
+            name: c4.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2385,6 +2514,7 @@
       capabilities:
         resource:
           properties:
+            name: c4.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2403,6 +2533,7 @@
       capabilities:
         resource:
           properties:
+            name: c4.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2421,6 +2552,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.large
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2439,6 +2571,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2457,6 +2590,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2475,6 +2609,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2493,6 +2628,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2511,6 +2647,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.16xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2529,6 +2666,7 @@
       capabilities:
         resource:
           properties:
+            name: p3.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2547,6 +2685,7 @@
       capabilities:
         resource:
           properties:
+            name: p3.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2565,6 +2704,7 @@
       capabilities:
         resource:
           properties:
+            name: p3.16xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2583,6 +2723,7 @@
       capabilities:
         resource:
           properties:
+            name: p2.xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2601,6 +2742,7 @@
       capabilities:
         resource:
           properties:
+            name: p2.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2619,6 +2761,7 @@
       capabilities:
         resource:
           properties:
+            name: p2.16xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2637,6 +2780,7 @@
       capabilities:
         resource:
           properties:
+            name: g3.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2655,6 +2799,7 @@
       capabilities:
         resource:
           properties:
+            name: g3.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2673,6 +2818,7 @@
       capabilities:
         resource:
           properties:
+            name: g3.16xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2691,6 +2837,7 @@
       capabilities:
         resource:
           properties:
+            name: h1.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2710,6 +2857,7 @@
       capabilities:
         resource:
           properties:
+            name: h1.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2729,6 +2877,7 @@
       capabilities:
         resource:
           properties:
+            name: h1.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2748,6 +2897,7 @@
       capabilities:
         resource:
           properties:
+            name: h1.16xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2767,6 +2917,7 @@
       capabilities:
         resource:
           properties:
+            name: d2.xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2786,6 +2937,7 @@
       capabilities:
         resource:
           properties:
+            name: d2.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2805,6 +2957,7 @@
       capabilities:
         resource:
           properties:
+            name: d2.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2824,6 +2977,7 @@
       capabilities:
         resource:
           properties:
+            name: d2.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2843,6 +2997,7 @@
       capabilities:
         resource:
           properties:
+            name: x1.16xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2862,6 +3017,7 @@
       capabilities:
         resource:
           properties:
+            name: x1.32xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2881,6 +3037,7 @@
       capabilities:
         resource:
           properties:
+            name: r3.large
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2900,6 +3057,7 @@
       capabilities:
         resource:
           properties:
+            name: r3.xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2919,6 +3077,7 @@
       capabilities:
         resource:
           properties:
+            name: r3.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2938,6 +3097,7 @@
       capabilities:
         resource:
           properties:
+            name: r3.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2957,6 +3117,7 @@
       capabilities:
         resource:
           properties:
+            name: r3.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2976,6 +3137,7 @@
       capabilities:
         resource:
           properties:
+            name: i2.xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -2995,6 +3157,7 @@
       capabilities:
         resource:
           properties:
+            name: i2.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -3014,6 +3177,7 @@
       capabilities:
         resource:
           properties:
+            name: i2.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -3033,6 +3197,7 @@
       capabilities:
         resource:
           properties:
+            name: i2.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -3052,6 +3217,7 @@
       capabilities:
         resource:
           properties:
+            name: i3.large
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -3071,6 +3237,7 @@
       capabilities:
         resource:
           properties:
+            name: i3.xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -3090,6 +3257,7 @@
       capabilities:
         resource:
           properties:
+            name: i3.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -3109,6 +3277,7 @@
       capabilities:
         resource:
           properties:
+            name: i3.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -3128,6 +3297,7 @@
       capabilities:
         resource:
           properties:
+            name: i3.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-east-2
         host:
@@ -3147,6 +3317,7 @@
       capabilities:
         resource:
           properties:
+            name: m1.small
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3166,6 +3337,7 @@
       capabilities:
         resource:
           properties:
+            name: m1.medium
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3185,6 +3357,7 @@
       capabilities:
         resource:
           properties:
+            name: m1.large
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3204,6 +3377,7 @@
       capabilities:
         resource:
           properties:
+            name: m1.xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3223,6 +3397,7 @@
       capabilities:
         resource:
           properties:
+            name: c1.medium
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3242,6 +3417,7 @@
       capabilities:
         resource:
           properties:
+            name: c1.xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3261,6 +3437,7 @@
       capabilities:
         resource:
           properties:
+            name: m2.xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3280,6 +3457,7 @@
       capabilities:
         resource:
           properties:
+            name: m2.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3299,6 +3477,7 @@
       capabilities:
         resource:
           properties:
+            name: m2.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3318,6 +3497,7 @@
       capabilities:
         resource:
           properties:
+            name: t1.micro
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3336,6 +3516,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.nano
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3354,6 +3535,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.micro
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3372,6 +3554,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.small
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3390,6 +3573,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.medium
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3408,6 +3592,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.large
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3426,6 +3611,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3444,6 +3630,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3462,6 +3649,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.large
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3480,6 +3668,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3498,6 +3687,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3516,6 +3706,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3534,6 +3725,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.12xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3552,6 +3744,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.24xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3570,6 +3763,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.large
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3588,6 +3782,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3606,6 +3801,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3624,6 +3820,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3642,6 +3839,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.10xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3660,6 +3858,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.16xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3678,6 +3877,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.large
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3696,6 +3896,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3714,6 +3915,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3732,6 +3934,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3750,6 +3953,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.9xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3768,6 +3972,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.18xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3786,6 +3991,7 @@
       capabilities:
         resource:
           properties:
+            name: c4.large
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3804,6 +4010,7 @@
       capabilities:
         resource:
           properties:
+            name: c4.xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3822,6 +4029,7 @@
       capabilities:
         resource:
           properties:
+            name: c4.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3840,6 +4048,7 @@
       capabilities:
         resource:
           properties:
+            name: c4.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3858,6 +4067,7 @@
       capabilities:
         resource:
           properties:
+            name: c4.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3876,6 +4086,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.large
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3894,6 +4105,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3912,6 +4124,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3930,6 +4143,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3948,6 +4162,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3966,6 +4181,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.16xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -3984,6 +4200,7 @@
       capabilities:
         resource:
           properties:
+            name: g3.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -4002,6 +4219,7 @@
       capabilities:
         resource:
           properties:
+            name: g3.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -4020,6 +4238,7 @@
       capabilities:
         resource:
           properties:
+            name: g3.16xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -4038,6 +4257,7 @@
       capabilities:
         resource:
           properties:
+            name: d2.xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -4057,6 +4277,7 @@
       capabilities:
         resource:
           properties:
+            name: d2.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -4076,6 +4297,7 @@
       capabilities:
         resource:
           properties:
+            name: d2.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -4095,6 +4317,7 @@
       capabilities:
         resource:
           properties:
+            name: d2.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -4114,6 +4337,7 @@
       capabilities:
         resource:
           properties:
+            name: m3.medium
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -4133,6 +4357,7 @@
       capabilities:
         resource:
           properties:
+            name: m3.large
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -4152,6 +4377,7 @@
       capabilities:
         resource:
           properties:
+            name: m3.xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -4171,6 +4397,7 @@
       capabilities:
         resource:
           properties:
+            name: m3.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -4190,6 +4417,7 @@
       capabilities:
         resource:
           properties:
+            name: c3.large
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -4209,6 +4437,7 @@
       capabilities:
         resource:
           properties:
+            name: c3.xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -4228,6 +4457,7 @@
       capabilities:
         resource:
           properties:
+            name: c3.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -4247,6 +4477,7 @@
       capabilities:
         resource:
           properties:
+            name: c3.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -4266,6 +4497,7 @@
       capabilities:
         resource:
           properties:
+            name: c3.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -4285,6 +4517,7 @@
       capabilities:
         resource:
           properties:
+            name: g2.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -4304,6 +4537,7 @@
       capabilities:
         resource:
           properties:
+            name: g2.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -4323,6 +4557,7 @@
       capabilities:
         resource:
           properties:
+            name: r3.large
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -4342,6 +4577,7 @@
       capabilities:
         resource:
           properties:
+            name: r3.xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -4361,6 +4597,7 @@
       capabilities:
         resource:
           properties:
+            name: r3.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -4380,6 +4617,7 @@
       capabilities:
         resource:
           properties:
+            name: r3.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -4399,6 +4637,7 @@
       capabilities:
         resource:
           properties:
+            name: r3.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -4418,6 +4657,7 @@
       capabilities:
         resource:
           properties:
+            name: i2.xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -4437,6 +4677,7 @@
       capabilities:
         resource:
           properties:
+            name: i2.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -4456,6 +4697,7 @@
       capabilities:
         resource:
           properties:
+            name: i2.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -4475,6 +4717,7 @@
       capabilities:
         resource:
           properties:
+            name: i2.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -4494,6 +4737,7 @@
       capabilities:
         resource:
           properties:
+            name: i3.large
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -4513,6 +4757,7 @@
       capabilities:
         resource:
           properties:
+            name: i3.xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -4532,6 +4777,7 @@
       capabilities:
         resource:
           properties:
+            name: i3.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -4551,6 +4797,7 @@
       capabilities:
         resource:
           properties:
+            name: i3.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -4570,6 +4817,7 @@
       capabilities:
         resource:
           properties:
+            name: i3.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-1
         host:
@@ -4589,6 +4837,7 @@
       capabilities:
         resource:
           properties:
+            name: m1.small
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -4608,6 +4857,7 @@
       capabilities:
         resource:
           properties:
+            name: m1.medium
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -4627,6 +4877,7 @@
       capabilities:
         resource:
           properties:
+            name: m1.large
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -4646,6 +4897,7 @@
       capabilities:
         resource:
           properties:
+            name: m1.xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -4665,6 +4917,7 @@
       capabilities:
         resource:
           properties:
+            name: c1.medium
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -4684,6 +4937,7 @@
       capabilities:
         resource:
           properties:
+            name: c1.xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -4703,6 +4957,7 @@
       capabilities:
         resource:
           properties:
+            name: cc2.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -4722,6 +4977,7 @@
       capabilities:
         resource:
           properties:
+            name: m2.xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -4741,6 +4997,7 @@
       capabilities:
         resource:
           properties:
+            name: m2.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -4760,6 +5017,7 @@
       capabilities:
         resource:
           properties:
+            name: m2.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -4779,6 +5037,7 @@
       capabilities:
         resource:
           properties:
+            name: hs1.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -4798,6 +5057,7 @@
       capabilities:
         resource:
           properties:
+            name: t1.micro
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -4816,6 +5076,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.nano
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -4834,6 +5095,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.micro
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -4852,6 +5114,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.small
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -4870,6 +5133,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.medium
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -4888,6 +5152,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.large
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -4906,6 +5171,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -4924,6 +5190,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -4942,6 +5209,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.large
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -4960,6 +5228,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -4978,6 +5247,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -4996,6 +5266,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5014,6 +5285,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.12xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5032,6 +5304,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.24xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5050,6 +5323,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.large
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5068,6 +5342,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5086,6 +5361,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5104,6 +5380,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5122,6 +5399,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.10xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5140,6 +5418,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.16xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5158,6 +5437,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.large
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5176,6 +5456,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5194,6 +5475,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5212,6 +5494,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5230,6 +5513,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.9xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5248,6 +5532,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.18xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5266,6 +5551,7 @@
       capabilities:
         resource:
           properties:
+            name: c4.large
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5284,6 +5570,7 @@
       capabilities:
         resource:
           properties:
+            name: c4.xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5302,6 +5589,7 @@
       capabilities:
         resource:
           properties:
+            name: c4.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5320,6 +5608,7 @@
       capabilities:
         resource:
           properties:
+            name: c4.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5338,6 +5627,7 @@
       capabilities:
         resource:
           properties:
+            name: c4.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5356,6 +5646,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.large
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5374,6 +5665,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5392,6 +5684,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5410,6 +5703,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5428,6 +5722,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5446,6 +5741,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.16xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5464,6 +5760,7 @@
       capabilities:
         resource:
           properties:
+            name: p3.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5482,6 +5779,7 @@
       capabilities:
         resource:
           properties:
+            name: p3.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5500,6 +5798,7 @@
       capabilities:
         resource:
           properties:
+            name: p3.16xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5518,6 +5817,7 @@
       capabilities:
         resource:
           properties:
+            name: p2.xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5536,6 +5836,7 @@
       capabilities:
         resource:
           properties:
+            name: p2.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5554,6 +5855,7 @@
       capabilities:
         resource:
           properties:
+            name: p2.16xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5572,6 +5874,7 @@
       capabilities:
         resource:
           properties:
+            name: g3.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5590,6 +5893,7 @@
       capabilities:
         resource:
           properties:
+            name: g3.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5608,6 +5912,7 @@
       capabilities:
         resource:
           properties:
+            name: g3.16xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5626,6 +5931,7 @@
       capabilities:
         resource:
           properties:
+            name: h1.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5645,6 +5951,7 @@
       capabilities:
         resource:
           properties:
+            name: h1.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5664,6 +5971,7 @@
       capabilities:
         resource:
           properties:
+            name: h1.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5683,6 +5991,7 @@
       capabilities:
         resource:
           properties:
+            name: h1.16xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5702,6 +6011,7 @@
       capabilities:
         resource:
           properties:
+            name: d2.xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5721,6 +6031,7 @@
       capabilities:
         resource:
           properties:
+            name: d2.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5740,6 +6051,7 @@
       capabilities:
         resource:
           properties:
+            name: d2.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5759,6 +6071,7 @@
       capabilities:
         resource:
           properties:
+            name: d2.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5778,6 +6091,7 @@
       capabilities:
         resource:
           properties:
+            name: m3.medium
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5797,6 +6111,7 @@
       capabilities:
         resource:
           properties:
+            name: m3.large
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5816,6 +6131,7 @@
       capabilities:
         resource:
           properties:
+            name: m3.xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5835,6 +6151,7 @@
       capabilities:
         resource:
           properties:
+            name: m3.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5854,6 +6171,7 @@
       capabilities:
         resource:
           properties:
+            name: c3.large
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5873,6 +6191,7 @@
       capabilities:
         resource:
           properties:
+            name: c3.xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5892,6 +6211,7 @@
       capabilities:
         resource:
           properties:
+            name: c3.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5911,6 +6231,7 @@
       capabilities:
         resource:
           properties:
+            name: c3.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5930,6 +6251,7 @@
       capabilities:
         resource:
           properties:
+            name: c3.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5949,6 +6271,7 @@
       capabilities:
         resource:
           properties:
+            name: g2.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5968,6 +6291,7 @@
       capabilities:
         resource:
           properties:
+            name: g2.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -5987,6 +6311,7 @@
       capabilities:
         resource:
           properties:
+            name: cr1.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -6006,6 +6331,7 @@
       capabilities:
         resource:
           properties:
+            name: x1.16xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -6025,6 +6351,7 @@
       capabilities:
         resource:
           properties:
+            name: x1.32xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -6044,6 +6371,7 @@
       capabilities:
         resource:
           properties:
+            name: x1e.xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -6063,6 +6391,7 @@
       capabilities:
         resource:
           properties:
+            name: x1e.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -6082,6 +6411,7 @@
       capabilities:
         resource:
           properties:
+            name: x1e.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -6101,6 +6431,7 @@
       capabilities:
         resource:
           properties:
+            name: x1e.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -6120,6 +6451,7 @@
       capabilities:
         resource:
           properties:
+            name: x1e.16xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -6139,6 +6471,7 @@
       capabilities:
         resource:
           properties:
+            name: x1e.32xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -6158,6 +6491,7 @@
       capabilities:
         resource:
           properties:
+            name: r3.large
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -6177,6 +6511,7 @@
       capabilities:
         resource:
           properties:
+            name: r3.xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -6196,6 +6531,7 @@
       capabilities:
         resource:
           properties:
+            name: r3.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -6215,6 +6551,7 @@
       capabilities:
         resource:
           properties:
+            name: r3.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -6234,6 +6571,7 @@
       capabilities:
         resource:
           properties:
+            name: r3.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -6253,6 +6591,7 @@
       capabilities:
         resource:
           properties:
+            name: i2.xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -6272,6 +6611,7 @@
       capabilities:
         resource:
           properties:
+            name: i2.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -6291,6 +6631,7 @@
       capabilities:
         resource:
           properties:
+            name: i2.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -6310,6 +6651,7 @@
       capabilities:
         resource:
           properties:
+            name: i2.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -6329,6 +6671,7 @@
       capabilities:
         resource:
           properties:
+            name: f1.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -6348,6 +6691,7 @@
       capabilities:
         resource:
           properties:
+            name: f1.16xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -6367,6 +6711,7 @@
       capabilities:
         resource:
           properties:
+            name: i3.large
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -6386,6 +6731,7 @@
       capabilities:
         resource:
           properties:
+            name: i3.xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -6405,6 +6751,7 @@
       capabilities:
         resource:
           properties:
+            name: i3.2xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -6424,6 +6771,7 @@
       capabilities:
         resource:
           properties:
+            name: i3.4xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -6443,6 +6791,7 @@
       capabilities:
         resource:
           properties:
+            name: i3.8xlarge
             type: cloud
             cloud: *amazon_cloud_us-west-2
         host:
@@ -6462,6 +6811,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.nano
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -6480,6 +6830,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.micro
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -6498,6 +6849,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.small
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -6516,6 +6868,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.medium
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -6534,6 +6887,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.large
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -6552,6 +6906,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.xlarge
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -6570,6 +6925,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.2xlarge
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -6588,6 +6944,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.large
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -6606,6 +6963,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.xlarge
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -6624,6 +6982,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.2xlarge
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -6642,6 +7001,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.4xlarge
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -6660,6 +7020,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.12xlarge
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -6678,6 +7039,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.24xlarge
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -6696,6 +7058,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.large
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -6714,6 +7077,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.xlarge
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -6732,6 +7096,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.2xlarge
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -6750,6 +7115,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.4xlarge
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -6768,6 +7134,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.10xlarge
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -6786,6 +7153,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.16xlarge
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -6804,6 +7172,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.large
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -6822,6 +7191,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.xlarge
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -6840,6 +7210,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.2xlarge
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -6858,6 +7229,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.4xlarge
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -6876,6 +7248,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.9xlarge
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -6894,6 +7267,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.18xlarge
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -6912,6 +7286,7 @@
       capabilities:
         resource:
           properties:
+            name: c4.large
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -6930,6 +7305,7 @@
       capabilities:
         resource:
           properties:
+            name: c4.xlarge
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -6948,6 +7324,7 @@
       capabilities:
         resource:
           properties:
+            name: c4.2xlarge
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -6966,6 +7343,7 @@
       capabilities:
         resource:
           properties:
+            name: c4.4xlarge
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -6984,6 +7362,7 @@
       capabilities:
         resource:
           properties:
+            name: c4.8xlarge
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -7002,6 +7381,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.large
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -7020,6 +7400,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.xlarge
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -7038,6 +7419,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.2xlarge
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -7056,6 +7438,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.4xlarge
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -7074,6 +7457,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.8xlarge
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -7092,6 +7476,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.16xlarge
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -7110,6 +7495,7 @@
       capabilities:
         resource:
           properties:
+            name: d2.xlarge
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -7129,6 +7515,7 @@
       capabilities:
         resource:
           properties:
+            name: d2.2xlarge
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -7148,6 +7535,7 @@
       capabilities:
         resource:
           properties:
+            name: d2.4xlarge
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -7167,6 +7555,7 @@
       capabilities:
         resource:
           properties:
+            name: d2.8xlarge
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -7186,6 +7575,7 @@
       capabilities:
         resource:
           properties:
+            name: x1.16xlarge
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -7205,6 +7595,7 @@
       capabilities:
         resource:
           properties:
+            name: x1.32xlarge
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -7224,6 +7615,7 @@
       capabilities:
         resource:
           properties:
+            name: i3.large
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -7243,6 +7635,7 @@
       capabilities:
         resource:
           properties:
+            name: i3.xlarge
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -7262,6 +7655,7 @@
       capabilities:
         resource:
           properties:
+            name: i3.2xlarge
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -7281,6 +7675,7 @@
       capabilities:
         resource:
           properties:
+            name: i3.4xlarge
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -7300,6 +7695,7 @@
       capabilities:
         resource:
           properties:
+            name: i3.8xlarge
             type: cloud
             cloud: *amazon_cloud_ca-central-1
         host:
@@ -7319,6 +7715,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.nano
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -7337,6 +7734,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.micro
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -7355,6 +7753,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.small
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -7373,6 +7772,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.medium
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -7391,6 +7791,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.large
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -7409,6 +7810,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -7427,6 +7829,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.2xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -7445,6 +7848,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.large
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -7463,6 +7867,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -7481,6 +7886,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.2xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -7499,6 +7905,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.4xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -7517,6 +7924,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.12xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -7535,6 +7943,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.24xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -7553,6 +7962,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.large
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -7571,6 +7981,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -7589,6 +8000,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.2xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -7607,6 +8019,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.4xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -7625,6 +8038,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.10xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -7643,6 +8057,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.16xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -7661,6 +8076,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.large
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -7679,6 +8095,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -7697,6 +8114,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.2xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -7715,6 +8133,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.4xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -7733,6 +8152,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.9xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -7751,6 +8171,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.18xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -7769,6 +8190,7 @@
       capabilities:
         resource:
           properties:
+            name: c4.large
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -7787,6 +8209,7 @@
       capabilities:
         resource:
           properties:
+            name: c4.xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -7805,6 +8228,7 @@
       capabilities:
         resource:
           properties:
+            name: c4.2xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -7823,6 +8247,7 @@
       capabilities:
         resource:
           properties:
+            name: c4.4xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -7841,6 +8266,7 @@
       capabilities:
         resource:
           properties:
+            name: c4.8xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -7859,6 +8285,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.large
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -7877,6 +8304,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -7895,6 +8323,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.2xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -7913,6 +8342,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.4xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -7931,6 +8361,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.8xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -7949,6 +8380,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.16xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -7967,6 +8399,7 @@
       capabilities:
         resource:
           properties:
+            name: p2.xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -7985,6 +8418,7 @@
       capabilities:
         resource:
           properties:
+            name: p2.8xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -8003,6 +8437,7 @@
       capabilities:
         resource:
           properties:
+            name: p2.16xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -8021,6 +8456,7 @@
       capabilities:
         resource:
           properties:
+            name: g3.4xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -8039,6 +8475,7 @@
       capabilities:
         resource:
           properties:
+            name: g3.8xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -8057,6 +8494,7 @@
       capabilities:
         resource:
           properties:
+            name: g3.16xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -8075,6 +8513,7 @@
       capabilities:
         resource:
           properties:
+            name: d2.xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -8094,6 +8533,7 @@
       capabilities:
         resource:
           properties:
+            name: d2.2xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -8113,6 +8553,7 @@
       capabilities:
         resource:
           properties:
+            name: d2.4xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -8132,6 +8573,7 @@
       capabilities:
         resource:
           properties:
+            name: d2.8xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -8151,6 +8593,7 @@
       capabilities:
         resource:
           properties:
+            name: m3.medium
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -8170,6 +8613,7 @@
       capabilities:
         resource:
           properties:
+            name: m3.large
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -8189,6 +8633,7 @@
       capabilities:
         resource:
           properties:
+            name: m3.xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -8208,6 +8653,7 @@
       capabilities:
         resource:
           properties:
+            name: m3.2xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -8227,6 +8673,7 @@
       capabilities:
         resource:
           properties:
+            name: c3.large
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -8246,6 +8693,7 @@
       capabilities:
         resource:
           properties:
+            name: c3.xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -8265,6 +8713,7 @@
       capabilities:
         resource:
           properties:
+            name: c3.2xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -8284,6 +8733,7 @@
       capabilities:
         resource:
           properties:
+            name: c3.4xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -8303,6 +8753,7 @@
       capabilities:
         resource:
           properties:
+            name: c3.8xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -8322,6 +8773,7 @@
       capabilities:
         resource:
           properties:
+            name: g2.2xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -8341,6 +8793,7 @@
       capabilities:
         resource:
           properties:
+            name: g2.8xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -8360,6 +8813,7 @@
       capabilities:
         resource:
           properties:
+            name: x1.16xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -8379,6 +8833,7 @@
       capabilities:
         resource:
           properties:
+            name: x1.32xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -8398,6 +8853,7 @@
       capabilities:
         resource:
           properties:
+            name: r3.large
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -8417,6 +8873,7 @@
       capabilities:
         resource:
           properties:
+            name: r3.xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -8436,6 +8893,7 @@
       capabilities:
         resource:
           properties:
+            name: r3.2xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -8455,6 +8913,7 @@
       capabilities:
         resource:
           properties:
+            name: r3.4xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -8474,6 +8933,7 @@
       capabilities:
         resource:
           properties:
+            name: r3.8xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -8493,6 +8953,7 @@
       capabilities:
         resource:
           properties:
+            name: i2.xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -8512,6 +8973,7 @@
       capabilities:
         resource:
           properties:
+            name: i2.2xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -8531,6 +8993,7 @@
       capabilities:
         resource:
           properties:
+            name: i2.4xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -8550,6 +9013,7 @@
       capabilities:
         resource:
           properties:
+            name: i2.8xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -8569,6 +9033,7 @@
       capabilities:
         resource:
           properties:
+            name: i3.large
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -8588,6 +9053,7 @@
       capabilities:
         resource:
           properties:
+            name: i3.xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -8607,6 +9073,7 @@
       capabilities:
         resource:
           properties:
+            name: i3.2xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -8626,6 +9093,7 @@
       capabilities:
         resource:
           properties:
+            name: i3.4xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -8645,6 +9113,7 @@
       capabilities:
         resource:
           properties:
+            name: i3.8xlarge
             type: cloud
             cloud: *amazon_cloud_eu-central-1
         host:
@@ -8664,6 +9133,7 @@
       capabilities:
         resource:
           properties:
+            name: m1.small
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -8683,6 +9153,7 @@
       capabilities:
         resource:
           properties:
+            name: m1.medium
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -8702,6 +9173,7 @@
       capabilities:
         resource:
           properties:
+            name: m1.large
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -8721,6 +9193,7 @@
       capabilities:
         resource:
           properties:
+            name: m1.xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -8740,6 +9213,7 @@
       capabilities:
         resource:
           properties:
+            name: c1.medium
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -8759,6 +9233,7 @@
       capabilities:
         resource:
           properties:
+            name: c1.xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -8778,6 +9253,7 @@
       capabilities:
         resource:
           properties:
+            name: cc2.8xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -8797,6 +9273,7 @@
       capabilities:
         resource:
           properties:
+            name: m2.xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -8816,6 +9293,7 @@
       capabilities:
         resource:
           properties:
+            name: m2.2xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -8835,6 +9313,7 @@
       capabilities:
         resource:
           properties:
+            name: m2.4xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -8854,6 +9333,7 @@
       capabilities:
         resource:
           properties:
+            name: hs1.8xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -8873,6 +9353,7 @@
       capabilities:
         resource:
           properties:
+            name: t1.micro
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -8891,6 +9372,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.nano
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -8909,6 +9391,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.micro
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -8927,6 +9410,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.small
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -8945,6 +9429,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.medium
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -8963,6 +9448,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.large
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -8981,6 +9467,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -8999,6 +9486,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.2xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9017,6 +9505,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.large
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9035,6 +9524,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9053,6 +9543,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.2xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9071,6 +9562,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.4xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9089,6 +9581,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.12xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9107,6 +9600,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.24xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9125,6 +9619,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.large
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9143,6 +9638,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9161,6 +9657,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.2xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9179,6 +9676,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.4xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9197,6 +9695,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.10xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9215,6 +9714,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.16xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9233,6 +9733,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.large
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9251,6 +9752,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9269,6 +9771,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.2xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9287,6 +9790,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.4xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9305,6 +9809,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.9xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9323,6 +9828,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.18xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9341,6 +9847,7 @@
       capabilities:
         resource:
           properties:
+            name: c4.large
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9359,6 +9866,7 @@
       capabilities:
         resource:
           properties:
+            name: c4.xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9377,6 +9885,7 @@
       capabilities:
         resource:
           properties:
+            name: c4.2xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9395,6 +9904,7 @@
       capabilities:
         resource:
           properties:
+            name: c4.4xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9413,6 +9923,7 @@
       capabilities:
         resource:
           properties:
+            name: c4.8xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9431,6 +9942,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.large
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9449,6 +9961,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9467,6 +9980,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.2xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9485,6 +9999,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.4xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9503,6 +10018,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.8xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9521,6 +10037,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.16xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9539,6 +10056,7 @@
       capabilities:
         resource:
           properties:
+            name: p3.2xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9557,6 +10075,7 @@
       capabilities:
         resource:
           properties:
+            name: p3.8xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9575,6 +10094,7 @@
       capabilities:
         resource:
           properties:
+            name: p3.16xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9593,6 +10113,7 @@
       capabilities:
         resource:
           properties:
+            name: p2.xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9611,6 +10132,7 @@
       capabilities:
         resource:
           properties:
+            name: p2.8xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9629,6 +10151,7 @@
       capabilities:
         resource:
           properties:
+            name: p2.16xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9647,6 +10170,7 @@
       capabilities:
         resource:
           properties:
+            name: g3.4xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9665,6 +10189,7 @@
       capabilities:
         resource:
           properties:
+            name: g3.8xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9683,6 +10208,7 @@
       capabilities:
         resource:
           properties:
+            name: g3.16xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9701,6 +10227,7 @@
       capabilities:
         resource:
           properties:
+            name: h1.2xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9720,6 +10247,7 @@
       capabilities:
         resource:
           properties:
+            name: h1.4xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9739,6 +10267,7 @@
       capabilities:
         resource:
           properties:
+            name: h1.8xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9758,6 +10287,7 @@
       capabilities:
         resource:
           properties:
+            name: h1.16xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9777,6 +10307,7 @@
       capabilities:
         resource:
           properties:
+            name: d2.xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9796,6 +10327,7 @@
       capabilities:
         resource:
           properties:
+            name: d2.2xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9815,6 +10347,7 @@
       capabilities:
         resource:
           properties:
+            name: d2.4xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9834,6 +10367,7 @@
       capabilities:
         resource:
           properties:
+            name: d2.8xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9853,6 +10387,7 @@
       capabilities:
         resource:
           properties:
+            name: m3.medium
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9872,6 +10407,7 @@
       capabilities:
         resource:
           properties:
+            name: m3.large
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9891,6 +10427,7 @@
       capabilities:
         resource:
           properties:
+            name: m3.xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9910,6 +10447,7 @@
       capabilities:
         resource:
           properties:
+            name: m3.2xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9929,6 +10467,7 @@
       capabilities:
         resource:
           properties:
+            name: c3.large
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9948,6 +10487,7 @@
       capabilities:
         resource:
           properties:
+            name: c3.xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9967,6 +10507,7 @@
       capabilities:
         resource:
           properties:
+            name: c3.2xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -9986,6 +10527,7 @@
       capabilities:
         resource:
           properties:
+            name: c3.4xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -10005,6 +10547,7 @@
       capabilities:
         resource:
           properties:
+            name: c3.8xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -10024,6 +10567,7 @@
       capabilities:
         resource:
           properties:
+            name: g2.2xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -10043,6 +10587,7 @@
       capabilities:
         resource:
           properties:
+            name: g2.8xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -10062,6 +10607,7 @@
       capabilities:
         resource:
           properties:
+            name: cr1.8xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -10081,6 +10627,7 @@
       capabilities:
         resource:
           properties:
+            name: x1.16xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -10100,6 +10647,7 @@
       capabilities:
         resource:
           properties:
+            name: x1.32xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -10119,6 +10667,7 @@
       capabilities:
         resource:
           properties:
+            name: x1e.xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -10138,6 +10687,7 @@
       capabilities:
         resource:
           properties:
+            name: x1e.2xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -10157,6 +10707,7 @@
       capabilities:
         resource:
           properties:
+            name: x1e.4xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -10176,6 +10727,7 @@
       capabilities:
         resource:
           properties:
+            name: x1e.8xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -10195,6 +10747,7 @@
       capabilities:
         resource:
           properties:
+            name: x1e.16xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -10214,6 +10767,7 @@
       capabilities:
         resource:
           properties:
+            name: x1e.32xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -10233,6 +10787,7 @@
       capabilities:
         resource:
           properties:
+            name: r3.large
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -10252,6 +10807,7 @@
       capabilities:
         resource:
           properties:
+            name: r3.xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -10271,6 +10827,7 @@
       capabilities:
         resource:
           properties:
+            name: r3.2xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -10290,6 +10847,7 @@
       capabilities:
         resource:
           properties:
+            name: r3.4xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -10309,6 +10867,7 @@
       capabilities:
         resource:
           properties:
+            name: r3.8xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -10328,6 +10887,7 @@
       capabilities:
         resource:
           properties:
+            name: i2.xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -10347,6 +10907,7 @@
       capabilities:
         resource:
           properties:
+            name: i2.2xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -10366,6 +10927,7 @@
       capabilities:
         resource:
           properties:
+            name: i2.4xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -10385,6 +10947,7 @@
       capabilities:
         resource:
           properties:
+            name: i2.8xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -10404,6 +10967,7 @@
       capabilities:
         resource:
           properties:
+            name: f1.2xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -10423,6 +10987,7 @@
       capabilities:
         resource:
           properties:
+            name: f1.16xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -10442,6 +11007,7 @@
       capabilities:
         resource:
           properties:
+            name: i3.large
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -10461,6 +11027,7 @@
       capabilities:
         resource:
           properties:
+            name: i3.xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -10480,6 +11047,7 @@
       capabilities:
         resource:
           properties:
+            name: i3.2xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -10499,6 +11067,7 @@
       capabilities:
         resource:
           properties:
+            name: i3.4xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -10518,6 +11087,7 @@
       capabilities:
         resource:
           properties:
+            name: i3.8xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-1
         host:
@@ -10537,6 +11107,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.nano
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -10555,6 +11126,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.micro
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -10573,6 +11145,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.small
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -10591,6 +11164,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.medium
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -10609,6 +11183,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.large
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -10627,6 +11202,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -10645,6 +11221,7 @@
       capabilities:
         resource:
           properties:
+            name: t2.2xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -10663,6 +11240,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.large
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -10681,6 +11259,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -10699,6 +11278,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.2xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -10717,6 +11297,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.4xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -10735,6 +11316,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.12xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -10753,6 +11335,7 @@
       capabilities:
         resource:
           properties:
+            name: m5.24xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -10771,6 +11354,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.large
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -10789,6 +11373,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -10807,6 +11392,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.2xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -10825,6 +11411,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.4xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -10843,6 +11430,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.10xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -10861,6 +11449,7 @@
       capabilities:
         resource:
           properties:
+            name: m4.16xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -10879,6 +11468,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.large
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -10897,6 +11487,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -10915,6 +11506,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.2xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -10933,6 +11525,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.4xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -10951,6 +11544,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.9xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -10969,6 +11563,7 @@
       capabilities:
         resource:
           properties:
+            name: c5.18xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -10987,6 +11582,7 @@
       capabilities:
         resource:
           properties:
+            name: c4.large
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -11005,6 +11601,7 @@
       capabilities:
         resource:
           properties:
+            name: c4.xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -11023,6 +11620,7 @@
       capabilities:
         resource:
           properties:
+            name: c4.2xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -11041,6 +11639,7 @@
       capabilities:
         resource:
           properties:
+            name: c4.4xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -11059,6 +11658,7 @@
       capabilities:
         resource:
           properties:
+            name: c4.8xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -11077,6 +11677,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.large
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -11095,6 +11696,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -11113,6 +11715,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.2xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -11131,6 +11734,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.4xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -11149,6 +11753,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.8xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -11167,6 +11772,7 @@
       capabilities:
         resource:
           properties:
+            name: r4.16xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -11185,6 +11791,7 @@
       capabilities:
         resource:
           properties:
+            name: d2.xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -11204,6 +11811,7 @@
       capabilities:
         resource:
           properties:
+            name: d2.2xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -11223,6 +11831,7 @@
       capabilities:
         resource:
           properties:
+            name: d2.4xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -11242,6 +11851,7 @@
       capabilities:
         resource:
           properties:
+            name: d2.8xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -11261,6 +11871,7 @@
       capabilities:
         resource:
           properties:
+            name: x1.16xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -11280,6 +11891,7 @@
       capabilities:
         resource:
           properties:
+            name: x1.32xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -11299,6 +11911,7 @@
       capabilities:
         resource:
           properties:
+            name: i3.large
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -11318,6 +11931,7 @@
       capabilities:
         resource:
           properties:
+            name: i3.xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -11337,6 +11951,7 @@
       capabilities:
         resource:
           properties:
+            name: i3.2xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -11356,6 +11971,7 @@
       capabilities:
         resource:
           properties:
+            name: i3.4xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:
@@ -11375,6 +11991,7 @@
       capabilities:
         resource:
           properties:
+            name: i3.8xlarge
             type: cloud
             cloud: *amazon_cloud_eu-west-2
         host:

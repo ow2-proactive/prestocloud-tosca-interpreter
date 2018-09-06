@@ -8,6 +8,7 @@
       capabilities:
         resource:
           properties:
+            name: Basic_A0
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -27,6 +28,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B1s
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -46,6 +48,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A0
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -65,6 +68,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B1ms
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -84,6 +88,7 @@
       capabilities:
         resource:
           properties:
+            name: Basic_A1
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -103,6 +108,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A1_v2
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -122,6 +128,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B2s
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -141,6 +148,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A1
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -160,6 +168,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F1
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -179,6 +188,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F1s
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -198,6 +208,7 @@
       capabilities:
         resource:
           properties:
+            name: Basic_A2
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -217,6 +228,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D1_v2
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -236,6 +248,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS1_v2
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -255,6 +268,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B2ms
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -274,6 +288,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A2_v2
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -293,6 +308,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS1
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -312,6 +328,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D1
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -331,6 +348,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A2
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -350,6 +368,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D2_v3
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -369,6 +388,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D2_v2_Promo
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -388,6 +408,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS2_v2_Promo
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -407,6 +428,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F2
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -426,6 +448,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F2s
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -445,6 +468,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A2m_v2
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -464,6 +488,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D11_v2_Promo
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -483,6 +508,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS11_v2_Promo
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -502,6 +528,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E2_v3
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -521,6 +548,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B4ms
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -540,6 +568,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D2_v2
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -559,6 +588,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS2_v2
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -578,6 +608,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D2
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -597,6 +628,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS2
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -616,6 +648,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A4_v2
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -635,6 +668,7 @@
       capabilities:
         resource:
           properties:
+            name: Basic_A3
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -654,6 +688,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D11_v2
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -673,6 +708,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS11_v2
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -692,6 +728,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A5
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -711,6 +748,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D11
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -730,6 +768,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS11
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -749,6 +788,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A3
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -768,6 +808,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D3_v2_Promo
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -787,6 +828,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS3_v2_Promo
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -806,6 +848,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D4_v3
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -825,6 +868,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F4
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -844,6 +888,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F4s
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -863,6 +908,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A4m_v2
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -882,6 +928,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D12_v2_Promo
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -901,6 +948,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E4_v3
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -920,6 +968,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS12_v2_Promo
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -939,6 +988,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B8ms
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -958,6 +1008,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_L4s
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -977,6 +1028,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D3_v2
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -996,6 +1048,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS3_v2
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1015,6 +1068,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D3
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1034,6 +1088,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS3
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1053,6 +1108,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A8_v2
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1072,6 +1128,7 @@
       capabilities:
         resource:
           properties:
+            name: Basic_A4
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1091,6 +1148,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D12_v2
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1110,6 +1168,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS12_v2
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1129,6 +1188,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D12
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1148,6 +1208,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS12
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1167,6 +1228,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A6
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1186,6 +1248,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_G1
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1205,6 +1268,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_GS1
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1224,6 +1288,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A4
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1243,6 +1308,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D8_v3
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1262,6 +1328,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D4_v2_Promo
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1281,6 +1348,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS4_v2_Promo
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1300,6 +1368,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F8s
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1319,6 +1388,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F8
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1338,6 +1408,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A8m_v2
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1357,6 +1428,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS13_v2_Promo
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1376,6 +1448,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D13_v2_Promo
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1395,6 +1468,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E8_v3
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1414,6 +1488,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_L8s
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1433,6 +1508,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D4_v2
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1452,6 +1528,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS4_v2
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1471,6 +1548,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS4
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1490,6 +1568,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D4
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1509,6 +1588,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS13_v2
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1528,6 +1608,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D13_v2
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1547,6 +1628,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A10
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1566,6 +1648,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS13
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1585,6 +1668,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D13
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1604,6 +1688,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A7
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1623,6 +1708,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_G2
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1642,6 +1728,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_GS2
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1661,6 +1748,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A8
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1680,6 +1768,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_H8
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1699,6 +1788,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D5_v2_Promo
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1718,6 +1808,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS5_v2_Promo
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1737,6 +1828,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D16_v3
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1756,6 +1848,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F16
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1775,6 +1868,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F16s
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1794,6 +1888,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E16_v3
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1813,6 +1908,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D14_v2_Promo
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1832,6 +1928,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS14_v2_Promo
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1851,6 +1948,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D5_v2
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1870,6 +1968,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS5_v2
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1889,6 +1988,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D14
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1908,6 +2008,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS14
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1927,6 +2028,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS14_v2
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1946,6 +2048,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D14_v2
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1965,6 +2068,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_L16s
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -1984,6 +2088,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_H8m
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -2003,6 +2108,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A11
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -2022,6 +2128,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS15_v2
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -2041,6 +2148,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D15_v2
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -2060,6 +2168,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_G3
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -2079,6 +2188,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_GS3
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -2098,6 +2208,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A9
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -2117,6 +2228,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_H16
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -2136,6 +2248,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D32_v3
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -2155,6 +2268,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_H16r
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -2174,6 +2288,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E32_v3
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -2193,6 +2308,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_L32s
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -2212,6 +2328,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_H16m
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -2231,6 +2348,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_H16mr
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -2250,6 +2368,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_G4
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -2269,6 +2388,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_GS4
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -2288,6 +2408,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D64_v3
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -2307,6 +2428,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E64_v3
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -2326,6 +2448,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_G5
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -2345,6 +2468,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_GS5
             type: cloud
             cloud: *azure_cloud_westus
         host:
@@ -2364,6 +2488,7 @@
       capabilities:
         resource:
           properties:
+            name: Basic_A0
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -2383,6 +2508,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B1s
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -2402,6 +2528,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A0
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -2421,6 +2548,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B1ms
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -2440,6 +2568,7 @@
       capabilities:
         resource:
           properties:
+            name: Basic_A1
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -2459,6 +2588,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A1_v2
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -2478,6 +2608,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B2s
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -2497,6 +2628,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A1
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -2516,6 +2648,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F1s
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -2535,6 +2668,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F1
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -2554,6 +2688,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A2_v2
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -2573,6 +2708,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS1_v2
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -2592,6 +2728,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D1_v2
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -2611,6 +2748,7 @@
       capabilities:
         resource:
           properties:
+            name: Basic_A2
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -2630,6 +2768,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B2ms
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -2649,6 +2788,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A2
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -2668,6 +2808,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A2m_v2
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -2687,6 +2828,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F2s
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -2706,6 +2848,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F2
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -2725,6 +2868,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS2_v2_Promo
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -2744,6 +2888,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D2_v3
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -2763,6 +2908,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D2_v2_Promo
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -2782,6 +2928,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS11_v2_Promo
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -2801,6 +2948,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D11_v2_Promo
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -2820,6 +2968,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B4ms
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -2839,6 +2988,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D2_v2
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -2858,6 +3008,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS2_v2
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -2877,6 +3028,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A4_v2
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -2896,6 +3048,7 @@
       capabilities:
         resource:
           properties:
+            name: Basic_A3
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -2915,6 +3068,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS11_v2
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -2934,6 +3088,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A5
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -2953,6 +3108,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D11_v2
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -2972,6 +3128,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A3
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -2991,6 +3148,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A4m_v2
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3010,6 +3168,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F4s
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3029,6 +3188,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F4
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3048,6 +3208,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D3_v2_Promo
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3067,6 +3228,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS3_v2_Promo
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3086,6 +3248,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D4_v3
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3105,6 +3268,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B8ms
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3124,6 +3288,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D12_v2_Promo
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3143,6 +3308,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS12_v2_Promo
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3162,6 +3328,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D3_v2
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3181,6 +3348,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS3_v2
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3200,6 +3368,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A8_v2
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3219,6 +3388,7 @@
       capabilities:
         resource:
           properties:
+            name: Basic_A4
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3238,6 +3408,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS12_v2
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3257,6 +3428,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D12_v2
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3276,6 +3448,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A6
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3295,6 +3468,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A4
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3314,6 +3488,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A8m_v2
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3333,6 +3508,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F8s
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3352,6 +3528,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F8
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3371,6 +3548,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS4_v2_Promo
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3390,6 +3568,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D8_v3
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3409,6 +3588,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D4_v2_Promo
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3428,6 +3608,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D13_v2_Promo
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3447,6 +3628,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS13_v2_Promo
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3466,6 +3648,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS4_v2
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3485,6 +3668,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D4_v2
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3504,6 +3688,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D13_v2
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3523,6 +3708,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS13_v2
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3542,6 +3728,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A7
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3561,6 +3748,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F16s
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3580,6 +3768,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F16
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3599,6 +3788,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D5_v2_Promo
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3618,6 +3808,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D16_v3
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3637,6 +3828,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS5_v2_Promo
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3656,6 +3848,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS5_v2
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3675,6 +3868,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D5_v2
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3694,6 +3888,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D14_v2_Promo
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3713,6 +3908,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS14_v2
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3732,6 +3928,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D14_v2
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3751,6 +3948,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS14_v2_Promo
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3770,6 +3968,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D15_v2
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3789,6 +3988,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS15_v2
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3808,6 +4008,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D32_v3
             type: cloud
             cloud: *azure_cloud_westcentralus
         host:
@@ -3827,6 +4028,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B1s
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -3846,6 +4048,7 @@
       capabilities:
         resource:
           properties:
+            name: Basic_A0
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -3865,6 +4068,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A0
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -3884,6 +4088,7 @@
       capabilities:
         resource:
           properties:
+            name: Basic_A1
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -3903,6 +4108,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B1ms
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -3922,6 +4128,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A1_v2
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -3941,6 +4148,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B2s
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -3960,6 +4168,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A1
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -3979,6 +4188,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F1s
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -3998,6 +4208,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F1
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4017,6 +4228,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B2ms
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4036,6 +4248,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A2_v2
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4055,6 +4268,7 @@
       capabilities:
         resource:
           properties:
+            name: Basic_A2
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4074,6 +4288,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D1_v2
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4093,6 +4308,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D1
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4112,6 +4328,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS1_v2
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4131,6 +4348,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A2
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4150,6 +4368,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS2_v2_Promo
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4169,6 +4388,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D2_v2_Promo
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4188,6 +4408,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F2s
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4207,6 +4428,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F2
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4226,6 +4448,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D2_v3
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4245,6 +4468,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A2m_v2
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4264,6 +4488,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D11_v2_Promo
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4283,6 +4508,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS11_v2_Promo
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4302,6 +4528,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E2_v3
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4321,6 +4548,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B4ms
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4340,6 +4568,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS2_v2
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4359,6 +4588,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D2_v2
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4378,6 +4608,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D2
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4397,6 +4628,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A4_v2
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4416,6 +4648,7 @@
       capabilities:
         resource:
           properties:
+            name: Basic_A3
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4435,6 +4668,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D11
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4454,6 +4688,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS11_v2
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4473,6 +4708,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A5
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4492,6 +4728,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D11_v2
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4511,6 +4748,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A3
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4530,6 +4768,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F4
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4549,6 +4788,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F4s
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4568,6 +4808,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS3_v2_Promo
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4587,6 +4828,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D4_v3
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4606,6 +4848,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D3_v2_Promo
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4625,6 +4868,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A4m_v2
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4644,6 +4888,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B8ms
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4663,6 +4908,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E4_v3
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4682,6 +4928,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D12_v2_Promo
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4701,6 +4948,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS12_v2_Promo
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4720,6 +4968,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D3
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4739,6 +4988,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS3_v2
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4758,6 +5008,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D3_v2
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4777,6 +5028,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A8_v2
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4796,6 +5048,7 @@
       capabilities:
         resource:
           properties:
+            name: Basic_A4
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4815,6 +5068,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D12
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4834,6 +5088,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS12_v2
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4853,6 +5108,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D12_v2
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4872,6 +5128,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A6
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4891,6 +5148,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A4
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4910,6 +5168,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F8s
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4929,6 +5188,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F8
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4948,6 +5208,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D4_v2_Promo
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4967,6 +5228,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D8_v3
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -4986,6 +5248,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS4_v2_Promo
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5005,6 +5268,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A8m_v2
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5024,6 +5288,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D13_v2_Promo
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5043,6 +5308,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS13_v2_Promo
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5062,6 +5328,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E8_v3
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5081,6 +5348,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_NC6
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5100,6 +5368,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D4
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5119,6 +5388,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS4_v2
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5138,6 +5408,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D4_v2
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5157,6 +5428,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS13_v2
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5176,6 +5448,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A10
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5195,6 +5468,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D13
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5214,6 +5488,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D13_v2
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5233,6 +5508,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A7
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5252,6 +5528,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_NV6
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5271,6 +5548,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A8
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5290,6 +5568,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F16s
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5309,6 +5588,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F16
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5328,6 +5608,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D16_v3
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5347,6 +5628,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS5_v2_Promo
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5366,6 +5648,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D5_v2_Promo
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5385,6 +5668,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_H8
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5404,6 +5688,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E16_v3
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5423,6 +5708,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS14_v2_Promo
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5442,6 +5728,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D14_v2_Promo
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5461,6 +5748,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D5_v2
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5480,6 +5768,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS5_v2
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5499,6 +5788,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D14
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5518,6 +5808,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS14_v2
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5537,6 +5828,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D14_v2
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5556,6 +5848,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_H8m
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5575,6 +5868,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_NC12
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5594,6 +5888,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A11
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5613,6 +5908,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS15_v2
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5632,6 +5928,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D15_v2
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5651,6 +5948,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_NV12
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5670,6 +5968,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A9
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5689,6 +5988,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D32_v3
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5708,6 +6008,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_H16
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5727,6 +6028,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_H16r
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5746,6 +6048,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E32_v3
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5765,6 +6068,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_H16m
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5784,6 +6088,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_NC24
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5803,6 +6108,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_H16mr
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5822,6 +6128,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_NC24r
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5841,6 +6148,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_NV24
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5860,6 +6168,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D64_v3
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5879,6 +6188,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E64_v3
             type: cloud
             cloud: *azure_cloud_northcentralus
         host:
@@ -5898,6 +6208,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B1s
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -5917,6 +6228,7 @@
       capabilities:
         resource:
           properties:
+            name: Basic_A0
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -5936,6 +6248,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A0
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -5955,6 +6268,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B1ms
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -5974,6 +6288,7 @@
       capabilities:
         resource:
           properties:
+            name: Basic_A1
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -5993,6 +6308,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B2s
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6012,6 +6328,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A1_v2
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6031,6 +6348,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A1
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6050,6 +6368,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F1s
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6069,6 +6388,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F1
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6088,6 +6408,7 @@
       capabilities:
         resource:
           properties:
+            name: Basic_A2
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6107,6 +6428,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B2ms
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6126,6 +6448,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS1_v2
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6145,6 +6468,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D1_v2
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6164,6 +6488,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS1
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6183,6 +6508,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D1
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6202,6 +6528,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A2_v2
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6221,6 +6548,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A2
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6240,6 +6568,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D2_v3
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6259,6 +6588,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D2_v2_Promo
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6278,6 +6608,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS2_v2_Promo
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6297,6 +6628,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F2s
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6316,6 +6648,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F2
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6335,6 +6668,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A2m_v2
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6354,6 +6688,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B4ms
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6373,6 +6708,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS11_v2_Promo
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6392,6 +6728,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E2_v3
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6411,6 +6748,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D11_v2_Promo
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6430,6 +6768,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D2_v2
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6449,6 +6788,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS2_v2
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6468,6 +6808,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS2
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6487,6 +6828,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D2
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6506,6 +6848,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A4_v2
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6525,6 +6868,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D11_v2
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6544,6 +6888,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS11_v2
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6563,6 +6908,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS11
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6582,6 +6928,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A5
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6601,6 +6948,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D11
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6620,6 +6968,7 @@
       capabilities:
         resource:
           properties:
+            name: Basic_A3
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6639,6 +6988,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A3
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6658,6 +7008,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D4_v3
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6677,6 +7028,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D3_v2_Promo
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6696,6 +7048,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS3_v2_Promo
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6715,6 +7068,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F4
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6734,6 +7088,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F4s
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6753,6 +7108,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B8ms
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6772,6 +7128,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A4m_v2
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6791,6 +7148,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS12_v2_Promo
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6810,6 +7168,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E4_v3
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6829,6 +7188,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D12_v2_Promo
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6848,6 +7208,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS3_v2
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6867,6 +7228,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D3_v2
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6886,6 +7248,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS3
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6905,6 +7268,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D3
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6924,6 +7288,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A8_v2
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6943,6 +7308,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D12_v2
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6962,6 +7328,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS12_v2
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -6981,6 +7348,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS12
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7000,6 +7368,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D12
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7019,6 +7388,7 @@
       capabilities:
         resource:
           properties:
+            name: Basic_A4
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7038,6 +7408,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A6
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7057,6 +7428,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A4
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7076,6 +7448,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D8_v3
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7095,6 +7468,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS4_v2_Promo
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7114,6 +7488,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D4_v2_Promo
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7133,6 +7508,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F8s
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7152,6 +7528,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F8
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7171,6 +7548,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A8m_v2
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7190,6 +7568,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E8_v3
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7209,6 +7588,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS13_v2_Promo
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7228,6 +7608,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D13_v2_Promo
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7247,6 +7628,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS4_v2
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7266,6 +7648,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D4_v2
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7285,6 +7668,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS4
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7304,6 +7688,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D4
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7323,6 +7708,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A10
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7342,6 +7728,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS13
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7361,6 +7748,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS13_v2
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7380,6 +7768,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D13
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7399,6 +7788,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D13_v2
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7418,6 +7808,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_NC6
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7437,6 +7828,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A7
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7456,6 +7848,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A8
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7475,6 +7868,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_NV6
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7494,6 +7888,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_H8
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7513,6 +7908,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D16_v3
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7532,6 +7928,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS5_v2_Promo
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7551,6 +7948,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D5_v2_Promo
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7570,6 +7968,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F16
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7589,6 +7988,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F16s
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7608,6 +8008,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS5_v2
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7627,6 +8028,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D5_v2
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7646,6 +8048,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D14_v2_Promo
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7665,6 +8068,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E16_v3
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7684,6 +8088,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS14_v2_Promo
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7703,6 +8108,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS14
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7722,6 +8128,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D14_v2
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7741,6 +8148,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D14
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7760,6 +8168,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS14_v2
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7779,6 +8188,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_H8m
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7798,6 +8208,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A11
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7817,6 +8228,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_NC12
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7836,6 +8248,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS15_v2
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7855,6 +8268,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D15_v2
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7874,6 +8288,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A9
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7893,6 +8308,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_NV12
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7912,6 +8328,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_H16
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7931,6 +8348,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D32_v3
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7950,6 +8368,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_H16r
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7969,6 +8388,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E32_v3
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -7988,6 +8408,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_H16m
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -8007,6 +8428,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_H16mr
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -8026,6 +8448,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_NC24
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -8045,6 +8468,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_NC24r
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -8064,6 +8488,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_NV24
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -8083,6 +8508,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D64_v3
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -8102,6 +8528,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E64_v3
             type: cloud
             cloud: *azure_cloud_northeurope
         host:
@@ -8121,6 +8548,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B1s
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8140,6 +8568,7 @@
       capabilities:
         resource:
           properties:
+            name: Basic_A0
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8159,6 +8588,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A0
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8178,6 +8608,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B1ms
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8197,6 +8628,7 @@
       capabilities:
         resource:
           properties:
+            name: Basic_A1
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8216,6 +8648,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A1_v2
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8235,6 +8668,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B2s
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8254,6 +8688,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A1
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8273,6 +8708,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F1
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8292,6 +8728,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F1s
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8311,6 +8748,7 @@
       capabilities:
         resource:
           properties:
+            name: Basic_A2
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8330,6 +8768,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B2ms
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8349,6 +8788,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A2_v2
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8368,6 +8808,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS1_v2
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8387,6 +8828,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D1_v2
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8406,6 +8848,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D1
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8425,6 +8868,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS1
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8444,6 +8888,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A2
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8463,6 +8908,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A2m_v2
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8482,6 +8928,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F2
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8501,6 +8948,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F2s
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8520,6 +8968,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS2_v2_Promo
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8539,6 +8988,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D2_v3
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8558,6 +9008,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D2_v2_Promo
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8577,6 +9028,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B4ms
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8596,6 +9048,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D11_v2_Promo
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8615,6 +9068,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS11_v2_Promo
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8634,6 +9088,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E2_v3
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8653,6 +9108,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS2_v2
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8672,6 +9128,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D2_v2
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8691,6 +9148,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A4_v2
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8710,6 +9168,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D2
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8729,6 +9188,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS2
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8748,6 +9208,7 @@
       capabilities:
         resource:
           properties:
+            name: Basic_A3
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8767,6 +9228,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D11_v2
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8786,6 +9248,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS11_v2
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8805,6 +9268,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A5
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8824,6 +9288,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D11
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8843,6 +9308,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS11
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8862,6 +9328,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A3
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8881,6 +9348,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A4m_v2
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8900,6 +9368,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F4
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8919,6 +9388,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F4s
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8938,6 +9408,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D4_v3
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8957,6 +9428,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS3_v2_Promo
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8976,6 +9448,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D3_v2_Promo
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -8995,6 +9468,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B8ms
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9014,6 +9488,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D12_v2_Promo
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9033,6 +9508,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS12_v2_Promo
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9052,6 +9528,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E4_v3
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9071,6 +9548,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS3_v2
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9090,6 +9568,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D3_v2
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9109,6 +9588,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_L4s
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9128,6 +9608,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A8_v2
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9147,6 +9628,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D3
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9166,6 +9648,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS3
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9185,6 +9668,7 @@
       capabilities:
         resource:
           properties:
+            name: Basic_A4
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9204,6 +9688,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D12_v2
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9223,6 +9708,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS12_v2
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9242,6 +9728,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A6
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9261,6 +9748,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D12
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9280,6 +9768,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS12
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9299,6 +9788,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A4
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9318,6 +9808,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_G1
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9337,6 +9828,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_GS1
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9356,6 +9848,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F8s
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9375,6 +9868,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F8
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9394,6 +9888,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A8m_v2
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9413,6 +9908,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS4_v2_Promo
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9432,6 +9928,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D8_v3
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9451,6 +9948,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D4_v2_Promo
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9470,6 +9968,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E8_v3
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9489,6 +9988,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D13_v2_Promo
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9508,6 +10008,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS13_v2_Promo
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9527,6 +10028,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D4_v2
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9546,6 +10048,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS4_v2
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9565,6 +10068,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_L8s
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9584,6 +10088,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS13_v2
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9603,6 +10108,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D13_v2
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9622,6 +10128,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D4
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9641,6 +10148,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS4
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9660,6 +10168,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D13
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9679,6 +10188,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS13
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9698,6 +10208,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A10
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9717,6 +10228,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A7
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9736,6 +10248,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_NC6
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9755,6 +10268,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_GS2
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9774,6 +10288,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_G2
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9793,6 +10308,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A8
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9812,6 +10328,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_NV6
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9831,6 +10348,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F16
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9850,6 +10368,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F16s
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9869,6 +10388,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D5_v2_Promo
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9888,6 +10408,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS5_v2_Promo
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9907,6 +10428,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D16_v3
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9926,6 +10448,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_H8
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9945,6 +10468,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D14_v2_Promo
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9964,6 +10488,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E16_v3
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -9983,6 +10508,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS14_v2_Promo
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -10002,6 +10528,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D5_v2
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -10021,6 +10548,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS5_v2
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -10040,6 +10568,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_L16s
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -10059,6 +10588,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D14_v2
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -10078,6 +10608,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS14_v2
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -10097,6 +10628,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D14
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -10116,6 +10648,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS14
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -10135,6 +10668,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_H8m
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -10154,6 +10688,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A11
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -10173,6 +10708,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_NC12
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -10192,6 +10728,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS15_v2
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -10211,6 +10748,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D15_v2
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -10230,6 +10768,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_GS3
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -10249,6 +10788,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_G3
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -10268,6 +10808,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A9
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -10287,6 +10828,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_NV12
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -10306,6 +10848,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_ND6s
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -10325,6 +10868,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D32_v3
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -10344,6 +10888,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_H16
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -10363,6 +10908,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_H16r
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -10382,6 +10928,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E32_v3
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -10401,6 +10948,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_L32s
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -10420,6 +10968,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_H16m
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -10439,6 +10988,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_H16mr
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -10458,6 +11008,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_NC24
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -10477,6 +11028,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_NC24r
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -10496,6 +11048,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_G4
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -10515,6 +11068,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_GS4
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -10534,6 +11088,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_ND12s
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -10553,6 +11108,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_NV24
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -10572,6 +11128,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D64_v3
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -10591,6 +11148,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E64_v3
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -10610,6 +11168,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_G5
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -10629,6 +11188,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_GS5
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -10648,6 +11208,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_ND24s
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -10667,6 +11228,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_ND24rs
             type: cloud
             cloud: *azure_cloud_westeurope
         host:
@@ -10686,6 +11248,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B1s
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -10705,6 +11268,7 @@
       capabilities:
         resource:
           properties:
+            name: Basic_A0
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -10724,6 +11288,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A0
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -10743,6 +11308,7 @@
       capabilities:
         resource:
           properties:
+            name: Basic_A1
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -10762,6 +11328,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B1ms
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -10781,6 +11348,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B2s
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -10800,6 +11368,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A1_v2
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -10819,6 +11388,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A1
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -10838,6 +11408,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F1s
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -10857,6 +11428,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F1
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -10876,6 +11448,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B2ms
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -10895,6 +11468,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A2_v2
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -10914,6 +11488,7 @@
       capabilities:
         resource:
           properties:
+            name: Basic_A2
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -10933,6 +11508,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS1_v2
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -10952,6 +11528,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D1_v2
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -10971,6 +11548,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F2
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -10990,6 +11568,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F2s
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11009,6 +11588,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A2
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11028,6 +11608,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D2_v3
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11047,6 +11628,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E2_v3
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11066,6 +11648,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B4ms
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11085,6 +11668,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A2m_v2
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11104,6 +11688,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D2_v2
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11123,6 +11708,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS2_v2
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11142,6 +11728,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A4_v2
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11161,6 +11748,7 @@
       capabilities:
         resource:
           properties:
+            name: Basic_A3
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11180,6 +11768,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A5
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11199,6 +11788,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D11_v2
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11218,6 +11808,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS11_v2
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11237,6 +11828,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F4
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11256,6 +11848,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F4s
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11275,6 +11868,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A3
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11294,6 +11888,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D4_v3
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11313,6 +11908,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B8ms
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11332,6 +11928,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E4_v3
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11351,6 +11948,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A4m_v2
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11370,6 +11968,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS3_v2
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11389,6 +11988,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D3_v2
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11408,6 +12008,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A8_v2
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11427,6 +12028,7 @@
       capabilities:
         resource:
           properties:
+            name: Basic_A4
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11446,6 +12048,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A6
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11465,6 +12068,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D12_v2
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11484,6 +12088,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS12_v2
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11503,6 +12108,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F8
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11522,6 +12128,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F8s
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11541,6 +12148,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A4
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11560,6 +12168,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D8_v3
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11579,6 +12188,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E8_v3
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11598,6 +12208,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A8m_v2
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11617,6 +12228,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D4_v2
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11636,6 +12248,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS4_v2
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11655,6 +12268,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS13_v2
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11674,6 +12288,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D13_v2
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11693,6 +12308,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A7
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11712,6 +12328,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F16s
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11731,6 +12348,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F16
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11750,6 +12368,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D16_v3
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11769,6 +12388,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E16_v3
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11788,6 +12408,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D5_v2
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11807,6 +12428,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS5_v2
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11826,6 +12448,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS14_v2
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11845,6 +12468,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D14_v2
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11864,6 +12488,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D15_v2
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11883,6 +12508,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D32_v3
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11902,6 +12528,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E32_v3
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11921,6 +12548,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D64_v3
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11940,6 +12568,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E64_v3
             type: cloud
             cloud: *azure_cloud_francecentral
         host:
@@ -11959,6 +12588,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B1s
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -11978,6 +12608,7 @@
       capabilities:
         resource:
           properties:
+            name: Basic_A0
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -11997,6 +12628,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A0
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12016,6 +12648,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B1ms
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12035,6 +12668,7 @@
       capabilities:
         resource:
           properties:
+            name: Basic_A1
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12054,6 +12688,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B2s
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12073,6 +12708,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A1_v2
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12092,6 +12728,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A1
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12111,6 +12748,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F1
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12130,6 +12768,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F1s
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12149,6 +12788,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B2ms
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12168,6 +12808,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A2_v2
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12187,6 +12828,7 @@
       capabilities:
         resource:
           properties:
+            name: Basic_A2
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12206,6 +12848,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS1_v2
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12225,6 +12868,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D1_v2
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12244,6 +12888,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A2
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12263,6 +12908,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D2_v3
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12282,6 +12928,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D2_v2_Promo
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12301,6 +12948,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS2_v2_Promo
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12320,6 +12968,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F2s
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12339,6 +12988,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F2
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12358,6 +13008,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A2m_v2
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12377,6 +13028,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS11_v2_Promo
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12396,6 +13048,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E2_v3
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12415,6 +13068,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D11_v2_Promo
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12434,6 +13088,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B4ms
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12453,6 +13108,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS2_v2
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12472,6 +13128,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D2_v2
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12491,6 +13148,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A4_v2
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12510,6 +13168,7 @@
       capabilities:
         resource:
           properties:
+            name: Basic_A3
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12529,6 +13188,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A5
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12548,6 +13208,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS11_v2
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12567,6 +13228,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D11_v2
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12586,6 +13248,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A3
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12605,6 +13268,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D4_v3
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12624,6 +13288,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D3_v2_Promo
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12643,6 +13308,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS3_v2_Promo
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12662,6 +13328,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F4
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12681,6 +13348,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F4s
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12700,6 +13368,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B8ms
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12719,6 +13388,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS12_v2_Promo
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12738,6 +13408,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E4_v3
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12757,6 +13428,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D12_v2_Promo
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12776,6 +13448,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A4m_v2
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12795,6 +13468,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D3_v2
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12814,6 +13488,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS3_v2
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12833,6 +13508,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A8_v2
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12852,6 +13528,7 @@
       capabilities:
         resource:
           properties:
+            name: Basic_A4
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12871,6 +13548,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A6
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12890,6 +13568,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D12_v2
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12909,6 +13588,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS12_v2
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12928,6 +13608,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A4
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12947,6 +13628,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D4_v2_Promo
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12966,6 +13648,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS4_v2_Promo
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -12985,6 +13668,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D8_v3
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -13004,6 +13688,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F8
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -13023,6 +13708,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F8s
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -13042,6 +13728,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E8_v3
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -13061,6 +13748,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D13_v2_Promo
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -13080,6 +13768,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS13_v2_Promo
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -13099,6 +13788,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A8m_v2
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -13118,6 +13808,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D4_v2
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -13137,6 +13828,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS4_v2
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -13156,6 +13848,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS13_v2
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -13175,6 +13868,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D13_v2
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -13194,6 +13888,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A7
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -13213,6 +13908,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D5_v2_Promo
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -13232,6 +13928,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS5_v2_Promo
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -13251,6 +13948,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D16_v3
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -13270,6 +13968,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F16s
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -13289,6 +13988,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F16
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -13308,6 +14008,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS14_v2_Promo
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -13327,6 +14028,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E16_v3
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -13346,6 +14048,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D14_v2_Promo
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -13365,6 +14068,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D5_v2
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -13384,6 +14088,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS5_v2
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -13403,6 +14108,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS14_v2
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -13422,6 +14128,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D14_v2
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -13441,6 +14148,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS15_v2
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -13460,6 +14168,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D15_v2
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -13479,6 +14188,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D32_v3
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -13498,6 +14208,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E32_v3
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -13517,6 +14228,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D64_v3
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -13536,6 +14248,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E64_v3
             type: cloud
             cloud: *azure_cloud_ukwest
         host:
@@ -13555,6 +14268,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B1s
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -13574,6 +14288,7 @@
       capabilities:
         resource:
           properties:
+            name: Basic_A0
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -13593,6 +14308,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A0
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -13612,6 +14328,7 @@
       capabilities:
         resource:
           properties:
+            name: Basic_A1
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -13631,6 +14348,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B1ms
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -13650,6 +14368,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B2s
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -13669,6 +14388,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A1_v2
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -13688,6 +14408,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A1
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -13707,6 +14428,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F1
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -13726,6 +14448,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F1s
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -13745,6 +14468,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B2ms
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -13764,6 +14488,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A2_v2
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -13783,6 +14508,7 @@
       capabilities:
         resource:
           properties:
+            name: Basic_A2
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -13802,6 +14528,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS1_v2
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -13821,6 +14548,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D1_v2
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -13840,6 +14568,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A2
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -13859,6 +14588,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D2_v3
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -13878,6 +14608,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS2_v2_Promo
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -13897,6 +14628,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D2_v2_Promo
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -13916,6 +14648,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F2
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -13935,6 +14668,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F2s
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -13954,6 +14688,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D11_v2_Promo
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -13973,6 +14708,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E2_v3
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -13992,6 +14728,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS11_v2_Promo
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14011,6 +14748,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B4ms
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14030,6 +14768,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A2m_v2
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14049,6 +14788,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS2_v2
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14068,6 +14808,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D2_v2
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14087,6 +14828,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A4_v2
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14106,6 +14848,7 @@
       capabilities:
         resource:
           properties:
+            name: Basic_A3
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14125,6 +14868,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A5
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14144,6 +14888,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS11_v2
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14163,6 +14908,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D11_v2
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14182,6 +14928,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A3
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14201,6 +14948,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS3_v2_Promo
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14220,6 +14968,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D4_v3
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14239,6 +14988,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D3_v2_Promo
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14258,6 +15008,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F4s
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14277,6 +15028,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F4
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14296,6 +15048,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_B8ms
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14315,6 +15068,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E4_v3
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14334,6 +15088,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D12_v2_Promo
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14353,6 +15108,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS12_v2_Promo
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14372,6 +15128,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_GS1
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14391,6 +15148,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_G1
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14410,6 +15168,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_L4s
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14429,6 +15188,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A4m_v2
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14448,6 +15208,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS3_v2
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14467,6 +15228,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D3_v2
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14486,6 +15248,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A8_v2
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14505,6 +15268,7 @@
       capabilities:
         resource:
           properties:
+            name: Basic_A4
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14524,6 +15288,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A6
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14543,6 +15308,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS12_v2
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14562,6 +15328,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D12_v2
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14581,6 +15348,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A4
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14600,6 +15368,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D8_v3
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14619,6 +15388,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS4_v2_Promo
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14638,6 +15408,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D4_v2_Promo
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14657,6 +15428,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F8
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14676,6 +15448,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F8s
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14695,6 +15468,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E8_v3
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14714,6 +15488,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D13_v2_Promo
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14733,6 +15508,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS13_v2_Promo
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14752,6 +15528,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_G2
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14771,6 +15548,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_GS2
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14790,6 +15568,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_L8s
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14809,6 +15588,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A8m_v2
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14828,6 +15608,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS4_v2
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14847,6 +15628,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D4_v2
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14866,6 +15648,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS13_v2
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14885,6 +15668,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D13_v2
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14904,6 +15688,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_A7
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14923,6 +15708,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_NC6
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14942,6 +15728,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS5_v2_Promo
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14961,6 +15748,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D5_v2_Promo
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14980,6 +15768,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D16_v3
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -14999,6 +15788,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F16
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -15018,6 +15808,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_F16s
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -15037,6 +15828,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_NV6
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -15056,6 +15848,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_H8
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -15075,6 +15868,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS14_v2_Promo
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -15094,6 +15888,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D14_v2_Promo
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -15113,6 +15908,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E16_v3
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -15132,6 +15928,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_GS3
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -15151,6 +15948,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_G3
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -15170,6 +15968,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_L16s
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -15189,6 +15988,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_H8m
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -15208,6 +16008,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D5_v2
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -15227,6 +16028,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS5_v2
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -15246,6 +16048,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS14_v2
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -15265,6 +16068,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D14_v2
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -15284,6 +16088,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_NC12
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -15303,6 +16108,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_DS15_v2
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -15322,6 +16128,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D15_v2
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -15341,6 +16148,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D32_v3
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -15360,6 +16168,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_NV12
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -15379,6 +16188,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_H16
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -15398,6 +16208,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_H16r
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -15417,6 +16228,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E32_v3
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -15436,6 +16248,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_GS4
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -15455,6 +16268,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_G4
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -15474,6 +16288,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_L32s
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -15493,6 +16308,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_H16m
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -15512,6 +16328,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_H16mr
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -15531,6 +16348,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_NC24
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -15550,6 +16368,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_D64_v3
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -15569,6 +16388,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_NC24r
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -15588,6 +16408,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_NV24
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -15607,6 +16428,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_E64_v3
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -15626,6 +16448,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_GS5
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
@@ -15645,6 +16468,7 @@
       capabilities:
         resource:
           properties:
+            name: Standard_G5
             type: cloud
             cloud: *azure_cloud_uksouth
         host:
