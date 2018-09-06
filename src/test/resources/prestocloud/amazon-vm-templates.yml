@@ -1,3 +1,62 @@
+tosca_definitions_version: tosca_prestocloud_mapping_1_2
+
+metadata:
+  template_name: Amazon cloud descriptions
+  template_author: ActiveEon
+  template_version: 1.0.0-SNAPSHOT
+
+description: Cloud descriptions for Amazon EC2.
+
+imports:
+  - tosca-normative-types:1.2
+  - resource-descriptions:1.0
+
+dsl_definitions:
+
+  amazon_cloud_westus: &amazon_cloud_us-east-1
+    cloud_name: amazon_public1
+    cloud_type: amazon
+    cloud_region: us-east-1
+
+  amazon_cloud_westcentralus: &amazon_cloud_us-east-2
+    cloud_name: amazon_public2
+    cloud_type: amazon
+    cloud_region: us-east-2
+
+  amazon_cloud_northcentralus: &amazon_cloud_us-west-1
+    cloud_name: amazon_public3
+    cloud_type: amazon
+    cloud_region: us-west-1
+
+  amazon_cloud_northeurope: &amazon_cloud_us-west-2
+    cloud_name: amazon_public4
+    cloud_type: amazon
+    cloud_region: us-west-2
+
+  amazon_cloud_westeurope: &amazon_cloud_ca-central-1
+    cloud_name: amazon_public5
+    cloud_type: amazon
+    cloud_region: ca-central-1
+
+  amazon_cloud_francecentral: &amazon_cloud_eu-central-1
+    cloud_name: amazon_public6
+    cloud_type: amazon
+    cloud_region: eu-central-1
+
+  amazon_cloud_ukwest: &amazon_cloud_eu-west-1
+    cloud_name: amazon_public7
+    cloud_type: amazon
+    cloud_region: eu-west-1
+
+  amazon_cloud_uksouth: &amazon_cloud_eu-west-2
+    cloud_name: amazon_public8
+    cloud_type: amazon
+    cloud_region: eu-west-2
+
+topology_template:
+
+  node_templates:
+
     m1_small_us_east_1:
       type: prestocloud.nodes.compute.cloud.amazon
       description: PrEstoCloud Amazon compute node of type M1 General Purpose Small (m1.small) in region us-east-1.

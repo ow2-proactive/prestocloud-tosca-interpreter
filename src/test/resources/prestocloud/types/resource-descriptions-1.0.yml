@@ -206,6 +206,10 @@ capability_types:
     description: >
       The resource capability indicates which type of resource can be used to execute the node.
     properties:
+      name:
+        type: string
+        description: The name of the resource.
+        required: false
       type:
         type: string
         description: Type of the resource to use.

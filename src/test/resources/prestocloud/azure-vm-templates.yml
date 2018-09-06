@@ -1,3 +1,65 @@
+tosca_definitions_version: tosca_prestocloud_mapping_1_2
+
+metadata:
+  template_name: Azure cloud descriptions
+  template_author: ActiveEon
+  template_version: 1.0.0-SNAPSHOT
+
+description: Cloud descriptions for Azure.
+
+imports:
+  - tosca-normative-types:1.2
+  - resource-descriptions:1.0
+
+dsl_definitions:
+
+  cloud_type: &cloud_type
+    type: cloud
+
+  azure_cloud_westus: &azure_cloud_westus
+    cloud_name: azure_public1
+    cloud_type: azure
+    cloud_region: westus
+
+  azure_cloud_westcentralus: &azure_cloud_westcentralus
+    cloud_name: azure_public2
+    cloud_type: azure
+    cloud_region: westcentralus
+
+  azure_cloud_northcentralus: &azure_cloud_northcentralus
+    cloud_name: azure_public3
+    cloud_type: azure
+    cloud_region: northcentralus
+
+  azure_cloud_northeurope: &azure_cloud_northeurope
+    cloud_name: azure_public4
+    cloud_type: azure
+    cloud_region: northeurope
+
+  azure_cloud_westeurope: &azure_cloud_westeurope
+    cloud_name: azure_public5
+    cloud_type: azure
+    cloud_region: westeurope
+
+  azure_cloud_francecentral: &azure_cloud_francecentral
+    cloud_name: azure_public6
+    cloud_type: azure
+    cloud_region: francecentral
+
+  azure_cloud_ukwest: &azure_cloud_ukwest
+    cloud_name: azure_public7
+    cloud_type: azure
+    cloud_region: ukwest
+
+  azure_cloud_uksouth: &azure_cloud_uksouth
+    cloud_name: azure_public8
+    cloud_type: azure
+    cloud_region: uksouth
+
+topology_template:
+
+  node_templates:
+
     Basic_A0_westus:
       type: prestocloud.nodes.compute.cloud.azure
       description: PrEstoCloud Azure compute node of type Basic_A0 (region westus).
