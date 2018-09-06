@@ -8,10 +8,13 @@ metadata:
    TimePeriod:  720
    ProviderName_0: Amazon
    ProviderRequired_0: false
-   ProviderExcluded_0: true
+   ProviderExcluded_0: false
    ProviderName_1: Azure
    ProviderRequired_1: true
    ProviderExcluded_1: false
+   ProviderName_2: OpenStack
+   ProviderRequired_2: false
+   ProviderExcluded_2: true
    MaxInstances: 100
    MetricToMinimize: Cost
    MetricToMaximize: Clients_served_under_20ms
