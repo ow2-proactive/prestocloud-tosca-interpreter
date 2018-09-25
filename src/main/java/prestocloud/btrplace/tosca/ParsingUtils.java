@@ -1,17 +1,45 @@
-package prestocloud.tosca;
+/*
+ * ProActive Parallel Suite(TM):
+ * The Open Source library for parallel and distributed
+ * Workflows & Scheduling, Orchestration, Cloud Automation
+ * and Big Data Analysis on Enterprise Grids & Clouds.
+ *
+ * Copyright (c) 2007 - 2017 ActiveEon
+ * Contact: contact@activeeon.com
+ *
+ * This library is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation: version 3 of
+ * the License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * If needed, contact us to obtain a release under GPL Version 2 or 3
+ * or a different license than the AGPL.
+ */
+package prestocloud.btrplace.tosca;
 
-import com.google.common.collect.Sets;
-import lombok.Getter;
-import lombok.Setter;
-import org.btrplace.model.*;
-import org.btrplace.model.constraint.*;
-import org.btrplace.model.view.ShareableResource;
-import org.btrplace.plan.ReconfigurationPlan;
-import org.btrplace.scheduler.choco.ChocoScheduler;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.prestocloud.tosca.model.definitions.*;
+import org.prestocloud.tosca.model.definitions.AbstractPropertyValue;
+import org.prestocloud.tosca.model.definitions.ComplexPropertyValue;
+import org.prestocloud.tosca.model.definitions.FilterDefinition;
+import org.prestocloud.tosca.model.definitions.ListPropertyValue;
+import org.prestocloud.tosca.model.definitions.PropertyConstraint;
+import org.prestocloud.tosca.model.definitions.RequirementDefinition;
+import org.prestocloud.tosca.model.definitions.ScalarPropertyValue;
 import org.prestocloud.tosca.model.definitions.constraints.EqualConstraint;
 import org.prestocloud.tosca.model.definitions.constraints.GreaterOrEqualConstraint;
 import org.prestocloud.tosca.model.definitions.constraints.InRangeConstraint;
@@ -20,57 +48,24 @@ import org.prestocloud.tosca.model.templates.Capability;
 import org.prestocloud.tosca.model.templates.NodeTemplate;
 import org.prestocloud.tosca.model.templates.PolicyTemplate;
 import org.prestocloud.tosca.model.types.NodeType;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.hateoas.HypermediaAutoConfiguration;
-import org.springframework.context.annotation.*;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
-import prestocloud.btrplace.PrestoCloudExtensions;
-import prestocloud.btrplace.minUsed.MinUsed;
-import prestocloud.component.ICSARRepositorySearchService;
+
+import prestocloud.btrplace.tosca.model.Constraint;
+import prestocloud.btrplace.tosca.model.Relationship;
 import prestocloud.model.common.Tag;
 import prestocloud.tosca.model.ArchiveRoot;
 import prestocloud.tosca.parser.ParsingException;
 import prestocloud.tosca.parser.ParsingResult;
 import prestocloud.tosca.parser.ToscaParser;
-import prestocloud.tosca.repository.LocalRepositoryImpl;
 
-import javax.annotation.Resource;
-import java.io.IOException;
-import java.nio.file.Paths;
-import java.util.*;
+/**
+ * @author ActiveEon Team
+ * @since 25/09/18
+ */
+public class ParsingUtils {
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(loader = AnnotationConfigContextLoader.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-@ActiveProfiles("PrEstoCloudTOSCAParser")
-public class BtrPlaceTest {
+    public static Map<String, Map<String, Map<String, String>>> getCloudNodesTemplates(ParsingResult<ArchiveRoot> parsingResult, String region) throws IOException, ParsingException {
 
-    @Profile("PrEstoCloudTOSCAParser")
-    @Configuration
-    @EnableAutoConfiguration(exclude = { HypermediaAutoConfiguration.class })
-    @EnableAspectJAutoProxy(proxyTargetClass = true)
-    @ComponentScan(basePackages = { "prestocloud.tosca.context", "prestocloud.tosca.parser" })
-    static class ContextConfiguration {
-        @Bean
-        public ICSARRepositorySearchService repositorySearchService() {
-            LocalRepositoryImpl repository = new LocalRepositoryImpl();
-            repository.setPath("src/main/resources/repository/");
-            return repository;
-        }
-    }
-
-    @Resource
-    protected ToscaParser parser;
-
-    @Resource
-    protected ICSARRepositorySearchService csarRepositorySearchService;
-
-    public Map<String, Map<String, Map<String, String>>> getCloudNodesTemplates(String templateFile, String region) throws IOException, ParsingException {
-        ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/", templateFile));
+        // First make sure there is no parsing error
         Assert.assertEquals(0, parsingResult.getContext().getParsingErrors().size());
 
         Map<String, Map<String, Map<String, String>>> vmTypes = new HashMap<>();
@@ -180,7 +175,7 @@ public class BtrPlaceTest {
         return vmTypes;
     }
 
-    public List<Constraint> getConstraints(ParsingResult<ArchiveRoot> parsingResult) {
+    public static List<Constraint> getConstraints(ParsingResult<ArchiveRoot> parsingResult) {
         List<Constraint> constraints = new ArrayList<>();
 
         // Look for placement constraints
@@ -201,7 +196,7 @@ public class BtrPlaceTest {
     }
 
     // TODO: PARSE MASTER AS WELL!!!
-    public List<Relationship> getRelationships(ParsingResult<ArchiveRoot> parsingResult) {
+    public static List<Relationship> getRelationships(ParsingResult<ArchiveRoot> parsingResult) {
 
         List<Relationship> relationships = new ArrayList<>();
 
@@ -291,7 +286,7 @@ public class BtrPlaceTest {
         return relationships;
     }
 
-    public Map<String, String> getMetadata(ParsingResult<ArchiveRoot> parsingResult) {
+    public static Map<String, String> getMetadata(ParsingResult<ArchiveRoot> parsingResult) {
         Map<String, String> metadata = new HashMap<>();
         for (Tag tag : parsingResult.getResult().getArchive().getTags()) {
             metadata.put(tag.getName(), tag.getValue());
@@ -299,7 +294,7 @@ public class BtrPlaceTest {
         return metadata;
     }
 
-    public List<String> getListOfCloudsFromMetadata(Map<String, String> metadata) {
+    public static List<String> getListOfCloudsFromMetadata(Map<String, String> metadata) {
         List<String> clouds = new ArrayList<>();
         for (Map.Entry<String, String> entry : metadata.entrySet()) {
             if (entry.getKey().contains("ProviderName")) {
@@ -323,20 +318,21 @@ public class BtrPlaceTest {
         return clouds;
     }
 
-    public String findBestSuitableVMType(String cloud, String region, Map<String, List<String>> hostingConstraints) throws IOException, ParsingException {
+    public static String findBestSuitableVMType(ToscaParser parser, String repositoryPath, String cloud, String region, Map<String, List<String>> hostingConstraints) throws IOException, ParsingException {
 
         // TODO: MAKE A LIST OF CANDIDATES AND SELECT THE LOWEST PRICE
 
         Map<String, Map<String, Map<String, String>>> VMTypes;
 
         if (cloud.equalsIgnoreCase("amazon")) {
-            VMTypes = getCloudNodesTemplates("amazon-vm-templates.yml", region);
+            VMTypes = getCloudNodesTemplates(parser.parseFile(Paths.get(repositoryPath,"amazon-vm-templates.yml")), region);
         }
         else if (cloud.equalsIgnoreCase("azure")) {
-            VMTypes = getCloudNodesTemplates("azure-vm-templates.yml", region);
+            VMTypes = getCloudNodesTemplates(parser.parseFile(Paths.get(repositoryPath,"azure-vm-templates.yml")), region);
         }
         else if (cloud.equalsIgnoreCase("openstack")) {
             System.out.println("OpenStack types not yet defined (flavors must be customized).");
+            //VMTypes = getCloudNodesTemplates(parser.parseFile(Paths.get(repositoryPath, "openstack-vm-templates.yml")), region);
             return null;
         }
         else {
@@ -463,343 +459,5 @@ public class BtrPlaceTest {
         }
         System.out.println("No suitable type found for hosting constraints: " + hostingConstraints);
         return null;
-    }
-
-    @Test
-    public void testParsingVMTypes() throws IOException, ParsingException {
-        Map<String, Map<String, Map<String, String>>> AmazonVMTypes = getCloudNodesTemplates("amazon-vm-templates.yml", null);
-        Map<String, Map<String, Map<String, String>>> AzureVMTypes = getCloudNodesTemplates("azure-vm-templates.yml", null);
-        Assert.assertEquals(617, AmazonVMTypes.size());
-        Assert.assertEquals(824, AzureVMTypes.size());
-    }
-
-    @Test
-    public void testParsingICCSExample() throws IOException, ParsingException {
-        ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "ICCS-example.yml"));
-        Assert.assertEquals(0, parsingResult.getContext().getParsingErrors().size());
-
-        Map<String, String> metadata = getMetadata(parsingResult);
-        Assert.assertEquals(11, metadata.size());
-        List<String> clouds = getListOfCloudsFromMetadata(metadata);
-
-        List<Constraint> constraints = getConstraints(parsingResult);
-        Assert.assertEquals(15, constraints.size());
-
-        List<Relationship> relationships = getRelationships(parsingResult);
-        Assert.assertEquals(10, relationships.size());
-    }
-
-    @Test
-    public void testBtrPlaceComputation() throws IOException, ParsingException {
-
-        String tosca_file = "ICCS-example.yml";
-
-        // Parse the TOSCA input file
-        ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/", tosca_file));
-        Map<String, String> metadata = getMetadata(parsingResult);
-        List<String> supported_clouds = getListOfCloudsFromMetadata(metadata);
-        List<Relationship> relationships = getRelationships(parsingResult);
-        List<Constraint> constraints = getConstraints(parsingResult);
-
-        // Select a VM type for each host in each cloud
-        // TODO: Parse involved edge devices to retrieve resources capacity
-        Map<String, Map<String, String>> selected_vm_types = new HashMap<>();
-        for (Relationship relationship : relationships) {
-            // If the resource may run on cloud(s), select best matching types
-            if (relationship.getResourceConstraints().get("type").contains("cloud")) {
-                // Loop for all clouds supported (metadata)
-                Map<String, String> selected_types = new HashMap<>();
-                for (String cloud : supported_clouds) {
-                    String fragment = relationship.getFragment();
-                    // TODO: manage desired regions in a better way
-                    String selected_type = findBestSuitableVMType(cloud, cloud.equalsIgnoreCase("azure")?"francecentral":"eu-west-1", relationship.getHostingConstraints());
-                    selected_types.put(cloud.toLowerCase(), selected_type);
-                    selected_vm_types.put(fragment, selected_types);
-                }
-            }
-            else {
-                System.out.println("Edge only resource found: " + relationship.getHost());
-            }
-        }
-
-        // Initialize BtrPlace model and mapping
-        Model mo = new DefaultModel();
-        Mapping map = mo.getMapping();
-
-        // Create fragments (VMs)
-        Map<String, VM> vms = new HashMap<>();
-        for (Relationship relationship : relationships) {
-            vms.put(relationship.getFragment(), mo.newVM());
-        }
-
-        // Declare some edge devices (nodes)
-        Map<String, Node> edge_nodes = new HashMap<>();
-        // These edge devices are part of ban constraints
-        edge_nodes.put("acfdgex98", mo.newNode());
-        edge_nodes.put("kdsfk31fw", mo.newNode());
-        edge_nodes.put("f2553fdfs", mo.newNode());
-        edge_nodes.put("bd5fgdx32", mo.newNode());
-        // Another two extras
-        edge_nodes.put("deiuhde91", mo.newNode());
-        edge_nodes.put("dzol52kza", mo.newNode());
-
-        // Declare the 2 public clouds
-        // TODO: take them (along with the REGION) from METADATA
-        Map<String, Node> public_clouds = new HashMap<>();
-        public_clouds.put("amazon_eu_west_1", mo.newNode());
-        public_clouds.put("azure_france_central", mo.newNode());
-
-        // Set cpu
-        ShareableResource cpu = new ShareableResource("cpu");
-        mo.attach(cpu);
-        // Set edge devices cpu
-        for (Map.Entry<String, Node> edge_node : edge_nodes.entrySet()) {
-            cpu.setCapacity(edge_node.getValue(), 4);
-        }
-        // Pseudo infinite capacity for the public clouds.
-        for (Map.Entry<String, Node> cloud : public_clouds.entrySet()) {
-            cpu.setCapacity(cloud.getValue(), Integer.MAX_VALUE / 1000);
-        }
-        // Set cpu consumption of fragments
-        for (Relationship relationship : relationships) {
-            String memory_required = relationship.hostingConstraints.get("mem_size").get(0);
-            int constraint;
-            if (memory_required.contains("RangeMin")) {
-                constraint = Integer.valueOf(memory_required.split(",")[0].split(" ")[1]);
-            }
-            else if (memory_required.contains("GreaterOrEqual")) {
-                constraint = Integer.valueOf(memory_required.split(" ")[1]);
-            }
-            else {
-                constraint = Integer.valueOf(memory_required);
-            }
-            cpu.setConsumption(vms.get(relationship.getFragment()), constraint);
-        }
-
-        // Set memory
-        ShareableResource mem = new ShareableResource("memory");
-        mo.attach(mem);
-        // Set edge devices memory
-        for (Map.Entry<String, Node> edge_node : edge_nodes.entrySet()) {
-            mem.setCapacity(edge_node.getValue(), 2);
-        }
-        // Pseudo infinite capacity for the public clouds.
-        for (Map.Entry<String, Node> cloud : public_clouds.entrySet()) {
-            mem.setCapacity(cloud.getValue(), Integer.MAX_VALUE / 1000);
-        }
-        // Set memory consumption of fragments
-        for (Relationship relationship : relationships) {
-            String memory_required = relationship.hostingConstraints.get("mem_size").get(0);
-            int constraint;
-            if (memory_required.contains("RangeMin")) {
-                constraint = (int)Math.round(Double.valueOf(memory_required.split(",")[0].split(" ")[1]));
-            }
-            else if (memory_required.contains("GreaterOrEqual")) {
-                constraint = (int)Math.round(Double.valueOf(memory_required.split(" ")[1]));
-            }
-            else {
-                constraint = (int)Math.round(Double.valueOf(memory_required));
-            }
-            mem.setConsumption(vms.get(relationship.getFragment()), constraint);
-        }
-
-        // Set disk
-        ShareableResource disk = new ShareableResource("disk");
-        mo.attach(disk);
-        // Set edge devices disk
-        for (Map.Entry<String, Node> edge_node : edge_nodes.entrySet()) {
-            disk.setCapacity(edge_node.getValue(), 60);
-        }
-        // Pseudo infinite capacity for the public clouds.
-        for (Map.Entry<String, Node> cloud : public_clouds.entrySet()) {
-            disk.setCapacity(cloud.getValue(), Integer.MAX_VALUE / 1000);
-        }
-        // Set disk consumption of fragments
-        for (Relationship relationship : relationships) {
-            String disk_required = relationship.hostingConstraints.get("mem_size").get(0);
-            int constraint;
-            if (disk_required.contains("RangeMin")) {
-                constraint = (int)Math.round(Double.valueOf(disk_required.split(",")[0].split(" ")[1]));
-            }
-            else if (disk_required.contains("GreaterOrEqual")) {
-                constraint = (int)Math.round(Double.valueOf(disk_required.split(" ")[1]));
-            }
-            else {
-                constraint = (int)Math.round(Double.valueOf(disk_required));
-            }
-            disk.setConsumption(vms.get(relationship.getFragment()), constraint);
-        }
-
-        // Initial model setup
-        final List<SatConstraint> cstrs = new ArrayList<>();
-        // All edge nodes and public clouds are online and running
-        for (Map.Entry<String, Node> edge_node : edge_nodes.entrySet()) {
-            map.on(edge_node.getValue());
-        }
-        for (Map.Entry<String, Node> public_cloud : public_clouds.entrySet()) {
-            map.on(public_cloud.getValue());
-        }
-        cstrs.addAll(Online.newOnline(mo.getMapping().getAllNodes()));
-        // Initial placement. VMs ready to be deployed
-        for (Map.Entry<String, VM> vm : vms.entrySet()) {
-            map.ready(vm.getValue());
-        }
-        cstrs.addAll(Running.newRunning(mo.getMapping().getAllVMs()));
-
-        // Apply placement constraints
-        for (Constraint constraint : constraints) {
-            // TODO: manage more constraints
-            if (constraint.getType().contains("Spread")) {
-                Set<VM> constrained_vms = new HashSet<>();
-                for (String target : constraint.getTargets()) {
-                    constrained_vms.add(vms.get(target));
-                }
-                cstrs.add(new Spread(constrained_vms));
-            }
-            if (constraint.getType().contains("Gather")) {
-                Set<VM> constrained_vms = new HashSet<>();
-                for (String target : constraint.getTargets()) {
-                    constrained_vms.add(vms.get(target));
-                }
-                cstrs.add(new Gather(constrained_vms));
-            }
-            if (constraint.getType().contains("Ban")) {
-                Set<Node> constrained_nodes = new HashSet<>();
-                for (String node : constraint.getDevices()) {
-                    constrained_nodes.add(edge_nodes.get(node));
-                }
-                String vm = null;
-                for (String target : constraint.getTargets()) {
-                    vm = target;
-                }
-                cstrs.add(new Ban(vms.get(vm), Sets.newHashSet(constrained_nodes)));
-            }
-        }
-
-        // Detect cloud only & edge only constraints
-        for (Relationship relationship : relationships) {
-            // If the resource can only be run on cloud or edge => this is a constraint!
-            if (relationship.getResourceConstraints().get("type").size() == 1) {
-                // Here we ban edge devices
-                if(relationship.getResourceConstraints().get("type").get(0).equalsIgnoreCase("cloud")) {
-                    cstrs.add(new Ban(vms.get(relationship.getFragment()), Sets.newHashSet(edge_nodes.values())));
-                }
-                // Here we ban all clouds (public & private)
-                if(relationship.getResourceConstraints().get("type").get(0).equalsIgnoreCase("edge")) {
-                    cstrs.add(new Ban(vms.get(relationship.getFragment()), Sets.newHashSet(public_clouds.values())));
-                    // TODO: add private clouds if defined
-                }
-            }
-        }
-
-        // Create an instance, set the objective, start an optimized scheduler and solve the problem
-        Instance ii = new Instance(mo, cstrs, new MinUsed(Sets.newHashSet(public_clouds.values())));
-        final ChocoScheduler sched = PrestoCloudExtensions.newScheduler();
-        sched.doOptimize(true);
-        ReconfigurationPlan p = sched.solve(ii);
-        Assert.assertNotNull(p);
-
-        /*
-        //Show the results
-        System.out.println("-- Computation done: ");
-        System.out.println(p);
-        */
-
-        // Get the new model and mapping
-        mo = p.getResult();
-        map = mo.getMapping();
-
-        // Print statistics
-        System.out.println("==================================================================================================================");
-        System.out.println("Solver statistics:");
-        System.out.println("==================================================================================================================");
-        System.out.println(sched.getStatistics());
-        System.out.println("==================================================================================================================");
-
-        // Show the resulting placement
-        System.out.println("==================================================================================================================");
-        System.out.println("FRAGMENT_NAME \t\t\t\t\t\t\t\t\t\t -> \tCLOUD_NAME / EDGE_NAME\t -> \tVM_TYPE");
-        System.out.println("==================================================================================================================");
-        for (Map.Entry<String, VM> vm : vms.entrySet()) {
-            // Extract the destination node
-            Node destination_node = map.getVMLocation(vm.getValue());
-            // Look into edge devices
-            for (Map.Entry<String, Node> node : edge_nodes.entrySet()) {
-                if (node.getValue().equals(destination_node)) {
-                    System.out.println(vm.getKey() + "\t -> \t" + node.getKey());
-                    break;
-                }
-            }
-            // Look into public clouds devices
-            for (Map.Entry<String, Node> node : public_clouds.entrySet()) {
-                if (node.getValue().equals(destination_node)) {
-                    System.out.println(vm.getKey() + "\t -> \t" + (node.getKey().contains("amazon")?(node.getKey()+"\t"):node.getKey()) + "\t -> \t" + selected_vm_types.get(vm.getKey()).get(node.getKey().split("_")[0]));
-                    break;
-                }
-            }
-            // TODO: look into private clouds
-        }
-        System.out.println("==================================================================================================================");
-    }
-}
-
-class Constraint {
-
-    public String name;
-
-    @Getter @Setter
-    public String type;
-    @Getter @Setter
-    public Set<String> targets;
-    @Getter @Setter
-    public Set<String> devices;
-
-    Constraint(String name) {
-        this.name = name;
-        targets = new HashSet<>();
-        devices = new HashSet<>();
-    }
-
-    public void addDevice(String device) {
-        devices.add(device);
-    }
-}
-
-class Relationship {
-    @Getter @Setter
-    public String fragment;
-    @Getter @Setter
-    public String jppf;
-    @Getter @Setter
-    public String host;
-    @Getter @Setter
-    public String master;
-    @Getter @Setter
-    public Map<String, List<String>> hostingConstraints;
-    @Getter @Setter
-    public Map<String, List<String>> resourceConstraints;
-    @Getter @Setter
-    public Map<String, List<String>> osConstraints;
-
-    Relationship(String fragment, String jppf, String host) {
-        this.fragment = fragment;
-        this.jppf = jppf;
-        this.host = host;
-        this.master = null;
-        hostingConstraints = new HashMap<>();
-        resourceConstraints = new HashMap<>();
-        osConstraints = new HashMap<>();
-    }
-
-    public void addHostingConstraint(String name, List<String> hostingConstraint) {
-        hostingConstraints.put(name, hostingConstraint);
-    }
-
-    public void addResourceConstraint(String name, List<String> resourceConstraint) {
-        resourceConstraints.put(name, resourceConstraint);
-    }
-
-    public void addOSConstraint(String name, List<String> osConstraint) {
-        osConstraints.put(name, osConstraint);
     }
 }
