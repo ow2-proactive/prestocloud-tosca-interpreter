@@ -31,7 +31,7 @@ import prestocloud.tosca.parser.ToscaArchiveParser;
  */
 @Getter
 @Setter
-@Component
+@Component("localRepository")
 public class LocalRepositoryImpl implements ICSARRepositorySearchService {
     private static ThreadLocal<Boolean> recursiveCall = new ThreadLocal<>();
     @Resource
