@@ -128,7 +128,7 @@ public class TOSCAParserApp {
         }
 
         output_string.deleteCharAt(output_string.length()-1);
-        System.out.println(output_string);
+        System.out.println("RESULT: "+output_string);
     }
 
     private void test_printing_function(ParsingResult<ArchiveRoot> parsingResult) {
