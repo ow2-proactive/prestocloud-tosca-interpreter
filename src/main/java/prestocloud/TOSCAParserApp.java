@@ -91,40 +91,59 @@ public class TOSCAParserApp {
             // Print OK if no error found
             Assert.assertEquals(0, parsingResult.getContext().getParsingErrors().size());
             //System.out.println("OK");
-            determine_fragment_instances(args[2],parsingResult);
+           //test_printing_function(parsingResult);
+            determine_fragment_instances(parsingResult);
 
         };
     }
 
     /**
-     * This function returns a comma separated integer list of instances corresponding to a (string) comma separated list of fragment names
-     * @param arg The csv input string of fragment names
+     * This function returns a comma separated list containing for each type of fragment deployed, its name,the total number of deployed instances, the number of cloud instances, and the number of edge instances
      * @param parsingResult The result of the parsing of the instance-level tosca
      */
-    private void determine_fragment_instances(String arg, ParsingResult<ArchiveRoot> parsingResult) {
-        String DELIMITER = ",";
-        String [] fragments_list = arg.split(DELIMITER);
+    private void determine_fragment_instances(ParsingResult<ArchiveRoot> parsingResult) {
+        String ENTRY_DELIMITER = ",";
+        String KEY_VALUE_DELIMITER = ";";
         StringBuilder output_string = new StringBuilder("");
         HashMap<String,Integer> instances_hashmap = new HashMap<>();
+        HashMap<String,Integer> edge_instances_hashmap = new HashMap<>();
+        HashMap<String,Integer> cloud_instances_hashmap = new HashMap<>();
+
 
         Map<String, NodeTemplate> nodeTemplates = parsingResult.getResult().getTopology().getNodeTemplates();
-        for (Map.Entry<String, NodeTemplate> nodeTemplateFragment : nodeTemplates.entrySet()) {
-            if (nodeTemplateFragment.getValue().getType().equalsIgnoreCase("prestocloud.nodes.fragment.faas")) {
-                String fragment_name = nodeTemplateFragment.getKey();
+        for (Map.Entry<String, NodeTemplate> tosca_node : nodeTemplates.entrySet()) {
+            if (tosca_node.getValue().getType().equalsIgnoreCase("prestocloud.nodes.fragment.faas")) {
+                String fragment_name = tosca_node.getKey();
                 fragment_name = fragment_name.replaceAll("_\\d$", "");
                 instances_hashmap.put(fragment_name,0);
+                cloud_instances_hashmap.put(fragment_name,0);
+                edge_instances_hashmap.put(fragment_name,0);
             }
         }
-        for (Map.Entry<String, NodeTemplate> nodeTemplateFragment : nodeTemplates.entrySet()) {
-            if (nodeTemplateFragment.getValue().getType().equalsIgnoreCase("prestocloud.nodes.agent.faas")){
-                String agent_name = nodeTemplateFragment.getKey();
+        for (Map.Entry<String, NodeTemplate> tosca_node : nodeTemplates.entrySet()) {
+            if (tosca_node.getValue().getType().equalsIgnoreCase("prestocloud.nodes.agent.faas")){
+                String agent_name = tosca_node.getKey();
                 String fragment_name = agent_name.replaceFirst("deployment_node_","").replaceAll("_\\d$","");
-                instances_hashmap.computeIfPresent(fragment_name,(real_fragment_name,fragment_instances)-> ++fragment_instances);
+                String deployment_location = ((ScalarPropertyValue) nodeTemplates.get(tosca_node.getValue().getRelationships().get("host").getTarget()).getCapabilities().get("resource").getProperties().get("type")).getValue(); /* 1.Get the host of the fragment -> tosca_node.getValue().getRelationships().get("host").getTarget()
+                 2.Get the "type" property from the "resource" section of the hosting TOSCA node -> getCapabilities().get("resource").getProperties().get("type")
+                 3.Convert to a ScalarPropertyValue with a cast, and finally call the getValue() method.
+                 */
+
+                if (deployment_location.equalsIgnoreCase("cloud")){
+                    cloud_instances_hashmap.computeIfPresent(fragment_name,(real_fragment_name,fragment_instances)-> ++fragment_instances); //increase cloud instances
+                }else if (deployment_location.equalsIgnoreCase("edge")){
+                    edge_instances_hashmap.computeIfPresent(fragment_name,(real_fragment_name,fragment_instances)-> ++fragment_instances);// increase edge instances
+                }
+
+                instances_hashmap.computeIfPresent(fragment_name,(real_fragment_name,fragment_instances)-> ++fragment_instances); //increase total instances
+
             }
         }
 
-        for (String fragment:fragments_list){
-            output_string.append(instances_hashmap.get(fragment)).append(DELIMITER);
+        for (Map.Entry fragment:instances_hashmap.entrySet()){
+            Integer edge_instances = edge_instances_hashmap.get(fragment.getKey());
+            Integer cloud_instances = cloud_instances_hashmap.get(fragment.getKey());
+            output_string.append(fragment.getKey()).append(KEY_VALUE_DELIMITER).append(fragment.getValue()).append(KEY_VALUE_DELIMITER).append(cloud_instances).append(KEY_VALUE_DELIMITER).append(edge_instances).append(ENTRY_DELIMITER);
         }
 
         output_string.deleteCharAt(output_string.length()-1);

@@ -146,7 +146,7 @@ topology_template:
             mem_size: 2.0 GB
             disk_size: 30 GB
 
-    processing_node_fragments_VideoCaptor_1:
+    processing_node_fragments_VideoStreamer_1:
       type: prestocloud.nodes.compute.edge
       properties:
         type: edge
@@ -171,7 +171,7 @@ topology_template:
             mem_size: 2.0 GB
             disk_size: 30 GB
 
-    processing_node_fragments_VideoCaptor_2:
+    processing_node_fragments_VideoStreamer_2:
       type: prestocloud.nodes.compute.edge
       properties:
         type: edge
@@ -196,7 +196,7 @@ topology_template:
             mem_size: 2.0 GB
             disk_size: 30 GB
 
-    processing_node_fragments_VideoCaptor_3:
+    processing_node_fragments_VideoStreamer_3:
       type: prestocloud.nodes.compute.edge
       properties:
         type: edge
@@ -291,44 +291,44 @@ topology_template:
       requirements:
         - execute: deployment_node_fragments_PercussionDetector_1
 
-    deployment_node_fragments_VideoCaptor_1:
+    deployment_node_fragments_VideoStreamer_1:
       type: prestocloud.nodes.agent.faas
       requirements:
-        - host: processing_node_fragments_VideoCaptor_1
+        - host: processing_node_fragments_VideoStreamer_1
 
-    fragments_VideoCaptor_1:
+    fragments_VideoStreamer_1:
       type: prestocloud.nodes.fragment.faas
       properties:
         id: 5
-        name: fragments.VideoCaptor
+        name: fragments.VideoStreamer
         onloadable: true
       requirements:
-        - execute: deployment_node_fragments_VideoCaptor_1
+        - execute: deployment_node_fragments_VideoStreamer_1
 
-    deployment_node_fragments_VideoCaptor_2:
+    deployment_node_fragments_VideoStreamer_2:
       type: prestocloud.nodes.agent.faas
       requirements:
-        - host: processing_node_fragments_VideoCaptor_2
+        - host: processing_node_fragments_VideoStreamer_2
 
-    fragments_VideoCaptor_2:
+    fragments_VideoStreamer_2:
       type: prestocloud.nodes.fragment.faas
       properties:
         id: 5
-        name: fragments.VideoCaptor
+        name: fragments.VideoStreamer
         onloadable: true
       requirements:
-        - execute: deployment_node_fragments_VideoCaptor_2
+        - execute: deployment_node_fragments_VideoStreamer_2
 
-    deployment_node_fragments_VideoCaptor_3:
+    deployment_node_fragments_VideoStreamer_3:
       type: prestocloud.nodes.agent.faas
       requirements:
-        - host: processing_node_fragments_VideoCaptor_3
+        - host: processing_node_fragments_VideoStreamer_3
 
-    fragments_VideoCaptor_3:
+    fragments_VideoStreamer_3:
       type: prestocloud.nodes.fragment.faas
       properties:
         id: 5
-        name: fragments.VideoCaptor
+        name: fragments.VideoStreamer
         onloadable: true
       requirements:
-        - execute: deployment_node_fragments_VideoCaptor_3
+        - execute: deployment_node_fragments_VideoStreamer_3
