@@ -43,6 +43,8 @@ node_types:
         type: prestocloud.capabilities.container
       resource:
         type: prestocloud.capabilities.resource
+      sensors:
+        type: prestocloud.capabilities.sensors
 
   prestocloud.nodes.compute.cloud.amazon:
     derived_from: prestocloud.nodes.compute
@@ -161,6 +163,21 @@ data_types:
 
 # Capabilities
 capability_types:
+
+  prestocloud.capabilities.sensors:
+    derived_from: tosca.capabilities.Root
+    description: Provide a list of sensors.
+    properties:
+      camera:
+        type: boolean
+        description: A camera sensor.
+        required: false
+        default: false
+      microphone:
+        type: boolean
+        description: A microphone sensor.
+        required: false
+        default: false
 
   prestocloud.capabilities.container:
     derived_from: tosca.capabilities.Root

@@ -17,11 +17,20 @@ node_types:
   prestocloud.nodes.fragment.faas:
    description: A TOSCA description of a FaaS fragment
    derived_from: prestocloud.nodes.fragment
+   properties:
+      docker:
+        type: prestocloud.datatype.docker
+        description: Parameter for the docker container to execute.
+        required: false
    requirements:
      - execute:
         node: prestocloud.nodes.agent.faas
         capability: prestocloud.capabilities.fragmentExecution.faas
         relationship: prestocloud.relationships.executedBy.faas
+     - balance_load:
+        node: prestocloud.nodes.loadBalancer.faas
+        capability: prestocloud.capabilities.loadBalancing.faas
+        relationship: prestocloud.relationships.loadBalancedBy.faas
 
   prestocloud.nodes.fragment.jppf:
    description: A TOSCA description of a JPPF fragment
@@ -45,26 +54,28 @@ node_types:
      onloadable:
        type: boolean
        required: false
+   requirements:
+     - execute:
+        node: prestocloud.nodes.agent
+        capability: prestocloud.capabilities.fragmentExecution
+        relationship: prestocloud.relationships.executedBy
 
-  # Agent nodes
+  # Agents
   prestocloud.nodes.agent.faas:
     description: A basic FaaS-agent node
     derived_from: prestocloud.nodes.agent
-    properties:
-      component_version:
-        type: version
-        required: false
     capabilities:
+      execute:
+        type: prestocloud.capabilities.fragmentExecution.faas
       load_balancer:
         type: prestocloud.capabilities.loadBalancing.faas
 
   prestocloud.nodes.agent.jppf:
     description: A basic JPPF-agent node
     derived_from: prestocloud.nodes.agent
-    properties:
-      component_version:
-        type: version
-        required: false
+    capabilities:
+      execute:
+        type: prestocloud.capabilities.fragmentExecution.jppf
     requirements:
       - master:
          node: prestocloud.nodes.master.jppf
@@ -74,20 +85,24 @@ node_types:
   prestocloud.nodes.agent:
     description: A basic "agent" node
     derived_from: tosca.nodes.Root
-    capabilities:
-      execute:
-        type: prestocloud.capabilities.fragmentExecution
     properties:
       component_version:
         type: version
         required: false
+      ssh_key:
+        description: Pointer to the SSH keypair to use (keypair are usually hosted on a keyvault)
+        type: string
+        required: false
+    capabilities:
+      execute:
+        type: prestocloud.capabilities.fragmentExecution
     requirements:
       - host:
          node: prestocloud.nodes.compute
          capability: tosca.capabilities.Container
          relationship: tosca.relationships.HostedOn
 
-  # FaaS load balancer node
+  # FaaS load balancer
   prestocloud.nodes.loadBalancer.faas:
     description: A FaaS alike load balancer useful for horizontally scalable fragments
     derived_from: tosca.nodes.Root
@@ -95,28 +110,26 @@ node_types:
       component_version:
         type: version
         required: false
+    capabilities:
+      balance_load:
+        type: prestocloud.capabilities.loadBalancing.faas
     requirements:
-      - agents:
-         node: prestocloud.nodes.agent.faas
-         capability: prestocloud.capabilities.loadBalancing.faas
-         relationship: prestocloud.relationships.balancesLoadOn.faas
-         occurrences: [2, UNBOUNDED]
       - host:
          node: prestocloud.nodes.compute
          capability: tosca.capabilities.Container
          relationship: tosca.relationships.HostedOn
 
-  # JPPF Master node
+  # JPPF master
   prestocloud.nodes.master.jppf:
     description: A JPPF Master node
     derived_from: tosca.nodes.Root
-    capabilities:
-      jppf_endpoint:
-        type: prestocloud.capabilities.endpoint.jppf
     properties:
       component_version:
         type: version
         required: false
+    capabilities:
+      jppf_endpoint:
+        type: prestocloud.capabilities.endpoint.jppf
     requirements:
       - host:
          node: prestocloud.nodes.compute
@@ -125,11 +138,15 @@ node_types:
 
 capability_types:
 
-  # FaaS load balancing capability
   prestocloud.capabilities.loadBalancing.faas:
     description: Provide the ability to be managed by a FaaS load balancer
-    derived_from: tosca.capabilities.Root
+    derived_from: prestocloud.capabilities.loadBalancing
     valid_source_types: [ prestocloud.nodes.agent.faas ]
+
+  prestocloud.capabilities.loadBalancing:
+    description: Provide the ability to be managed by a load balancer
+    derived_from: tosca.capabilities.Root
+    valid_source_types: [ prestocloud.nodes.agent ]
 
   # JPPF Master endpoint capability
   prestocloud.capabilities.endpoint.jppf:
@@ -173,14 +190,14 @@ capability_types:
 
 relationship_types:
 
-  # FaaS load balancing relationship
-  prestocloud.relationships.balancesLoadOn.faas:
-    derived_from: tosca.relationships.Root
+  # Load balancing relationships
+  prestocloud.relationships.loadBalancedBy.faas:
+    derived_from: prestocloud.relationships.loadBalancedBy
     valid_target_types: [ prestocloud.nodes.agent.faas ]
-    properties:
-      agents_number:
-        type: integer
-        required: false
+
+  prestocloud.relationships.loadBalancedBy:
+    derived_from: tosca.relationships.Root
+    valid_target_types: [ prestocloud.nodes.agent ]
 
   # JPPF Master endpoint connection relationship
   prestocloud.relationships.connectsTo.jppf:
@@ -203,3 +220,56 @@ relationship_types:
   prestocloud.relationships.executedBy:
     derived_from: tosca.relationships.Root
     valid_target_types: [ prestocloud.nodes.agent ]
+
+data_types:
+
+  prestocloud.datatype.docker:
+    derived_from: tosca.datatypes.Root
+    description: Docker container parameters.
+    properties:
+      image:
+        type: string
+        description: The name of the cloud.
+        required: true
+      registry:
+        type: string
+        description: The name of the Docker registry to use
+        required: true
+      variables:
+        type: map
+        description: The optional list of environmental variables to define.
+        required: false
+        entry_schema:
+          type: string
+      ports:
+        type: list
+        description: The list of ports to map to the host.
+        required: false
+        entry_schema:
+          type: prestocloud.datatype.docker.port
+
+  prestocloud.datatype.docker.port:
+    derived_from: tosca.datatypes.Root
+    description: A Docker port mapping description.
+    properties:
+      target:
+        type: integer
+        description: The target port of the container.
+        required: true
+        constraints:
+          - in_range: [ 1, 65535 ]
+      published:
+        type: integer
+        description: The port to map/publish on the host.
+        required: true
+        constraints:
+          - in_range: [ 1, 65535 ]
+      protocol:
+        type: string
+        required: true
+        default: TCP
+        constraints:
+          - valid_values: [ UDP, TCP ]
+      vna:
+        type: string
+        required: false

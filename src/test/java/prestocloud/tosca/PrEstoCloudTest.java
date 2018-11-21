@@ -102,23 +102,23 @@ public class PrEstoCloudTest {
 
     @Test
     public void testParsingTypeLevelTOSCA() throws IOException, ParsingException {
-        ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "ICCS-example.yml"));
+        ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "ICCS-example-jppf.yml"));
         Assert.assertEquals(0, parsingResult.getContext().getParsingErrors().size());
-        parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "ICCS-example_2.yml"));
+        parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "ICCS-example-faas.yml"));
         Assert.assertEquals(0, parsingResult.getContext().getParsingErrors().size());
     }
 
     @Test
     public void testParsingInstanceLevelTOSCA() throws IOException, ParsingException {
-        ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "ActiveEon-example.yml"));
+        ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "ActiveEon-example-jppf.yml"));
         Assert.assertEquals(0, parsingResult.getContext().getParsingErrors().size());
-        parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "ActiveEon-example_2.yml"));
+        parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "ActiveEon-example-faas.yml"));
         Assert.assertEquals(0, parsingResult.getContext().getParsingErrors().size());
     }
 
     @Test
     public void testParsingActiveEon() throws IOException, ParsingException {
-        ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "ActiveEon-example.yml"));
+        ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "ActiveEon-example-jppf.yml"));
         Assert.assertEquals(0, parsingResult.getContext().getParsingErrors().size());
 
         // Look for fragments in the node templates
