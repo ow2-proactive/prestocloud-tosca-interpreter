@@ -336,7 +336,15 @@ topology_template:
             docker:
               image: "lambda_proxy_app/main_app:1.2.2"
               registry: "nexus:39580"
-              variables: { "SERVER_PORT":"9980", "SUM_URL":"@GwdMGW4gbn", "MULTIPLICATION_PORT":"9910", "DIVISION_PORT":"9930", "DIVISION_IPV6ENABLED":"false", "MULTIPLICATION_URL":"@GwdMGW4gbn", "DIVISION_URL":"@GwdMGW4gbn", "SUM_PORT":"9920" }
+              variables:
+                SERVER_PORT: "9980"
+                SUM_URL: "@GwdMGW4gbn"
+                MULTIPLICATION_PORT: "9910"
+                DIVISION_PORT: "9930"
+                DIVISION_IPV6ENABLED: "false"
+                MULTIPLICATION_URL: "@GwdMGW4gbn"
+                DIVISION_URL: "@GwdMGW4gbn"
+                SUM_PORT: "9920"
               ports:
                 - target: 9980
                   published: 9980
