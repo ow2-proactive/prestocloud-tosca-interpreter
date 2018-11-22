@@ -84,9 +84,9 @@ node_types:
                capabilities:
                   - host:
                      properties:
-                        - num_cpus: { in_range: [ 2,4 ] }
-                        - mem_size: { in_range: [ 4,8 ] }
-                        - disk_size: { in_range: [ 40,100 ] }
+                        - num_cpus: { in_range: [ 2, 4 ] }
+                        - mem_size: { in_range: [ 4 GB, 8 GB ] }
+                        - disk_size: { in_range: [ 40 GB, 100GB ] }
                   - os:
                      properties:
                         - architecture: { valid_values: [ x86_64, i386 ] }
@@ -134,9 +134,9 @@ node_types:
                capabilities:
                   - host:
                      properties:
-                        - num_cpus: { in_range: [ 2,4 ] }
-                        - mem_size: { in_range: [ 4,8 ] }
-                        - disk_size: { in_range: [ 100,500 ] }
+                        - num_cpus: { in_range: [ 2, 4 ] }
+                        - mem_size: { in_range: [ 4 GB, 8 GB ] }
+                        - disk_size: { in_range: [ 100 GB, 500 GB ] }
                   - os:
                      properties:
                         - architecture: { valid_values: [ x86_64, i386 ] }
@@ -181,9 +181,9 @@ node_types:
                capabilities:
                   - host:
                      properties:
-                        - num_cpus: { in_range: [ 2,4 ] }
-                        - mem_size: { in_range: [ 4,8 ] }
-                        - disk_size: { in_range: [ 40,100 ] }
+                        - num_cpus: { in_range: [ 2, 4 ] }
+                        - mem_size: { in_range: [ 4 GB, 8 GB ] }
+                        - disk_size: { in_range: [ 40 GB, 100 GB ] }
                   - os:
                      properties:
                         - architecture: { valid_values: [ x86_64, i386 ] }
@@ -231,9 +231,9 @@ node_types:
                capabilities:
                   - host:
                      properties:
-                        - num_cpus: { in_range: [ 1,2 ] }
-                        - mem_size: { in_range: [ 2,4 ] }
-                        - disk_size: { in_range: [ 20,40 ] }
+                        - num_cpus: { in_range: [ 1, 2 ] }
+                        - mem_size: { in_range: [ 2  GB, 4 GB ] }
+                        - disk_size: { in_range: [ 20 GB, 40 GB ] }
                   - os:
                      properties:
                         - architecture: { valid_values: [ arm64, armel, armhf ] }
@@ -281,9 +281,9 @@ node_types:
                capabilities:
                   - host:
                      properties:
-                        - num_cpus: { in_range: [ 1,2 ] }
-                        - mem_size: { in_range: [ 2,4 ] }
-                        - disk_size: { in_range: [ 20,40 ] }
+                        - num_cpus: { in_range: [ 1, 2 ] }
+                        - mem_size: { in_range: [ 2 GB, 4 GB ] }
+                        - disk_size: { in_range: [ 20 GB, 40 GB ] }
                   - os:
                      properties:
                         - architecture: { valid_values: [ arm64, armel, armhf ] }
