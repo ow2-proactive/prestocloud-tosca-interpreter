@@ -64,7 +64,8 @@ node_types:
                capabilities:
                   - host:
                      properties:
-                        - mem_size: { in_range: [ 200 MB, 4 GB ] }
+                        - num_cpus: { in_range: [ 1, 2 ] }
+                        - mem_size: { in_range: [ 2 GB, 4 GB ] }
                         - disk_size: { in_range: [ 20 GB, 40 GB ] }
                   - resource:
                      properties:
