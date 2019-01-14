@@ -25,21 +25,8 @@
  */
 package prestocloud.btrplace.tosca;
 
-import java.io.IOException;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.junit.Assert;
-import org.prestocloud.tosca.model.definitions.AbstractPropertyValue;
-import org.prestocloud.tosca.model.definitions.ComplexPropertyValue;
-import org.prestocloud.tosca.model.definitions.FilterDefinition;
-import org.prestocloud.tosca.model.definitions.ListPropertyValue;
-import org.prestocloud.tosca.model.definitions.PropertyConstraint;
-import org.prestocloud.tosca.model.definitions.RequirementDefinition;
-import org.prestocloud.tosca.model.definitions.ScalarPropertyValue;
+import org.prestocloud.tosca.model.definitions.*;
 import org.prestocloud.tosca.model.definitions.constraints.EqualConstraint;
 import org.prestocloud.tosca.model.definitions.constraints.GreaterOrEqualConstraint;
 import org.prestocloud.tosca.model.definitions.constraints.InRangeConstraint;
@@ -48,14 +35,22 @@ import org.prestocloud.tosca.model.templates.Capability;
 import org.prestocloud.tosca.model.templates.NodeTemplate;
 import org.prestocloud.tosca.model.templates.PolicyTemplate;
 import org.prestocloud.tosca.model.types.NodeType;
-
 import prestocloud.btrplace.tosca.model.Constraint;
-import prestocloud.btrplace.tosca.model.Relationship;
+import prestocloud.btrplace.tosca.model.Docker;
+import prestocloud.btrplace.tosca.model.RelationshipFaaS;
+import prestocloud.btrplace.tosca.model.RelationshipJPPF;
 import prestocloud.model.common.Tag;
 import prestocloud.tosca.model.ArchiveRoot;
 import prestocloud.tosca.parser.ParsingException;
 import prestocloud.tosca.parser.ParsingResult;
 import prestocloud.tosca.parser.ToscaParser;
+
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author ActiveEon Team
@@ -180,25 +175,27 @@ public class ParsingUtils {
 
         // Look for placement constraints
         Map<String, PolicyTemplate> policyTemplates = parsingResult.getResult().getTopology().getPolicies();
-        for (Map.Entry<String, PolicyTemplate> policyTemplate : policyTemplates.entrySet()) {
-            Constraint constraint = new Constraint(policyTemplate.getKey());
-            constraint.setType(policyTemplate.getValue().getType());
-            constraint.setTargets(policyTemplate.getValue().getTargets());
-            if (policyTemplate.getValue().getType().equalsIgnoreCase("prestocloud.placement.Ban")) {
-                List<Object> excludedDevices = ((ListPropertyValue)policyTemplate.getValue().getProperties().get("excluded_devices")).getValue();
-                for (Object excludedDevice : excludedDevices) {
-                    constraint.addDevice((String)excludedDevice);
+        if (policyTemplates != null) {
+            for (Map.Entry<String, PolicyTemplate> policyTemplate : policyTemplates.entrySet()) {
+                Constraint constraint = new Constraint(policyTemplate.getKey());
+                constraint.setType(policyTemplate.getValue().getType());
+                constraint.setTargets(policyTemplate.getValue().getTargets());
+                if (policyTemplate.getValue().getType().equalsIgnoreCase("prestocloud.placement.Ban")) {
+                    List<Object> excludedDevices = ((ListPropertyValue) policyTemplate.getValue().getProperties().get("excluded_devices")).getValue();
+                    for (Object excludedDevice : excludedDevices) {
+                        constraint.addDevice((String) excludedDevice);
+                    }
                 }
+                constraints.add(constraint);
             }
-            constraints.add(constraint);
         }
         return constraints;
     }
 
     // TODO: PARSE MASTER AS WELL!!!
-    public static List<Relationship> getRelationships(ParsingResult<ArchiveRoot> parsingResult) {
+    public static List<RelationshipJPPF> getJPPFRelationships(ParsingResult<ArchiveRoot> parsingResult) {
 
-        List<Relationship> relationships = new ArrayList<>();
+        List<RelationshipJPPF> relationships = new ArrayList<>();
 
         // Look for fragments in the node templates
         Map<String, NodeTemplate> nodeTemplates = parsingResult.getResult().getTopology().getNodeTemplates();
@@ -211,7 +208,7 @@ public class ParsingUtils {
                         // Look for the corresponding node type
                         for (Map.Entry<String, NodeType> nodeTypeJPPF : parsingResult.getResult().getNodeTypes().entrySet()) {
                             if (nodeTypeJPPF.getKey().equalsIgnoreCase(nodeTemplateJPPF.getValue().getType())) {
-                                Relationship relationship = new Relationship(nodeTemplateFragment.getKey(), nodeTemplateJPPF.getKey(), nodeTypeJPPF.getKey());
+                                RelationshipJPPF relationship = new RelationshipJPPF(nodeTemplateFragment.getKey(), nodeTemplateJPPF.getKey(), nodeTypeJPPF.getKey());
                                 // Look for requirements
                                 for (RequirementDefinition requirement : nodeTypeJPPF.getValue().getRequirements()) {
                                     if (requirement.getId().equalsIgnoreCase("master")) {
@@ -286,6 +283,149 @@ public class ParsingUtils {
         return relationships;
     }
 
+    public static List<Docker> getDockerParameters(ParsingResult<ArchiveRoot> parsingResult) {
+
+        List<Docker> dockers = new ArrayList<>();
+
+        // Look for fragments in the node templates
+        Map<String, NodeTemplate> nodeTemplates = parsingResult.getResult().getTopology().getNodeTemplates();
+        for (Map.Entry<String, NodeTemplate> nodeTemplateFragment : nodeTemplates.entrySet()) {
+            // Fragment detected
+            if (nodeTemplateFragment.getValue().getType().equalsIgnoreCase("prestocloud.nodes.fragment.faas")) {
+                Docker dockerParameters = new Docker(nodeTemplateFragment.getValue().getName());
+                // Look for the 'docker' property
+                ComplexPropertyValue dockerProperty = (ComplexPropertyValue) nodeTemplateFragment.getValue().getProperties().get("docker");
+                if (dockerProperty != null) {
+                    for (String dockerKey : dockerProperty.getValue().keySet()) {
+                        if (dockerKey.equalsIgnoreCase("image")) {
+                            dockerParameters.setImage(dockerProperty.getValue().get(dockerKey).toString());
+                        }
+                        if (dockerKey.equalsIgnoreCase("registry")) {
+                            dockerParameters.setRegistry(dockerProperty.getValue().get(dockerKey).toString());
+                        }
+                        if (dockerKey.equalsIgnoreCase("cmd")) {
+                            dockerParameters.setCmd(dockerProperty.getValue().get(dockerKey).toString());
+                        }
+                        if (dockerKey.equalsIgnoreCase("variables")) {
+                            for (String variableKey : ((HashMap<String, String>)dockerProperty.getValue().get(dockerKey)).keySet()) {
+                                dockerParameters.addVariable(variableKey, ((HashMap<String, String>)dockerProperty.getValue().get(dockerKey)).get(variableKey).toString());
+                            }
+                        }
+                        if (dockerKey.equalsIgnoreCase("ports")) {
+                            for (HashMap<String, String> port : ((ArrayList<HashMap<String, String>>)dockerProperty.getValue().get(dockerKey))) {
+                                for (String portKey : port.keySet()) {
+                                    if (portKey.equalsIgnoreCase("protocol")) {
+                                        dockerParameters.setPortProtocol(port.get(portKey));
+                                    }
+                                    if (portKey.equalsIgnoreCase("published")) {
+                                        dockerParameters.setPortPublished(port.get(portKey));
+                                    }
+                                    if (portKey.equalsIgnoreCase("target")) {
+                                        dockerParameters.setPortTarget(port.get(portKey));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    dockers.add(dockerParameters);
+                }
+            }
+        }
+        return dockers;
+    }
+
+    // TODO: parse load balancer as well!!
+    public static List<RelationshipFaaS> getFaaSRelationships(ParsingResult<ArchiveRoot> parsingResult) {
+
+        List<RelationshipFaaS> relationships = new ArrayList<>();
+
+        // Look for fragments in the node templates
+        Map<String, NodeTemplate> nodeTemplates = parsingResult.getResult().getTopology().getNodeTemplates();
+        for (Map.Entry<String, NodeTemplate> nodeTemplateFragment : nodeTemplates.entrySet()) {
+            // Fragment detected
+            if (nodeTemplateFragment.getValue().getType().equalsIgnoreCase("prestocloud.nodes.fragment.faas")) {
+                // Look for the corresponding FaaS agent
+                for (Map.Entry<String, NodeTemplate> nodeTemplateFaaS : nodeTemplates.entrySet()) {
+                    if (nodeTemplateFaaS.getKey().equalsIgnoreCase(nodeTemplateFragment.getValue().getRelationships().get("execute").getTarget())) {
+                        // Look for the corresponding node type
+                        for (Map.Entry<String, NodeType> nodeTypeFaaS : parsingResult.getResult().getNodeTypes().entrySet()) {
+                            if (nodeTypeFaaS.getKey().equalsIgnoreCase(nodeTemplateFaaS.getValue().getType())) {
+                                RelationshipFaaS relationship = new RelationshipFaaS(nodeTemplateFragment.getKey(), nodeTemplateFaaS.getKey(), nodeTypeFaaS.getKey());
+                                // Look for requirements
+                                for (RequirementDefinition requirement : nodeTypeFaaS.getValue().getRequirements()) {
+                                    // Look for a requirement with nodeFilter's capabilities (hosting)
+                                    if (requirement.getNodeFilter() != null) {
+                                        for (Map.Entry<String, FilterDefinition> capability : requirement.getNodeFilter().getCapabilities().entrySet()) {
+                                            // Find the host properties
+                                            if (capability.getKey().equalsIgnoreCase("host")) {
+                                                for (Map.Entry<String, List<PropertyConstraint>> properties : capability.getValue().getProperties().entrySet()) {
+                                                    List<String> constraints = new ArrayList<>();
+                                                    for (PropertyConstraint propertyConstraint : properties.getValue()) {
+                                                        if (propertyConstraint instanceof InRangeConstraint) {
+                                                            constraints.add("RangeMin: " + ((InRangeConstraint) propertyConstraint).getInRange().get(0) + ", RangeMax: " + ((InRangeConstraint) propertyConstraint).getInRange().get(1));
+                                                        } else if (propertyConstraint instanceof EqualConstraint) {
+                                                            constraints.add("Equal: " + ((EqualConstraint) propertyConstraint).getEqual());
+                                                        } else if (propertyConstraint instanceof GreaterOrEqualConstraint) {
+                                                            constraints.add("GreaterOrEqual: " + ((GreaterOrEqualConstraint) propertyConstraint).getGreaterOrEqual());
+                                                        } else {
+                                                            // Constraint not yet managed
+                                                            System.out.println("Host constraint not managed: " + propertyConstraint.toString());
+                                                        }
+                                                    }
+                                                    relationship.addHostingConstraint(properties.getKey(), constraints);
+                                                }
+                                            }
+                                            // Find the OS properties
+                                            if (capability.getKey().equalsIgnoreCase("os")) {
+                                                for (Map.Entry<String, List<PropertyConstraint>> properties : capability.getValue().getProperties().entrySet()) {
+                                                    List<String> constraints = new ArrayList<>();
+                                                    for (PropertyConstraint propertyConstraint : properties.getValue()) {
+                                                        if (propertyConstraint instanceof EqualConstraint) {
+                                                            constraints.add(((EqualConstraint) propertyConstraint).getEqual());
+                                                        } else if (propertyConstraint instanceof ValidValuesConstraint) {
+                                                            constraints.addAll(((ValidValuesConstraint) propertyConstraint).getValidValues());
+                                                        } else {
+                                                            // Constraint not yet managed
+                                                            System.out.println("OS constraint not managed: " + propertyConstraint.toString());
+                                                        }
+                                                    }
+                                                    relationship.addOSConstraint(properties.getKey(), constraints);
+                                                }
+                                            }
+                                            // Find the resource properties
+                                            if (capability.getKey().equalsIgnoreCase("resource")) {
+                                                for (Map.Entry<String, List<PropertyConstraint>> properties : capability.getValue().getProperties().entrySet()) {
+                                                    List<String> constraints = new ArrayList<>();
+                                                    for (PropertyConstraint propertyConstraint : properties.getValue()) {
+                                                        if (propertyConstraint instanceof EqualConstraint) {
+                                                            constraints.add(((EqualConstraint) propertyConstraint).getEqual());
+                                                        } else if (propertyConstraint instanceof ValidValuesConstraint) {
+                                                            constraints.addAll(((ValidValuesConstraint) propertyConstraint).getValidValues());
+                                                        } else {
+                                                            // Constraint not yet managed
+                                                            System.out.println("Resource constraint not managed: " + propertyConstraint.toString());
+                                                        }
+                                                    }
+                                                    relationship.addResourceConstraint(properties.getKey(), constraints);
+                                                }
+                                            }
+                                            // Find the sensors properties
+                                            if (capability.getKey().equalsIgnoreCase("sensors")) {
+                                                //TODO: get sensors requirements
+                                            }
+                                        }
+                                    }
+                                }
+                                relationships.add(relationship);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return relationships;
+    }
+
     public static Map<String, String> getMetadata(ParsingResult<ArchiveRoot> parsingResult) {
         Map<String, String> metadata = new HashMap<>();
         for (Tag tag : parsingResult.getResult().getArchive().getTags()) {
@@ -323,6 +463,7 @@ public class ParsingUtils {
         // TODO: MAKE A LIST OF CANDIDATES AND SELECT THE LOWEST PRICE
 
         Map<String, Map<String, Map<String, String>>> VMTypes;
+        Map<String, Double> selectedTypes = new HashMap<>();
 
         if (cloud.equalsIgnoreCase("amazon")) {
             VMTypes = getCloudNodesTemplates(parser.parseFile(Paths.get(repositoryPath,"amazon-vm-templates.yml")), region);
@@ -453,11 +594,18 @@ public class ParsingUtils {
                 }
                 if (cpu && mem && disk && price) {
                     //System.out.println("Best suitable type found: " + hostingConstraint.getKey());
-                    return hostingConstraint.getValue().get("cloud").get("name");
+                    //return hostingConstraint.getValue().get("cloud").get("name");
+                    selectedTypes.put(hostingConstraint.getValue().get("cloud").get("name"), Double.valueOf(hostingConstraint.getValue().get("host").get("price")));
                 }
             }
         }
-        System.out.println("No suitable type found for hosting constraints: " + hostingConstraints);
-        return null;
+
+        if (selectedTypes.isEmpty()) {
+            System.out.println("No suitable type found for hosting constraints: " + hostingConstraints);
+            return null;
+        }
+        else {
+            return selectedTypes.entrySet().stream().sorted(Map.Entry.comparingByValue()).findFirst().get().getKey();
+        }
     }
 }
