@@ -10000,26 +10000,6 @@ topology_template:
             disk_size: 200 GB
             price: 0.48
 
-    Standard_D4_v2_Promo_westeurope:
-      type: prestocloud.nodes.compute.cloud.azure
-      description: PrEstoCloud Azure compute node of type Standard_D4_v2_Promo (region westeurope).
-      properties:
-        name: Standard_D4_v2_Promo
-        type: cloud
-        cloud: *azure_cloud_westeurope
-      capabilities:
-        resource:
-          properties:
-            name: Standard_D4_v2_Promo
-            type: cloud
-            cloud: *azure_cloud_westeurope
-        host:
-          properties:
-            num_cpus: 8
-            mem_size: 28 GB
-            disk_size: 400 GB
-            price: 0.48
-
     Standard_E8_v3_westeurope:
       type: prestocloud.nodes.compute.cloud.azure
       description: PrEstoCloud Azure compute node of type Standard_E8_v3 (region westeurope).
