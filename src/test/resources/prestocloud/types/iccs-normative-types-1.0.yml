@@ -233,8 +233,12 @@ data_types:
         required: true
       registry:
         type: string
-        description: The name of the Docker registry to use
-        required: true
+        description: The name of the Docker registry to use, optional.
+        required: false
+      cmd:
+        type: string
+        description: An optional cmdline to execute.
+        required: false
       variables:
         type: map
         description: The optional list of environmental variables to define.
