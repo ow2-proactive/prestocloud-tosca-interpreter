@@ -25,18 +25,18 @@
  */
 package prestocloud.btrplace.tosca.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * @author ActiveEon Team
  * @since 25/09/18
  */
-public class Relationship {
+public class RelationshipJPPF {
     @Getter
     @Setter
     public String fragment;
@@ -53,7 +53,7 @@ public class Relationship {
     @Getter @Setter
     public Map<String, List<String>> osConstraints;
 
-    public Relationship(String fragment, String jppf, String host) {
+    public RelationshipJPPF(String fragment, String jppf, String host) {
         this.fragment = fragment;
         this.jppf = jppf;
         this.host = host;
