@@ -1,0 +1,175 @@
+tosca_definitions_version: tosca_prestocloud_mapping_1_2
+
+metadata:
+   template_name: ICCS generated types definition
+   template_author: ICCS
+   template_version: 1.0.0-SNAPSHOT
+   TimePeriod: 720
+   ProviderName_0: Amazon
+   ProviderRequired_0: true
+   ProviderExcluded_0: false
+   ProviderName_1: Azure
+   ProviderRequired_1: true
+   ProviderExcluded_1: false
+   ProviderName_2: OpenStack
+   ProviderRequired_2: false
+   ProviderExcluded_2: true
+   MaxInstances: 100
+
+description: Types Description
+
+imports:
+   - tosca-normative-types:1.2
+   - iccs-normative-types:1.0
+   - resource-descriptions:1.0
+   - placement-constraints:1.0
+
+node_types:
+
+   # Multimedia manager node selection
+   processing_node_fragments_MultimediaManager:
+      description: A TOSCA description of a node
+      derived_from: prestocloud.nodes.agent.faas
+      requirements:
+         - host:
+            capability: tosca.capabilities.Container
+            node: prestocloud.nodes.compute
+            relationship: tosca.relationships.HostedOn
+            occurrences: [ 1,10 ]
+            node_filter:
+               capabilities:
+                  - host:
+                     properties:
+                        - num_cpus: { in_range: [ 8, 16 ] }
+                        - mem_size: { in_range: [ 24, 32 ] }
+                        - disk_size: { in_range: [ 400, 500 ] }
+                  - os:
+                     properties:
+                        - architecture: { equal: x86_64 }
+                        - type: { equal: linux }
+                        - distribution: { equal: ubuntu }
+                  - resource:
+                     properties:
+                        - type: { equal: cloud }
+
+#   # Multimedia manager's load balancer node selection
+#   load_balancing_MultimediaManager_type:
+#      description: Hosting requirements for the multimedia manager's load balancer
+#      derived_from: prestocloud.nodes.loadBalancer.faas
+#      requirements:
+#         - host:
+#            capability: tosca.capabilities.Container
+#            node: prestocloud.nodes.compute
+#            relationship: tosca.relationships.HostedOn
+#            occurrences: [ 1, 1 ]
+#            node_filter:
+#               capabilities:
+#                  - host:
+#                     properties:
+#                        - num_cpus: { in_range: [ 1, 2 ] }
+#                        - mem_size: { in_range: [ 2 GB, 4 GB ] }
+#                        - disk_size: { in_range: [ 20 GB, 40 GB ] }
+#                  - resource:
+#                     properties:
+#                        - type: { equal: cloud }
+
+   # Video transcoder node selection
+   processing_node_fragments_VideoTranscoder:
+      description: A TOSCA description of a node
+      derived_from: prestocloud.nodes.agent.faas
+      requirements:
+         - host:
+            capability: tosca.capabilities.Container
+            node: prestocloud.nodes.compute
+            relationship: tosca.relationships.HostedOn
+            occurrences: [ 1,10 ]
+            node_filter:
+               capabilities:
+                  - host:
+                     properties:
+                        - num_cpus: { in_range: [ 4, 8 ] }
+                        - mem_size: { in_range: [ 8, 12 ] }
+                        - disk_size: { in_range: [ 40, 100 ] }
+                  - os:
+                     properties:
+                        - architecture: { equal: x86_64 }
+                        - type: { equal: linux }
+                        - distribution: { equal: ubuntu }
+                  - resource:
+                     properties:
+                        - type: { equal: cloud }
+#                  - sensors:
+#                     properties:
+#                        - camera: { equal: true }
+
+   # Video transcoder's load balancer node selection
+#   load_balancing_VideoTranscoder_type:
+#      description: Hosting requirements for the multimedia manager's load balancer
+#      derived_from: prestocloud.nodes.loadBalancer.faas
+#      requirements:
+#         - host:
+#            capability: tosca.capabilities.Container
+#            node: prestocloud.nodes.compute
+#            relationship: tosca.relationships.HostedOn
+#            occurrences: [ 1, 1 ]
+#            node_filter:
+#               capabilities:
+#                  - host:
+#                     properties:
+#                        - num_cpus: { in_range: [ 1, 2 ] }
+#                        - mem_size: { in_range: [ 2 GB, 4 GB ] }
+#                        - disk_size: { in_range: [ 20 GB, 40 GB ] }
+#                  - resource:
+#                     properties:
+#                        - type: { equal: cloud }
+
+topology_template:
+
+   node_templates:
+
+      # Multimedia manager
+
+#      load_balancing_MultimediaManager:
+#         type: load_balancing_MultimediaManager_type
+
+      deployment_node_fragments_MultimediaManager:
+         type: processing_node_fragments_MultimediaManager
+
+      fragments_MultimediaManager:
+         type: prestocloud.nodes.fragment.faas
+         properties:
+            id: 2
+            name: fragments.MultimediaManager
+            onloadable: false
+            docker:
+              image: "alpine:latest"
+              cmd: "echo '[Multimedia Manager]'"
+         requirements:
+            - execute: deployment_node_fragments_MultimediaManager
+ #           - balance_load: load_balancing_MultimediaManager
+
+      # Video transcoder
+
+#      load_balancing_VideoTranscoder:
+#         type: load_balancing_VideoTranscoder_type
+
+      deployment_node_fragments_VideoTranscoder:
+         type: processing_node_fragments_VideoTranscoder
+
+      fragments_VideoTranscoder:
+         type: prestocloud.nodes.fragment.faas
+         properties:
+            id: 3
+            name: fragments.VideoTranscoder
+            onloadable: false
+            docker:
+              image: "alpine:latest"
+              cmd: "echo '[Video Transcoder]'"
+         requirements:
+            - execute: deployment_node_fragments_VideoTranscoder
+#            - balance_load: load_balancing_VideoTranscoder
+
+   policies:
+     - anti_affinity_group_0:
+        type: prestocloud.placement.Spread
+        targets: [ fragments_MultimediaManager, fragments_VideoTranscoder ]
