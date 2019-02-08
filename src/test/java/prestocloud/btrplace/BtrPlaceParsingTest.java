@@ -1,12 +1,30 @@
 package prestocloud.btrplace;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.google.common.collect.Sets;
-import net.minidev.json.JSONArray;
-import net.minidev.json.JSONObject;
-import org.btrplace.model.*;
-import org.btrplace.model.constraint.*;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+
+import javax.annotation.Resource;
+
+import org.btrplace.model.DefaultModel;
+import org.btrplace.model.Instance;
+import org.btrplace.model.Mapping;
+import org.btrplace.model.Model;
+import org.btrplace.model.Node;
+import org.btrplace.model.VM;
+import org.btrplace.model.constraint.Ban;
+import org.btrplace.model.constraint.Gather;
+import org.btrplace.model.constraint.Online;
+import org.btrplace.model.constraint.Running;
+import org.btrplace.model.constraint.SatConstraint;
+import org.btrplace.model.constraint.Spread;
 import org.btrplace.model.view.ShareableResource;
 import org.btrplace.plan.ReconfigurationPlan;
 import org.btrplace.scheduler.choco.ChocoScheduler;
@@ -15,12 +33,23 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.hateoas.HypermediaAutoConfiguration;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.context.annotation.Profile;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.google.common.collect.Sets;
+
+import net.minidev.json.JSONArray;
+import net.minidev.json.JSONObject;
 import prestocloud.btrplace.minUsed.MinUsed;
 import prestocloud.btrplace.tosca.ParsingUtils;
 import prestocloud.btrplace.tosca.model.Constraint;
@@ -33,12 +62,6 @@ import prestocloud.tosca.parser.ParsingException;
 import prestocloud.tosca.parser.ParsingResult;
 import prestocloud.tosca.parser.ToscaParser;
 import prestocloud.tosca.repository.LocalRepositoryImpl;
-
-import javax.annotation.Resource;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Paths;
-import java.util.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class)
