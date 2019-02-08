@@ -22,16 +22,42 @@ imports:
 
 node_types:
 
-   # Audio captor node selection
-   processing_node_fragments_AudioCaptor:
-      description: A TOSCA description of a node
-      derived_from: prestocloud.nodes.agent.faas
+   # Requirements for a cloud based proxy
+   proxying_fragments_type:
+      description: Hosting requirements of a proxy
+      derived_from: prestocloud.nodes.proxy.faas
       requirements:
          - host:
             capability: tosca.capabilities.Container
             node: prestocloud.nodes.compute
             relationship: tosca.relationships.HostedOn
-            occurrences: [ 1,10 ]
+            occurrences: [ 1, 1 ]
+            node_filter:
+               capabilities:
+                  - host:
+                     properties:
+                        - num_cpus: { in_range: [ 1, 2 ] }
+                        - mem_size: { in_range: [ 2 GB, 4 GB ] }
+                        - disk_size: { in_range: [ 20 GB, 40 GB ] }
+                  - resource:
+                     properties:
+                        - type: { equal: cloud }
+
+   # Audio captor node selection
+   processing_node_fragments_AudioCaptor:
+      description: A TOSCA description of a node
+      derived_from: prestocloud.nodes.agent.faas
+      properties:
+         ssh_pub_key:
+            type: string
+            description: Optional public SSH key to access the machine remotely.
+            required: false
+      requirements:
+         - host:
+            capability: tosca.capabilities.Container
+            node: prestocloud.nodes.compute
+            relationship: tosca.relationships.HostedOn
+            occurrences: [ 1,1 ]
             node_filter:
                capabilities:
                   - host:
@@ -50,27 +76,6 @@ node_types:
                      properties:
                         - microphone: { equal: true }
 
-   # Audio captor's load balancer node selection
-   load_balancing_AudioCaptor_type:
-      description: Hosting requirements for the audio captor's load balancer
-      derived_from: prestocloud.nodes.loadBalancer.faas
-      requirements:
-         - host:
-            capability: tosca.capabilities.Container
-            node: prestocloud.nodes.compute
-            relationship: tosca.relationships.HostedOn
-            occurrences: [ 1, 1 ]
-            node_filter:
-               capabilities:
-                  - host:
-                     properties:
-                        - num_cpus: { in_range: [ 1, 2 ] }
-                        - mem_size: { in_range: [ 2 GB, 4 GB ] }
-                        - disk_size: { in_range: [ 20 GB, 40 GB ] }
-                  - resource:
-                     properties:
-                        - type: { valid_values: [ edge ] }
-
    # Face detector node selection
    processing_node_fragments_FaceDetector:
       description: A TOSCA description of a node
@@ -80,7 +85,7 @@ node_types:
             capability: tosca.capabilities.Container
             node: prestocloud.nodes.compute
             relationship: tosca.relationships.HostedOn
-            occurrences: [ 1,10 ]
+            occurrences: [ 1,1 ]
             node_filter:
                capabilities:
                   - host:
@@ -99,27 +104,6 @@ node_types:
                   - sensors:
                      properties:
                         - camera: { equal: true }
-
-   # Face detector's load balancer node selection
-   load_balancing_FaceDetector_type:
-      description: Hosting requirements for the face detector's load balancer
-      derived_from: prestocloud.nodes.loadBalancer.faas
-      requirements:
-         - host:
-            capability: tosca.capabilities.Container
-            node: prestocloud.nodes.compute
-            relationship: tosca.relationships.HostedOn
-            occurrences: [ 1, 1 ]
-            node_filter:
-               capabilities:
-                  - host:
-                     properties:
-                        - num_cpus: { in_range: [ 1, 2 ] }
-                        - mem_size: { in_range: [ 2 GB, 4 GB ] }
-                        - disk_size: { in_range: [ 20 GB, 40 GB ] }
-                  - resource:
-                     properties:
-                        - type: { equal: cloud }
 
    # Multimedia manager node selection
    processing_node_fragments_MultimediaManager:
@@ -147,7 +131,7 @@ node_types:
                      properties:
                         - type: { equal: cloud }
 
-   # Multimedia manager's load balancer node selection
+   # Requirements for Multimedia manager's load balancer
    load_balancing_MultimediaManager_type:
       description: Hosting requirements for the multimedia manager's load balancer
       derived_from: prestocloud.nodes.loadBalancer.faas
@@ -197,7 +181,7 @@ node_types:
                      properties:
                         - camera: { equal: true }
 
-   # Video transcoder's load balancer node selection
+   # Requirements for Video transcoder's load balancer
    load_balancing_VideoTranscoder_type:
       description: Hosting requirements for the multimedia manager's load balancer
       derived_from: prestocloud.nodes.loadBalancer.faas
@@ -247,7 +231,7 @@ node_types:
                      properties:
                         - microphone: { equal: true }
 
-   # Percussion detector's load balancer node selection
+   # Requirements for Percussion detector's load balancer
    load_balancing_PercussionDetector_type:
       description: Hosting requirements for the percussion detector's load balancer
       derived_from: prestocloud.nodes.loadBalancer.faas
@@ -297,7 +281,7 @@ node_types:
                      properties:
                         - camera: { equal: true }
 
-   # Video captor's load balancer node selection
+   # Requirements for Video captor's load balancer
    load_balancing_VideoStreamer_type:
       description: Hosting requirements for the video streamer's load balancer
       derived_from: prestocloud.nodes.loadBalancer.faas
@@ -319,14 +303,29 @@ node_types:
                         - type: { valid_values: [ edge ] }
 
 topology_template:
+
+   inputs:
+      ssh_pub_key1:
+         type: string
+         description: <
+            An SSH public key specified as input. If empty, the orchestrator must be able to retrieve it itself from its name.
+      ssh_priv_key1:
+         type: string
+         description: <
+            Reference an SSH private key. It may be pass as input only if the type level TOSCA remains private.
+            The orchestrator must be able to retrieve it from its name (usually stored in a keyvault).
+
    node_templates:
 
-      # Audio captor
-      load_balancing_AudioCaptor:
-         type: load_balancing_AudioCaptor_type
+      # Proxy used by both audio captor and face detector (fragments with 1 occurence)
+      proxying_some_fragments:
+         type: proxying_fragments_type
 
+      # Audio captor
       deployment_node_fragments_AudioCaptor:
          type: processing_node_fragments_AudioCaptor
+         properties:
+            ssh_pub_key: { get_input: ssh_pub_key1 }
 
       fragments_AudioCaptor:
          type: prestocloud.nodes.fragment.faas
@@ -353,12 +352,9 @@ topology_template:
                   vna: VNA0
          requirements:
             - execute: deployment_node_fragments_AudioCaptor
-            - balance_load: load_balancing_AudioCaptor
+            - proxy: proxying_some_fragments
 
       # Face detector
-      load_balancing_FaceDetector:
-         type: load_balancing_FaceDetector_type
-
       deployment_node_fragments_FaceDetector:
          type: processing_node_fragments_FaceDetector
 
@@ -370,7 +366,7 @@ topology_template:
             onloadable: false
          requirements:
             - execute: deployment_node_fragments_FaceDetector
-            - balance_load: load_balancing_FaceDetector
+            - proxy: proxying_some_fragments
 
       # Multimedia manager
       load_balancing_MultimediaManager:
