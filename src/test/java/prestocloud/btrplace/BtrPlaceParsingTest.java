@@ -96,7 +96,7 @@ public class BtrPlaceParsingTest {
         Map<String, Map<String, Map<String, String>>> AmazonVMTypes = ParsingUtils.getCloudNodesTemplates(parser.parseFile(Paths.get(filesPath,"amazon-vm-templates.yml")), null);
         Map<String, Map<String, Map<String, String>>> AzureVMTypes = ParsingUtils.getCloudNodesTemplates(parser.parseFile(Paths.get(filesPath,"azure-vm-templates.yml")), null);
         Assert.assertEquals(617, AmazonVMTypes.size());
-        Assert.assertEquals(824, AzureVMTypes.size());
+        Assert.assertEquals(823, AzureVMTypes.size());
     }
 
     @Test
