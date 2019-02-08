@@ -31,6 +31,10 @@ node_types:
         node: prestocloud.nodes.loadBalancer.faas
         capability: prestocloud.capabilities.loadBalancing.faas
         relationship: prestocloud.relationships.loadBalancedBy.faas
+     - proxy:
+        node: prestocloud.nodes.proxy.faas
+        capability: prestocloud.capabilities.proxying.faas
+        relationship: prestocloud.relationships.proxiedBy.faas
 
   prestocloud.nodes.fragment.jppf:
    description: A TOSCA description of a JPPF fragment
@@ -69,6 +73,8 @@ node_types:
         type: prestocloud.capabilities.fragmentExecution.faas
       load_balancer:
         type: prestocloud.capabilities.loadBalancing.faas
+      proxy:
+        type: prestocloud.capabilities.proxying.faas
 
   prestocloud.nodes.agent.jppf:
     description: A basic JPPF-agent node
@@ -102,6 +108,27 @@ node_types:
          capability: tosca.capabilities.Container
          relationship: tosca.relationships.HostedOn
 
+  # FaaS proxy
+  prestocloud.nodes.proxy.faas:
+    description: A lambda proxy for FaaS
+    derived_from: tosca.nodes.Root
+    properties:
+      component_version:
+        type: version
+        required: false
+      docker:
+        type: prestocloud.datatype.docker
+        description: Parameter for the docker container to execute.
+        required: false
+    capabilities:
+      proxy:
+        type: prestocloud.capabilities.proxying.faas
+    requirements:
+      - host:
+         node: prestocloud.nodes.compute
+         capability: tosca.capabilities.Container
+         relationship: tosca.relationships.HostedOn
+
   # FaaS load balancer
   prestocloud.nodes.loadBalancer.faas:
     description: A FaaS alike load balancer useful for horizontally scalable fragments
@@ -109,6 +136,10 @@ node_types:
     properties:
       component_version:
         type: version
+        required: false
+      docker:
+        type: prestocloud.datatype.docker
+        description: Parameter for the docker container to execute.
         required: false
     capabilities:
       balance_load:
@@ -138,6 +169,18 @@ node_types:
 
 capability_types:
 
+  # Proxy capabilities
+  prestocloud.capabilities.proxying.faas:
+    description: Provide the ability to be proxied by a lambda proxy (FaaS)
+    derived_from: prestocloud.capabilities.proxying
+    valid_source_types: [ prestocloud.nodes.agent.faas ]
+
+  prestocloud.capabilities.proxying:
+    description: Provide the ability to be proxied
+    derived_from: tosca.capabilities.Root
+    valid_source_types: [ prestocloud.nodes.agent ]
+
+  # Load balancing capabilities
   prestocloud.capabilities.loadBalancing.faas:
     description: Provide the ability to be managed by a FaaS load balancer
     derived_from: prestocloud.capabilities.loadBalancing
@@ -189,6 +232,15 @@ capability_types:
     valid_source_types: [ prestocloud.nodes.fragment ]
 
 relationship_types:
+
+  # Proxy relationships
+  prestocloud.relationships.proxiedBy.faas:
+    derived_from: prestocloud.relationships.proxiedBy
+    valid_target_types: [ prestocloud.nodes.agent.faas ]
+
+  prestocloud.relationships.proxiedBy:
+    derived_from: tosca.relationships.Root
+    valid_target_types: [ prestocloud.nodes.agent ]
 
   # Load balancing relationships
   prestocloud.relationships.loadBalancedBy.faas:
