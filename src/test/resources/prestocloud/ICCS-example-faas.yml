@@ -270,7 +270,6 @@ topology_template:
                 - target: 9980
                   published: 9980
                   protocol: TCP
-                  vna: VNA0
          requirements:
             - execute: deployment_node_fragments_AudioCaptor
             - proxy: proxying_fragments
