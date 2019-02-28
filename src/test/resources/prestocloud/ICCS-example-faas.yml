@@ -47,11 +47,6 @@ node_types:
    processing_node_fragments_AudioCaptor:
       description: A TOSCA description of a node
       derived_from: prestocloud.nodes.agent.faas
-      properties:
-         ssh_pub_key:
-            type: string
-            description: Optional public SSH key to access the machine remotely.
-            required: false
       requirements:
          - host:
             capability: tosca.capabilities.Container

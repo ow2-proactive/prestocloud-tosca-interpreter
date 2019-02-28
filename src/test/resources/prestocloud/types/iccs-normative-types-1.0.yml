@@ -22,15 +22,16 @@ node_types:
         type: prestocloud.datatype.docker
         description: Parameter for the docker container to execute.
         required: false
+      health_check:
+        type: prestocloud.datatype.health_check
+        description: Parameters for the health check service.
+        required: false
+
    requirements:
      - execute:
         node: prestocloud.nodes.agent.faas
         capability: prestocloud.capabilities.fragmentExecution.faas
         relationship: prestocloud.relationships.executedBy.faas
-     - balance_load:
-        node: prestocloud.nodes.loadBalancer.faas
-        capability: prestocloud.capabilities.loadBalancing.faas
-        relationship: prestocloud.relationships.loadBalancedBy.faas
      - proxy:
         node: prestocloud.nodes.proxy.faas
         capability: prestocloud.capabilities.proxying.faas
@@ -71,8 +72,6 @@ node_types:
     capabilities:
       execute:
         type: prestocloud.capabilities.fragmentExecution.faas
-      load_balancer:
-        type: prestocloud.capabilities.loadBalancing.faas
       proxy:
         type: prestocloud.capabilities.proxying.faas
 
@@ -129,27 +128,6 @@ node_types:
          capability: tosca.capabilities.Container
          relationship: tosca.relationships.HostedOn
 
-  # FaaS load balancer
-  prestocloud.nodes.loadBalancer.faas:
-    description: A FaaS alike load balancer useful for horizontally scalable fragments
-    derived_from: tosca.nodes.Root
-    properties:
-      component_version:
-        type: version
-        required: false
-      docker:
-        type: prestocloud.datatype.docker
-        description: Parameter for the docker container to execute.
-        required: false
-    capabilities:
-      balance_load:
-        type: prestocloud.capabilities.loadBalancing.faas
-    requirements:
-      - host:
-         node: prestocloud.nodes.compute
-         capability: tosca.capabilities.Container
-         relationship: tosca.relationships.HostedOn
-
   # JPPF master
   prestocloud.nodes.master.jppf:
     description: A JPPF Master node
@@ -169,7 +147,7 @@ node_types:
 
 capability_types:
 
-  # Proxy capabilities
+  # Proxy / Load balancing capabilities
   prestocloud.capabilities.proxying.faas:
     description: Provide the ability to be proxied by a lambda proxy (FaaS)
     derived_from: prestocloud.capabilities.proxying
@@ -177,17 +155,6 @@ capability_types:
 
   prestocloud.capabilities.proxying:
     description: Provide the ability to be proxied
-    derived_from: tosca.capabilities.Root
-    valid_source_types: [ prestocloud.nodes.agent ]
-
-  # Load balancing capabilities
-  prestocloud.capabilities.loadBalancing.faas:
-    description: Provide the ability to be managed by a FaaS load balancer
-    derived_from: prestocloud.capabilities.loadBalancing
-    valid_source_types: [ prestocloud.nodes.agent.faas ]
-
-  prestocloud.capabilities.loadBalancing:
-    description: Provide the ability to be managed by a load balancer
     derived_from: tosca.capabilities.Root
     valid_source_types: [ prestocloud.nodes.agent ]
 
@@ -233,21 +200,12 @@ capability_types:
 
 relationship_types:
 
-  # Proxy relationships
+  # Proxy / Load balancing relationships
   prestocloud.relationships.proxiedBy.faas:
     derived_from: prestocloud.relationships.proxiedBy
     valid_target_types: [ prestocloud.nodes.agent.faas ]
 
   prestocloud.relationships.proxiedBy:
-    derived_from: tosca.relationships.Root
-    valid_target_types: [ prestocloud.nodes.agent ]
-
-  # Load balancing relationships
-  prestocloud.relationships.loadBalancedBy.faas:
-    derived_from: prestocloud.relationships.loadBalancedBy
-    valid_target_types: [ prestocloud.nodes.agent.faas ]
-
-  prestocloud.relationships.loadBalancedBy:
     derived_from: tosca.relationships.Root
     valid_target_types: [ prestocloud.nodes.agent ]
 
@@ -326,6 +284,21 @@ data_types:
         default: TCP
         constraints:
           - valid_values: [ UDP, TCP ]
-      vna:
+
+  prestocloud.datatype.health_check:
+    derived from: tosca.datatypes.Root
+    description: Collect health probes from url or cmdline to report in the consul server.
+    properties:
+      interval:
+        type: integer
+        description: The time interval to publish data in seconds (default 5 min.)
+        default: 300
+        required: true
+      url:
         type: string
+        description: The URL to retrieve health data.
+        required: false
+      cmd:
+        type: string
+        description: A cmdline to retrieve health data.
         required: false
