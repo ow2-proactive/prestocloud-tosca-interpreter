@@ -69,6 +69,11 @@ node_types:
   prestocloud.nodes.agent.faas:
     description: A basic FaaS-agent node
     derived_from: prestocloud.nodes.agent
+    properties:
+      ssh_pub_key:
+        type: string
+        description: Optional public SSH key to access the machine remotely.
+        required: false
     capabilities:
       execute:
         type: prestocloud.capabilities.fragmentExecution.faas
