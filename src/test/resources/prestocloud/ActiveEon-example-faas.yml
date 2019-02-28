@@ -80,7 +80,7 @@ topology_template:
 
     # Audio captor load balancer
     load_balancing_AudioCaptor:
-      type: prestocloud.nodes.loadBalancer.faas
+      type: prestocloud.nodes.proxy.faas
       requirements:
         - host: load_balancing_AudioCaptor_node
 
@@ -99,7 +99,7 @@ topology_template:
         onloadable: true
       requirements:
         - execute: deployment_node_fragments_AudioCaptor_1
-        - balance_load: load_balancing_AudioCaptor
+        - proxy: load_balancing_AudioCaptor
 
     # Face detector node
     processing_node_fragments_FaceDetector_1:
@@ -156,7 +156,7 @@ topology_template:
 
     # Face detector load balancer
     load_balancing_FaceDetector:
-      type: prestocloud.nodes.loadBalancer.faas
+      type: prestocloud.nodes.proxy.faas
       requirements:
         - host: load_balancing_FaceDetector_node
 
@@ -175,7 +175,7 @@ topology_template:
         onloadable: false
       requirements:
         - execute: deployment_node_fragments_FaceDetector_1
-        - balance_load: load_balancing_FaceDetector
+        - proxy: load_balancing_FaceDetector
 
     # Multimedia manager node
     processing_node_fragments_MultimediaManager_1:
@@ -229,7 +229,7 @@ topology_template:
 
     # Multimedia manager load balancer
     load_balancing_MultimediaManager:
-      type: prestocloud.nodes.loadBalancer.faas
+      type: prestocloud.nodes.proxy.faas
       requirements:
         - host: load_balancing_MultimediaManager_node
 
@@ -248,327 +248,4 @@ topology_template:
         onloadable: false
       requirements:
         - execute: deployment_node_fragments_MultimediaManager_1
-        - balance_load: load_balancing_MultimediaManager
-
-    # Video transcoder node
-    processing_node_fragments_VideoTranscoder_1:
-      type: prestocloud.nodes.compute.cloud.amazon
-      properties:
-        type: cloud
-      capabilities:
-        resource:
-          properties:
-            type: cloud
-            cloud:
-              cloud_name: amazon_public1
-              cloud_type: amazon
-              cloud_region: us-east-1
-              cloud_network:
-                network_id: s-gbdpnc4s
-                network_name: subnet1
-                addresses:
-                  - 192.168.1.5
-        host:
-          properties:
-            num_cpus: 2
-            mem_size: 4.0 GB
-            disk_size: 50 GB
-            price: 0.120000
-        sensors:
-          properties:
-            camera: true
-
-    # Video transcoder load balancing node
-    load_balancing_VideoTranscoder_node:
-      type: prestocloud.nodes.compute.cloud.amazon
-      properties:
-        type: cloud
-      capabilities:
-        resource:
-          properties:
-            type: cloud
-            cloud:
-              cloud_name: amazon_public1
-              cloud_type: amazon
-              cloud_region: us-east-1
-              cloud_network:
-                network_id: s-gbdpnc4s
-                network_name: subnet1
-                addresses:
-                  - 192.168.1.6
-        host:
-          properties:
-            num_cpus: 1
-            mem_size: 2.0 GB
-            disk_size: 30 GB
-            price: 0.060000
-
-    # Video transcoder load balancer
-    load_balancing_VideoTranscoder:
-      type: prestocloud.nodes.loadBalancer.faas
-      requirements:
-        - host: load_balancing_VideoTranscoder_node
-
-    # Video transcoder agent
-    deployment_node_fragments_VideoTranscoder_1:
-      type: prestocloud.nodes.agent.faas
-      requirements:
-        - host: processing_node_fragments_VideoTranscoder_1
-
-    # Video transcoder fragment
-    fragments_VideoTranscoder_1:
-      type: prestocloud.nodes.fragment.faas
-      properties:
-        id: 3
-        name: fragments.VideoTranscoder
-        onloadable: false
-      requirements:
-        - execute: deployment_node_fragments_VideoTranscoder_1
-        - balance_load: load_balancing_VideoTranscoder
-
-    # Percussion detector node
-    processing_node_fragments_PercussionDetector_1:
-      type: prestocloud.nodes.compute.edge
-      properties:
-        type: edge
-      capabilities:
-        resource:
-          properties:
-            type: edge
-            edge:
-              edge_type: raspberry
-              edge_location: paris
-              edge_credentials:
-                username: admin
-                password: admin
-              edge_network:
-                network_id: netid1
-                network_name: local-net
-                addresses:
-                  - 10.0.0.3
-        host:
-          properties:
-            num_cpus: 1
-            mem_size: 2.0 GB
-            disk_size: 30 GB
-        sensors:
-          properties:
-            microphone: true
-
-    # Percussion detector load balancing node
-    load_balancing_PercussionDetector_node:
-      type: prestocloud.nodes.compute.edge
-      properties:
-        type: edge
-      capabilities:
-        resource:
-          properties:
-            type: edge
-            edge:
-              edge_type: raspberry
-              edge_location: paris
-              edge_credentials:
-                username: admin
-                password: admin
-              edge_network:
-                network_id: netid1
-                network_name: local-net
-                addresses:
-                  - 10.0.0.4
-        host:
-          properties:
-            num_cpus: 1
-            mem_size: 2.0 GB
-            disk_size: 20 GB
-
-    # Percussion detector load balancer
-    load_balancing_PercussionDetector:
-      type: prestocloud.nodes.loadBalancer.faas
-      requirements:
-        - host: load_balancing_PercussionDetector_node
-
-    # Percussion detector agent
-    deployment_node_fragments_PercussionDetector_1:
-      type: prestocloud.nodes.agent.faas
-      requirements:
-        - host: processing_node_fragments_PercussionDetector_1
-
-    # Percussion detector fragment
-    fragments_PercussionDetector_1:
-      type: prestocloud.nodes.fragment.faas
-      properties:
-        id: 4
-        name: fragments.PercussionDetector
-        onloadable: true
-      requirements:
-        - execute: deployment_node_fragments_PercussionDetector_1
-        - balance_load: load_balancing_PercussionDetector
-
-    # Video streamer nodes
-    processing_node_fragments_VideoStreamer_1:
-      type: prestocloud.nodes.compute.edge
-      properties:
-        type: edge
-      capabilities:
-        resource:
-          properties:
-            type: edge
-            edge:
-              edge_type: raspberry
-              edge_location: paris
-              edge_credentials:
-                username: admin
-                password: admin
-              edge_network:
-                network_id: netid1
-                network_name: local-net
-                addresses:
-                  - 10.0.0.5
-        host:
-          properties:
-            num_cpus: 1
-            mem_size: 2.0 GB
-            disk_size: 30 GB
-        sensors:
-          properties:
-            camera: true
-
-    processing_node_fragments_VideoStreamer_2:
-      type: prestocloud.nodes.compute.edge
-      properties:
-        type: edge
-      capabilities:
-        resource:
-          properties:
-            type: edge
-            edge:
-              edge_type: raspberry
-              edge_location: paris
-              edge_credentials:
-                username: admin
-                password: admin
-              edge_network:
-                network_id: netid1
-                network_name: local-net
-                addresses:
-                  - 10.0.0.6
-        host:
-          properties:
-            num_cpus: 1
-            mem_size: 2.0 GB
-            disk_size: 30 GB
-        sensors:
-          properties:
-            camera: true
-
-    processing_node_fragments_VideoStreamer_3:
-      type: prestocloud.nodes.compute.edge
-      properties:
-        type: edge
-      capabilities:
-        resource:
-          properties:
-            type: edge
-            edge:
-              edge_type: raspberry
-              edge_location: paris
-              edge_credentials:
-                username: admin
-                password: admin
-              edge_network:
-                network_id: netid1
-                network_name: local-net
-                addresses:
-                  - 10.0.0.7
-        host:
-          properties:
-            num_cpus: 1
-            mem_size: 2.0 GB
-            disk_size: 30 GB
-        sensors:
-          properties:
-            camera: true
-
-    # Video streamer load balancing node
-    load_balancing_VideoStreamer_node:
-      type: prestocloud.nodes.compute.edge
-      properties:
-        type: edge
-      capabilities:
-        resource:
-          properties:
-            type: edge
-            edge:
-              edge_type: raspberry
-              edge_location: paris
-              edge_credentials:
-                username: admin
-                password: admin
-              edge_network:
-                network_id: netid1
-                network_name: local-net
-                addresses:
-                  - 10.0.0.8
-        host:
-          properties:
-            num_cpus: 1
-            mem_size: 2.0 GB
-            disk_size: 20 GB
-
-    # Video streamer load balancer
-    load_balancing_VideoStreamer:
-      type: prestocloud.nodes.loadBalancer.faas
-      requirements:
-        - host: load_balancing_VideoStreamer_node
-
-    # Video streamer agents
-    deployment_node_fragments_VideoStreamer_1:
-      type: prestocloud.nodes.agent.faas
-      requirements:
-        - host: processing_node_fragments_VideoStreamer_1
-
-    deployment_node_fragments_VideoStreamer_2:
-      type: prestocloud.nodes.agent.faas
-      requirements:
-        - host: processing_node_fragments_VideoStreamer_2
-
-    deployment_node_fragments_VideoStreamer_3:
-      type: prestocloud.nodes.agent.faas
-      requirements:
-        - host: processing_node_fragments_VideoStreamer_3
-
-    # Video captor fragments
-    fragments_VideoStreamer_1:
-      type: prestocloud.nodes.fragment.faas
-      properties:
-        id: 5
-        name: fragments.VideoStreamer
-        onloadable: true
-      requirements:
-        - execute: deployment_node_fragments_VideoStreamer_1
-        - balance_load: load_balancing_VideoStreamer
-
-    fragments_VideoStreamer_2:
-      type: prestocloud.nodes.fragment.faas
-      properties:
-        id: 5
-        name: fragments.VideoStreamer
-        onloadable: true
-      requirements:
-        - execute: deployment_node_fragments_VideoStreamer_2
-        - balance_load: load_balancing_VideoStreamer
-
-    deployment_node_fragments_VideoStreamer_3:
-      type: prestocloud.nodes.agent.faas
-      requirements:
-        - host: processing_node_fragments_VideoStreamer_3
-
-    fragments_VideoStreamer_3:
-      type: prestocloud.nodes.fragment.faas
-      properties:
-        id: 5
-        name: fragments.VideoStreamer
-        onloadable: true
-      requirements:
-        - execute: deployment_node_fragments_VideoStreamer_3
-        - balance_load: load_balancing_VideoStreamer
+        - proxy: load_balancing_MultimediaManager
