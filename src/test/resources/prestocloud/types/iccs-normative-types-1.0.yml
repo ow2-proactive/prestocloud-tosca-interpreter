@@ -291,7 +291,7 @@ data_types:
           - valid_values: [ UDP, TCP ]
 
   prestocloud.datatype.health_check:
-    derived from: tosca.datatypes.Root
+    derived_from: tosca.datatypes.Root
     description: Collect health probes from url or cmdline to report in the consul server.
     properties:
       interval:
