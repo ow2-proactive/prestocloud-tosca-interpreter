@@ -206,7 +206,7 @@ capability_types:
       cpu_frequency:
         type: scalar-unit.frequency
         description: >
-          Specifies the operating frequency of CPU's core.  This property expresses the expected frequency of one (1) CPU as provided by the property
+          Specifies the operating frequency of CPU's core. This property expresses the expected frequency of one (1) CPU as provided by the property
           "num_cpus".
         required: false
         constraints:
