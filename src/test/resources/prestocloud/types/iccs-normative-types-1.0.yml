@@ -18,6 +18,9 @@ node_types:
    description: A TOSCA description of a FaaS fragment
    derived_from: prestocloud.nodes.fragment
    properties:
+      occurrences:
+        type: integer
+        required: false
       docker:
         type: prestocloud.datatype.docker
         description: Parameter for the docker container to execute.

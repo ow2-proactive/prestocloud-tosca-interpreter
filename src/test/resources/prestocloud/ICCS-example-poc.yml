@@ -35,7 +35,6 @@ node_types:
             capability: tosca.capabilities.Container
             node: prestocloud.nodes.compute
             relationship: tosca.relationships.HostedOn
-            occurrences: [ 1,10 ]
             node_filter:
                capabilities:
                   - host:
@@ -82,7 +81,6 @@ node_types:
             capability: tosca.capabilities.Container
             node: prestocloud.nodes.compute
             relationship: tosca.relationships.HostedOn
-            occurrences: [ 1,10 ]
             node_filter:
                capabilities:
                   - host:
@@ -141,6 +139,7 @@ topology_template:
             id: 2
             name: fragments.MultimediaManager
             onloadable: false
+            occurrences: 1
             docker:
               image: "alpine:latest"
               cmd: "echo '[Multimedia Manager]'"
@@ -162,6 +161,7 @@ topology_template:
             id: 3
             name: fragments.VideoTranscoder
             onloadable: false
+            occurrences: 1
             docker:
               image: "alpine:latest"
               cmd: "echo '[Video Transcoder]'"
