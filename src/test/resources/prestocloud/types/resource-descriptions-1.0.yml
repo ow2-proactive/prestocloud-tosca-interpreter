@@ -38,6 +38,10 @@ node_types:
         type: prestocloud.datatypes.edge
         description: Properties for edge resources.
         required: false
+      network:
+        type: tosca.datatypes.network.NetworkInfo
+        description: The network to setup on cloud.
+        required: false
     capabilities:
       host:
         type: prestocloud.capabilities.container
@@ -94,10 +98,6 @@ data_types:
         type: prestocloud.datatypes.cloudcredentials
         description: The credentials to authenticate with cloud API.
         required: false
-      cloud_network:
-        type: tosca.datatypes.network.NetworkInfo
-        description: The network to setup on cloud.
-        required: false
 
   prestocloud.datatypes.edge:
     derived_from: tosca.datatypes.Root
@@ -117,10 +117,6 @@ data_types:
       edge_credentials:
         type: prestocloud.datatypes.edgecredentials
         description: The credentials to authenticate with the edge device.
-        required: true
-      edge_network:
-        type: tosca.datatypes.network.NetworkInfo
-        description: The network infos of the edge device.
         required: true
 
   prestocloud.datatypes.cloudcredentials:
