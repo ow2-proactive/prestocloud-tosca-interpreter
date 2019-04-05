@@ -166,8 +166,8 @@ node_types:
                      properties:
                         - type: { equal: cloud }
 
-   # Multimedia manager node selection on Edge
-   processing_edge_node_fragments_MultimediaManager:
+   # Multimedia manager node selection
+   processing_node_fragments_MultimediaManager:
       description: A TOSCA description of a node
       derived_from: prestocloud.nodes.agent.faas
       requirements:
@@ -189,12 +189,6 @@ node_types:
                   - resource:
                      properties:
                         - type: { equal: edge }
-
-   # Multimedia manager node selection on Cloud
-   processing_cloud_node_fragments_MultimediaManager:
-      description: A TOSCA description of a node
-      derived_from: prestocloud.nodes.agent.faas
-      requirements:
          - host:
             capability: tosca.capabilities.Container
             node: prestocloud.nodes.compute
@@ -307,11 +301,8 @@ topology_template:
       proxying_MultimediaManager:
          type: proxying_MultimediaManager_type
 
-      deployment_cloud_node_fragments_MultimediaManager:
-         type: processing_cloud_node_fragments_MultimediaManager
-
-      deployment_edge_node_fragments_MultimediaManager:
-         type: processing_edge_node_fragments_MultimediaManager
+      deployment_node_fragments_MultimediaManager:
+         type: processing_node_fragments_MultimediaManager
 
       fragments_MultimediaManager:
          type: prestocloud.nodes.fragment.faas
@@ -321,6 +312,5 @@ topology_template:
             onloadable: false
             occurrences: 4
          requirements:
-            - execute: deployment_cloud_node_fragments_MultimediaManager
-            - execute: deployment_edge_node_fragments_MultimediaManager
+            - execute: deployment_node_fragments_MultimediaManager
             - proxy: proxying_MultimediaManager
