@@ -22,6 +22,11 @@ topology_template:
       description: PrEstoCloud Amazon compute node of type M1 General Purpose Extra Large (m1.xlarge) in region us-east-1.
       properties:
         type: cloud
+        network:
+          network_id: s-gbdpnc4s
+          network_name: subnet1
+          addresses:
+           - 192.168.1.1
       capabilities:
         resource:
           properties:
@@ -30,11 +35,6 @@ topology_template:
               cloud_name: amazon_public1
               cloud_type: amazon
               cloud_region: us-east-1
-              cloud_network:
-                network_id: s-gbdpnc4s
-                network_name: subnet1
-                addresses:
-                  - 192.168.1.1
         host:
           properties:
             num_cpus: 4
