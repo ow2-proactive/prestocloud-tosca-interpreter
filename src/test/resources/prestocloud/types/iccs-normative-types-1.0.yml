@@ -21,9 +21,13 @@ node_types:
       occurrences:
         type: integer
         required: false
-      docker:
+      docker_cloud:
         type: prestocloud.datatype.docker
-        description: Parameter for the docker container to execute.
+        description: Parameter for the docker container to execute on cloud resources.
+        required: false
+      docker_edge:
+        type: prestocloud.datatype.docker
+        description: Parameter for the docker container to execute on edge devices.
         required: false
       health_check:
         type: prestocloud.datatype.health_check
@@ -123,9 +127,13 @@ node_types:
       component_version:
         type: version
         required: false
-      docker:
+      docker_cloud:
         type: prestocloud.datatype.docker
-        description: Parameter for the docker container to execute.
+        description: Parameter for the docker container to execute on cloud resources.
+        required: false
+      docker_edge:
+        type: prestocloud.datatype.docker
+        description: Parameter for the docker container to execute on edge devices.
         required: false
     capabilities:
       proxy:

@@ -241,7 +241,7 @@ topology_template:
             name: fragments.AudioCaptor
             onloadable: true
             occurrences: 1
-            docker:
+            docker_edge:
               image: "lambda_proxy_app/main_app:1.2.2"
               registry: "nexus:39580"
               variables:

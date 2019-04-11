@@ -140,7 +140,7 @@ topology_template:
             name: fragments.MultimediaManager
             onloadable: false
             occurrences: 1
-            docker:
+            docker_cloud:
               image: "alpine:latest"
               cmd: "echo '[Multimedia Manager]'"
          requirements:
@@ -162,7 +162,7 @@ topology_template:
             name: fragments.VideoTranscoder
             onloadable: false
             occurrences: 1
-            docker:
+            docker_cloud:
               image: "alpine:latest"
               cmd: "echo '[Video Transcoder]'"
          requirements:
