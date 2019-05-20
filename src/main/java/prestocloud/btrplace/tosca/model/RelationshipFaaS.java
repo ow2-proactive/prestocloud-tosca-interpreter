@@ -28,50 +28,34 @@ package prestocloud.btrplace.tosca.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 /**
  * @author ActiveEon Team
  * @since 25/09/18
  */
 public class RelationshipFaaS {
-    @Getter
-    @Setter
+
+    @Getter @Setter
     public String fragment;
     @Getter @Setter
-    public String faas;
+    public String node;
     @Getter @Setter
-    public String host;
+    public String proxy;
     @Getter @Setter
-    public String loadBalancer;
+    public ConstrainedNode hostingNode;
     @Getter @Setter
-    public Map<String, List<String>> hostingConstraints;
-    @Getter @Setter
-    public Map<String, List<String>> resourceConstraints;
-    @Getter @Setter
-    public Map<String, List<String>> osConstraints;
+    public ConstrainedNode hostingProxy;
 
-    public RelationshipFaaS(String fragment, String faas, String host) {
+    public RelationshipFaaS(String fragment, String node, String proxy) {
         this.fragment = fragment;
-        this.faas = faas;
-        this.host = host;
-        this.loadBalancer = null;
-        hostingConstraints = new HashMap<>();
-        resourceConstraints = new HashMap<>();
-        osConstraints = new HashMap<>();
+        this.node = node;
+        this.proxy = proxy;
     }
 
-    public void addHostingConstraint(String name, List<String> hostingConstraint) {
-        hostingConstraints.put(name, hostingConstraint);
-    }
-
-    public void addResourceConstraint(String name, List<String> resourceConstraint) {
-        resourceConstraints.put(name, resourceConstraint);
-    }
-
-    public void addOSConstraint(String name, List<String> osConstraint) {
-        osConstraints.put(name, osConstraint);
+    public RelationshipFaaS(String fragment, String node, String proxy, ConstrainedNode hostingNode, ConstrainedNode hostingProxy) {
+        this.fragment = fragment;
+        this.node = node;
+        this.proxy = proxy;
+        this.hostingNode = hostingNode;
+        this.hostingProxy = hostingProxy;
     }
 }

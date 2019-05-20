@@ -25,8 +25,21 @@
  */
 package prestocloud.btrplace.tosca;
 
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.junit.Assert;
-import org.prestocloud.tosca.model.definitions.*;
+import org.prestocloud.tosca.model.definitions.AbstractPropertyValue;
+import org.prestocloud.tosca.model.definitions.ComplexPropertyValue;
+import org.prestocloud.tosca.model.definitions.FilterDefinition;
+import org.prestocloud.tosca.model.definitions.ListPropertyValue;
+import org.prestocloud.tosca.model.definitions.PropertyConstraint;
+import org.prestocloud.tosca.model.definitions.RequirementDefinition;
+import org.prestocloud.tosca.model.definitions.ScalarPropertyValue;
 import org.prestocloud.tosca.model.definitions.constraints.EqualConstraint;
 import org.prestocloud.tosca.model.definitions.constraints.GreaterOrEqualConstraint;
 import org.prestocloud.tosca.model.definitions.constraints.InRangeConstraint;
@@ -35,6 +48,8 @@ import org.prestocloud.tosca.model.templates.Capability;
 import org.prestocloud.tosca.model.templates.NodeTemplate;
 import org.prestocloud.tosca.model.templates.PolicyTemplate;
 import org.prestocloud.tosca.model.types.NodeType;
+
+import prestocloud.btrplace.tosca.model.ConstrainedNode;
 import prestocloud.btrplace.tosca.model.Constraint;
 import prestocloud.btrplace.tosca.model.Docker;
 import prestocloud.btrplace.tosca.model.RelationshipFaaS;
@@ -44,13 +59,6 @@ import prestocloud.tosca.model.ArchiveRoot;
 import prestocloud.tosca.parser.ParsingException;
 import prestocloud.tosca.parser.ParsingResult;
 import prestocloud.tosca.parser.ToscaParser;
-
-import java.io.IOException;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author ActiveEon Team
@@ -283,7 +291,7 @@ public class ParsingUtils {
         return relationships;
     }
 
-    public static List<Docker> getDockerParameters(ParsingResult<ArchiveRoot> parsingResult) {
+    public static List<Docker> getDockerParameters(ParsingResult<ArchiveRoot> parsingResult, String locationType) {
 
         List<Docker> dockers = new ArrayList<>();
 
@@ -294,7 +302,7 @@ public class ParsingUtils {
             if (nodeTemplateFragment.getValue().getType().equalsIgnoreCase("prestocloud.nodes.fragment.faas")) {
                 Docker dockerParameters = new Docker(nodeTemplateFragment.getValue().getName());
                 // Look for the 'docker' property
-                ComplexPropertyValue dockerProperty = (ComplexPropertyValue) nodeTemplateFragment.getValue().getProperties().get("docker");
+                ComplexPropertyValue dockerProperty = (ComplexPropertyValue) nodeTemplateFragment.getValue().getProperties().get("docker_" + locationType);
                 if (dockerProperty != null) {
                     for (String dockerKey : dockerProperty.getValue().keySet()) {
                         if (dockerKey.equalsIgnoreCase("image")) {
@@ -334,7 +342,6 @@ public class ParsingUtils {
         return dockers;
     }
 
-    // TODO: parse load balancer as well!!
     public static List<RelationshipFaaS> getFaaSRelationships(ParsingResult<ArchiveRoot> parsingResult) {
 
         List<RelationshipFaaS> relationships = new ArrayList<>();
@@ -342,88 +349,122 @@ public class ParsingUtils {
         // Look for fragments in the node templates
         Map<String, NodeTemplate> nodeTemplates = parsingResult.getResult().getTopology().getNodeTemplates();
         for (Map.Entry<String, NodeTemplate> nodeTemplateFragment : nodeTemplates.entrySet()) {
-            // Fragment detected
+            // Detect only fragment at highest level
             if (nodeTemplateFragment.getValue().getType().equalsIgnoreCase("prestocloud.nodes.fragment.faas")) {
-                // Look for the corresponding FaaS agent
+
+                // Fragment detected, start to build a relationship
+                RelationshipFaaS relationship = new RelationshipFaaS(nodeTemplateFragment.getKey(),
+                        nodeTemplateFragment.getValue().getRelationships().get("execute").getTarget(),
+                        nodeTemplateFragment.getValue().getRelationships().get("proxy").getTarget());
+
+                // // Look for the corresponding deployment node template declaration
                 for (Map.Entry<String, NodeTemplate> nodeTemplateFaaS : nodeTemplates.entrySet()) {
-                    if (nodeTemplateFaaS.getKey().equalsIgnoreCase(nodeTemplateFragment.getValue().getRelationships().get("execute").getTarget())) {
+
+                    // TODO: ALSO LOOK FOR ITS PROPERTIES (WE CAN HAVE SSH KEYS, ETC.)
+
+                    // Look for the proxy node
+                    if (nodeTemplateFaaS.getKey().equalsIgnoreCase(nodeTemplateFragment.getValue().getRelationships().get("proxy").getTarget())) {
+
                         // Look for the corresponding node type
                         for (Map.Entry<String, NodeType> nodeTypeFaaS : parsingResult.getResult().getNodeTypes().entrySet()) {
                             if (nodeTypeFaaS.getKey().equalsIgnoreCase(nodeTemplateFaaS.getValue().getType())) {
-                                RelationshipFaaS relationship = new RelationshipFaaS(nodeTemplateFragment.getKey(), nodeTemplateFaaS.getKey(), nodeTypeFaaS.getKey());
-                                // Look for requirements
-                                for (RequirementDefinition requirement : nodeTypeFaaS.getValue().getRequirements()) {
-                                    // Look for a requirement with nodeFilter's capabilities (hosting)
-                                    if (requirement.getNodeFilter() != null) {
-                                        for (Map.Entry<String, FilterDefinition> capability : requirement.getNodeFilter().getCapabilities().entrySet()) {
-                                            // Find the host properties
-                                            if (capability.getKey().equalsIgnoreCase("host")) {
-                                                for (Map.Entry<String, List<PropertyConstraint>> properties : capability.getValue().getProperties().entrySet()) {
-                                                    List<String> constraints = new ArrayList<>();
-                                                    for (PropertyConstraint propertyConstraint : properties.getValue()) {
-                                                        if (propertyConstraint instanceof InRangeConstraint) {
-                                                            constraints.add("RangeMin: " + ((InRangeConstraint) propertyConstraint).getInRange().get(0) + ", RangeMax: " + ((InRangeConstraint) propertyConstraint).getInRange().get(1));
-                                                        } else if (propertyConstraint instanceof EqualConstraint) {
-                                                            constraints.add("Equal: " + ((EqualConstraint) propertyConstraint).getEqual());
-                                                        } else if (propertyConstraint instanceof GreaterOrEqualConstraint) {
-                                                            constraints.add("GreaterOrEqual: " + ((GreaterOrEqualConstraint) propertyConstraint).getGreaterOrEqual());
-                                                        } else {
-                                                            // Constraint not yet managed
-                                                            System.out.println("Host constraint not managed: " + propertyConstraint.toString());
-                                                        }
-                                                    }
-                                                    relationship.addHostingConstraint(properties.getKey(), constraints);
-                                                }
-                                            }
-                                            // Find the OS properties
-                                            if (capability.getKey().equalsIgnoreCase("os")) {
-                                                for (Map.Entry<String, List<PropertyConstraint>> properties : capability.getValue().getProperties().entrySet()) {
-                                                    List<String> constraints = new ArrayList<>();
-                                                    for (PropertyConstraint propertyConstraint : properties.getValue()) {
-                                                        if (propertyConstraint instanceof EqualConstraint) {
-                                                            constraints.add(((EqualConstraint) propertyConstraint).getEqual());
-                                                        } else if (propertyConstraint instanceof ValidValuesConstraint) {
-                                                            constraints.addAll(((ValidValuesConstraint) propertyConstraint).getValidValues());
-                                                        } else {
-                                                            // Constraint not yet managed
-                                                            System.out.println("OS constraint not managed: " + propertyConstraint.toString());
-                                                        }
-                                                    }
-                                                    relationship.addOSConstraint(properties.getKey(), constraints);
-                                                }
-                                            }
-                                            // Find the resource properties
-                                            if (capability.getKey().equalsIgnoreCase("resource")) {
-                                                for (Map.Entry<String, List<PropertyConstraint>> properties : capability.getValue().getProperties().entrySet()) {
-                                                    List<String> constraints = new ArrayList<>();
-                                                    for (PropertyConstraint propertyConstraint : properties.getValue()) {
-                                                        if (propertyConstraint instanceof EqualConstraint) {
-                                                            constraints.add(((EqualConstraint) propertyConstraint).getEqual());
-                                                        } else if (propertyConstraint instanceof ValidValuesConstraint) {
-                                                            constraints.addAll(((ValidValuesConstraint) propertyConstraint).getValidValues());
-                                                        } else {
-                                                            // Constraint not yet managed
-                                                            System.out.println("Resource constraint not managed: " + propertyConstraint.toString());
-                                                        }
-                                                    }
-                                                    relationship.addResourceConstraint(properties.getKey(), constraints);
-                                                }
-                                            }
-                                            // Find the sensors properties
-                                            if (capability.getKey().equalsIgnoreCase("sensors")) {
-                                                //TODO: get sensors requirements
-                                            }
-                                        }
-                                    }
-                                }
-                                relationships.add(relationship);
+                                // Start to build a proxy node
+                                ConstrainedNode proxyNode = buildConstrainedNode(nodeTypeFaaS.getKey(), nodeTypeFaaS.getValue().getDerivedFrom(), nodeTypeFaaS.getValue().getRequirements());
+                                relationship.setHostingProxy(proxyNode);
+                            }
+                        }
+                    }
+
+                    // Look for the execute node
+                    if (nodeTemplateFaaS.getKey().equalsIgnoreCase(nodeTemplateFragment.getValue().getRelationships().get("execute").getTarget())) {
+
+                        // Look for the corresponding node type
+                        for (Map.Entry<String, NodeType> nodeTypeFaaS : parsingResult.getResult().getNodeTypes().entrySet()) {
+                            if (nodeTypeFaaS.getKey().equalsIgnoreCase(nodeTemplateFaaS.getValue().getType())) {
+                                // Start to build a proxy node
+                                ConstrainedNode executeNode = buildConstrainedNode(nodeTypeFaaS.getKey(), nodeTypeFaaS.getValue().getDerivedFrom(), nodeTypeFaaS.getValue().getRequirements());
+                                relationship.setHostingNode(executeNode);
                             }
                         }
                     }
                 }
+                relationships.add(relationship);
             }
         }
         return relationships;
+    }
+
+    private static ConstrainedNode buildConstrainedNode(String name, List<String> derivedFrom, List<RequirementDefinition> requirements) {
+
+        ConstrainedNode node = new ConstrainedNode(name, derivedFrom);
+
+        // Look for requirements
+        for (RequirementDefinition requirement : requirements) {
+            // Look for a requirement with nodeFilter's capabilities (hosting)
+            if (requirement.getNodeFilter() != null) {
+                for (Map.Entry<String, FilterDefinition> capability : requirement.getNodeFilter().getCapabilities().entrySet()) {
+                    // Find the host properties
+                    if (capability.getKey().equalsIgnoreCase("host")) {
+                        for (Map.Entry<String, List<PropertyConstraint>> properties : capability.getValue().getProperties().entrySet()) {
+                            List<String> constraints = new ArrayList<>();
+                            for (PropertyConstraint propertyConstraint : properties.getValue()) {
+                                if (propertyConstraint instanceof InRangeConstraint) {
+                                    constraints.add("RangeMin: " + ((InRangeConstraint) propertyConstraint).getInRange().get(0) + ", RangeMax: " + ((InRangeConstraint) propertyConstraint).getInRange().get(1));
+                                } else if (propertyConstraint instanceof EqualConstraint) {
+                                    constraints.add("Equal: " + ((EqualConstraint) propertyConstraint).getEqual());
+                                } else if (propertyConstraint instanceof GreaterOrEqualConstraint) {
+                                    constraints.add("GreaterOrEqual: " + ((GreaterOrEqualConstraint) propertyConstraint).getGreaterOrEqual());
+                                } else {
+                                    // Constraint not yet managed
+                                    System.out.println("Host constraint not managed: " + propertyConstraint.toString());
+                                }
+                            }
+                            node.addHostingConstraint(properties.getKey(), constraints);
+                        }
+                    }
+                    // Find the OS properties
+                    if (capability.getKey().equalsIgnoreCase("os")) {
+                        for (Map.Entry<String, List<PropertyConstraint>> properties : capability.getValue().getProperties().entrySet()) {
+                            List<String> constraints = new ArrayList<>();
+                            for (PropertyConstraint propertyConstraint : properties.getValue()) {
+                                if (propertyConstraint instanceof EqualConstraint) {
+                                    constraints.add(((EqualConstraint) propertyConstraint).getEqual());
+                                } else if (propertyConstraint instanceof ValidValuesConstraint) {
+                                    constraints.addAll(((ValidValuesConstraint) propertyConstraint).getValidValues());
+                                } else {
+                                    // Constraint not yet managed
+                                    System.out.println("OS constraint not managed: " + propertyConstraint.toString());
+                                }
+                            }
+                            node.addOSConstraint(properties.getKey(), constraints);
+                        }
+                    }
+                    // Find the resource properties
+                    if (capability.getKey().equalsIgnoreCase("resource")) {
+                        for (Map.Entry<String, List<PropertyConstraint>> properties : capability.getValue().getProperties().entrySet()) {
+                            List<String> constraints = new ArrayList<>();
+                            for (PropertyConstraint propertyConstraint : properties.getValue()) {
+                                if (propertyConstraint instanceof EqualConstraint) {
+                                    constraints.add(((EqualConstraint) propertyConstraint).getEqual());
+                                } else if (propertyConstraint instanceof ValidValuesConstraint) {
+                                    constraints.addAll(((ValidValuesConstraint) propertyConstraint).getValidValues());
+                                } else {
+                                    // Constraint not yet managed
+                                    System.out.println("Resource constraint not managed: " + propertyConstraint.toString());
+                                }
+                            }
+                            node.addResourceConstraint(properties.getKey(), constraints);
+                        }
+                    }
+                    // Find the sensors properties
+                    if (capability.getKey().equalsIgnoreCase("sensors")) {
+                        //TODO: get sensors requirements
+                    }
+                }
+            }
+        }
+
+        return node;
     }
 
     public static Map<String, String> getMetadata(ParsingResult<ArchiveRoot> parsingResult) {
