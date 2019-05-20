@@ -9,6 +9,15 @@ metadata:
    ProviderName_0: Google_Cloud_Compute
    ProviderRequired_0: false
    ProviderExcluded_0: true
+   ProviderName_1: Amazon
+   ProviderRequired_1: true
+   ProviderExcluded_1: false
+   ProviderName_2: Azure
+   ProviderRequired_2: true
+   ProviderExcluded_2: false
+   ProviderName_3: OpenStack
+   ProviderRequired_3: false
+   ProviderExcluded_3: true
    MaxInstances: 100
    MetricToMinimize: Cost
 
