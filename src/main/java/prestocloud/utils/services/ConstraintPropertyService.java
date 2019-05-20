@@ -216,6 +216,10 @@ public final class ConstraintPropertyService {
             Consumer<String> missingPropertyConsumer) throws ConstraintViolationException, ConstraintValueDoNotMatchPropertyTypeException {
         DataType dataType = ToscaContext.get(DataType.class, propertyDefinition.getType());
         if (dataType == null) {
+            // Complex type may also refer to a non-complex type in case of nested get_property
+            if (complexPropertyValue.containsKey("get_property")) {
+                return;
+            }
             throw new ConstraintViolationException("Complex type " + propertyDefinition.getType()
                     + " is not complex or it cannot be found in the archive");
         }
