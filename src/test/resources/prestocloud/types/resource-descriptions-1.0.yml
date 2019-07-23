@@ -98,6 +98,18 @@ data_types:
         type: prestocloud.datatypes.cloudcredentials
         description: The credentials to authenticate with cloud API.
         required: false
+      cloud_instance:
+        type: string
+        description: The name of the cloud instance type to use.
+        required: false
+      cloud_image:
+        type: string
+        description: The name/id of the cloud image to use.
+        required: false
+      gps_coordinates:
+        type: string
+        description: The GPS coordinates of the hosting region.
+        required: false
 
   prestocloud.datatypes.edge:
     derived_from: tosca.datatypes.Root
@@ -118,6 +130,10 @@ data_types:
         type: prestocloud.datatypes.edgecredentials
         description: The credentials to authenticate with the edge device.
         required: true
+      gps_coordinates:
+        type: string
+        description: The GPS coordinates of the edge device.
+        required: false
 
   prestocloud.datatypes.cloudcredentials:
     derived_from: tosca.datatypes.Root
@@ -165,13 +181,18 @@ capability_types:
     description: Provide a list of sensors.
     properties:
       camera:
-        type: boolean
-        description: A camera sensor.
+        type: string
+        description: The path to a camera sensor.
         required: false
         default: false
       microphone:
-        type: boolean
-        description: A microphone sensor.
+        type: string
+        description: The path to a microphone sensor.
+        required: false
+        default: false
+      temperature:
+        type: string
+        description: The path to a temperature sensor.
         required: false
         default: false
 

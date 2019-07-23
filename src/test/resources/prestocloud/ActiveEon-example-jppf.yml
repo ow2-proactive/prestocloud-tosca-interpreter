@@ -9,7 +9,7 @@ description: Types definition for ICCS needs
 
 imports:
    - tosca-normative-types:1.2
-   - iccs-normative-types:1.0
+   - iccs-normative-types:1.1
    - resource-descriptions:1.0
 
 topology_template:
@@ -55,6 +55,5 @@ topology_template:
        properties:
           id: 0
           name: eu.prestocloud.application_classes.AudioAnalytics.getData
-          onloadable: true
        requirements:
           - execute: getData_0

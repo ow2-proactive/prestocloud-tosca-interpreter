@@ -9,7 +9,7 @@ description: Placement constraints definition for BtrPlace
 
 imports:
   - tosca-normative-types:1.2
-  - iccs-normative-types:1.0
+  - iccs-normative-types:1.1
   - resource-descriptions:1.0
 
 policy_types:

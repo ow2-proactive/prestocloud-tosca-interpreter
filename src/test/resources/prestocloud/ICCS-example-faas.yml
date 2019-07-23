@@ -25,7 +25,7 @@ description: Types Description
 
 imports:
    - tosca-normative-types:1.2
-   - iccs-normative-types:1.0
+   - iccs-normative-types:1.1
    - resource-descriptions:1.0
    - placement-constraints:1.0
 
@@ -73,10 +73,10 @@ node_types:
                         - distribution: { equal: ubuntu }
                   - resource:
                      properties:
-                        - type: { valid_values: [ edge ] }
+                        - type: { equal: cloud }
                   - sensors:
                      properties:
-                        - microphone: { equal: true }
+                        - microphone: { equal: "/dev/snd/mic" }
 
    # Face detector node selection
    processing_node_fragments_FaceDetector:
@@ -104,7 +104,7 @@ node_types:
                         - type: { equal: cloud }
                   - sensors:
                      properties:
-                        - camera: { equal: true }
+                        - camera: { equal: "/dev/video0" }
 
    # Requirements for a load balancer
    load_balancing_VideoTranscoder_type:
@@ -152,7 +152,7 @@ node_types:
                         - type: { equal: cloud }
                   - sensors:
                      properties:
-                        - camera: { equal: true }
+                        - camera: { equal: "/dev/video0" }
 
 
    # Requirements for Multimedia manager's proxy AND load balancer
@@ -248,7 +248,7 @@ topology_template:
          properties:
             id: 0
             name: fragments.AudioCaptor
-            onloadable: true
+            scalable: false
             occurrences: 1
             docker_edge:
               image: "lambda_proxy_app/main_app:1.2.2"
@@ -266,6 +266,10 @@ topology_template:
                 - target: 9980
                   published: 9980
                   protocol: TCP
+            optimization_variables:
+              cost: 1
+              distance: 1
+              friendliness: { "Amazon_US_east": "1", "Azure_Europe_North": "1" }
          requirements:
             - execute: deployment_node_fragments_AudioCaptor
             - proxy: proxying_fragments
@@ -279,11 +283,15 @@ topology_template:
          properties:
             id: 1
             name: fragments.FaceDetector
-            onloadable: false
+            scalable: false
             occurrences: 1
             health_check:
               interval: 60
               cmd: "cat /proc/meminfo"
+            optimization_variables:
+              cost: 1
+              distance: 1
+              friendliness: { "Amazon_US_east": "1", "Azure_Europe_North": "1" }
          requirements:
             - execute: deployment_node_fragments_FaceDetector
             - proxy: proxying_fragments
@@ -300,8 +308,12 @@ topology_template:
          properties:
             id: 3
             name: fragments.VideoTranscoder
-            onloadable: false
+            scalable: true
             occurrences: 2
+            optimization_variables:
+              cost: 1
+              distance: 1
+              friendliness: { "Amazon_US_east": "1", "Azure_Europe_North": "1" }
          requirements:
             - execute: deployment_node_fragments_VideoTranscoder
             - proxy: load_balancing_VideoTranscoder
@@ -318,8 +330,12 @@ topology_template:
          properties:
             id: 2
             name: fragments.MultimediaManager
-            onloadable: false
+            scalable: true
             occurrences: 4
+            optimization_variables:
+              cost: 1
+              distance: 1
+              friendliness: { "Amazon_US_east": "1", "Azure_Europe_North": "1" }
          requirements:
             - execute: deployment_node_fragments_MultimediaManager
             - proxy: proxying_MultimediaManager

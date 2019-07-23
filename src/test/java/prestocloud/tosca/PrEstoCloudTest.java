@@ -104,7 +104,14 @@ public class PrEstoCloudTest {
     public void testParsingTypeLevelTOSCA() throws IOException, ParsingException {
         ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "ICCS-example-jppf.yml"));
         Assert.assertEquals(0, parsingResult.getContext().getParsingErrors().size());
+
+        /*parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "tosca_cvs-v3.6.yaml"));
+        Assert.assertEquals(0, parsingResult.getContext().getParsingErrors().size());*/
+
         parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "ICCS-example-faas.yml"));
+        Assert.assertEquals(0, parsingResult.getContext().getParsingErrors().size());
+
+        parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "refactored-example.yml"));
         Assert.assertEquals(0, parsingResult.getContext().getParsingErrors().size());
     }
 

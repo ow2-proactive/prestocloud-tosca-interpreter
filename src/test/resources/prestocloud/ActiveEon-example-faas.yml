@@ -16,7 +16,7 @@ description: Types Description
 
 imports:
    - tosca-normative-types:1.2
-   - iccs-normative-types:1.0
+   - iccs-normative-types:1.1
    - resource-descriptions:1.0
    - placement-constraints:1.0
 
@@ -96,7 +96,6 @@ topology_template:
       properties:
         id: 0
         name: fragments.AudioCaptor
-        onloadable: true
       requirements:
         - execute: deployment_node_fragments_AudioCaptor_1
         - proxy: load_balancing_AudioCaptor
@@ -172,7 +171,7 @@ topology_template:
       properties:
         id: 1
         name: fragments.FaceDetector
-        onloadable: false
+        scalable: false
       requirements:
         - execute: deployment_node_fragments_FaceDetector_1
         - proxy: load_balancing_FaceDetector
@@ -245,7 +244,6 @@ topology_template:
       properties:
         id: 2
         name: fragments.MultimediaManager
-        onloadable: false
       requirements:
         - execute: deployment_node_fragments_MultimediaManager_1
         - proxy: load_balancing_MultimediaManager
