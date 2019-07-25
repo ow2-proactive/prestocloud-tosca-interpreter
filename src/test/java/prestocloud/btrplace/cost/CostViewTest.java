@@ -38,6 +38,9 @@ public class CostViewTest {
     Assert.assertTrue(cv.publicHost(n3, vm1, 0.5, 1, 2, 3, 4));
     Assert.assertEquals(0.1, cv.minHostingCost(), 1E-6);
     Assert.assertEquals(1, cv.minDistance());
+
+    Assert.assertTrue(cv.publicHost(n3, vm1, 0.5, 1, 0, 3, 4));
+    Assert.assertEquals(Integer.MAX_VALUE, cv.get(vm1, n3, null));
   }
 
   @Test

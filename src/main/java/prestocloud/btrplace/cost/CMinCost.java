@@ -3,7 +3,6 @@ package prestocloud.btrplace.cost;
 import gnu.trove.map.TObjectIntMap;
 import gnu.trove.map.hash.TObjectIntHashMap;
 import org.btrplace.model.Instance;
-import org.btrplace.model.Model;
 import org.btrplace.model.Node;
 import org.btrplace.model.VM;
 import org.btrplace.model.view.ModelView;
@@ -76,6 +75,10 @@ public class CMinCost implements ChocoConstraint {
 
       final IntVar place = rp.getVMAction(vm).getDSlice().getHoster();
       final int[] table = costArray(rp, vm, place);
+      if (table.length == 0) {
+        // No solution
+        return false;
+      }
       int max = IntStream.of(table).max().getAsInt();
       final IntVar cost =
           rp.getModel().intVar(rp.makeVarLabel("cost(", vm,")"), 0, max);
@@ -115,8 +118,6 @@ public class CMinCost implements ChocoConstraint {
   }
 
   private void placementHeuristic(final ReconfigurationProblem rp, final IntVar cost) {
-    Model mo = rp.getSourceModel();
-
     final TObjectIntMap<VM> costs = vmWeight(rp);
 
     List<AbstractStrategy<?>> strategies = new ArrayList<>();
@@ -185,7 +186,20 @@ public class CMinCost implements ChocoConstraint {
      for (int i = place.getLB(); i <= ub; i = place.nextValue(i)) {
        final Node no = rp.getNode(i);
 
-       final int cc = cv.get(vm, no, currentHost);
+       int cc = cv.get(vm, no, currentHost);
+       if (cc == Integer.MAX_VALUE) {
+         try {
+           // Infinite penalty, we deny that node.
+           place.removeValue(i, Cause.Null);
+           // Placeholder to avoid an overflow. It will be ignored anyway as the
+           // node is no longer a candidate.
+           cc = 0;
+         } catch (final ContradictionException ex) {
+           // Unsolvable problem. We notify by returning an empty table.
+           return new int[0];
+         }
+       }
+       // TODO: prevent the overflow due to max_value;
        if (cc < 0) {
          throw new SchedulerModelingException(rp.getSourceModel(),
              "No cost associated to the vm " + vm + "->" + no + " assignment");
@@ -194,5 +208,4 @@ public class CMinCost implements ChocoConstraint {
      }
      return cost;
   }
-
 }

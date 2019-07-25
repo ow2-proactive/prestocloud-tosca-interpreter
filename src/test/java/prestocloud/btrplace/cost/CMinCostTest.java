@@ -27,12 +27,18 @@ public class CMinCostTest {
   @Test
   public void testDeliverable() {
     final Model mo = new DefaultModel();
+
+    // The view to declare the scores.
     final CostView cv = new CostView();
+
+    // 3 dimensions for 3 resources.
     final ShareableResource mem = new ShareableResource("memory");
     final ShareableResource cores = new ShareableResource("cores");
+    final ShareableResource storage = new ShareableResource("storage");
     mo.attach(cv);
     mo.attach(mem);
     mo.attach(cores);
+    mo.attach(storage);
 
     final List<Node> edges = new ArrayList<>();
     final List<Node> clouds = new ArrayList<>();
@@ -46,6 +52,7 @@ public class CMinCostTest {
       cv.edgeHost(no);
       mem.setCapacity(no, 8);
       cores.setCapacity(no, 4);
+      storage.setCapacity(no, 100);
     }
 
     // 4 public clouds.
@@ -56,13 +63,23 @@ public class CMinCostTest {
       // Pseudo infinite capacity.
       mem.setCapacity(no, Integer.MAX_VALUE / 100);
       cores.setCapacity(no, Integer.MAX_VALUE / 100);
+      storage.setCapacity(no, Integer.MAX_VALUE / 100);
     }
 
-    // 10 VMs with different sizes.
+    // 10 VMs with different sizes. They represent the fragment replicas but
+    // also the proxies.
+    // IMHO: the proxies should stay in the edge to save bandwidth and latency
+    // as we naturally tend to prefer hosting the fragments in the edge, so
+    // with a proxy on a cloud, there will be plenty of unnecessary round trips.
     for (int i = 0; i < 10; i++) {
       final VM vm = mo.newVM();
       vms.add(vm);
 
+      // We size the VMs according to there resource requirements. For the edge,
+      // this is required to ensure that we will not saturate the host. For
+      // a cloud hosting, the values are only used to compute the hourly hosting
+      // costs. So they are not really used as a cloud as a pseudo-infinite
+      // hosting capacity.
       if (i < 3) {
         // small VMs.
         mem.setConsumption(vm, 2);
@@ -76,6 +93,7 @@ public class CMinCostTest {
         mem.setConsumption(vm, 4);
         cores.setConsumption(vm, 2);
       }
+      storage.setConsumption(vm, 4);
       mo.getMapping().addReadyVM(vm);
     }
 
@@ -84,7 +102,12 @@ public class CMinCostTest {
       int d = 1;
       for (final Node no : clouds) {
         double hourlyCost = mem.getConsumption(vm) * cores.getConsumption(vm);
-        cv.publicHost(no, vm, hourlyCost, d * 100, 1, 1, 1);
+        if (d == 1) {
+          cv.publicHost(no, vm, hourlyCost, d * 100, 0, 1, 1);
+        } else {
+          cv.publicHost(no, vm, hourlyCost, d * 100, 1, 1, 1);
+        }
+
         d++;
       }
     }
@@ -93,7 +116,8 @@ public class CMinCostTest {
     Instance ii = new Instance(mo, new ArrayList<>(), new MinCost());
     ii.getSatConstraints().addAll(Running.newRunning(vms));
 
-    // the scheduler.
+    // TODO: If some VMs
+    // Scheduler creation and customisation.
     final ChocoScheduler sched = new DefaultChocoScheduler();
     sched.getParameters().getMapper().mapConstraint(MinCost.class, CMinCost.class);
     sched.doOptimize(true);
@@ -121,7 +145,7 @@ public class CMinCostTest {
 
     plan = sched.solve(ii);
     System.out.println(sched.getStatistics());
-    //System.out.println(plan);
+    System.out.println(plan);
 
     System.out.println("Result mapping:");
     System.out.println(plan.getResult().getMapping());

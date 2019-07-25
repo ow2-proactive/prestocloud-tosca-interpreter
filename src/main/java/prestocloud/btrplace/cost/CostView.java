@@ -154,7 +154,9 @@ public class CostView implements ModelView {
    * @param vm the VM
    * @param to the destination node
    * @param from the current VM placement. May be {@code null}.
-   * @return the associated cost. May be {@code < 0} if unregistered.
+   * @return the associated cost. May be {@code < 0} if unregistered. If it
+   * equals to {@code Integer#MAX_VALUE}, this means the destination node is
+   * not a candidate.
    */
   public int get(final VM vm, final Node to, final Node from) {
     if (isEdge(to)) {
