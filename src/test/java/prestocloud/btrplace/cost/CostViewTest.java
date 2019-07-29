@@ -1,5 +1,6 @@
 package prestocloud.btrplace.cost;
 
+import com.google.common.collect.Sets;
 import org.btrplace.model.DefaultModel;
 import org.btrplace.model.Model;
 import org.btrplace.model.Node;
@@ -34,13 +35,21 @@ public class CostViewTest {
     Assert.assertFalse(cv.edgeHost(n1));
     Assert.assertTrue(cv.edgeHost(n2));
     Assert.assertTrue(cv.isEdge(n2));
+    Assert.assertNull(cv.publicCost(vm1, n1));
 
     Assert.assertTrue(cv.publicHost(n3, vm1, 0.5, 1, 2, 3, 4));
+    final Cost cc  = cv.publicCost(vm1, n3);
+    Assert.assertEquals(1, cc.distance());
+    Assert.assertEquals(2, cc.affinity());
+    Assert.assertEquals(3, cc.alpha());
+    Assert.assertEquals(4, cc.beta());
     Assert.assertEquals(0.1, cv.minHostingCost(), 1E-6);
     Assert.assertEquals(1, cv.minDistance());
 
     Assert.assertTrue(cv.publicHost(n3, vm1, 0.5, 1, 0, 3, 4));
     Assert.assertEquals(Integer.MAX_VALUE, cv.get(vm1, n3, null));
+
+    Assert.assertEquals(Sets.newHashSet(vm1), cv.registeredVMs());
   }
 
   @Test

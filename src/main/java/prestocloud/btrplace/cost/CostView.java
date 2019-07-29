@@ -176,6 +176,30 @@ public class CostView implements ModelView {
   }
 
   /**
+   * Get the cost model parameters for a given VM to be assigned to a given
+   * cloud.
+   * @param vm the VM
+   * @param to the cloud
+   * @return the cost model parameters if declared earlier using {@link #publicHost(Node, VM, double, int, int, int, int)}.
+   * {@code null} otherwise
+   */
+  public Cost publicCost(final VM vm, final Node to) {
+    return costs.getOrDefault(to, new HashMap<>()).get(vm);
+  }
+
+  /**
+   * Get all the known VMs.
+   * @return a set of VMs.
+   */
+  public Set<VM> registeredVMs() {
+    final Set<VM> vms = new HashSet<>();
+    costs.forEach((no, cc) -> {
+      vms.addAll(cc.keySet());
+    });
+    return vms;
+  }
+
+  /**
    * Get the view in a model.
    * @param mo the model to analyse.
    * @return the view if exists. {@code null} otherwise.

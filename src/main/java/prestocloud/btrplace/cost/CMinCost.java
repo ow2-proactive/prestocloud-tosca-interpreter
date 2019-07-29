@@ -14,6 +14,7 @@ import org.btrplace.scheduler.choco.ReconfigurationProblem;
 import org.btrplace.scheduler.choco.constraint.ChocoConstraint;
 import org.btrplace.scheduler.choco.constraint.mttr.VMPlacementUtils;
 import org.btrplace.scheduler.choco.transition.NodeTransition;
+import org.btrplace.scheduler.choco.transition.Transition;
 import org.btrplace.scheduler.choco.view.CShareableResource;
 import org.chocosolver.solver.Cause;
 import org.chocosolver.solver.exception.ContradictionException;
@@ -36,6 +37,8 @@ import java.util.stream.IntStream;
 
 /**
  * Choco implementation of {@link MinCost}.
+ * Element constraints are used to link every possible assignments to its
+ * associated cost.
  */
 public class CMinCost implements ChocoConstraint {
 
@@ -149,29 +152,29 @@ public class CMinCost implements ChocoConstraint {
             toKeep.toArray(new IntVar[0]))
     );
 
-    List<IntVar> ends = rp.getVMActions().stream()
-        .map(a -> a.getEnd()).collect(
-        Collectors.toList());
+    // Scheduling problem.
+    IntVar[] ends = rp.getVMActions().stream()
+        .map(Transition::getEnd).toArray(IntVar[]::new);
     strategies.add(
-        new IntStrategy(ends.toArray(new IntVar[0]),
-            new InputOrder(rp.getModel()),
+        new IntStrategy(ends,
+            new InputOrder<>(rp.getModel()),
             new IntDomainMin()));
-    strategies.add(
-        new IntStrategy(new IntVar[]{rp.getEnd(), cost},
-            new InputOrder(rp.getModel()),
-            new IntDomainMin()));
+
+    // Makespan and Cost variable.
     strategies.add(
         new IntStrategy(new IntVar[]{rp.getEnd(), cost},
-            new InputOrder(rp.getModel()),
+            new InputOrder<>(rp.getModel()),
             new IntDomainMin()));
+
+    // Set the branching heuristics.
     rp.getSolver().setSearch(
         new StrategiesSequencer(
             rp.getSolver().getEnvironment(),
-            strategies.toArray(new AbstractStrategy[strategies.size()])));
+            strategies.toArray(new AbstractStrategy[0])));
   }
 
   /**
-   * Comput the hosting cost associated to every possible placement for a VM.
+   * Compute the hosting cost associated to every possible placement for a VM.
    * @param rp the problem.
    * @param vm the VM.
    * @param place the placement variable.
@@ -199,7 +202,6 @@ public class CMinCost implements ChocoConstraint {
            return new int[0];
          }
        }
-       // TODO: prevent the overflow due to max_value;
        if (cc < 0) {
          throw new SchedulerModelingException(rp.getSourceModel(),
              "No cost associated to the vm " + vm + "->" + no + " assignment");

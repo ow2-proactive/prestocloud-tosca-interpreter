@@ -3,6 +3,10 @@ package prestocloud.btrplace;
 import org.btrplace.json.model.InstanceConverter;
 import org.btrplace.scheduler.choco.ChocoScheduler;
 import org.btrplace.scheduler.choco.DefaultChocoScheduler;
+import prestocloud.btrplace.cost.CMinCost;
+import prestocloud.btrplace.cost.CostViewConverter;
+import prestocloud.btrplace.cost.MinCost;
+import prestocloud.btrplace.cost.MinCostConverter;
 import prestocloud.btrplace.minUsed.CMinUsed;
 import prestocloud.btrplace.minUsed.MinUsed;
 import prestocloud.btrplace.minUsed.MinUsedConverter;
@@ -21,6 +25,7 @@ public final class PrestoCloudExtensions {
   public static ChocoScheduler newScheduler() {
     final ChocoScheduler sched = new DefaultChocoScheduler();
     sched.getParameters().getMapper().mapConstraint(MinUsed.class, CMinUsed.class);
+    sched.getParameters().getMapper().mapConstraint(MinCost.class, CMinCost.class);
     return sched;
   }
 
@@ -31,6 +36,8 @@ public final class PrestoCloudExtensions {
   public static InstanceConverter newInstanceConverter() {
     final InstanceConverter ic = new InstanceConverter();
     ic.getConstraintsConverter().register(new MinUsedConverter());
+    ic.getConstraintsConverter().register(new MinCostConverter());
+    ic.getModelConverter().getViewsConverter().register(new CostViewConverter());
     return ic;
   }
 

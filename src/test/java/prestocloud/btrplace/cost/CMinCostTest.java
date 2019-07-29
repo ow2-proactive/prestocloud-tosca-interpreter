@@ -1,5 +1,7 @@
 package prestocloud.btrplace.cost;
 
+import org.btrplace.json.JSONConverterException;
+import org.btrplace.json.model.InstanceConverter;
 import org.btrplace.model.DefaultModel;
 import org.btrplace.model.Instance;
 import org.btrplace.model.Model;
@@ -10,10 +12,13 @@ import org.btrplace.model.constraint.Running;
 import org.btrplace.model.view.ShareableResource;
 import org.btrplace.plan.ReconfigurationPlan;
 import org.btrplace.scheduler.choco.ChocoScheduler;
-import org.btrplace.scheduler.choco.DefaultChocoScheduler;
 import org.junit.Assert;
 import org.junit.Test;
+import prestocloud.btrplace.PrestoCloudExtensions;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -25,7 +30,7 @@ import java.util.stream.Collectors;
 public class CMinCostTest {
 
   @Test
-  public void testDeliverable() {
+  public void testDeliverable() throws JSONConverterException, IOException {
     final Model mo = new DefaultModel();
 
     // The view to declare the scores.
@@ -107,7 +112,6 @@ public class CMinCostTest {
         } else {
           cv.publicHost(no, vm, hourlyCost, d * 100, 1, 1, 1);
         }
-
         d++;
       }
     }
@@ -116,10 +120,11 @@ public class CMinCostTest {
     Instance ii = new Instance(mo, new ArrayList<>(), new MinCost());
     ii.getSatConstraints().addAll(Running.newRunning(vms));
 
-    // TODO: If some VMs
+    // Instance serialisation to enable replay.
+    final InstanceConverter ic = PrestoCloudExtensions.newInstanceConverter();
+
     // Scheduler creation and customisation.
-    final ChocoScheduler sched = new DefaultChocoScheduler();
-    sched.getParameters().getMapper().mapConstraint(MinCost.class, CMinCost.class);
+    final ChocoScheduler sched = PrestoCloudExtensions.newScheduler();
     sched.doOptimize(true);
     sched.setTimeLimit(5);
 
@@ -129,11 +134,9 @@ public class CMinCostTest {
     System.out.println("Initial deployment:");
     ReconfigurationPlan plan = sched.solve(ii);
     System.out.println(sched.getStatistics());
-    //System.out.println(plan);
 
     System.out.println("Result mapping:");
     System.out.println(plan.getResult().getMapping());
-
 
     // Let scale down. Half the VMs are removed.
     System.out.println("------ scale down ---");
@@ -143,7 +146,11 @@ public class CMinCostTest {
     ii = new Instance(plan.getResult(), new ArrayList<>(), new MinCost());
     ii.getSatConstraints().addAll(Ready.newReady(toRemove));
 
+    File tmp = File.createTempFile("presto-", ".json");
+    ic.toJSON(ii).writeJSONString(Files.newBufferedWriter(tmp.toPath()));
+    System.out.println("Instance solved in " + tmp);
     plan = sched.solve(ii);
+
     System.out.println(sched.getStatistics());
     System.out.println(plan);
 
