@@ -10,6 +10,9 @@ import prestocloud.btrplace.cost.MinCostConverter;
 import prestocloud.btrplace.minUsed.CMinUsed;
 import prestocloud.btrplace.minUsed.MinUsed;
 import prestocloud.btrplace.minUsed.MinUsedConverter;
+import prestocloud.btrplace.precedingRunning.CPrecedingRunning;
+import prestocloud.btrplace.precedingRunning.PrecedingRunning;
+import prestocloud.btrplace.precedingRunning.PrecedingRunningConverter;
 
 /**
  * Utility class to create BtrPlace components.
@@ -26,6 +29,7 @@ public final class PrestoCloudExtensions {
     final ChocoScheduler sched = new DefaultChocoScheduler();
     sched.getParameters().getMapper().mapConstraint(MinUsed.class, CMinUsed.class);
     sched.getParameters().getMapper().mapConstraint(MinCost.class, CMinCost.class);
+    sched.getParameters().getMapper().mapConstraint(PrecedingRunning.class, CPrecedingRunning.class);
     return sched;
   }
 
@@ -37,6 +41,7 @@ public final class PrestoCloudExtensions {
     final InstanceConverter ic = new InstanceConverter();
     ic.getConstraintsConverter().register(new MinUsedConverter());
     ic.getConstraintsConverter().register(new MinCostConverter());
+    ic.getConstraintsConverter().register(new PrecedingRunningConverter());
     ic.getModelConverter().getViewsConverter().register(new CostViewConverter());
     return ic;
   }
