@@ -1,29 +1,12 @@
 package prestocloud.btrplace;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-
-import javax.annotation.Resource;
-
-import org.btrplace.model.DefaultModel;
-import org.btrplace.model.Instance;
-import org.btrplace.model.Mapping;
-import org.btrplace.model.Model;
-import org.btrplace.model.Node;
-import org.btrplace.model.VM;
-import org.btrplace.model.constraint.Gather;
-import org.btrplace.model.constraint.Online;
-import org.btrplace.model.constraint.Running;
-import org.btrplace.model.constraint.SatConstraint;
-import org.btrplace.model.constraint.Spread;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.google.common.collect.Sets;
+import net.minidev.json.JSONArray;
+import net.minidev.json.JSONObject;
+import org.btrplace.model.*;
+import org.btrplace.model.constraint.*;
 import org.btrplace.model.view.ShareableResource;
 import org.btrplace.plan.ReconfigurationPlan;
 import org.btrplace.scheduler.choco.ChocoScheduler;
@@ -32,34 +15,28 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.hateoas.HypermediaAutoConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.*;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.google.common.collect.Sets;
-
-import net.minidev.json.JSONArray;
-import net.minidev.json.JSONObject;
 import prestocloud.btrplace.minUsed.MinUsed;
 import prestocloud.btrplace.tosca.ParsingUtils;
-import prestocloud.btrplace.tosca.model.Constraint;
-import prestocloud.btrplace.tosca.model.Docker;
-import prestocloud.btrplace.tosca.model.RelationshipFaaS;
+import prestocloud.btrplace.tosca.model.*;
+import prestocloud.btrplace.tosca.model.PlacementConstraint;
 import prestocloud.component.ICSARRepositorySearchService;
 import prestocloud.tosca.model.ArchiveRoot;
 import prestocloud.tosca.parser.ParsingException;
 import prestocloud.tosca.parser.ParsingResult;
 import prestocloud.tosca.parser.ToscaParser;
 import prestocloud.tosca.repository.LocalRepositoryImpl;
+
+import javax.annotation.Resource;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class)
@@ -89,61 +66,113 @@ public class WholeChainTest {
     @Resource
     protected ICSARRepositorySearchService csarRepositorySearchService;
 
+    /**
+     * Simple helper method to retrieve the selected VM type for a fragment name *or* a node name (eg. proxy, master, etc.).
+     *
+     * @param selectedCloudVMTypes HashMap of all selected cloud VM types
+     * @param vmName name of the fragment *or* the node/host to look for
+     * @param nodeName name of the computed destination cloud
+     * @return the selected VM type, `null` if not found.
+     */
+    private String getSelectedCloudVMType(Map<String, Map<String, Map<String, Map<String, String>>>> selectedCloudVMTypes, String vmName, String nodeName) {
+        if (selectedCloudVMTypes.get(vmName) != null) {
+            return selectedCloudVMTypes.get(vmName).get("execute").get(selectedCloudVMTypes.get(vmName).get("execute").keySet().stream().findFirst().get()).get(nodeName.split("_")[0]);
+        }
+        else {
+            for (Map.Entry<String, Map<String, Map<String, Map<String, String>>>> selectedFragmentTypes : selectedCloudVMTypes.entrySet()) {
+                for (Map.Entry<String, Map<String, Map<String, String>>> selectedTypes : selectedFragmentTypes.getValue().entrySet()) {
+                    if (selectedTypes.getValue().containsKey(vmName)) {
+                        // Assume that cloud name and region name are concatenated with '_'
+                        return selectedTypes.getValue().get(vmName).get(nodeName.split("_")[0]);
+                    }
+                }
+            }
+        }
+        // This should never return null as a matching type must have be found for each VM
+        return null;
+    }
+
     @Test
     //public void processToscaWithBtrPlace(String resourcesPath, String instanceLevelTOSCAFile, String outputFile) throws ParsingException, IOException {
     public void processToscaWithBtrPlace() throws ParsingException, IOException {
 
         String resourcesPath = filesPath; // "src/main/resources/repository";
-        String instanceLevelTOSCAFile = filesPath + "ICCS-example-faas.yml";
+        String typeLevelTOSCAFile = filesPath + "ICCS-example-v6.yml";
         String outputFile = filesPath + "test.json";
 
         String azure_region = "westeurope";
         String amazon_region = "eu-west-1";
 
-        // Parse the TOSCA input file
-        ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get(instanceLevelTOSCAFile));
+        // Parse the type level TOSCA file
+        ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get(typeLevelTOSCAFile));
+
+        // Extract all required information
         Map<String, String> metadata = ParsingUtils.getMetadata(parsingResult);
-        List<String> supported_clouds = ParsingUtils.getListOfCloudsFromMetadata(metadata);
-        List<RelationshipFaaS> relationships = ParsingUtils.getFaaSRelationships(parsingResult);
-        List<Docker> dockersCloud = ParsingUtils.getDockerParameters(parsingResult, "cloud");
-        List<Docker> dockersEdge = ParsingUtils.getDockerParameters(parsingResult, "edge");
-        List<Constraint> constraints = ParsingUtils.getConstraints(parsingResult);
+        List<String> supportedClouds = ParsingUtils.getListOfCloudsFromMetadata(metadata);
+        List<Relationship> relationships = ParsingUtils.getRelationships(parsingResult);
+        List<PlacementConstraint> placementConstraints = ParsingUtils.getConstraints(parsingResult);
+        List<OptimizationVariables> optimizationVariables = ParsingUtils.getOptimizationVariables(parsingResult);
+        List<Docker> dockers = ParsingUtils.getDockers(parsingResult);
+        // TODO: deal with health checks
+        List<HealthCheck> healthChecks = ParsingUtils.getHealthChecks(parsingResult);
 
-        // TODO: do it also for proxy hosting!
-
-        // Select a VM type for each host in each cloud
-        // TODO: Parse involved edge devices to retrieve resources capacity
-        Map<String, Map<String, String>> selected_vm_types = new HashMap<>();
-        for (RelationshipFaaS relationship : relationships) {
-            // If the resource may run on cloud(s), select best matching types
-            if (!relationship.getHostingNode().getResourceConstraints().isEmpty()) {
-                if (relationship.getHostingNode().getResourceConstraints().get("type").contains("cloud")) {
-                    // Loop for all clouds supported (metadata)
-                    Map<String, String> selected_types = new HashMap<>();
-                    for (String cloud : supported_clouds) {
-                        String fragment = relationship.getFragment();
-                        // TODO: manage desired regions in a better way
-                        String selected_type = ParsingUtils.findBestSuitableVMType(parser, resourcesPath, cloud, cloud.equalsIgnoreCase("azure") ? azure_region : amazon_region, relationship.getHostingNode().getHostingConstraints());
-                        selected_types.put(cloud.toLowerCase(), selected_type);
-                        selected_vm_types.put(fragment, selected_types);
+        // Select the best VM type for each host in each available cloud
+        // Map structure: fragment name -> requirement type -> node name -> cloud name -> VM type
+        Map<String, Map<String, Map<String, Map<String, String>>>> selectedCloudVMTypes = new HashMap<>();
+        for (Relationship relationship : relationships) {
+            Map<String, Map<String, Map<String, String>>> allSelectedTypesWithRequirement = new HashMap<>();
+            Map<String, Map<String, String>> allSelectedTypes = new HashMap<>();
+            for (ConstrainedNode constrainedNode : relationship.getAllConstrainedNodes()) {
+                for (NodeConstraints nodeConstraints : constrainedNode.getConstraints()) {
+                    if (!nodeConstraints.getResourceConstraints().isEmpty()) {
+                        // If the resource may run on cloud(s), select best matching types
+                        if (nodeConstraints.getResourceConstraints().get("type").contains("cloud")) {
+                            // Loop for all clouds supported (metadata)
+                            Map<String, String> selectedTypes = new HashMap<>();
+                            for (String cloud : supportedClouds) {
+                                // TODO: manage desired regions in a better way
+                                String selected_type = ParsingUtils.findBestSuitableVMType(
+                                        parser,
+                                        resourcesPath,
+                                        cloud,
+                                        cloud.equalsIgnoreCase("azure") ? azure_region : amazon_region,
+                                        nodeConstraints.getHostingConstraints());
+                                selectedTypes.put(cloud.toLowerCase(), selected_type);
+                            }
+                            allSelectedTypes.put(constrainedNode.getName(), selectedTypes);
+                            allSelectedTypesWithRequirement.put(constrainedNode.getType(), allSelectedTypes);
+                        } else {
+                            System.out.println("Edge-only hosting resource constraint found: " + constrainedNode.getName());
+                        }
                     }
                 }
-                else {
-                    System.out.println("Edge only resource found: " + relationship.getNode());
-                }
             }
+            selectedCloudVMTypes.put(relationship.getFragmentName(), allSelectedTypesWithRequirement);
         }
 
         // Initialize BtrPlace model and mapping
         Model mo = new DefaultModel();
         Mapping map = mo.getMapping();
 
-        // Create fragments (VMs)
+        // Create VMs
         Map<String, VM> vms = new HashMap<>();
-        for (RelationshipFaaS relationship : relationships) {
-            vms.put(relationship.getFragment(), mo.newVM());
+        for (Map.Entry<String, Map<String, Map<String, Map<String, String>>>> selectedFragmentTypes : selectedCloudVMTypes.entrySet()) {
+            for (Map.Entry<String, Map<String, Map<String, String>>> selectedTypes : selectedFragmentTypes.getValue().entrySet()) {
+                // Add the fragment's execute node first
+                if (selectedTypes.getKey().equalsIgnoreCase("execute")) {
+                    vms.put(selectedFragmentTypes.getKey(), mo.newVM());
+                }
+                else {
+                    // Remove duplicates (eg. a 'proxy' may be linked to multiple fragments)
+                    String nodeName = selectedTypes.getValue().keySet().stream().findFirst().get();
+                    if (!vms.containsKey(nodeName)) {
+                        vms.put(nodeName, mo.newVM());
+                    }
+                }
+            }
         }
 
+        // TODO: declare edge devices (depending how we get them)
         /* Declare some edge devices (nodes)
         Map<String, Node> edge_nodes = new HashMap<>();
         // These edge devices are part of ban constraints
@@ -151,9 +180,6 @@ public class WholeChainTest {
         edge_nodes.put("kdsfk31fw", mo.newNode());
         edge_nodes.put("f2553fdfs", mo.newNode());
         edge_nodes.put("bd5fgdx32", mo.newNode());
-        // Another two extras
-        edge_nodes.put("deiuhde91", mo.newNode());
-        edge_nodes.put("dzol52kza", mo.newNode());
         */
 
         // Declare the 2 public clouds
@@ -162,99 +188,101 @@ public class WholeChainTest {
         public_clouds.put("amazon_" + amazon_region, mo.newNode());
         public_clouds.put("azure_" + azure_region, mo.newNode());
 
-        // TODO: ADD RESOURCES USAGE FOR PROXY HOSTS
-
-        // Set cpu
+        // Create and attach cpu, memory and disk resources
         ShareableResource cpu = new ShareableResource("cpu");
+        ShareableResource mem = new ShareableResource("memory");
+        ShareableResource disk = new ShareableResource("disk");
         mo.attach(cpu);
+        mo.attach(mem);
+        mo.attach(disk);
+
+        // TODO: set cpu for edge devices
         /* Set edge devices cpu
         for (Map.Entry<String, Node> edge_node : edge_nodes.entrySet()) {
             cpu.setCapacity(edge_node.getValue(), 4);
         }*/
-        // Pseudo infinite capacity for the public clouds.
-        for (Map.Entry<String, Node> cloud : public_clouds.entrySet()) {
-            cpu.setCapacity(cloud.getValue(), Integer.MAX_VALUE / 1000);
-        }
-        // Set cpu consumption of fragments
-        for (RelationshipFaaS relationship : relationships) {
-            String memory_required = relationship.getHostingNode().getHostingConstraints().get("mem_size").get(0);
-            int constraint;
-            if (memory_required.contains("RangeMin")) {
-                constraint = Integer.valueOf(memory_required.split(",")[0].split(" ")[1]);
-            }
-            else if (memory_required.contains("GreaterOrEqual")) {
-                constraint = Integer.valueOf(memory_required.split(" ")[1]);
-            }
-            else {
-                constraint = Integer.valueOf(memory_required);
-            }
-            cpu.setConsumption(vms.get(relationship.getFragment()), constraint);
-        }
 
-        // Set memory
-        ShareableResource mem = new ShareableResource("memory");
-        mo.attach(mem);
+        // TODO: set memory for edge devices
         /* Set edge devices memory
         for (Map.Entry<String, Node> edge_node : edge_nodes.entrySet()) {
             mem.setCapacity(edge_node.getValue(), 2);
         }*/
-        // Pseudo infinite capacity for the public clouds.
-        for (Map.Entry<String, Node> cloud : public_clouds.entrySet()) {
-            mem.setCapacity(cloud.getValue(), Integer.MAX_VALUE / 1000);
-        }
-        // Set memory consumption of fragments
-        for (RelationshipFaaS relationship : relationships) {
-            String memory_required = relationship.getHostingNode().getHostingConstraints().get("mem_size").get(0);
-            int constraint;
-            if (memory_required.contains("RangeMin")) {
-                constraint = (int)Math.round(Double.valueOf(memory_required.split(",")[0].split(" ")[1]));
-            }
-            else if (memory_required.contains("GreaterOrEqual")) {
-                constraint = (int)Math.round(Double.valueOf(memory_required.split(" ")[1]));
-            }
-            else {
-                constraint = (int)Math.round(Double.valueOf(memory_required));
-            }
-            mem.setConsumption(vms.get(relationship.getFragment()), constraint);
-        }
 
-        // Set disk
-        ShareableResource disk = new ShareableResource("disk");
-        mo.attach(disk);
+        // TODO: set disk for edge devices
         /* Set edge devices disk
         for (Map.Entry<String, Node> edge_node : edge_nodes.entrySet()) {
             disk.setCapacity(edge_node.getValue(), 60);
         }*/
+
         // Pseudo infinite capacity for the public clouds.
         for (Map.Entry<String, Node> cloud : public_clouds.entrySet()) {
+            cpu.setCapacity(cloud.getValue(), Integer.MAX_VALUE / 1000);
+            mem.setCapacity(cloud.getValue(), Integer.MAX_VALUE / 1000);
             disk.setCapacity(cloud.getValue(), Integer.MAX_VALUE / 1000);
         }
-        // Set disk consumption of fragments
-        for (RelationshipFaaS relationship : relationships) {
-            String disk_required = relationship.getHostingNode().getHostingConstraints().get("mem_size").get(0);
-            int constraint;
-            if (disk_required.contains("RangeMin")) {
-                constraint = (int)Math.round(Double.valueOf(disk_required.split(",")[0].split(" ")[1]));
+
+        // Set consumption of all required nodes/hosts
+        for (Relationship relationship : relationships) {
+            for (ConstrainedNode constrainedNode : relationship.getAllConstrainedNodes()) {
+                for (NodeConstraints nodeConstraints : constrainedNode.getConstraints()) {
+                    if (!nodeConstraints.getResourceConstraints().isEmpty()) {
+                        // If the resource may run on cloud(s), select best matching types
+                        if (nodeConstraints.getResourceConstraints().get("type").contains("cloud")) {
+                            // Prepare VM name depending on requirement type ('execute' targets the fragment name, others target node/host name)
+                            String vmName = constrainedNode.getType().equalsIgnoreCase("execute") ? relationship.getFragmentName() : constrainedNode.getType();
+                            for (Map.Entry<String, List<String>> hostingConstraint : nodeConstraints.getHostingConstraints().entrySet()) {
+                                String required = hostingConstraint.getValue().get(0);
+
+                                // TODO: manage more value constraints if needed
+                                int constraint;
+                                if (required.contains("RangeMin")) {
+                                    constraint = Integer.valueOf(required.split(",")[0].split(" ")[1]);
+                                } else if (required.contains("GreaterOrEqual")) {
+                                    constraint = Integer.valueOf(required.split(" ")[1]);
+                                } else {
+                                    constraint = Integer.valueOf(required);
+                                }
+
+                                // TODO: manage more units if needed
+                                if (hostingConstraint.getKey().equalsIgnoreCase("num_cpus")) {
+                                    cpu.setConsumption(vms.get(vmName), constraint);
+                                } else if (hostingConstraint.getKey().equalsIgnoreCase("mem_size")) {
+                                    // Mem in GB only
+                                    if (required.contains("MB")) {
+                                        constraint = Math.round(constraint / 1024);
+                                    }
+                                    mem.setConsumption(vms.get(vmName), constraint);
+                                } else if (hostingConstraint.getKey().equalsIgnoreCase("storage_size")) {
+                                    // Storage in GB only
+                                    if (required.contains("MB")) {
+                                        constraint = Math.round(constraint / 1024);
+                                    }
+                                    disk.setConsumption(vms.get(vmName), constraint);
+                                } else {
+                                    System.out.println("Unrecognized hosting constraint: " + hostingConstraint.getKey());
+                                }
+                            }
+                        }
+                    }
+                }
             }
-            else if (disk_required.contains("GreaterOrEqual")) {
-                constraint = (int)Math.round(Double.valueOf(disk_required.split(" ")[1]));
-            }
-            else {
-                constraint = (int)Math.round(Double.valueOf(disk_required));
-            }
-            disk.setConsumption(vms.get(relationship.getFragment()), constraint);
         }
 
         // Initial model setup
         final List<SatConstraint> cstrs = new ArrayList<>();
-        // All edge nodes and public clouds are online and running
+
+        // TODO: set the state for edge devices
+        // All edge nodes are online and running
         /*for (Map.Entry<String, Node> edge_node : edge_nodes.entrySet()) {
             map.on(edge_node.getValue());
         }*/
+
+        // All public clouds are online and running
         for (Map.Entry<String, Node> public_cloud : public_clouds.entrySet()) {
             map.on(public_cloud.getValue());
         }
         cstrs.addAll(Online.newOnline(mo.getMapping().getAllNodes()));
+
         // Initial placement. VMs ready to be deployed
         for (Map.Entry<String, VM> vm : vms.entrySet()) {
             map.ready(vm.getValue());
@@ -262,23 +290,50 @@ public class WholeChainTest {
         cstrs.addAll(Running.newRunning(mo.getMapping().getAllVMs()));
 
         // Apply placement constraints
-        for (Constraint constraint : constraints) {
-            // TODO: manage more constraints
-            if (constraint.getType().contains("Spread")) {
+        for (PlacementConstraint placementConstraint : placementConstraints) {
+            // TODO: manage more constraints if needed
+            if (placementConstraint.getType().contains("Spread")) {
                 Set<VM> constrained_vms = new HashSet<>();
-                for (String target : constraint.getTargets()) {
-                    constrained_vms.add(vms.get(target));
+                for (String target : placementConstraint.getTargets()) {
+                    // Check if the VM actually exists in case edge devices are not yet managed
+                    if (vms.get(target) != null) {
+                        constrained_vms.add(vms.get(target));
+                    }
+                    else {
+                        System.out.println("Non consistent 'Gather' constraint detected for: " + target);
+                    }
                 }
                 cstrs.add(new Spread(constrained_vms));
             }
-            if (constraint.getType().contains("Gather")) {
+            if (placementConstraint.getType().contains("Gather")) {
                 Set<VM> constrained_vms = new HashSet<>();
-                for (String target : constraint.getTargets()) {
-                    constrained_vms.add(vms.get(target));
+                for (String target : placementConstraint.getTargets()) {
+                    // Check if the VM actually exists in case edge devices are not yet managed
+                    if (vms.get(target) != null) {
+                        constrained_vms.add(vms.get(target));
+                    }
+                    else {
+                        System.out.println("Non consistent 'Gather' constraint detected for: " + target);
+                    }
                 }
                 cstrs.add(new Gather(constrained_vms));
             }
-            // Ban is for edge devices only
+            // TODO: precedence constraint
+            /*if (constraint.getType().contains("Precedence")) {
+                Set<VM> constrained_vms = new HashSet<>();
+                for (String target : constraint.getTargets()) {
+                    // Check if the VM actually exists in case edge devices are not yet managed
+                    if (vms.get(target) != null) {
+                        constrained_vms.add(vms.get(target));
+                    }
+                    else {
+                        System.out.println("Non consistent 'Gather' constraint detected for: " + target);
+                    }
+                }
+                String vm = constraint.getDevices().stream().findFirst().get();
+                cstrs.add(new Precedence(vms.get(vm), Sets.newHashSet(constrained_vms)));
+            }*/
+            // TODO: Ban is usually put on edge devices only
             /*if (constraint.getType().contains("Ban")) {
                 Set<Node> constrained_nodes = new HashSet<>();
                 for (String node : constraint.getDevices()) {
@@ -292,21 +347,7 @@ public class WholeChainTest {
             }*/
         }
 
-        /* Detect cloud only & edge only constraints
-        for (RelationshipFaaS relationship : relationships) {
-            // If the resource can only be run on cloud or edge => this is a constraint!
-            if (relationship.getResourceConstraints().get("type").size() == 1) {
-                // Here we ban edge devices
-                if(relationship.getResourceConstraints().get("type").get(0).equalsIgnoreCase("cloud")) {
-                    cstrs.add(new Ban(vms.get(relationship.getFragment()), Sets.newHashSet(edge_nodes.values())));
-                }
-                // Here we ban all clouds (public & private)
-                if(relationship.getResourceConstraints().get("type").get(0).equalsIgnoreCase("edge")) {
-                    cstrs.add(new Ban(vms.get(relationship.getFragment()), Sets.newHashSet(public_clouds.values())));
-                    // TODO: add private clouds if defined
-                }
-            }
-        }*/
+        // TODO: Add precedence constraints inferred from relationships => 'proxy', 'master', and 'balanced_by' nodes must be started before fragments's hosting node ('execute')
 
         // Create an instance, set the objective, start an optimized scheduler and solve the problem
         Instance ii = new Instance(mo, cstrs, new MinUsed(Sets.newHashSet(public_clouds.values())));
@@ -315,74 +356,77 @@ public class WholeChainTest {
         ReconfigurationPlan p = sched.solve(ii);
         Assert.assertNotNull(p);
 
-        /*
-        //Show the results
-        System.out.println("-- Computation done: ");
-        System.out.println(p);
-        */
+        // DEBUG: Show the computed placement actions
+        //System.out.println(p);
 
         // Get the new model and mapping
         mo = p.getResult();
         map = mo.getMapping();
 
-        // Print statistics
+        // Print statistics & resulting placement
         System.out.println("==================================================================================================================");
         System.out.println("Solver statistics:");
         System.out.println("==================================================================================================================");
         System.out.println(sched.getStatistics());
         System.out.println("==================================================================================================================");
+        System.out.println("FRAGMENT/NODE NAME -> CLOUD & REGION NAME -> VM TYPE SELECTED");
+        System.out.println("==================================================================================================================");
 
-        // Show the resulting placement
-        System.out.println("==================================================================================================================");
-        System.out.println("FRAGMENT_NAME \t\t\t\t -> \tCLOUD_NAME / EDGE_NAME\t -> \tVM_TYPE");
-        System.out.println("==================================================================================================================");
         for (Map.Entry<String, VM> vm : vms.entrySet()) {
             // Extract the destination node
             Node destination_node = map.getVMLocation(vm.getValue());
+
+            // TODO: print edge devices placement
             /* Look into edge devices
             for (Map.Entry<String, Node> node : edge_nodes.entrySet()) {
                 if (node.getValue().equals(destination_node)) {
                     System.out.println(vm.getKey() + "\t -> \t" + node.getKey());
-                    break;
-                }
-            }*/
-            // Look into public clouds devices
-            for (Map.Entry<String, Node> node : public_clouds.entrySet()) {
-                if (node.getValue().equals(destination_node)) {
-                    System.out.println(vm.getKey() + "\t -> \t" + node.getKey() + "\t -> \t" + selected_vm_types.get(vm.getKey()).get(node.getKey().split("_")[0]));
-
-                    // TODO: test if docker properties target cloud or edge
-
-                    for (Docker docker : dockersCloud) {
-                        if (docker.getFragmentName().equalsIgnoreCase(vm.getKey())) {
+                    for (Docker docker : dockers) {
+                        if (docker.getFragmentName().equalsIgnoreCase(vm.getKey()) && docker.getResourceType().contains("edge")) {
                             System.out.println(" \t -> \t docker run " +  docker.getImage() + " " + docker.getCmd());
                             break;
                         }
                     }
                     break;
                 }
+            }*/
+
+            // Look into public clouds devices
+            for (Map.Entry<String, Node> node : public_clouds.entrySet()) {
+                if (node.getValue().equals(destination_node)) {
+                    System.out.println(vm.getKey() + " -> " + node.getKey() + " -> " + getSelectedCloudVMType(selectedCloudVMTypes, vm.getKey(), node.getKey()));
+                    for (Docker docker : dockers) {
+                        if (docker.getFragmentName().equalsIgnoreCase(vm.getKey()) && docker.getResourceType().contains("cloud")) {
+                            System.out.println(docker.printCmdline());
+                            break;
+                        }
+                    }
+                    break;
+                }
             }
-            // TODO: look into private clouds
         }
         System.out.println("==================================================================================================================");
 
-        // Format output to JSON
+        // Generate JSON output
         JSONArray ja = new JSONArray();
         for (Map.Entry<String, VM> vm : vms.entrySet()) {
             // Extract the destination node
             Node destination_node = map.getVMLocation(vm.getValue());
+
+            // TODO: write edge devices computed placement
+
+            // Output all public clouds devices
             for (Map.Entry<String, Node> node : public_clouds.entrySet()) {
                 if (node.getValue().equals(destination_node)) {
                     JSONObject jo = new JSONObject();
                     jo.put("fragment", vm.getKey());
                     jo.put("cloud", node.getKey().substring(0, node.getKey().lastIndexOf('_')));
                     jo.put("region", node.getKey().substring(node.getKey().lastIndexOf('_') + 1));
-                    jo.put("type", selected_vm_types.get(vm.getKey()).get(node.getKey().split("_")[0]));
+                    jo.put("type", getSelectedCloudVMType(selectedCloudVMTypes, vm.getKey(), node.getKey()));
 
-                    // TODO: test if docker properties target cloud or edge
-
-                    Optional<Docker> docker = dockersCloud.stream().filter(d -> d.getFragmentName().equalsIgnoreCase(vm.getKey())).findFirst();
-                    docker.ifPresent(docker1 -> jo.put("docker", "docker run " + docker1.getImage() + " " + docker1.getCmd()));
+                    // INFO: docker command is optional because 'proxy', 'master', and 'balanced_by' nodes don't have one!
+                    Optional<Docker> docker = dockers.stream().filter(d -> d.getFragmentName().equalsIgnoreCase(vm.getKey())).findFirst();
+                    docker.ifPresent(dck -> jo.put("docker", dck.printCmdline()));
                     ja.add(jo);
                 }
             }
