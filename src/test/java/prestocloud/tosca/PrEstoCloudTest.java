@@ -1,13 +1,5 @@
 package prestocloud.tosca;
 
-import java.io.IOException;
-import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,23 +10,25 @@ import org.prestocloud.tosca.model.templates.Capability;
 import org.prestocloud.tosca.model.templates.NodeTemplate;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.hateoas.HypermediaAutoConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.*;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
-
 import prestocloud.component.ICSARRepositorySearchService;
 import prestocloud.tosca.model.ArchiveRoot;
 import prestocloud.tosca.parser.ParsingException;
 import prestocloud.tosca.parser.ParsingResult;
 import prestocloud.tosca.parser.ToscaParser;
 import prestocloud.tosca.repository.LocalRepositoryImpl;
+
+import javax.annotation.Resource;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class)
@@ -105,8 +99,8 @@ public class PrEstoCloudTest {
         ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "ICCS-example-jppf.yml"));
         Assert.assertEquals(0, parsingResult.getContext().getParsingErrors().size());
 
-        /*parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "tosca_cvs-v3.6.yaml"));
-        Assert.assertEquals(0, parsingResult.getContext().getParsingErrors().size());*/
+        parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "ICCS-example-v6.yml"));
+        Assert.assertEquals(0, parsingResult.getContext().getParsingErrors().size());
 
         parsingResult = parser.parseFile(Paths.get("src/test/resources/prestocloud/", "ICCS-example-faas.yml"));
         Assert.assertEquals(0, parsingResult.getContext().getParsingErrors().size());
