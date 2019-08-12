@@ -25,21 +25,8 @@
  */
 package prestocloud.btrplace.tosca;
 
-import java.io.IOException;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.junit.Assert;
-import org.prestocloud.tosca.model.definitions.AbstractPropertyValue;
-import org.prestocloud.tosca.model.definitions.ComplexPropertyValue;
-import org.prestocloud.tosca.model.definitions.FilterDefinition;
-import org.prestocloud.tosca.model.definitions.ListPropertyValue;
-import org.prestocloud.tosca.model.definitions.PropertyConstraint;
-import org.prestocloud.tosca.model.definitions.RequirementDefinition;
-import org.prestocloud.tosca.model.definitions.ScalarPropertyValue;
+import org.prestocloud.tosca.model.definitions.*;
 import org.prestocloud.tosca.model.definitions.constraints.EqualConstraint;
 import org.prestocloud.tosca.model.definitions.constraints.GreaterOrEqualConstraint;
 import org.prestocloud.tosca.model.definitions.constraints.InRangeConstraint;
@@ -48,17 +35,19 @@ import org.prestocloud.tosca.model.templates.Capability;
 import org.prestocloud.tosca.model.templates.NodeTemplate;
 import org.prestocloud.tosca.model.templates.PolicyTemplate;
 import org.prestocloud.tosca.model.types.NodeType;
-
-import prestocloud.btrplace.tosca.model.ConstrainedNode;
-import prestocloud.btrplace.tosca.model.Constraint;
-import prestocloud.btrplace.tosca.model.Docker;
-import prestocloud.btrplace.tosca.model.RelationshipFaaS;
-import prestocloud.btrplace.tosca.model.RelationshipJPPF;
+import prestocloud.btrplace.tosca.model.*;
 import prestocloud.model.common.Tag;
 import prestocloud.tosca.model.ArchiveRoot;
 import prestocloud.tosca.parser.ParsingException;
 import prestocloud.tosca.parser.ParsingResult;
 import prestocloud.tosca.parser.ToscaParser;
+
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author ActiveEon Team
@@ -178,30 +167,56 @@ public class ParsingUtils {
         return vmTypes;
     }
 
-    public static List<Constraint> getConstraints(ParsingResult<ArchiveRoot> parsingResult) {
-        List<Constraint> constraints = new ArrayList<>();
+    public static List<PlacementConstraint> getConstraints(ParsingResult<ArchiveRoot> parsingResult) {
+        List<PlacementConstraint> placementConstraints = new ArrayList<>();
 
         // Look for placement constraints
         Map<String, PolicyTemplate> policyTemplates = parsingResult.getResult().getTopology().getPolicies();
         if (policyTemplates != null) {
             for (Map.Entry<String, PolicyTemplate> policyTemplate : policyTemplates.entrySet()) {
-                Constraint constraint = new Constraint(policyTemplate.getKey());
-                constraint.setType(policyTemplate.getValue().getType());
-                constraint.setTargets(policyTemplate.getValue().getTargets());
+                PlacementConstraint placementConstraint = new PlacementConstraint(policyTemplate.getKey());
+                placementConstraint.setType(policyTemplate.getValue().getType());
+                placementConstraint.setTargets(policyTemplate.getValue().getTargets());
+                // TODO: retrieve properties for all custom constraints that requires it
                 if (policyTemplate.getValue().getType().equalsIgnoreCase("prestocloud.placement.Ban")) {
                     List<Object> excludedDevices = ((ListPropertyValue) policyTemplate.getValue().getProperties().get("excluded_devices")).getValue();
                     for (Object excludedDevice : excludedDevices) {
-                        constraint.addDevice((String) excludedDevice);
+                        placementConstraint.addDevice((String) excludedDevice);
                     }
                 }
-                constraints.add(constraint);
+                if (policyTemplate.getValue().getType().equalsIgnoreCase("prestocloud.placement.Precedence")) {
+                    placementConstraint.addDevice(policyTemplate.getValue().getProperties().get("preceding").toString());
+                }
+                placementConstraints.add(placementConstraint);
             }
         }
-        return constraints;
+        return placementConstraints;
     }
 
-    // TODO: PARSE MASTER AS WELL!!!
-    public static List<RelationshipJPPF> getJPPFRelationships(ParsingResult<ArchiveRoot> parsingResult) {
+    public static List<Relationship> getRelationships(ParsingResult<ArchiveRoot> parsingResult) {
+
+        List<Relationship> relationships = new ArrayList<>();
+
+        // Look for fragments in the node templates
+        Map<String, NodeTemplate> nodeTemplates = parsingResult.getResult().getTopology().getNodeTemplates();
+        for (Map.Entry<String, NodeTemplate> nodeTemplateFragment : nodeTemplates.entrySet()) {
+            if (nodeTemplateFragment.getValue().getType().equalsIgnoreCase("prestocloud.nodes.fragment.jppf")) {
+                relationships.addAll(getJPPFRelationships(parsingResult));
+            }
+            if (nodeTemplateFragment.getValue().getType().equalsIgnoreCase("prestocloud.nodes.fragment.faas")) {
+                relationships.addAll(getFaaSRelationships(parsingResult));
+            }
+            if (nodeTemplateFragment.getValue().getType().equalsIgnoreCase("prestocloud.nodes.fragment.loadBalanced")) {
+                relationships.addAll(getLBFragmentRelationships(parsingResult));
+            }
+            if (nodeTemplateFragment.getValue().getType().equalsIgnoreCase("prestocloud.nodes.fragment")) {
+                relationships.addAll(getFragmentRelationships(parsingResult));
+            }
+        }
+        return relationships;
+    }
+
+    private static List<RelationshipJPPF> getJPPFRelationships(ParsingResult<ArchiveRoot> parsingResult) {
 
         List<RelationshipJPPF> relationships = new ArrayList<>();
 
@@ -210,139 +225,19 @@ public class ParsingUtils {
         for (Map.Entry<String, NodeTemplate> nodeTemplateFragment : nodeTemplates.entrySet()) {
             // Fragment detected
             if (nodeTemplateFragment.getValue().getType().equalsIgnoreCase("prestocloud.nodes.fragment.jppf")) {
-                // Look for the corresponding JPPF agent
-                for (Map.Entry<String, NodeTemplate> nodeTemplateJPPF : nodeTemplates.entrySet()) {
-                    if (nodeTemplateJPPF.getKey().equalsIgnoreCase(nodeTemplateFragment.getValue().getRelationships().get("execute").getTarget())) {
-                        // Look for the corresponding node type
-                        for (Map.Entry<String, NodeType> nodeTypeJPPF : parsingResult.getResult().getNodeTypes().entrySet()) {
-                            if (nodeTypeJPPF.getKey().equalsIgnoreCase(nodeTemplateJPPF.getValue().getType())) {
-                                RelationshipJPPF relationship = new RelationshipJPPF(nodeTemplateFragment.getKey(), nodeTemplateJPPF.getKey(), nodeTypeJPPF.getKey());
-                                // Look for requirements
-                                for (RequirementDefinition requirement : nodeTypeJPPF.getValue().getRequirements()) {
-                                    if (requirement.getId().equalsIgnoreCase("master")) {
-                                        relationship.setMaster(requirement.getType());
-                                    }
-                                    // Look for a requirement with nodeFilter's capabilities (hosting)
-                                    if (requirement.getNodeFilter() != null) {
-                                        for (Map.Entry<String, FilterDefinition> capability : requirement.getNodeFilter().getCapabilities().entrySet()) {
-                                            // Find the host properties
-                                            if (capability.getKey().equalsIgnoreCase("host")) {
-                                                for (Map.Entry<String, List<PropertyConstraint>> properties : capability.getValue().getProperties().entrySet()) {
-                                                    List<String> constraints = new ArrayList<>();
-                                                    for (PropertyConstraint propertyConstraint : properties.getValue()) {
-                                                        if (propertyConstraint instanceof InRangeConstraint) {
-                                                            constraints.add("RangeMin: " + ((InRangeConstraint) propertyConstraint).getInRange().get(0) + ", RangeMax: " + ((InRangeConstraint) propertyConstraint).getInRange().get(1));
-                                                        } else if (propertyConstraint instanceof EqualConstraint) {
-                                                            constraints.add("Equal: " + ((EqualConstraint) propertyConstraint).getEqual());
-                                                        } else if (propertyConstraint instanceof GreaterOrEqualConstraint) {
-                                                            constraints.add("GreaterOrEqual: " + ((GreaterOrEqualConstraint) propertyConstraint).getGreaterOrEqual());
-                                                        } else {
-                                                            // Constraint not yet managed
-                                                            System.out.println("Host constraint not managed: " + propertyConstraint.toString());
-                                                        }
-                                                    }
-                                                    relationship.addHostingConstraint(properties.getKey(), constraints);
-                                                }
-                                            }
-                                            // Find the OS properties
-                                            if (capability.getKey().equalsIgnoreCase("os")) {
-                                                for (Map.Entry<String, List<PropertyConstraint>> properties : capability.getValue().getProperties().entrySet()) {
-                                                    List<String> constraints = new ArrayList<>();
-                                                    for (PropertyConstraint propertyConstraint : properties.getValue()) {
-                                                        if (propertyConstraint instanceof EqualConstraint) {
-                                                            constraints.add(((EqualConstraint) propertyConstraint).getEqual());
-                                                        } else if (propertyConstraint instanceof ValidValuesConstraint) {
-                                                            constraints.addAll(((ValidValuesConstraint) propertyConstraint).getValidValues());
-                                                        } else {
-                                                            // Constraint not yet managed
-                                                            System.out.println("OS constraint not managed: " + propertyConstraint.toString());
-                                                        }
-                                                    }
-                                                    relationship.addOSConstraint(properties.getKey(), constraints);
-                                                }
-                                            }
-                                            // Find the resource properties
-                                            if (capability.getKey().equalsIgnoreCase("resource")) {
-                                                for (Map.Entry<String, List<PropertyConstraint>> properties : capability.getValue().getProperties().entrySet()) {
-                                                    List<String> constraints = new ArrayList<>();
-                                                    for (PropertyConstraint propertyConstraint : properties.getValue()) {
-                                                        if (propertyConstraint instanceof EqualConstraint) {
-                                                            constraints.add(((EqualConstraint) propertyConstraint).getEqual());
-                                                        } else if (propertyConstraint instanceof ValidValuesConstraint) {
-                                                            constraints.addAll(((ValidValuesConstraint) propertyConstraint).getValidValues());
-                                                        } else {
-                                                            // Constraint not yet managed
-                                                            System.out.println("Resource constraint not managed: " + propertyConstraint.toString());
-                                                        }
-                                                    }
-                                                    relationship.addResourceConstraint(properties.getKey(), constraints);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                                relationships.add(relationship);
-                            }
-                        }
-                    }
-                }
+                // Fragment detected, start to build a relationship
+                RelationshipJPPF relationship = new RelationshipJPPF(nodeTemplateFragment.getKey(),
+                        nodeTemplateFragment.getValue().getRelationships().get("execute").getTarget(),
+                        nodeTemplateFragment.getValue().getRelationships().get("master").getTarget());
+                relationship.setHostingNode(getConstrainedNode("execute", nodeTemplateFragment, nodeTemplates, parsingResult));
+                relationship.setHostingMaster(getConstrainedNode("master", nodeTemplateFragment, nodeTemplates, parsingResult));
+                relationships.add(relationship);
             }
         }
         return relationships;
     }
 
-    public static List<Docker> getDockerParameters(ParsingResult<ArchiveRoot> parsingResult, String locationType) {
-
-        List<Docker> dockers = new ArrayList<>();
-
-        // Look for fragments in the node templates
-        Map<String, NodeTemplate> nodeTemplates = parsingResult.getResult().getTopology().getNodeTemplates();
-        for (Map.Entry<String, NodeTemplate> nodeTemplateFragment : nodeTemplates.entrySet()) {
-            // Fragment detected
-            if (nodeTemplateFragment.getValue().getType().equalsIgnoreCase("prestocloud.nodes.fragment.faas")) {
-                Docker dockerParameters = new Docker(nodeTemplateFragment.getValue().getName());
-                // Look for the 'docker' property
-                ComplexPropertyValue dockerProperty = (ComplexPropertyValue) nodeTemplateFragment.getValue().getProperties().get("docker_" + locationType);
-                if (dockerProperty != null) {
-                    for (String dockerKey : dockerProperty.getValue().keySet()) {
-                        if (dockerKey.equalsIgnoreCase("image")) {
-                            dockerParameters.setImage(dockerProperty.getValue().get(dockerKey).toString());
-                        }
-                        if (dockerKey.equalsIgnoreCase("registry")) {
-                            dockerParameters.setRegistry(dockerProperty.getValue().get(dockerKey).toString());
-                        }
-                        if (dockerKey.equalsIgnoreCase("cmd")) {
-                            dockerParameters.setCmd(dockerProperty.getValue().get(dockerKey).toString());
-                        }
-                        if (dockerKey.equalsIgnoreCase("variables")) {
-                            for (String variableKey : ((HashMap<String, String>)dockerProperty.getValue().get(dockerKey)).keySet()) {
-                                dockerParameters.addVariable(variableKey, ((HashMap<String, String>)dockerProperty.getValue().get(dockerKey)).get(variableKey).toString());
-                            }
-                        }
-                        if (dockerKey.equalsIgnoreCase("ports")) {
-                            for (HashMap<String, String> port : ((ArrayList<HashMap<String, String>>)dockerProperty.getValue().get(dockerKey))) {
-                                for (String portKey : port.keySet()) {
-                                    if (portKey.equalsIgnoreCase("protocol")) {
-                                        dockerParameters.setPortProtocol(port.get(portKey));
-                                    }
-                                    if (portKey.equalsIgnoreCase("published")) {
-                                        dockerParameters.setPortPublished(port.get(portKey));
-                                    }
-                                    if (portKey.equalsIgnoreCase("target")) {
-                                        dockerParameters.setPortTarget(port.get(portKey));
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    dockers.add(dockerParameters);
-                }
-            }
-        }
-        return dockers;
-    }
-
-    public static List<RelationshipFaaS> getFaaSRelationships(ParsingResult<ArchiveRoot> parsingResult) {
+    private static List<RelationshipFaaS> getFaaSRelationships(ParsingResult<ArchiveRoot> parsingResult) {
 
         List<RelationshipFaaS> relationships = new ArrayList<>();
 
@@ -351,57 +246,89 @@ public class ParsingUtils {
         for (Map.Entry<String, NodeTemplate> nodeTemplateFragment : nodeTemplates.entrySet()) {
             // Detect only fragment at highest level
             if (nodeTemplateFragment.getValue().getType().equalsIgnoreCase("prestocloud.nodes.fragment.faas")) {
-
-                // Fragment detected, start to build a relationship
+                // Build the relationship
                 RelationshipFaaS relationship = new RelationshipFaaS(nodeTemplateFragment.getKey(),
                         nodeTemplateFragment.getValue().getRelationships().get("execute").getTarget(),
                         nodeTemplateFragment.getValue().getRelationships().get("proxy").getTarget());
-
-                // // Look for the corresponding deployment node template declaration
-                for (Map.Entry<String, NodeTemplate> nodeTemplateFaaS : nodeTemplates.entrySet()) {
-
-                    // TODO: ALSO LOOK FOR ITS PROPERTIES (WE CAN HAVE SSH KEYS, ETC.)
-
-                    // Look for the proxy node
-                    if (nodeTemplateFaaS.getKey().equalsIgnoreCase(nodeTemplateFragment.getValue().getRelationships().get("proxy").getTarget())) {
-
-                        // Look for the corresponding node type
-                        for (Map.Entry<String, NodeType> nodeTypeFaaS : parsingResult.getResult().getNodeTypes().entrySet()) {
-                            if (nodeTypeFaaS.getKey().equalsIgnoreCase(nodeTemplateFaaS.getValue().getType())) {
-                                // Start to build a proxy node
-                                ConstrainedNode proxyNode = buildConstrainedNode(nodeTypeFaaS.getKey(), nodeTypeFaaS.getValue().getDerivedFrom(), nodeTypeFaaS.getValue().getRequirements());
-                                relationship.setHostingProxy(proxyNode);
-                            }
-                        }
-                    }
-
-                    // Look for the execute node
-                    if (nodeTemplateFaaS.getKey().equalsIgnoreCase(nodeTemplateFragment.getValue().getRelationships().get("execute").getTarget())) {
-
-                        // Look for the corresponding node type
-                        for (Map.Entry<String, NodeType> nodeTypeFaaS : parsingResult.getResult().getNodeTypes().entrySet()) {
-                            if (nodeTypeFaaS.getKey().equalsIgnoreCase(nodeTemplateFaaS.getValue().getType())) {
-                                // Start to build a proxy node
-                                ConstrainedNode executeNode = buildConstrainedNode(nodeTypeFaaS.getKey(), nodeTypeFaaS.getValue().getDerivedFrom(), nodeTypeFaaS.getValue().getRequirements());
-                                relationship.setHostingNode(executeNode);
-                            }
-                        }
-                    }
-                }
+                relationship.setHostingNode(getConstrainedNode("execute", nodeTemplateFragment, nodeTemplates, parsingResult));
+                relationship.setHostingProxy(getConstrainedNode("proxy", nodeTemplateFragment, nodeTemplates, parsingResult));
                 relationships.add(relationship);
             }
         }
         return relationships;
     }
 
-    private static ConstrainedNode buildConstrainedNode(String name, List<String> derivedFrom, List<RequirementDefinition> requirements) {
+    private static List<RelationshipFragmentLB> getLBFragmentRelationships(ParsingResult<ArchiveRoot> parsingResult) {
 
-        ConstrainedNode node = new ConstrainedNode(name, derivedFrom);
+        List<RelationshipFragmentLB> relationships = new ArrayList<>();
+
+        // Look for fragments in the node templates
+        Map<String, NodeTemplate> nodeTemplates = parsingResult.getResult().getTopology().getNodeTemplates();
+        for (Map.Entry<String, NodeTemplate> nodeTemplateFragment : nodeTemplates.entrySet()) {
+            // Fragment detected
+            if (nodeTemplateFragment.getValue().getType().equalsIgnoreCase("prestocloud.nodes.fragment.loadBalanced")) {
+                // Fragment detected, start to build a relationship
+                RelationshipFragmentLB relationship = new RelationshipFragmentLB(nodeTemplateFragment.getKey(),
+                        nodeTemplateFragment.getValue().getRelationships().get("execute").getTarget(),
+                        nodeTemplateFragment.getValue().getRelationships().get("balanced_by").getTarget());
+                relationship.setHostingNode(getConstrainedNode("execute", nodeTemplateFragment, nodeTemplates, parsingResult));
+                relationship.setHostingLB(getConstrainedNode("balanced_by", nodeTemplateFragment, nodeTemplates, parsingResult));
+                relationships.add(relationship);
+            }
+        }
+        return relationships;
+    }
+
+    private static List<RelationshipFragment> getFragmentRelationships(ParsingResult<ArchiveRoot> parsingResult) {
+
+        List<RelationshipFragment> relationships = new ArrayList<>();
+
+        // Look for fragments in the node templates
+        Map<String, NodeTemplate> nodeTemplates = parsingResult.getResult().getTopology().getNodeTemplates();
+        for (Map.Entry<String, NodeTemplate> nodeTemplateFragment : nodeTemplates.entrySet()) {
+            // Fragment detected
+            if (nodeTemplateFragment.getValue().getType().equalsIgnoreCase("prestocloud.nodes.fragment")) {
+                // Fragment detected, start to build a relationship
+                RelationshipFragment relationship = new RelationshipFragment(nodeTemplateFragment.getKey(),
+                        nodeTemplateFragment.getValue().getRelationships().get("execute").getTarget());
+                relationship.setHostingNode(getConstrainedNode("execute", nodeTemplateFragment, nodeTemplates, parsingResult));
+                relationships.add(relationship);
+            }
+        }
+        return relationships;
+    }
+
+    private static ConstrainedNode getConstrainedNode(String requirementName, Map.Entry<String, NodeTemplate> nodeTemplateFragment, Map<String, NodeTemplate> nodeTemplates, ParsingResult<ArchiveRoot> parsingResult) {
+
+        ConstrainedNode constrainedNode = null;
+
+        // // Look for the corresponding deployment node template declaration
+        for (Map.Entry<String, NodeTemplate> nodeTemplateFaaS : nodeTemplates.entrySet()) {
+            // Look for the constrained node
+            if (nodeTemplateFaaS.getKey().equalsIgnoreCase(nodeTemplateFragment.getValue().getRelationships().get(requirementName).getTarget())) {
+
+                // Look for the corresponding node type
+                for (Map.Entry<String, NodeType> nodeTypeFaaS : parsingResult.getResult().getNodeTypes().entrySet()) {
+                    if (nodeTypeFaaS.getKey().equalsIgnoreCase(nodeTemplateFaaS.getValue().getType())) {
+                        // Start to build a constrained node
+                        constrainedNode = buildConstrainedNode(nodeTypeFaaS.getKey(), requirementName, nodeTypeFaaS.getValue().getDerivedFrom(), nodeTypeFaaS.getValue().getRequirements());
+                        break;
+                    }
+                }
+            }
+        }
+        return constrainedNode;
+    }
+
+    private static ConstrainedNode buildConstrainedNode(String name, String type, List<String> derivedFrom, List<RequirementDefinition> requirements) {
+
+        ConstrainedNode node = new ConstrainedNode(name, type, derivedFrom);
 
         // Look for requirements
         for (RequirementDefinition requirement : requirements) {
             // Look for a requirement with nodeFilter's capabilities (hosting)
             if (requirement.getNodeFilter() != null) {
+                NodeConstraints nodeConstraints = new NodeConstraints();
                 for (Map.Entry<String, FilterDefinition> capability : requirement.getNodeFilter().getCapabilities().entrySet()) {
                     // Find the host properties
                     if (capability.getKey().equalsIgnoreCase("host")) {
@@ -419,7 +346,7 @@ public class ParsingUtils {
                                     System.out.println("Host constraint not managed: " + propertyConstraint.toString());
                                 }
                             }
-                            node.addHostingConstraint(properties.getKey(), constraints);
+                            nodeConstraints.addHostingConstraint(properties.getKey(), constraints);
                         }
                     }
                     // Find the OS properties
@@ -436,7 +363,7 @@ public class ParsingUtils {
                                     System.out.println("OS constraint not managed: " + propertyConstraint.toString());
                                 }
                             }
-                            node.addOSConstraint(properties.getKey(), constraints);
+                            nodeConstraints.addOSConstraint(properties.getKey(), constraints);
                         }
                     }
                     // Find the resource properties
@@ -453,14 +380,15 @@ public class ParsingUtils {
                                     System.out.println("Resource constraint not managed: " + propertyConstraint.toString());
                                 }
                             }
-                            node.addResourceConstraint(properties.getKey(), constraints);
+                            nodeConstraints.addResourceConstraint(properties.getKey(), constraints);
                         }
                     }
                     // Find the sensors properties
                     if (capability.getKey().equalsIgnoreCase("sensors")) {
-                        //TODO: get sensors requirements
+                        // TODO: get sensors requirements
                     }
                 }
+                node.addConstraints(nodeConstraints);
             }
         }
 
@@ -501,8 +429,6 @@ public class ParsingUtils {
 
     public static String findBestSuitableVMType(ToscaParser parser, String repositoryPath, String cloud, String region, Map<String, List<String>> hostingConstraints) throws IOException, ParsingException {
 
-        // TODO: MAKE A LIST OF CANDIDATES AND SELECT THE LOWEST PRICE
-
         Map<String, Map<String, Map<String, String>>> VMTypes;
         Map<String, Double> selectedTypes = new HashMap<>();
 
@@ -514,7 +440,10 @@ public class ParsingUtils {
         }
         else if (cloud.equalsIgnoreCase("openstack")) {
             System.out.println("OpenStack types not yet defined (flavors must be customized).");
+
+            // TODO: manage private clouds custom templates
             //VMTypes = getCloudNodesTemplates(parser.parseFile(Paths.get(repositoryPath, "openstack-vm-templates.yml")), region);
+
             return null;
         }
         else {
@@ -549,7 +478,7 @@ public class ParsingUtils {
                         }
                         available = Integer.valueOf(hostingConstraint.getValue().get("host").get("num_cpus"));
                         if (required <= available) {
-                            //System.out.println("Good type or cpu: " + hostingConstraint.getKey());
+                            //System.out.println("Good type for cpu: " + hostingConstraint.getKey());
                             cpu = true;
                         }
                     }
@@ -566,12 +495,24 @@ public class ParsingUtils {
                         String required_mem_size = hostingConstraints.get("mem_size").get(0);
                         if (required_mem_size.contains("RangeMin")) {
                             required = Double.valueOf(required_mem_size.split(",")[0].split(" ")[1]);
+                            // Memory in GB only
+                            if (required_mem_size.split(",")[0].contains("MB")) {
+                                required = Math.round(required / 1024);
+                            }
                         }
                         else if (required_mem_size.contains("GreaterOrEqual")) {
                             required = Double.valueOf(required_mem_size.split(" ")[1]);
+                            // Memory in GB only
+                            if (required_mem_size.contains("MB")) {
+                                required = Math.round(required / 1024);
+                            }
                         }
                         else {
-                            required = Double.valueOf(required_mem_size);
+                            required = Double.valueOf(required_mem_size.split(" ")[0]);
+                            // Memory in GB only
+                            if (required_mem_size.contains("MB")) {
+                                required = Math.round(required / 1024);
+                            }
                         }
                         available = Double.valueOf(hostingConstraint.getValue().get("host").get("mem_size").split(" ")[0]);
                         if (required <= available) {
@@ -591,12 +532,24 @@ public class ParsingUtils {
                         String required_disk_size = hostingConstraints.get("disk_size").get(0);
                         if (required_disk_size.contains("RangeMin")) {
                             required = Double.valueOf(required_disk_size.split(",")[0].split(" ")[1]);
+                            // Disk in GB only
+                            if (required_disk_size.split(",")[0].contains("MB")) {
+                                required = Math.round(required / 1024);
+                            }
                         }
                         else if (required_disk_size.contains("GreaterOrEqual")) {
                             required = Double.valueOf(required_disk_size.split(" ")[1]);
+                            // Disk in GB only
+                            if (required_disk_size.contains("MB")) {
+                                required = Math.round(required / 1024);
+                            }
                         }
                         else {
                             required = Double.valueOf(required_disk_size);
+                            // Disk in GB only
+                            if (required_disk_size.contains("MB")) {
+                                required = Math.round(required / 1024);
+                            }
                         }
                         available = Double.valueOf(hostingConstraint.getValue().get("host").get("disk_size").split(" ")[0]);
                         if (required <= available) {
@@ -648,5 +601,126 @@ public class ParsingUtils {
         else {
             return selectedTypes.entrySet().stream().sorted(Map.Entry.comparingByValue()).findFirst().get().getKey();
         }
+    }
+
+    public static List<Docker> getDockers(ParsingResult<ArchiveRoot> parsingResult) {
+
+        List<Docker> dockers = new ArrayList<>();
+
+        // Look for fragments in the node templates
+        Map<String, NodeTemplate> nodeTemplates = parsingResult.getResult().getTopology().getNodeTemplates();
+        for (Map.Entry<String, NodeTemplate> nodeTemplateFragment : nodeTemplates.entrySet()) {
+            // Fragment detected
+            if (nodeTemplateFragment.getValue().getType().startsWith("prestocloud.nodes.fragment")) {
+                Docker docker = new Docker(nodeTemplateFragment.getValue().getName());
+                // Look for one of the 'docker' property
+                String resourceType = "docker_cloud";
+                ComplexPropertyValue dockerProperty = (ComplexPropertyValue) nodeTemplateFragment.getValue().getProperties().get(resourceType);
+                if (dockerProperty == null) {
+                    resourceType = "docker_edge";
+                    dockerProperty = (ComplexPropertyValue) nodeTemplateFragment.getValue().getProperties().get(resourceType);
+                }
+                if (dockerProperty != null) {
+                    docker.setResourceType(resourceType);
+                    for (String dockerKey : dockerProperty.getValue().keySet()) {
+                        if (dockerKey.equalsIgnoreCase("image")) {
+                            docker.setImage(dockerProperty.getValue().get(dockerKey).toString());
+                        }
+                        if (dockerKey.equalsIgnoreCase("registry")) {
+                            docker.setRegistry(dockerProperty.getValue().get(dockerKey).toString());
+                        }
+                        if (dockerKey.equalsIgnoreCase("cmd")) {
+                            docker.setCmd(dockerProperty.getValue().get(dockerKey).toString());
+                        }
+                        if (dockerKey.equalsIgnoreCase("variables")) {
+                            for (String variableKey : ((HashMap<String, String>)dockerProperty.getValue().get(dockerKey)).keySet()) {
+                                docker.addVariable(variableKey, ((HashMap<String, String>)dockerProperty.getValue().get(dockerKey)).get(variableKey).toString());
+                            }
+                        }
+                        if (dockerKey.equalsIgnoreCase("ports")) {
+                            for (HashMap<String, String> port : ((ArrayList<HashMap<String, String>>)dockerProperty.getValue().get(dockerKey))) {
+                                for (String portKey : port.keySet()) {
+                                    if (portKey.equalsIgnoreCase("protocol")) {
+                                        docker.setPortProtocol(port.get(portKey));
+                                    }
+                                    if (portKey.equalsIgnoreCase("published")) {
+                                        docker.setPortPublished(port.get(portKey));
+                                    }
+                                    if (portKey.equalsIgnoreCase("target")) {
+                                        docker.setPortTarget(port.get(portKey));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    dockers.add(docker);
+                }
+            }
+        }
+        return dockers;
+    }
+
+    public static List<HealthCheck> getHealthChecks(ParsingResult<ArchiveRoot> parsingResult) {
+
+        List<HealthCheck> healthChecks = new ArrayList<>();
+
+        // Look for fragments in the node templates
+        Map<String, NodeTemplate> nodeTemplates = parsingResult.getResult().getTopology().getNodeTemplates();
+        for (Map.Entry<String, NodeTemplate> nodeTemplateFragment : nodeTemplates.entrySet()) {
+            // Fragment detected
+            if (nodeTemplateFragment.getValue().getType().startsWith("prestocloud.nodes.fragment")) {
+                HealthCheck healthCheck = new HealthCheck(nodeTemplateFragment.getValue().getName());
+                // Look for the 'health_check' property
+                ComplexPropertyValue property = (ComplexPropertyValue) nodeTemplateFragment.getValue().getProperties().get("health_check");
+                if (property != null) {
+                    for (String key : property.getValue().keySet()) {
+                        if (key.equalsIgnoreCase("interval")) {
+                            healthCheck.setInterval(Integer.valueOf(property.getValue().get(key).toString()));
+                        }
+                        if (key.equalsIgnoreCase("url")) {
+                            healthCheck.setUrl(property.getValue().get(key).toString());
+                        }
+                        if (key.equalsIgnoreCase("cmd")) {
+                            healthCheck.setCmd(property.getValue().get(key).toString());
+                        }
+                    }
+                    healthChecks.add(healthCheck);
+                }
+            }
+        }
+        return healthChecks;
+    }
+
+    public static List<OptimizationVariables> getOptimizationVariables(ParsingResult<ArchiveRoot> parsingResult) {
+
+        List<OptimizationVariables> allOptimizationVariables = new ArrayList<>();
+
+        // Look for fragments in the node templates
+        Map<String, NodeTemplate> nodeTemplates = parsingResult.getResult().getTopology().getNodeTemplates();
+        for (Map.Entry<String, NodeTemplate> nodeTemplateFragment : nodeTemplates.entrySet()) {
+            // Fragment detected
+            if (nodeTemplateFragment.getValue().getType().startsWith("prestocloud.nodes.fragment")) {
+                OptimizationVariables optimizationVariables = new OptimizationVariables(nodeTemplateFragment.getValue().getName());
+                // Look for the 'optimization_variables' property
+                ComplexPropertyValue property = (ComplexPropertyValue) nodeTemplateFragment.getValue().getProperties().get("optimization_variables");
+                if (property != null) {
+                    for (String key : property.getValue().keySet()) {
+                        if (key.equalsIgnoreCase("cost")) {
+                            optimizationVariables.setCost(Integer.valueOf(property.getValue().get(key).toString()));
+                        }
+                        if (key.equalsIgnoreCase("distance")) {
+                            optimizationVariables.setDistance(Integer.valueOf(property.getValue().get(key).toString()));
+                        }
+                        if (key.equalsIgnoreCase("friendliness")) {
+                            for (String variableKey : ((HashMap<String, String>)property.getValue().get(key)).keySet()) {
+                                optimizationVariables.addFriendliness(variableKey, Integer.valueOf(((HashMap<String, String>)property.getValue().get(key)).get(variableKey).toString()));
+                            }
+                        }
+                    }
+                    allOptimizationVariables.add(optimizationVariables);
+                }
+            }
+        }
+        return allOptimizationVariables;
     }
 }

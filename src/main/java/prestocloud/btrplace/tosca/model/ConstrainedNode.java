@@ -25,12 +25,11 @@
  */
 package prestocloud.btrplace.tosca.model;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author ActiveEon Team
@@ -41,31 +40,20 @@ public class ConstrainedNode {
     @Getter @Setter
     public String name;
     @Getter @Setter
+    public String type;
+    @Getter @Setter
     public List<String> derivedTypes;
     @Getter @Setter
-    public Map<String, List<String>> hostingConstraints;
-    @Getter @Setter
-    public Map<String, List<String>> resourceConstraints;
-    @Getter @Setter
-    public Map<String, List<String>> osConstraints;
+    public List<NodeConstraints> constraints;
 
-    public ConstrainedNode(String name, List<String> derivedTypes) {
+    public ConstrainedNode(String name, String type, List<String> derivedTypes) {
         this.name = name;
+        this.type = type;
         this.derivedTypes = derivedTypes;
-        hostingConstraints = new HashMap<>();
-        resourceConstraints = new HashMap<>();
-        osConstraints = new HashMap<>();
+        this.constraints = new ArrayList<>();
     }
 
-    public void addHostingConstraint(String name, List<String> hostingConstraint) {
-        hostingConstraints.put(name, hostingConstraint);
-    }
-
-    public void addResourceConstraint(String name, List<String> resourceConstraint) {
-        resourceConstraints.put(name, resourceConstraint);
-    }
-
-    public void addOSConstraint(String name, List<String> osConstraint) {
-        osConstraints.put(name, osConstraint);
+    public void addConstraints(NodeConstraints nodeConstraints) {
+        constraints.add(nodeConstraints);
     }
 }
