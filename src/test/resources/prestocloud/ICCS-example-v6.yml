@@ -404,7 +404,7 @@ topology_template:
         optimization_variables:
           cost: 5
           distance: 4
-          friendliness: { "aws_us-east-1": "0", "google-asia-east1": "0", "azure-west-europe": "3" }
+          friendliness: { "amazon_cloud_us-east-1": "0", "azure_cloud_westeurope": "3" }
       requirements:
         - execute: deployment_node_test_fragments_MultimediaManager
 
@@ -424,7 +424,7 @@ topology_template:
         optimization_variables:
           cost: 2
           distance: 8
-          friendliness: { "aws_us-east-1": "0", "google-asia-east1": "0", "azure-west-europe": "5" }
+          friendliness: { "amazon_cloud_us-east-1": "0", "azure_cloud_westeurope": "5" }
       requirements:
         - execute: deployment_node_test_fragments_VideoTranscoder
 
