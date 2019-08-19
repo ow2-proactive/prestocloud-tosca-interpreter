@@ -723,4 +723,53 @@ public class ParsingUtils {
         }
         return allOptimizationVariables;
     }
+
+    public static List<VMTemplateDetails> getVMTemplatesDetails(ToscaParser parser, String repositoryPath) throws IOException, ParsingException {
+
+        List<VMTemplateDetails> vmTemplatesDetails = new ArrayList<>();
+
+        // TODO: add new cloud types (eg. google, openstack)
+
+        // Amazon
+        Map<String, Map<String, Map<String, String>>> amazonVMTypes = getCloudNodesTemplates(parser.parseFile(Paths.get(repositoryPath, "amazon-vm-templates.yml")), null);
+        for (Map.Entry<String, Map<String, Map<String, String>>> hostingConstraint : amazonVMTypes.entrySet()) {
+            Double price = null;
+            String name = null, type = null, region = null, coordinates = null;
+            for (Map.Entry<String, Map<String, String>> cloudProperties : hostingConstraint.getValue().entrySet()) {
+                if (cloudProperties.getKey().equalsIgnoreCase("host")) {
+                    price = Double.valueOf(cloudProperties.getValue().get("price"));
+                }
+                if (cloudProperties.getKey().equalsIgnoreCase("cloud")) {
+                    name = cloudProperties.getValue().get("cloud_name");
+                    type = cloudProperties.getValue().get("cloud_type");
+                    region = cloudProperties.getValue().get("cloud_region");
+                    coordinates = cloudProperties.getValue().get("gps_coordinates");
+                }
+            }
+            VMTemplateDetails VMTemplateDetails = new VMTemplateDetails(hostingConstraint.getKey(), name, type, region, coordinates, price);
+            vmTemplatesDetails.add(VMTemplateDetails);
+        }
+
+        // Azure
+        Map<String, Map<String, Map<String, String>>> azureVMTypes = getCloudNodesTemplates(parser.parseFile(Paths.get(repositoryPath, "azure-vm-templates.yml")), null);
+        for (Map.Entry<String, Map<String, Map<String, String>>> hostingConstraint : azureVMTypes.entrySet()) {
+            Double price = null;
+            String name = null, type = null, region = null, coordinates = null;
+            for (Map.Entry<String, Map<String, String>> cloudProperties : hostingConstraint.getValue().entrySet()) {
+                if (cloudProperties.getKey().equalsIgnoreCase("host")) {
+                    price = Double.valueOf(cloudProperties.getValue().get("price"));
+                }
+                if (cloudProperties.getKey().equalsIgnoreCase("cloud")) {
+                    name = cloudProperties.getValue().get("cloud_name");
+                    type = cloudProperties.getValue().get("cloud_type");
+                    region = cloudProperties.getValue().get("cloud_region");
+                    coordinates = cloudProperties.getValue().get("gps_coordinates");
+                }
+            }
+            VMTemplateDetails VMTemplateDetails = new VMTemplateDetails(hostingConstraint.getKey(), name, type, region, coordinates, price);
+            vmTemplatesDetails.add(VMTemplateDetails);
+        }
+
+        return vmTemplatesDetails;
+    }
 }
