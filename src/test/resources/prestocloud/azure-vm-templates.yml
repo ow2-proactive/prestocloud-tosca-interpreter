@@ -20,41 +20,49 @@ dsl_definitions:
     cloud_name: azure_public1
     cloud_type: azure
     cloud_region: westus
+    gps_coordinates: "11S 343142mE 4063192mN"
 
   azure_cloud_westcentralus: &azure_cloud_westcentralus
     cloud_name: azure_public2
     cloud_type: azure
     cloud_region: westcentralus
+    gps_coordinates: "13T 291216mE 4782899mN"
 
   azure_cloud_northcentralus: &azure_cloud_northcentralus
     cloud_name: azure_public3
     cloud_type: azure
     cloud_region: northcentralus
+    gps_coordinates: "16T 292488mE 4439437mN"
 
   azure_cloud_northeurope: &azure_cloud_northeurope
     cloud_name: azure_public4
     cloud_type: azure
     cloud_region: northeurope
+    gps_coordinates: "29U 568700mE 5857762mN"
 
   azure_cloud_westeurope: &azure_cloud_westeurope
     cloud_name: azure_public5
     cloud_type: azure
     cloud_region: westeurope
+    gps_coordinates: "31U 673479mE 5791583mN"
 
   azure_cloud_francecentral: &azure_cloud_francecentral
     cloud_name: azure_public6
     cloud_type: azure
     cloud_region: francecentral
+    gps_coordinates: "31U 452428mE 5411728mN"
 
   azure_cloud_ukwest: &azure_cloud_ukwest
     cloud_name: azure_public7
     cloud_type: azure
     cloud_region: ukwest
+    gps_coordinates: "30U 487556mE 5703404mN"
 
   azure_cloud_uksouth: &azure_cloud_uksouth
     cloud_name: azure_public8
     cloud_type: azure
     cloud_region: uksouth
+    gps_coordinates: "30U 699327mE 5710155mN"
 
 topology_template:
 
