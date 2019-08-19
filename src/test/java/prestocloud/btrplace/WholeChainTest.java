@@ -98,10 +98,9 @@ public class WholeChainTest {
     }
 
     @Test
-    //public void processToscaWithBtrPlace(String resourcesPath, String instanceLevelTOSCAFile, String outputFile) throws ParsingException, IOException {
     public void processToscaWithBtrPlace() throws ParsingException, IOException, JSONConverterException {
 
-        String resourcesPath = filesPath; // "src/main/resources/repository";
+        String resourcesPath = filesPath + "resources/"; // "src/main/resources/repository";
         String typeLevelTOSCAFile = filesPath + "ICCS-example-v6.yml";
         String outputFile = filesPath + "test.json";
 
