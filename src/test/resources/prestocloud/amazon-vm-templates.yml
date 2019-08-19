@@ -17,41 +17,49 @@ dsl_definitions:
     cloud_name: amazon_public1
     cloud_type: amazon
     cloud_region: us-east-1
+    gps_coordinates: "18S 411588mE 4084682mN"
 
   amazon_cloud_westcentralus: &amazon_cloud_us-east-2
     cloud_name: amazon_public2
     cloud_type: amazon
     cloud_region: us-east-2
+    gps_coordinates: "17T 356372mE 4454136mN"
 
   amazon_cloud_northcentralus: &amazon_cloud_us-west-1
     cloud_name: amazon_public3
     cloud_type: amazon
     cloud_region: us-west-1
+    gps_coordinates: "11S 343142mE 4063192mN"
 
   amazon_cloud_northeurope: &amazon_cloud_us-west-2
     cloud_name: amazon_public4
     cloud_type: amazon
     cloud_region: us-west-2
+    gps_coordinates: "10T 681478mE 4872060mN"
 
   amazon_cloud_westeurope: &amazon_cloud_ca-central-1
     cloud_name: amazon_public5
     cloud_type: amazon
     cloud_region: ca-central-1
+    gps_coordinates: "13V 338569mE 6773905mN"
 
   amazon_cloud_francecentral: &amazon_cloud_eu-central-1
     cloud_name: amazon_public6
     cloud_type: amazon
     cloud_region: eu-central-1
+    gps_coordinates: "32U 477268mE 5550981mN"
 
   amazon_cloud_ukwest: &amazon_cloud_eu-west-1
     cloud_name: amazon_public7
     cloud_type: amazon
     cloud_region: eu-west-1
+    gps_coordinates: "29U 568700mE 5857762mN"
 
   amazon_cloud_uksouth: &amazon_cloud_eu-west-2
     cloud_name: amazon_public8
     cloud_type: amazon
     cloud_region: eu-west-2
+    gps_coordinates: "30U 699327mE 5710155mN"
 
 topology_template:
 
