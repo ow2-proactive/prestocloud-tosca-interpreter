@@ -55,7 +55,19 @@ import java.util.Map;
  */
 public class ParsingUtils {
 
-    public static Map<String, Map<String, Map<String, String>>> getCloudNodesTemplates(ParsingResult<ArchiveRoot> parsingResult, String region) throws IOException, ParsingException {
+    /**
+     * Extract templates information.
+     *
+     * Return structure:
+     *  node template name -> capability name -> property -> value
+     *
+     * @param parsingResult template parsing results
+     * @param regions list of regions to take into consideration
+     * @return templates information.
+     * @throws IOException
+     * @throws ParsingException
+     */
+    public static Map<String, Map<String, Map<String, String>>> getCloudNodesTemplates(ParsingResult<ArchiveRoot> parsingResult, List<String> regions) throws IOException, ParsingException {
 
         // First make sure there is no parsing error
         Assert.assertEquals(0, parsingResult.getContext().getParsingErrors().size());
@@ -67,7 +79,7 @@ public class ParsingUtils {
         for (Map.Entry<String, NodeTemplate> nodeTemplate : nodeTemplates.entrySet()) {
 
             // Discard VM types in the wrong region
-            if (region != null && !region.equalsIgnoreCase(((ComplexPropertyValue)nodeTemplate.getValue().getCapabilities().get("resource").getProperties().get("cloud")).getValue().get("cloud_region").toString())) {
+            if (regions != null && !regions.contains((((ComplexPropertyValue)nodeTemplate.getValue().getCapabilities().get("resource").getProperties().get("cloud")).getValue().get("cloud_region").toString()))) {
                 continue;
             }
 
@@ -135,6 +147,10 @@ public class ParsingUtils {
                                 }
                                 if (cloudProperties.getKey().equalsIgnoreCase("cloud_name")) {
                                     resourceCapabilities.put("cloud_name", cloudProperties.getValue().toString());
+                                    //System.out.println(" - " + cloudProperties.getKey() + " = " + cloudProperties.getValue());
+                                }
+                                if (cloudProperties.getKey().equalsIgnoreCase("gps_coordinates")) {
+                                    resourceCapabilities.put("gps_coordinates", cloudProperties.getValue().toString());
                                     //System.out.println(" - " + cloudProperties.getKey() + " = " + cloudProperties.getValue());
                                 }
                                 // Get networking information
@@ -427,22 +443,25 @@ public class ParsingUtils {
         return clouds;
     }
 
-    public static String findBestSuitableVMType(ToscaParser parser, String repositoryPath, String cloud, String region, Map<String, List<String>> hostingConstraints) throws IOException, ParsingException {
+    /**
+     * Return the two informations separated with a space: "region_name vm_type"
+     */
+    public static String findBestSuitableRegionAndVMType(ToscaParser parser, String repositoryPath, String cloud, List<String> regions, Map<String, List<String>> hostingConstraints) throws IOException, ParsingException {
 
-        Map<String, Map<String, Map<String, String>>> VMTypes;
         Map<String, Double> selectedTypes = new HashMap<>();
 
+        Map<String, Map<String, Map<String, String>>> VMTypes;
         if (cloud.equalsIgnoreCase("amazon")) {
-            VMTypes = getCloudNodesTemplates(parser.parseFile(Paths.get(repositoryPath,"amazon-vm-templates.yml")), region);
+            VMTypes = getCloudNodesTemplates(parser.parseFile(Paths.get(repositoryPath,"amazon-vm-templates.yml")), regions);
         }
         else if (cloud.equalsIgnoreCase("azure")) {
-            VMTypes = getCloudNodesTemplates(parser.parseFile(Paths.get(repositoryPath,"azure-vm-templates.yml")), region);
+            VMTypes = getCloudNodesTemplates(parser.parseFile(Paths.get(repositoryPath,"azure-vm-templates.yml")), regions);
         }
         else if (cloud.equalsIgnoreCase("openstack")) {
             System.out.println("OpenStack types not yet defined (flavors must be customized).");
 
             // TODO: manage private clouds custom templates
-            //VMTypes = getCloudNodesTemplates(parser.parseFile(Paths.get(repositoryPath, "openstack-vm-templates.yml")), region);
+            //VMTypes = getCloudNodesTemplates(parser.parseFile(Paths.get(repositoryPath, "openstack-vm-templates.yml")), regions);
 
             return null;
         }
@@ -589,7 +608,7 @@ public class ParsingUtils {
                 if (cpu && mem && disk && price) {
                     //System.out.println("Best suitable type found: " + hostingConstraint.getKey());
                     //return hostingConstraint.getValue().get("cloud").get("name");
-                    selectedTypes.put(hostingConstraint.getValue().get("cloud").get("name"), Double.valueOf(hostingConstraint.getValue().get("host").get("price")));
+                    selectedTypes.put(hostingConstraint.getValue().get("cloud").get("cloud_region") + " " + hostingConstraint.getValue().get("cloud").get("name"), Double.valueOf(hostingConstraint.getValue().get("host").get("price")));
                 }
             }
         }
