@@ -35,25 +35,37 @@ import java.util.List;
  * @author ActiveEon Team
  * @since 25/09/18
  */
-public class ConstrainedNode {
+public class RelationshipFragment implements Relationship {
 
     @Getter @Setter
-    public String name;
+    public String fragment;
     @Getter @Setter
-    public String type;
-    @Getter @Setter
-    public List<String> derivedTypes;
-    @Getter @Setter
-    public List<NodeConstraints> constraints;
+    public String node;
+    @Setter
+    public ConstrainedNode hostingNode;
 
-    public ConstrainedNode(String name, String type, List<String> derivedTypes) {
-        this.name = name;
-        this.type = type;
-        this.derivedTypes = derivedTypes;
-        this.constraints = new ArrayList<>();
+    public RelationshipFragment(String fragment, String node) {
+        this.fragment = fragment;
+        this.node = node;
     }
 
-    public void addConstraints(NodeConstraints nodeConstraints) {
-        constraints.add(nodeConstraints);
+    public RelationshipFragment(String fragment, String node, ConstrainedNode hostingNode) {
+        this.fragment = fragment;
+        this.node = node;
+        this.hostingNode = hostingNode;
+    }
+
+    public String getFragmentName() {
+        return fragment;
+    }
+
+    public ConstrainedNode getHostingNode() {
+        return hostingNode;
+    }
+
+    public List<ConstrainedNode> getAllConstrainedNodes() {
+        List<ConstrainedNode> constrainedNodes = new ArrayList<>();
+        constrainedNodes.add(hostingNode);
+        return constrainedNodes;
     }
 }

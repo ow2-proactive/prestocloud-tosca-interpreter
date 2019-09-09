@@ -37,7 +37,7 @@ node_types:
         relationship: prestocloud.relationships.executedBy.jppf
      - master:
         node: prestocloud.nodes.master.jppf
-        capability: prestocloud.capabilities.fragmentDistribution.jppf
+        capability: prestocloud.capabilities.endpoint.jppf
         relationship: prestocloud.relationships.connectsTo.jppf
 
   prestocloud.nodes.fragment.loadBalanced:
@@ -113,7 +113,7 @@ node_types:
       execute:
         type: prestocloud.capabilities.fragmentExecution.jppf
       master:
-        type: prestocloud.capabilities.fragmentDistribution.jppf
+        type: prestocloud.capabilities.endpoint.jppf
 
   prestocloud.nodes.agent.loadBalanced:
     description: A basic JPPF-agent node
@@ -204,7 +204,7 @@ node_types:
         type: version
         required: false
     capabilities:
-      jppf_endpoint:
+      distribute_jppf_fragments:
         type: prestocloud.capabilities.endpoint.jppf
     requirements:
       - host:
@@ -219,11 +219,6 @@ capability_types:
     description: Provide the ability to be proxied by a lambda proxy (FaaS)
     derived_from: prestocloud.capabilities.proxying
     valid_source_types: [ prestocloud.nodes.agent.faas ]
-
-  prestocloud.capabilities.fragmentDistribution.jppf:
-    description: Provide the ability to accept and distribute fragments by a JPPF Master
-    derived_from: prestocloud.capabilities.proxying
-    valid_source_types: [ prestocloud.nodes.agent.jppf ]
 
   prestocloud.capabilities.proxying:
     description: Provide the ability to be proxied

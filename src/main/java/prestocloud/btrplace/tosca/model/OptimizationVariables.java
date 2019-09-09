@@ -25,36 +25,34 @@
  */
 package prestocloud.btrplace.tosca.model;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author ActiveEon Team
  * @since 25/09/18
  */
-public class Constraint {
-
-    public String name;
+public class OptimizationVariables {
 
     @Getter
-    @Setter
-    public String type;
+    public String fragmentName;
     @Getter @Setter
-    public Set<String> targets;
+    public int cost;
     @Getter @Setter
-    public Set<String> devices;
+    public int distance;
+    @Getter @Setter
+    public Map<String, Integer> friendliness;
 
-    public Constraint(String name) {
-        this.name = name;
-        targets = new HashSet<>();
-        devices = new HashSet<>();
+    public OptimizationVariables(String fragmentName) {
+        this.fragmentName = fragmentName;
+        friendliness = new HashMap<>();
     }
 
-    public void addDevice(String device) {
-        devices.add(device);
+    public void addFriendliness(String key, Integer value) {
+        friendliness.put(key, value);
     }
 }
 

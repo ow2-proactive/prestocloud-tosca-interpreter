@@ -1,60 +1,31 @@
 package prestocloud.btrplace;
 
-import java.io.IOException;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Resource;
-
-import org.btrplace.model.DefaultModel;
-import org.btrplace.model.Instance;
-import org.btrplace.model.Mapping;
-import org.btrplace.model.Model;
-import org.btrplace.model.Node;
-import org.btrplace.model.VM;
-import org.btrplace.model.constraint.Ban;
-import org.btrplace.model.constraint.Gather;
-import org.btrplace.model.constraint.Online;
-import org.btrplace.model.constraint.Running;
-import org.btrplace.model.constraint.SatConstraint;
-import org.btrplace.model.constraint.Spread;
-import org.btrplace.model.view.ShareableResource;
-import org.btrplace.plan.ReconfigurationPlan;
-import org.btrplace.scheduler.choco.ChocoScheduler;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.hateoas.HypermediaAutoConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.*;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
-
-import com.google.common.collect.Sets;
-
-import prestocloud.btrplace.minUsed.MinUsed;
 import prestocloud.btrplace.tosca.ParsingUtils;
-import prestocloud.btrplace.tosca.model.Constraint;
-import prestocloud.btrplace.tosca.model.RelationshipFaaS;
-import prestocloud.btrplace.tosca.model.RelationshipJPPF;
+import prestocloud.btrplace.tosca.model.PlacementConstraint;
+import prestocloud.btrplace.tosca.model.Relationship;
 import prestocloud.component.ICSARRepositorySearchService;
 import prestocloud.tosca.model.ArchiveRoot;
 import prestocloud.tosca.parser.ParsingException;
 import prestocloud.tosca.parser.ParsingResult;
 import prestocloud.tosca.parser.ToscaParser;
 import prestocloud.tosca.repository.LocalRepositoryImpl;
+
+import javax.annotation.Resource;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.Map;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class)
@@ -103,10 +74,10 @@ public class BtrPlaceParsingTest {
         List<String> clouds = ParsingUtils.getListOfCloudsFromMetadata(metadata);
         Assert.assertEquals(2, clouds.size());
 
-        List<Constraint> constraints = ParsingUtils.getConstraints(parsingResult);
-        Assert.assertEquals(1, constraints.size());
+        List<PlacementConstraint> placementConstraints = ParsingUtils.getConstraints(parsingResult);
+        Assert.assertEquals(1, placementConstraints.size());
 
-        List<RelationshipFaaS> relationships = ParsingUtils.getFaaSRelationships(parsingResult);
+        List<Relationship> relationships = ParsingUtils.getRelationships(parsingResult);
         Assert.assertEquals(2, relationships.size());
     }
 
@@ -121,14 +92,14 @@ public class BtrPlaceParsingTest {
         List<String> clouds = ParsingUtils.getListOfCloudsFromMetadata(metadata);
         Assert.assertEquals(2, clouds.size());
 
-        List<Constraint> constraints = ParsingUtils.getConstraints(parsingResult);
-        Assert.assertEquals(15, constraints.size());
+        List<PlacementConstraint> placementConstraints = ParsingUtils.getConstraints(parsingResult);
+        Assert.assertEquals(15, placementConstraints.size());
 
-        List<RelationshipJPPF> relationships = ParsingUtils.getJPPFRelationships(parsingResult);
+        List<Relationship> relationships = ParsingUtils.getRelationships(parsingResult);
         Assert.assertEquals(10, relationships.size());
     }
 
-    @Test
+    /*@Test
     public void testBtrPlaceComputationJPPF() throws IOException, ParsingException {
 
         String tosca_file = "ICCS-example-jppf.yml";
@@ -338,12 +309,6 @@ public class BtrPlaceParsingTest {
         ReconfigurationPlan p = sched.solve(ii);
         Assert.assertNotNull(p);
 
-        /*
-        //Show the results
-        System.out.println("-- Computation done: ");
-        System.out.println(p);
-        */
-
         // Get the new model and mapping
         mo = p.getResult();
         map = mo.getMapping();
@@ -380,4 +345,5 @@ public class BtrPlaceParsingTest {
         }
         System.out.println("==================================================================================================================");
     }
+    */
 }

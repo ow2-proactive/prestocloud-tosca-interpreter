@@ -28,32 +28,33 @@ package prestocloud.btrplace.tosca.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author ActiveEon Team
  * @since 25/09/18
  */
-public class ConstrainedNode {
+public class PlacementConstraint {
 
-    @Getter @Setter
     public String name;
-    @Getter @Setter
+
+    @Getter
+    @Setter
     public String type;
     @Getter @Setter
-    public List<String> derivedTypes;
+    public Set<String> targets;
     @Getter @Setter
-    public List<NodeConstraints> constraints;
+    public Set<String> devices;
 
-    public ConstrainedNode(String name, String type, List<String> derivedTypes) {
+    public PlacementConstraint(String name) {
         this.name = name;
-        this.type = type;
-        this.derivedTypes = derivedTypes;
-        this.constraints = new ArrayList<>();
+        targets = new HashSet<>();
+        devices = new HashSet<>();
     }
 
-    public void addConstraints(NodeConstraints nodeConstraints) {
-        constraints.add(nodeConstraints);
+    public void addDevice(String device) {
+        devices.add(device);
     }
 }
+

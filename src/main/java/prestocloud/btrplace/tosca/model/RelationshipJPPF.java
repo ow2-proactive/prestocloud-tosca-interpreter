@@ -28,50 +28,52 @@ package prestocloud.btrplace.tosca.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author ActiveEon Team
  * @since 25/09/18
  */
-public class RelationshipJPPF {
+public class RelationshipJPPF implements Relationship {
     @Getter
     @Setter
     public String fragment;
     @Getter @Setter
-    public String jppf;
-    @Getter @Setter
-    public String host;
+    public String node;
     @Getter @Setter
     public String master;
+    @Setter
+    public ConstrainedNode hostingNode;
     @Getter @Setter
-    public Map<String, List<String>> hostingConstraints;
-    @Getter @Setter
-    public Map<String, List<String>> resourceConstraints;
-    @Getter @Setter
-    public Map<String, List<String>> osConstraints;
+    public ConstrainedNode hostingMaster;
 
-    public RelationshipJPPF(String fragment, String jppf, String host) {
+    public RelationshipJPPF(String fragment, String node, String master) {
         this.fragment = fragment;
-        this.jppf = jppf;
-        this.host = host;
-        this.master = null;
-        hostingConstraints = new HashMap<>();
-        resourceConstraints = new HashMap<>();
-        osConstraints = new HashMap<>();
+        this.node = node;
+        this.master = master;
     }
 
-    public void addHostingConstraint(String name, List<String> hostingConstraint) {
-        hostingConstraints.put(name, hostingConstraint);
+    public RelationshipJPPF(String fragment, String node, String master, ConstrainedNode hostingNode, ConstrainedNode hostingMaster) {
+        this.fragment = fragment;
+        this.node = node;
+        this.master = master;
+        this.hostingNode = hostingNode;
+        this.hostingMaster = hostingMaster;
     }
 
-    public void addResourceConstraint(String name, List<String> resourceConstraint) {
-        resourceConstraints.put(name, resourceConstraint);
+    public String getFragmentName() {
+        return fragment;
     }
 
-    public void addOSConstraint(String name, List<String> osConstraint) {
-        osConstraints.put(name, osConstraint);
+    public ConstrainedNode getHostingNode() {
+        return hostingNode;
+    }
+
+    public List<ConstrainedNode> getAllConstrainedNodes() {
+        List<ConstrainedNode> constrainedNodes = new ArrayList<>();
+        constrainedNodes.add(hostingNode);
+        constrainedNodes.add(hostingMaster);
+        return constrainedNodes;
     }
 }

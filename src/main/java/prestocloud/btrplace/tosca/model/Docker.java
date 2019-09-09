@@ -39,7 +39,8 @@ public class Docker {
 
     @Getter
     public String fragmentName;
-
+    @Getter @Setter
+    public String resourceType;
     @Getter @Setter
     public String image;
     @Getter @Setter
@@ -62,6 +63,16 @@ public class Docker {
 
     public void addVariable(String key, String value) {
         variables.put(key, value);
+    }
+
+    // TODO: print full docker commandline
+    public String printCmdline() {
+        if (cmd != null) {
+            return "docker run " + image + " " + cmd;
+        }
+        else {
+            return "docker run " + image;
+        }
     }
 }
 

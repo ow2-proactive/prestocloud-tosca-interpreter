@@ -28,32 +28,30 @@ package prestocloud.btrplace.tosca.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author ActiveEon Team
  * @since 25/09/18
  */
-public class ConstrainedNode {
+public class HealthCheck {
 
+    @Getter
+    public String fragmentName;
     @Getter @Setter
-    public String name;
+    public int interval;
     @Getter @Setter
-    public String type;
+    public String url;
     @Getter @Setter
-    public List<String> derivedTypes;
-    @Getter @Setter
-    public List<NodeConstraints> constraints;
+    public String cmd;
 
-    public ConstrainedNode(String name, String type, List<String> derivedTypes) {
-        this.name = name;
-        this.type = type;
-        this.derivedTypes = derivedTypes;
-        this.constraints = new ArrayList<>();
+    public HealthCheck(String fragmentName) {
+        this.fragmentName = fragmentName;
     }
 
-    public void addConstraints(NodeConstraints nodeConstraints) {
-        constraints.add(nodeConstraints);
+    public HealthCheck(String fragmentName, int interval, String url, String cmd) {
+        this.fragmentName = fragmentName;
+        this.interval = interval;
+        this.url = url;
+        this.cmd = cmd;
     }
 }
+

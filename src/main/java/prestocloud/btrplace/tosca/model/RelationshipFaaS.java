@@ -28,11 +28,14 @@ package prestocloud.btrplace.tosca.model;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author ActiveEon Team
  * @since 25/09/18
  */
-public class RelationshipFaaS {
+public class RelationshipFaaS implements Relationship {
 
     @Getter @Setter
     public String fragment;
@@ -40,7 +43,7 @@ public class RelationshipFaaS {
     public String node;
     @Getter @Setter
     public String proxy;
-    @Getter @Setter
+    @Setter
     public ConstrainedNode hostingNode;
     @Getter @Setter
     public ConstrainedNode hostingProxy;
@@ -57,5 +60,20 @@ public class RelationshipFaaS {
         this.proxy = proxy;
         this.hostingNode = hostingNode;
         this.hostingProxy = hostingProxy;
+    }
+
+    public String getFragmentName() {
+        return fragment;
+    }
+
+    public ConstrainedNode getHostingNode() {
+        return hostingNode;
+    }
+
+    public List<ConstrainedNode> getAllConstrainedNodes() {
+        List<ConstrainedNode> constrainedNodes = new ArrayList<>();
+        constrainedNodes.add(hostingNode);
+        constrainedNodes.add(hostingProxy);
+        return constrainedNodes;
     }
 }

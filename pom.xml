@@ -18,6 +18,7 @@
     <hibernate-validator.version>5.0.2.Final</hibernate-validator.version>
     <velocity.version>1.7</velocity.version>
     <cloning.version>1.9.6</cloning.version>
+    <lucene.version>8.2.0</lucene.version>
 
     <!-- YAML Parsing -->
     <jackson.version>2.9.3</jackson.version>
@@ -36,7 +37,6 @@
     <!-- Logging -->
     <log4j.version>2.7</log4j.version>
     <slf4j.version>1.7.24</slf4j.version>
-
 
     <!-- BtrPlace -->
     <btrplace.version>1.9.3</btrplace.version>
@@ -163,6 +163,12 @@
       <version>${btrplace.version}</version>
     </dependency>
 
+    <!-- GPS coordinates -->
+    <dependency>
+      <groupId>org.apache.lucene</groupId>
+      <artifactId>lucene-spatial</artifactId>
+      <version>${lucene.version}</version>
+    </dependency>
 
     <!-- Tests -->
     <dependency>
@@ -216,6 +222,10 @@
       <id>jcenter-snapshots</id>
       <name>jcenter</name>
       <url>https://jcenter.bintray.com/</url>
+    </repository>
+    <repository>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
     </repository>
   </repositories>
 
