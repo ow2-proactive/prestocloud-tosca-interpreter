@@ -15,7 +15,7 @@ import java.util.Set;
 
 /**
  * A constraint to state that a given VM cannot be set to the running state
- * before at least one of the other givens VMs is running.
+ * before at least one of the other given VMs is running.
  *
  * Accordingly, if among the parent VMs, at least one VM is already running, the
  * constraint is considered satisfied. The same if the VM is already running.

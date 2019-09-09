@@ -35,7 +35,7 @@ public class CostViewTest {
     Assert.assertFalse(cv.edgeHost(n1));
     Assert.assertTrue(cv.edgeHost(n2));
     Assert.assertTrue(cv.isEdge(n2));
-    Assert.assertNull(cv.publicCost(vm1, n1));
+    Assert.assertNotNull(cv.publicCost(vm1, n1));
 
     Assert.assertTrue(cv.publicHost(n3, vm1, 0.5, 1, 2, 3, 4));
     final Cost cc  = cv.publicCost(vm1, n3);
