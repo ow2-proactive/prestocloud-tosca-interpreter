@@ -114,8 +114,10 @@ public class CMinCostTest {
       for (final Node no : clouds) {
         double hourlyCost = mem.getConsumption(vm) * cores.getConsumption(vm);
         if (d == 1) {
-          cv.publicHost(no, vm, hourlyCost, d * 100, 0, 1, 1);
+          // First cloud is 2.1 times more expensive than the second cloud.
+          cv.publicHost(no, vm, 2.1 * hourlyCost, d * 100, 1, 1, 1);
         } else {
+          // Second cloud is 2 times further than the first cloud.
           cv.publicHost(no, vm, hourlyCost, d * 100, 1, 1, 1);
         }
         d++;
@@ -150,6 +152,9 @@ public class CMinCostTest {
 
     System.out.println("Result mapping:");
     System.out.println(plan.getResult().getMapping());
+
+    // According to the cost model, if the cloud is used, the 2nd cloud must be
+    // preferred (distance x2 but 2.1 times cheaper).
 
     // Let scale down. Half the VMs are removed.
     System.out.println("\n-- scale down --");
