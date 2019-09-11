@@ -66,7 +66,7 @@ public class CostViewConverter implements ModelViewConverter<CostView> {
     for (final Object ob : pubs) {
       final JSONObject nodeLevel = (JSONObject) ob;
       final Node no = JSONs.requiredNode(mo, nodeLevel, NODE_LABEL);
-      for (final Object ob2 : (JSONArray) ((JSONObject)nodeLevel).get(VMS_LABEL)) {
+      for (final Object ob2 : (JSONArray) nodeLevel.get(VMS_LABEL)) {
         final JSONObject jsonCost = (JSONObject) ob2;
         final VM vm = JSONs.requiredVM(mo, jsonCost, VM_LABEL);
         final JSONArray arr = (JSONArray) jsonCost.get(COSTS_LABEL);

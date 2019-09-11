@@ -10,13 +10,26 @@ import org.btrplace.model.VM;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * JSON converter for the {@link PrecedingRunning} constraint.
+ * Format: {@code {"id"="precedingRunning","vm"=<vm_id>,"parents"=[vm_ids]}}
+ */
 public class PrecedingRunningConverter implements
     ConstraintConverter<PrecedingRunning> {
 
-  private final String ID = "precedingRunning";
+  /**
+   * JSON identifier for the constraint.
+   */
+  public final static String ID = "precedingRunning";
 
+  /**
+   * The label for the VM.
+   */
   private final String VM_LABEL = "vm";
 
+  /**
+   * The label for the parent VMs.
+   */
   private final String PARENT_VMS_LABEL = "parents";
 
   @Override

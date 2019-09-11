@@ -71,12 +71,11 @@ public class CostView implements ModelView {
     final CostView cv = new CostView();
     costs.forEach((no, map) -> {
       map.forEach((vm, co) -> {
-        cv.publicHost(no, vm, co.hourlyCost(), co.distance(), co.affinity(), co.alpha(), co.beta());
+        cv.publicHost(no, vm, co.hourlyCost(), co.distance(), co.affinity(),
+            co.alpha(), co.beta());
       });
     });
-    edges.forEach((no) -> {
-      cv.edgeHost(no);
-    });
+    edges.forEach(cv::edgeHost);
     return cv;
   }
 

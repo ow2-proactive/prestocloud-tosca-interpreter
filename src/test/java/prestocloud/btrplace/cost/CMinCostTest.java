@@ -60,8 +60,8 @@ public class CMinCostTest {
       storage.setCapacity(no, 100);
     }
 
-    // 4 public clouds.
-    for (int i = 0; i < 4; i++) {
+    // 2 public clouds.
+    for (int i = 0; i < 2; i++) {
       final Node no = mo.newNode();
       clouds.add(no);
       mo.getMapping().on(no);
@@ -71,6 +71,9 @@ public class CMinCostTest {
       storage.setCapacity(no, Integer.MAX_VALUE / 100);
     }
 
+    List<VM> smalls = new ArrayList<>();
+    List<VM> cpuHeavy = new ArrayList<>();
+    List<VM> regular = new ArrayList<>();
     // 10 VMs with different sizes. They represent the fragment replicas but
     // also the proxies.
     // IMHO: the proxies should stay in the edge to save bandwidth and latency
@@ -89,14 +92,17 @@ public class CMinCostTest {
         // small VMs.
         mem.setConsumption(vm, 2);
         cores.setConsumption(vm, 1);
+        smalls.add(vm);
       } else if (i < 8) {
         // heavy CPU.
         mem.setConsumption(vm, 2);
         cores.setConsumption(vm, 4);
+        cpuHeavy.add(vm);
       } else {
         // regular size.
         mem.setConsumption(vm, 4);
         cores.setConsumption(vm, 2);
+        regular.add(vm);
       }
       storage.setConsumption(vm, 4);
       mo.getMapping().addReadyVM(vm);
@@ -128,10 +134,17 @@ public class CMinCostTest {
     sched.doOptimize(true);
     sched.setTimeLimit(5);
 
+    System.out.println("-- Infrastructure --");
     System.out.println("Edge nodes: " + edges);
     System.out.println("cloud nodes: " + clouds);
 
-    System.out.println("Initial deployment:");
+    System.out.println("\n-- Managed entities --");
+    System.out.println("Small VMs: " + smalls + "; hourly cost=" + cv.publicCost(smalls.get(0), clouds.get(0)).hourlyCost());
+    System.out.println("cpu heavy VMs: " + cpuHeavy + "; hourly cost=" + cv.publicCost(cpuHeavy.get(0), clouds.get(0)).hourlyCost());
+    System.out.println("regular VMs: " + regular + "; hourly cost=" + cv.publicCost(regular.get(0), clouds.get(0)).hourlyCost());
+
+
+    System.out.println("\n-- Initial deployment --");
     ReconfigurationPlan plan = sched.solve(ii);
     System.out.println(sched.getStatistics());
 
@@ -139,7 +152,7 @@ public class CMinCostTest {
     System.out.println(plan.getResult().getMapping());
 
     // Let scale down. Half the VMs are removed.
-    System.out.println("------ scale down ---");
+    System.out.println("\n-- scale down --");
     final Set<VM> toRemove = vms.stream()
         .filter(v -> v.id() % 2 == 0).collect(Collectors.toSet());
     System.out.println("VMs to remove: " + toRemove);

@@ -38,7 +38,6 @@ import org.chocosolver.solver.variables.IntVar;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -159,14 +158,10 @@ public class CMinUsed implements CObjective {
 
     Solver s = rp.getSolver();
 
-    //Get the VMs to move for exclusion issue
+    //Get the VMs to move for exclusion issue.
     Set<VM> vmsToExclude = new HashSet<>(rp.getManageableVMs());
-    for (Iterator<VM> ite = vmsToExclude.iterator(); ite.hasNext(); ) {
-      VM vm = ite.next();
-      if (!(map.isRunning(vm) && rp.getFutureRunningVMs().contains(vm))) {
-        ite.remove();
-      }
-    }
+    vmsToExclude.removeIf(
+        vm -> !(map.isRunning(vm) && rp.getFutureRunningVMs().contains(vm)));
     List<AbstractStrategy<?>> strategies = new ArrayList<>();
 
     Map<IntVar, VM> pla = VMPlacementUtils.makePlacementMap(rp);
@@ -198,7 +193,7 @@ public class CMinUsed implements CObjective {
     }
     strategies.add(
         Search.intVarSearch(
-            new FirstFail(rp.getModel()), new IntDomainMax(), migs.toArray(new IntVar[migs.size()]))
+            new FirstFail(rp.getModel()), new IntDomainMax(), migs.toArray(new IntVar[0]))
     );
 
 
@@ -225,7 +220,7 @@ public class CMinUsed implements CObjective {
     //At this stage only it matters to plug the cost constraints
     strategies.add(new IntStrategy(new IntVar[]{rp.getEnd(), cost}, new MyInputOrder<>(s, this), new IntDomainMin()));
 
-    s.setSearch(new StrategiesSequencer(s.getEnvironment(), strategies.toArray(new AbstractStrategy[strategies.size()])));
+    s.setSearch(new StrategiesSequencer(s.getEnvironment(), strategies.toArray(new AbstractStrategy[0])));
   }
 
   /*
