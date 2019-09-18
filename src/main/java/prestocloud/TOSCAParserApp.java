@@ -26,7 +26,12 @@
 
 package prestocloud;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileSystem;
+import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.stream.Stream;
 
 import javax.annotation.Resource;
 
@@ -45,9 +50,11 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import lombok.Getter;
 import prestocloud.component.ICSARRepositorySearchService;
 import prestocloud.tosca.model.ArchiveRoot;
+import prestocloud.tosca.parser.ParsingException;
 import prestocloud.tosca.parser.ParsingResult;
 import prestocloud.tosca.parser.ToscaParser;
 import prestocloud.tosca.repository.LocalRepositoryImpl;
+import prestocloud.utils.CollectionUtils;
 
 /**
  * @author ActiveEon Team
@@ -75,14 +82,33 @@ public class TOSCAParserApp {
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
         return args -> {
             // First argument must be the repository path (example: "src/main/resources/repository/" or "/mnt/glusterfs")
+            if (!Files.exists(Paths.get(args[0])) || !Files.exists(Paths.get(args[1])) || !Files.exists(Paths.get(args[2]))) {
+               System.err.println("Either the repository directory or the specified file to be parsed is not found.");
+               System.exit(1);
+            }
             ((LocalRepositoryImpl)csarRepositorySearchService).setPath(args[0]);
 
             // Second argument must be the path of the file to parse (example: "src/test/resources/prestocloud/ICCS-example.yml")
-            ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get(args[1]));
+            boolean parsingSuccess = processToscaWithBtrPlace(args[1], args[2], args[3]);
 
-            // Print OK if no error found
-            Assert.assertEquals(0, parsingResult.getContext().getParsingErrors().size());
-            System.out.println("OK");
+            if (parsingSuccess) {
+                System.out.println("INFO: the parsing has succeeded.");
+                System.exit(0);
+            } else {
+                System.err.print("ERR: The parsing has failed.");
+                System.exit(1);
+            }
         };
+    }
+
+    public boolean processToscaWithBtrPlace(String resourcesPath, String typeLevelTOSCAFile, String outputFile) {
+        try {
+            ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get(typeLevelTOSCAFile));
+        } catch (ParsingException e) {
+            System.err.println(String.format("Error while parsing the Type-level TOSCA document", e.getMessage()));
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 }
