@@ -1,5 +1,6 @@
 package org.prestocloud.tosca.model.templates;
 
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -17,6 +18,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PolicyTemplate extends AbstractTemplate {
-    private Set<String> targets = Sets.newLinkedHashSet();
+    private LinkedHashSet<String> targets = Sets.newLinkedHashSet();
     private Map<String, PolicyTrigger> triggers = Maps.newLinkedHashMap();
 }

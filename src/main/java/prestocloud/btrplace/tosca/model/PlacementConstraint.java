@@ -28,7 +28,9 @@ package prestocloud.btrplace.tosca.model;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -43,14 +45,14 @@ public class PlacementConstraint {
     @Setter
     public String type;
     @Getter @Setter
-    public Set<String> targets;
+    public LinkedHashSet<String> targets;
     @Getter @Setter
-    public Set<String> devices;
+    public LinkedHashSet<String> devices;
 
     public PlacementConstraint(String name) {
         this.name = name;
-        targets = new HashSet<>();
-        devices = new HashSet<>();
+        targets = new LinkedHashSet<>();
+        devices = new LinkedHashSet<>();
     }
 
     public void addDevice(String device) {

@@ -26,16 +26,14 @@
 
 package prestocloud;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.stream.Stream;
+import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.junit.Assert;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.runner.RunWith;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -48,13 +46,15 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import lombok.Getter;
+import prestocloud.btrplace.tosca.ParsingUtils;
+import prestocloud.btrplace.tosca.model.VMTemplateDetails;
 import prestocloud.component.ICSARRepositorySearchService;
 import prestocloud.tosca.model.ArchiveRoot;
 import prestocloud.tosca.parser.ParsingException;
 import prestocloud.tosca.parser.ParsingResult;
 import prestocloud.tosca.parser.ToscaParser;
 import prestocloud.tosca.repository.LocalRepositoryImpl;
-import prestocloud.utils.CollectionUtils;
+import prestocloud.workspace.ParsingSpace;
 
 /**
  * @author ActiveEon Team
@@ -65,6 +65,7 @@ import prestocloud.utils.CollectionUtils;
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class)
+@Slf4j
 public class TOSCAParserApp {
 
     @Getter
@@ -104,7 +105,14 @@ public class TOSCAParserApp {
     public boolean processToscaWithBtrPlace(String resourcesPath, String typeLevelTOSCAFile, String outputFile) {
         try {
             ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get(typeLevelTOSCAFile));
+            List<VMTemplateDetails> vmTemplates = ParsingUtils.getVMTemplatesDetails(parser, resourcesPath);
+            ParsingSpace ps = new ParsingSpace(parsingResult, vmTemplates ,parser,resourcesPath);
+            ps.proceed();
         } catch (ParsingException e) {
+            System.err.println(String.format("Error while parsing the Type-level TOSCA document", e.getMessage()));
+            e.printStackTrace();
+            return false;
+        } catch (IOException e){
             System.err.println(String.format("Error while parsing the Type-level TOSCA document", e.getMessage()));
             e.printStackTrace();
             return false;
