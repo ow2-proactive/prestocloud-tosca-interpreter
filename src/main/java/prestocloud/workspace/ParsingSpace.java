@@ -67,6 +67,7 @@ public class ParsingSpace {
         // Retrieving main data from the parsed TOSCA.
         metadata = ParsingUtils.getMetadata(parsingResult);
         supportedClouds = ParsingUtils.getListOfCloudsFromMetadata(metadata);
+        logger.info(String.format("%d supported cloud have been found",supportedClouds.size()));
         relationships = ParsingUtils.getRelationships(parsingResult);
         placementConstraints = ParsingUtils.getConstraints(parsingResult);
         dockers = ParsingUtils.getDockers(parsingResult);
@@ -106,7 +107,7 @@ public class ParsingSpace {
                 }
             }
             selectedCloudVMTypes.put(relationship.getFragmentName(), allSelectedTypesWithRequirement);
-            logger.info(String.format("%n types were identified for the fragment Mn",allSelectedTypes.size(),relationship.getFragmentName()));
+            logger.info(String.format("%d types were identified for the fragment %s",allSelectedTypes.size(),relationship.getFragmentName()));
         }
         return true;
     }

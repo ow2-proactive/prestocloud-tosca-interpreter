@@ -200,9 +200,10 @@ public class ParsingUtils {
                         placementConstraint.addDevice((String) excludedDevice);
                     }
                 }
-                if (policyTemplate.getValue().getType().equalsIgnoreCase("prestocloud.placement.Precedence")) {
-                    placementConstraint.addDevice(policyTemplate.getValue().getProperties().get("preceding").toString());
-                }
+//                if (policyTemplate.getValue().getType().equalsIgnoreCase("prestocloud.placement.Precedence")) {
+//                    placementConstraint.addDevice(policyTemplate.getValue().getProperties().get("preceding").toString());
+//                    System.out.println(policyTemplate.getValue().getTargets());
+//                }
                 placementConstraints.add(placementConstraint);
             }
         }
@@ -451,6 +452,7 @@ public class ParsingUtils {
         Map<String, Double> selectedTypes = new HashMap<>();
         Map<String, Map<String, Map<String, String>>> VMTypes;
         Path expectedPath = Paths.get(repositoryPath, String.format("%s-vm-templates.yml", cloud));
+        System.out.println("Cloud val = " + cloud);
 
         if (!Files.exists(expectedPath)) {
 //            System.out.println("Cloud of type " + cloud + " not found.");
@@ -753,14 +755,15 @@ public class ParsingUtils {
     public static GetVMTemplatesDetailsResult getVMTemplatesDetails(ToscaParser parser, String repositoryPath) throws IOException, ParsingException {
 
         List<VMTemplateDetails> vmTemplatesDetails = new ArrayList<>();
-        HashMap<String,List<String>>  regionsPerClouds = new HashMap<>();
-        Pattern vmFilenameMatcher = Pattern.compile("^[\\S]*-vm-template.yml$");
+        HashMap<String,Set<String>>  regionsPerClouds = new HashMap<>();
+        HashMap<String,List<String>> definitiveRegionPerCloud = new HashMap<>();
+        Pattern vmFilenameMatcher = Pattern.compile("^[\\S]*-vm-templates.yml$");
 
         // Let's parse all available cloud resource - I select only specificiation file matching one kind of spec.
-        String[] listOfClouds = Files.list(Paths.get(repositoryPath)).filter(Files::isRegularFile).filter(path -> (vmFilenameMatcher.matcher(path.toString()).find())).toArray(String[]::new);
+        String[] listOfClouds = Files.list(Paths.get(repositoryPath)).filter(Files::isRegularFile).filter(path -> (vmFilenameMatcher.matcher(path.toString()).find())).map(Path::toString).toArray(String[]::new);
 
         for(String cloud : listOfClouds) {
-            Map<String, Map<String, Map<String, String>>> vMTypes = getCloudNodesTemplates(parser.parseFile(Paths.get(repositoryPath, cloud)), null);
+            Map<String, Map<String, Map<String, String>>> vMTypes = getCloudNodesTemplates(parser.parseFile(Paths.get(cloud)), null);
             for (Map.Entry<String, Map<String, Map<String, String>>> hostingConstraint : vMTypes.entrySet()) {
                 Double price = null;
                 String name = null, type = null, region = null, coordinates = null;
@@ -773,10 +776,10 @@ public class ParsingUtils {
                         type = cloudProperties.getValue().get("cloud_type");
                         region = cloudProperties.getValue().get("cloud_region");
                         coordinates = cloudProperties.getValue().get("gps_coordinates");
-                        if (!regionsPerClouds.keySet().contains(name)) {
-                            regionsPerClouds.put(name,new ArrayList<String>());
+                        if (!regionsPerClouds.keySet().contains(type)) {
+                            regionsPerClouds.put(type,new TreeSet<String>());
                         }
-                        regionsPerClouds.get(name).add(region);
+                        regionsPerClouds.get(type).add(region);
                     }
                 }
                 VMTemplateDetails VMTemplateDetails = new VMTemplateDetails(hostingConstraint.getKey(), name, type, region, coordinates, price);
@@ -826,7 +829,12 @@ public class ParsingUtils {
 
         GetVMTemplatesDetailsResult result = new GetVMTemplatesDetailsResult();
         result.vmTemplatesDetails = vmTemplatesDetails;
-        result.regionsPerClouds = regionsPerClouds;
+        regionsPerClouds.forEach((s, strings) -> {
+            ArrayList<String> tmp = new ArrayList<String>();
+            tmp.addAll(strings);
+            definitiveRegionPerCloud.put(s,tmp);
+        });
+        result.regionsPerClouds = definitiveRegionPerCloud;
         return result;
     }
 }
