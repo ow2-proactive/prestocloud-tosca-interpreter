@@ -43,11 +43,11 @@ import prestocloud.tosca.parser.ParsingResult;
 import prestocloud.tosca.parser.ToscaParser;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * @author ActiveEon Team
@@ -446,12 +446,19 @@ public class ParsingUtils {
     /**
      * Return the two informations separated with a space: "region_name vm_type"
      */
-    public static String findBestSuitableRegionAndVMType(ToscaParser parser, String repositoryPath, String cloud, List<String> regions, Map<String, List<String>> hostingConstraints) throws IOException, ParsingException {
+    public static String findBestSuitableRegionAndVMType(ToscaParser parser, String repositoryPath, String cloud, List<String> regions, Map<String, List<String>> hostingConstraints) throws Exception {
 
         Map<String, Double> selectedTypes = new HashMap<>();
-
         Map<String, Map<String, Map<String, String>>> VMTypes;
-        if (cloud.equalsIgnoreCase("amazon")) {
+        Path expectedPath = Paths.get(repositoryPath, String.format("%s-vm-templates.yml", cloud));
+
+        if (!Files.exists(expectedPath)) {
+//            System.out.println("Cloud of type " + cloud + " not found.");
+            throw new IllegalArgumentException("Cloud of type " + cloud + " not found.");
+ //           return null;
+        }
+        VMTypes = getCloudNodesTemplates(parser.parseFile(expectedPath), regions);
+ /*        if (cloud.equalsIgnoreCase("amazon")) {
             VMTypes = getCloudNodesTemplates(parser.parseFile(Paths.get(repositoryPath,"amazon-vm-templates.yml")), regions);
         }
         else if (cloud.equalsIgnoreCase("azure")) {
@@ -468,7 +475,7 @@ public class ParsingUtils {
         else {
             System.out.println("Cloud of type " + cloud + " not found.");
             return null;
-        }
+        }*/
 
         // Extract hosting infos from local data struct
         boolean cpu, mem, disk, price;
@@ -614,8 +621,8 @@ public class ParsingUtils {
         }
 
         if (selectedTypes.isEmpty()) {
-            System.out.println("No suitable type found for hosting constraints: " + hostingConstraints);
-            return null;
+//            System.out.println("No suitable type found for hosting constraints: " + hostingConstraints);
+            throw new Exception("No suitable type found for hosting constraints: " + hostingConstraints);
         }
         else {
             return selectedTypes.entrySet().stream().sorted(Map.Entry.comparingByValue()).findFirst().get().getKey();
@@ -743,13 +750,41 @@ public class ParsingUtils {
         return allOptimizationVariables;
     }
 
-    public static List<VMTemplateDetails> getVMTemplatesDetails(ToscaParser parser, String repositoryPath) throws IOException, ParsingException {
+    public static GetVMTemplatesDetailsResult getVMTemplatesDetails(ToscaParser parser, String repositoryPath) throws IOException, ParsingException {
 
         List<VMTemplateDetails> vmTemplatesDetails = new ArrayList<>();
+        HashMap<String,List<String>>  regionsPerClouds = new HashMap<>();
+        Pattern vmFilenameMatcher = Pattern.compile("^[\\S]*-vm-template.yml$");
 
-        // TODO: add new cloud types (eg. google, openstack)
+        // Let's parse all available cloud resource - I select only specificiation file matching one kind of spec.
+        String[] listOfClouds = Files.list(Paths.get(repositoryPath)).filter(Files::isRegularFile).filter(path -> (vmFilenameMatcher.matcher(path.toString()).find())).toArray(String[]::new);
 
-        // Amazon
+        for(String cloud : listOfClouds) {
+            Map<String, Map<String, Map<String, String>>> vMTypes = getCloudNodesTemplates(parser.parseFile(Paths.get(repositoryPath, cloud)), null);
+            for (Map.Entry<String, Map<String, Map<String, String>>> hostingConstraint : vMTypes.entrySet()) {
+                Double price = null;
+                String name = null, type = null, region = null, coordinates = null;
+                for (Map.Entry<String, Map<String, String>> cloudProperties : hostingConstraint.getValue().entrySet()) {
+                    if (cloudProperties.getKey().equalsIgnoreCase("host")) {
+                        price = Double.valueOf(cloudProperties.getValue().get("price"));
+                    }
+                    if (cloudProperties.getKey().equalsIgnoreCase("cloud")) {
+                        name = cloudProperties.getValue().get("cloud_name");
+                        type = cloudProperties.getValue().get("cloud_type");
+                        region = cloudProperties.getValue().get("cloud_region");
+                        coordinates = cloudProperties.getValue().get("gps_coordinates");
+                        if (!regionsPerClouds.keySet().contains(name)) {
+                            regionsPerClouds.put(name,new ArrayList<String>());
+                        }
+                        regionsPerClouds.get(name).add(region);
+                    }
+                }
+                VMTemplateDetails VMTemplateDetails = new VMTemplateDetails(hostingConstraint.getKey(), name, type, region, coordinates, price);
+                vmTemplatesDetails.add(VMTemplateDetails);
+            }
+        }
+
+/*        // Amazon
         Map<String, Map<String, Map<String, String>>> amazonVMTypes = getCloudNodesTemplates(parser.parseFile(Paths.get(repositoryPath, "amazon-vm-templates.yml")), null);
         for (Map.Entry<String, Map<String, Map<String, String>>> hostingConstraint : amazonVMTypes.entrySet()) {
             Double price = null;
@@ -787,8 +822,12 @@ public class ParsingUtils {
             }
             VMTemplateDetails VMTemplateDetails = new VMTemplateDetails(hostingConstraint.getKey(), name, type, region, coordinates, price);
             vmTemplatesDetails.add(VMTemplateDetails);
-        }
+        }*/
 
-        return vmTemplatesDetails;
+        GetVMTemplatesDetailsResult result = new GetVMTemplatesDetailsResult();
+        result.vmTemplatesDetails = vmTemplatesDetails;
+        result.regionsPerClouds = regionsPerClouds;
+        return result;
     }
 }
+

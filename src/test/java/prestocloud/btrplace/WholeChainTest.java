@@ -98,7 +98,7 @@ public class WholeChainTest {
     }
 
     @Test
-    public void processToscaWithBtrPlace() throws ParsingException, IOException, JSONConverterException {
+    public void processToscaWithBtrPlace() throws ParsingException, IOException, JSONConverterException,Exception {
 
         String resourcesPath = filesPath + "resources/"; // "src/main/resources/repository";
         String typeLevelTOSCAFile = filesPath + "ICCS-example-v6.yml";
@@ -114,7 +114,7 @@ public class WholeChainTest {
         List<PlacementConstraint> placementConstraints = ParsingUtils.getConstraints(parsingResult);
         List<Docker> dockers = ParsingUtils.getDockers(parsingResult);
         List<OptimizationVariables> optimizationVariables = ParsingUtils.getOptimizationVariables(parsingResult);
-        List<VMTemplateDetails> vmTemplatesDetails = ParsingUtils.getVMTemplatesDetails(parser, resourcesPath);
+        List<VMTemplateDetails> vmTemplatesDetails = ParsingUtils.getVMTemplatesDetails(parser, resourcesPath).vmTemplatesDetails;
         // TODO: deal with health checks
         List<HealthCheck> healthChecks = ParsingUtils.getHealthChecks(parsingResult);
 

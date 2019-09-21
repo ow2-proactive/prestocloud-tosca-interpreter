@@ -29,12 +29,13 @@ package prestocloud;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
 
 import javax.annotation.Resource;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -46,8 +47,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import lombok.Getter;
+import prestocloud.btrplace.tosca.GetVMTemplatesDetailsResult;
 import prestocloud.btrplace.tosca.ParsingUtils;
-import prestocloud.btrplace.tosca.model.VMTemplateDetails;
 import prestocloud.component.ICSARRepositorySearchService;
 import prestocloud.tosca.model.ArchiveRoot;
 import prestocloud.tosca.parser.ParsingException;
@@ -75,6 +76,8 @@ public class TOSCAParserApp {
     @Resource(name = "localRepository")
     private ICSARRepositorySearchService csarRepositorySearchService;
 
+    private Logger logger = LoggerFactory.getLogger(TOSCAParserApp.class);
+
     public static void main(String[] args) {
         SpringApplication.run(TOSCAParserApp.class, args);
     }
@@ -93,10 +96,10 @@ public class TOSCAParserApp {
             boolean parsingSuccess = processToscaWithBtrPlace(args[1], args[2], args[3]);
 
             if (parsingSuccess) {
-                System.out.println("INFO: the parsing has succeeded.");
+                logger.info("The parsing ended successfully");
                 System.exit(0);
             } else {
-                System.err.print("ERR: The parsing has failed.");
+                logger.error("ERR: The parsing has failed.");
                 System.exit(1);
             }
         };
@@ -104,16 +107,23 @@ public class TOSCAParserApp {
 
     public boolean processToscaWithBtrPlace(String resourcesPath, String typeLevelTOSCAFile, String outputFile) {
         try {
+            logger.info("(1/) Parsing the type-level TOSCA file");
             ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get(typeLevelTOSCAFile));
-            List<VMTemplateDetails> vmTemplates = ParsingUtils.getVMTemplatesDetails(parser, resourcesPath);
-            ParsingSpace ps = new ParsingSpace(parsingResult, vmTemplates ,parser,resourcesPath);
-            ps.proceed();
-        } catch (ParsingException e) {
-            System.err.println(String.format("Error while parsing the Type-level TOSCA document", e.getMessage()));
-            e.printStackTrace();
-            return false;
-        } catch (IOException e){
-            System.err.println(String.format("Error while parsing the Type-level TOSCA document", e.getMessage()));
+            logger.info("(2/) Parsing VM cloud resource TOSCA file");
+            GetVMTemplatesDetailsResult vmTemplatesParsingResult = ParsingUtils.getVMTemplatesDetails(parser, resourcesPath);
+            ParsingSpace ps = new ParsingSpace(parsingResult, vmTemplatesParsingResult ,parser,resourcesPath);
+            logger.info("(3/) Interpreting TOSCA specification");
+            ps.retrieveResourceFromParsing();
+            logger.info("(4/) Determining the best suited cloud VM type for identified computing resources");
+            ps.selectBestCloudVmType();
+            logger.info("(5/) Preparing APSC context (Btrplace)");
+            ps.configureBtrPlace();
+            logger.info("(6/) Creating btrplace resources (Vms & Edge)");
+            ps.createVmsResourceInBtrPlace();
+            logger.info("(7/) Populating the model with regions from public and private cloud");
+            ps.populatePublicAndPrivateCloud();
+        } catch (Exception e) {
+            logger.error(String.format("Error while parsing the Type-level TOSCA document", e.getMessage()));
             e.printStackTrace();
             return false;
         }
