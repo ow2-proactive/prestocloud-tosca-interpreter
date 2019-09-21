@@ -122,6 +122,8 @@ public class TOSCAParserApp {
             ps.createVmsResourceInBtrPlace();
             logger.info("(7/) Populating the model with regions from public and private cloud");
             ps.populatePublicAndPrivateCloud();
+            logger.info("(8/) Configuration of regions computing capability");
+            ps.setCapacity();
         } catch (Exception e) {
             logger.error(String.format("Error while parsing the Type-level TOSCA document", e.getMessage()));
             e.printStackTrace();

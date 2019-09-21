@@ -17,6 +17,7 @@ import prestocloud.tosca.model.ArchiveRoot;
 import prestocloud.tosca.parser.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @EnableAspectJAutoProxy(proxyTargetClass = true)
@@ -27,7 +28,7 @@ public class ParsingSpace {
 
     private Logger logger = LoggerFactory.getLogger(TOSCAParserApp.class);
 
-    private HashMap<String, List<String>> regionsPerClouds;
+    private HashMap<String, List<RegionCapacityDescriptor>> regionsPerClouds;
     private ParsingResult<ArchiveRoot> parsingResult;
     private ToscaParser parser;
     private String resourcesPath;
@@ -53,6 +54,7 @@ public class ParsingSpace {
     // Public and Private Cloud identificiation
     Map<String, Node> publicClouds = new HashMap<>();
     Map<String, Node> privateClouds = new HashMap<>();
+    Map<String,RegionCapacityDescriptor> regionCapabilityDescriptorPerCloud = new HashMap<>();
 
 
     public ParsingSpace(ParsingResult<ArchiveRoot> result, GetVMTemplatesDetailsResult getVMTemplatesDetailsResult, ToscaParser parser, String resourcesPath) {
@@ -92,7 +94,7 @@ public class ParsingSpace {
                                         parser,
                                         resourcesPath,
                                         cloud,
-                                        this.regionsPerClouds.get(cloud),
+                                        this.regionsPerClouds.get(cloud).stream().map(RegionCapacityDescriptor::getRegion).collect(Collectors.toList()),
                                         nodeConstraints.getHostingConstraints());
                                 String region = selectedRegionAndType.split(" ")[0];
                                 String vmType = selectedRegionAndType.split(" ")[1];
@@ -150,12 +152,15 @@ public class ParsingSpace {
     }
 
     public void populatePublicAndPrivateCloud() {
+        String placementString;
         for (String cloud : supportedClouds) {
-            for (String region : regionsPerClouds.get(cloud)) {
+            for (RegionCapacityDescriptor region : regionsPerClouds.get(cloud)) {
+                placementString = cloud + " " + region.getRegion();
+                regionCapabilityDescriptorPerCloud.put(placementString,region);
                 if (PUBLIC_CLOUDS_DEFINITION.contains(cloud)) {
-                    publicClouds.put(cloud + " " + region, mo.newNode());
+                    publicClouds.put(placementString, mo.newNode());
                 } else {
-                    privateClouds.put(cloud + " " + region, mo.newNode());
+                    privateClouds.put(cloud + " " + region.getRegion(), mo.newNode());
                 }
             }
 /*                if (cloud.equalsIgnoreCase("azure")) {
@@ -172,6 +177,8 @@ public class ParsingSpace {
     }
 
     public void setCapacity() {
+        populatePublicAndPrivateCloud();
+
         // Create and attach cpu, memory and disk resources
         ShareableResource cpu = new ShareableResource("cpu");
         ShareableResource mem = new ShareableResource("memory");
@@ -198,11 +205,18 @@ public class ParsingSpace {
             disk.setCapacity(edgeNode.getValue(), 60);
         }*/
 
-        for (Map.Entry<String, Node> cloud : publicClouds.entrySet()) {
-            cpu.setCapacity(cloud.getValue(), Integer.MAX_VALUE / 1000);
+        Set<Map.Entry<String, Node>> tmp = new HashSet<>();
+        tmp.addAll(publicClouds.entrySet());
+        tmp.addAll(privateClouds.entrySet());
+        for (Map.Entry<String, Node> cloud : tmp) {
+/*            cpu.setCapacity(cloud.getValue(), Integer.MAX_VALUE / 1000);
             mem.setCapacity(cloud.getValue(), Integer.MAX_VALUE / 1000);
-            disk.setCapacity(cloud.getValue(), Integer.MAX_VALUE / 1000);
+            disk.setCapacity(cloud.getValue(), Integer.MAX_VALUE / 1000);*/
+            cpu.setCapacity(cloud.getValue(), this.regionCapabilityDescriptorPerCloud.get(cloud.getKey()).getCpuCapacity());
+            mem.setCapacity(cloud.getValue(), this.regionCapabilityDescriptorPerCloud.get(cloud.getKey()).getMemoryCapacity());
+            disk.setCapacity(cloud.getValue(), this.regionCapabilityDescriptorPerCloud.get(cloud.getKey()).getDiskCapacity());
         }
-        // TODO: Proceed similarly for private clouds.
+
+
     }
 }

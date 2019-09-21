@@ -42,6 +42,18 @@ node_types:
         type: tosca.datatypes.network.NetworkInfo
         description: The network to setup on cloud.
         required: false
+      cpucapacity:
+        type: string
+        description: The max CPU capacity of the cloud/edge compute node
+        required: false
+      memorycapacity:
+        type: string
+        description: The max memory capacity of the cloud/edge compute node
+        required: false
+      diskcapacity:
+        type: string
+        description: The max disk capacity of the cloud/edge compute node
+        required: false
     capabilities:
       host:
         type: prestocloud.capabilities.container
