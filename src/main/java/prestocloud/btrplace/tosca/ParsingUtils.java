@@ -48,6 +48,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * @author ActiveEon Team
@@ -447,7 +448,7 @@ public class ParsingUtils {
     /**
      * Return the two informations separated with a space: "region_name vm_type"
      */
-    public static String findBestSuitableRegionAndVMType(ToscaParser parser, String repositoryPath, String cloud, List<String> regions, Map<String, List<String>> hostingConstraints) throws Exception {
+    public static List<String> findBestSuitableRegionAndVMType(ToscaParser parser, String repositoryPath, String cloud, List<String> regions, Map<String, List<String>> hostingConstraints) throws Exception {
 
         Map<String, Double> selectedTypes = new HashMap<>();
         Map<String, Map<String, Map<String, String>>> VMTypes;
@@ -626,7 +627,8 @@ public class ParsingUtils {
             throw new Exception("No suitable type found for hosting constraints: " + hostingConstraints);
         }
         else {
-            return selectedTypes.entrySet().stream().sorted(Map.Entry.comparingByValue()).findFirst().get().getKey();
+            //return selectedTypes.entrySet().stream().sorted(Map.Entry.comparingByValue()).findFirst().get().getKey();
+            return selectedTypes.entrySet().parallelStream().map(Map.Entry::getKey).collect(Collectors.toList());
         }
     }
 

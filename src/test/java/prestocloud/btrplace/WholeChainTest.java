@@ -137,16 +137,20 @@ public class WholeChainTest {
                             // Loop for all clouds supported (metadata)
                             Map<String, String> selectedTypes = new HashMap<>();
                             for (String cloud : supportedClouds) {
-                                String selectedRegionAndType = ParsingUtils.findBestSuitableRegionAndVMType(
+                                List<String> selectedRegionAndType = ParsingUtils.findBestSuitableRegionAndVMType(
                                         parser,
                                         resourcesPath,
                                         cloud,
                                         // TODO: improve a bit to manage more clouds (eg. openstack, google)
                                         cloud.equalsIgnoreCase("azure") ? azureRegions : amazonRegions,
                                         nodeConstraints.getHostingConstraints());
-                                String region = selectedRegionAndType.split(" ")[0];
+                                selectedRegionAndType.forEach(s -> {
+                                    String[] tmp = s.split(" ");
+                                    selectedTypes.put(cloud.toLowerCase() + " " + tmp[0], tmp[1]);
+                                });
+                                /*String region = selectedRegionAndType.split(" ")[0];
                                 String vmType = selectedRegionAndType.split(" ")[1];
-                                selectedTypes.put(cloud.toLowerCase() + " " + region, vmType);
+                                selectedTypes.put(cloud.toLowerCase() + " " + region, vmType);*/
                             }
                             allSelectedTypes.put(constrainedNode.getName(), selectedTypes);
                             allSelectedTypesWithRequirement.put(constrainedNode.getType(), allSelectedTypes);
