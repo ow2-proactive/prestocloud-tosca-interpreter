@@ -1,12 +1,17 @@
 package prestocloud.workspace;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
+import net.minidev.json.JSONArray;
+import net.minidev.json.JSONObject;
 import org.btrplace.model.*;
 import org.btrplace.model.constraint.*;
 import org.btrplace.model.view.ShareableResource;
 import org.btrplace.plan.ReconfigurationPlan;
 import org.btrplace.plan.event.Action;
+import org.btrplace.plan.event.BootVM;
 import org.btrplace.scheduler.choco.ChocoScheduler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -414,7 +419,7 @@ public class ParsingSpace {
                     String vm = placementConstraint.getDevices().stream().findFirst().get();
                     cstrs.add(new PrecedingRunning(vms.get(vm), Sets.newHashSet(constrained_vms)));*/
                     Object[] ordonnedVmAllocation = placementConstraint.getTargets().toArray();
-                    for(int i = 0; i < ordonnedVmAllocation.length -2; i++) {
+                    for(int i = 0; i < ordonnedVmAllocation.length -1; i++) {
                         HashSet<VM> tmp = Sets.newHashSet();
                         tmp.add(vms.get((String) ordonnedVmAllocation[i]));
                        cstrs.add(new PrecedingRunning(vms.get( (String) ordonnedVmAllocation[i+1]),tmp));
@@ -498,4 +503,70 @@ public class ParsingSpace {
         return true;
     }
 
+   public String generationJsonOutput() {
+// Generate JSON output
+       JSONArray ja = new JSONArray();
+       for (Action action : actions) {
+
+           // TODO: manage more actions if needed (eg. "MigrateVM" to transform in delete and boot actions)
+           if (action instanceof BootVM) {
+
+               // Retrieve VM/fragment name
+               String vmName = vms.entrySet().stream().filter(vm -> vm.getValue().equals(((BootVM) action).getVM())).findFirst().get().getKey();
+
+               // Retrieve node/host name
+               String nodeName = publicClouds.entrySet().stream().filter(pc -> pc.getValue().equals(((BootVM) action).getDestinationNode())).findFirst().get().getKey();
+
+               String selectedVMType = getSelectedCloudVMType(selectedCloudVMTypes, vmName, nodeName);
+               JSONObject jo = new JSONObject();
+               jo.put("action", "boot");
+               jo.put("start", action.getStart());
+               jo.put("end", action.getEnd());
+               jo.put("fragment", vmName);
+               jo.put("cloud", nodeName.split(" ")[0]);
+               jo.put("region", nodeName.split(" ")[1]);
+               jo.put("type", selectedVMType);
+
+               // Docker command is optional because 'proxy', 'master', and 'balanced_by' nodes don't have one
+               Optional<Docker> docker = dockers.stream().filter(d -> d.getFragmentName().equalsIgnoreCase(vmName)).findFirst();
+               docker.ifPresent(dck -> jo.put("docker", dck.printCmdline()));
+
+               ja.add(jo);
+           }
+       }
+       try {
+           String formattedOutput = new ObjectMapper().configure(SerializationFeature.INDENT_OUTPUT, true).writeValueAsString(ja);
+           return formattedOutput;
+       } catch (com.fasterxml.jackson.core.JsonProcessingException e) {
+          logger.error("Unable to process the JSON structure");
+          return  "";
+       }
+   }
+
+    /**
+     * Simple helper method to retrieve the selected cloud VM type for a fragment name *or* a node name (eg. proxy, master, etc.).
+     *
+     * @param selectedCloudVMTypes HashMap of all selected cloud VM types
+     * @param vmName name of the fragment *or* the node/host to look for
+     * @param nodeName name of the computed destination cloud
+     * @return the selected VM type, `null` if not found.
+     */
+    private String getSelectedCloudVMType(Map<String, Map<String, Map<String, Map<String, String>>>> selectedCloudVMTypes, String vmName, String nodeName) {
+        Map<String, Map<String, Map<String, String>>> tmp = selectedCloudVMTypes.get(vmName);
+        if (tmp != null) {
+            return  tmp.get("execute").values().stream().findFirst().get().get(nodeName);//.get(selectedCloudVMTypes.get(vmName).get("execute").keySet().stream().findFirst().get()).get(nodeName);
+        }
+        else {
+            for (Map.Entry<String, Map<String, Map<String, Map<String, String>>>> selectedFragmentTypes : selectedCloudVMTypes.entrySet()) {
+                for (Map.Entry<String, Map<String, Map<String, String>>> selectedTypes : selectedFragmentTypes.getValue().entrySet()) {
+                    if (selectedTypes.getValue().containsKey(vmName)) {
+                        // Assume that cloud name and region name are concatenated with a space
+                        return selectedTypes.getValue().get(vmName).get(nodeName);
+                    }
+                }
+            }
+        }
+        // This should never return null as a matching type must have be found for each VM
+        return null;
+    }
 }

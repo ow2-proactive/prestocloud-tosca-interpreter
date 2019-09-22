@@ -67,5 +67,4 @@ public class RegionCapacityDescriptor implements Comparable<RegionCapacityDescri
         }
     }
 
-
 }
