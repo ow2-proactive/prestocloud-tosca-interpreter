@@ -5,16 +5,22 @@ import lombok.extern.slf4j.Slf4j;
 import org.btrplace.model.*;
 import org.btrplace.model.constraint.*;
 import org.btrplace.model.view.ShareableResource;
+import org.btrplace.plan.ReconfigurationPlan;
+import org.btrplace.plan.event.Action;
+import org.btrplace.scheduler.choco.ChocoScheduler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import prestocloud.TOSCAParserApp;
+import prestocloud.btrplace.PrestoCloudExtensions;
 import prestocloud.btrplace.cost.CostView;
+import prestocloud.btrplace.cost.MinCost;
 import prestocloud.btrplace.precedingRunning.PrecedingRunning;
 import prestocloud.btrplace.tosca.GetVMTemplatesDetailsResult;
 import prestocloud.btrplace.tosca.ParsingUtils;
+import prestocloud.btrplace.tosca.geoloc.UTM2Deg;
 import prestocloud.btrplace.tosca.model.*;
 import prestocloud.tosca.model.ArchiveRoot;
 import prestocloud.tosca.parser.*;
@@ -52,10 +58,10 @@ public class ParsingSpace {
     private Map<String,String> masteringNodes = new HashMap<>();
 
     //btrplace model related attributes
-    Map<String, VM> vms = new HashMap<>();
-    ShareableResource cpu = new ShareableResource("cpu");
-    ShareableResource mem = new ShareableResource("memory");
-    ShareableResource disk = new ShareableResource("disk");
+    private Map<String, VM> vms = new HashMap<>();
+    private ShareableResource cpu = new ShareableResource("cpu");
+    private ShareableResource mem = new ShareableResource("memory");
+    private ShareableResource disk = new ShareableResource("disk");
     private Model mo;
     private Mapping map;
     private CostView cv;
@@ -65,8 +71,8 @@ public class ParsingSpace {
     Map<String, Node> privateClouds = new HashMap<>();
     Map<String,RegionCapacityDescriptor> regionCapabilityDescriptorPerCloud = new HashMap<>();
 
-    final List<SatConstraint> cstrs = new ArrayList<>();
-
+    private final List<SatConstraint> cstrs = new ArrayList<>();
+    private Set<Action> actions;
 
     public ParsingSpace(ParsingResult<ArchiveRoot> result, GetVMTemplatesDetailsResult getVMTemplatesDetailsResult, ToscaParser parser, String resourcesPath) {
         this.parsingResult = result;
@@ -432,6 +438,64 @@ public class ParsingSpace {
             }*/
     }
 
-    // TODO: Add precedence constraints from relationships. 'proxy', 'master', and 'balanced_by' nodes must be started before fragment's host ('execute' node))
+    public void extractCost() {
+        // TODO: use a valid reference location to compute distances ("Sophia Antipolis" for testing only, must be retrieved from fragment's properties or dependencies)
+        // Point to be discussed with ICCS.
+        String sophiaAntipolisUTM = "32T 342479mE 4831495mN";
+
+        // Preparing structure for public and private cloud.
+        Set<Map.Entry<String, Node>> allCloudEntrySet = new HashSet<>();
+        allCloudEntrySet.addAll(publicClouds.entrySet());
+        allCloudEntrySet.addAll(privateClouds.entrySet());
+
+        // Set cost view for each node <-> vm pair (values are extracted from optimization objective variables & VM templates details)
+        // TODO: do it also for edge devices
+        for (Map.Entry<String, VM> vm : vms.entrySet()) {
+            // Find corresponding optimisation variables, note that they are only set on fragment (not their dependencies like proxy, master, etc.)
+            Optional<OptimizationVariables> vmOptimVars = optimizationVariables.stream().filter(optimVars -> optimVars.getFragmentName().equalsIgnoreCase(vm.getKey())).findFirst();
+            for (Map.Entry<String, Node> node : allCloudEntrySet) {
+                // Find corresponding VM template
+                VMTemplateDetails vmTemplateDetails = vmTemplatesDetails.stream().filter(vmTplDetails -> (vmTplDetails.getCloud() + " " + vmTplDetails.getRegion()).equalsIgnoreCase(node.getKey())).findFirst().get();
+                // Default to 1
+                int affinity = 1;
+                int distance = 1;
+                int cost = 1;
+                if (vmOptimVars.isPresent()) {
+                    // Check if a specific affinity was set for this specific node (VM cloud and region match)
+                    for (Map.Entry<String, Integer> friendliness : vmOptimVars.get().getFriendliness().entrySet()) {
+                        if (friendliness.getKey().equalsIgnoreCase(vmTemplateDetails.getCloud() + "_" + vmTemplateDetails.getRegion())) {
+                            affinity = friendliness.getValue();
+                        }
+                    }
+                    distance = vmOptimVars.get().getDistance();
+                    cost = vmOptimVars.get().getCost();
+                }
+                // Set default values for 'dependent' hosting nodes
+                cv.publicHost(node.getValue(), vm.getValue(), vmTemplateDetails.getPrice(), UTM2Deg.getDistance(sophiaAntipolisUTM, vmTemplateDetails.getGeolocation()), affinity, distance, cost);
+            }
+        }
+    }
+
+    public boolean performedBtrplaceSolving() {
+        // Create an instance with MinCost objective
+        Instance ii = new Instance(mo, cstrs, new MinCost());
+
+        // Start an optimized scheduler and solve the problem
+        final ChocoScheduler sched = PrestoCloudExtensions.newScheduler();
+        sched.doOptimize(true);
+        ReconfigurationPlan p = sched.solve(ii);
+        if (p == null) {
+            return false;
+        }
+
+        // TODO: save the mapping to a proper place to reimport it later
+        /*File tmp = File.createTempFile("presto-plan-", ".json");
+        final ReconfigurationPlanConverter rpc = new ReconfigurationPlanConverter();
+        rpc.toJSON(p).writeJSONString(Files.newBufferedWriter(tmp.toPath()));*/
+
+        // Get list of computed actions
+        actions = p.getActions();
+        return true;
+    }
 
 }

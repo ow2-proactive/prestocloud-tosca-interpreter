@@ -132,6 +132,11 @@ public class TOSCAParserApp {
             ps.defineFragmentDeployability();
             logger.info("(13/) Enforcing policy constraint in APSC");
             ps.configurePlacementConstraint();
+            logger.info("(14/) Retrieving cost-related information");
+            ps.extractCost();
+            if (!ps.performedBtrplaceSolving()) {
+                throw new Exception("No Btrplace reconfiguraton plan was determined");
+            }
         } catch (Exception e) {
             logger.error(String.format("Error while parsing the Type-level TOSCA document", e.getMessage()));
             e.printStackTrace();
