@@ -1,7 +1,9 @@
 package prestocloud.workspace;
 
+import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.btrplace.model.*;
+import org.btrplace.model.constraint.*;
 import org.btrplace.model.view.ShareableResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +12,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import prestocloud.TOSCAParserApp;
 import prestocloud.btrplace.cost.CostView;
+import prestocloud.btrplace.precedingRunning.PrecedingRunning;
 import prestocloud.btrplace.tosca.GetVMTemplatesDetailsResult;
 import prestocloud.btrplace.tosca.ParsingUtils;
 import prestocloud.btrplace.tosca.model.*;
@@ -47,6 +50,9 @@ public class ParsingSpace {
 
     //btrplace model related attributes
     Map<String, VM> vms = new HashMap<>();
+    ShareableResource cpu = new ShareableResource("cpu");
+    ShareableResource mem = new ShareableResource("memory");
+    ShareableResource disk = new ShareableResource("disk");
     private Model mo;
     private Mapping map;
     private CostView cv;
@@ -55,6 +61,8 @@ public class ParsingSpace {
     Map<String, Node> publicClouds = new HashMap<>();
     Map<String, Node> privateClouds = new HashMap<>();
     Map<String,RegionCapacityDescriptor> regionCapabilityDescriptorPerCloud = new HashMap<>();
+
+    final List<SatConstraint> cstrs = new ArrayList<>();
 
 
     public ParsingSpace(ParsingResult<ArchiveRoot> result, GetVMTemplatesDetailsResult getVMTemplatesDetailsResult, ToscaParser parser, String resourcesPath) {
@@ -129,12 +137,14 @@ public class ParsingSpace {
                 // Add the fragment's execute node first
                 if (selectedTypes.getKey().equalsIgnoreCase("execute")) {
                     vms.put(selectedFragmentTypes.getKey(), mo.newVM());
+                    logger.info(String.format("Registering fragment %s ...",selectedFragmentTypes.getKey()));
                 }
                 else {
                     // We can have duplicates (eg. a 'proxy' may be linked to multiple fragments)
                     String nodeName = selectedTypes.getValue().keySet().stream().findFirst().get();
                     if (!vms.containsKey(nodeName)) {
                         vms.put(nodeName, mo.newVM());
+                        logger.info(String.format("Registering %s ...",nodeName));
                     }
                 }
             }
@@ -177,12 +187,7 @@ public class ParsingSpace {
     }
 
     public void setCapacity() {
-        populatePublicAndPrivateCloud();
-
         // Create and attach cpu, memory and disk resources
-        ShareableResource cpu = new ShareableResource("cpu");
-        ShareableResource mem = new ShareableResource("memory");
-        ShareableResource disk = new ShareableResource("disk");
         mo.attach(cpu);
         mo.attach(mem);
         mo.attach(disk);
@@ -216,7 +221,155 @@ public class ParsingSpace {
             mem.setCapacity(cloud.getValue(), this.regionCapabilityDescriptorPerCloud.get(cloud.getKey()).getMemoryCapacity());
             disk.setCapacity(cloud.getValue(), this.regionCapabilityDescriptorPerCloud.get(cloud.getKey()).getDiskCapacity());
         }
-
-
     }
+
+    public void configuringNodeConstraint() {
+        // Set consumption of all required nodes/hosts
+        for (Relationship relationship : relationships) {
+            for (ConstrainedNode constrainedNode : relationship.getAllConstrainedNodes()) {
+                for (NodeConstraints nodeConstraints : constrainedNode.getConstraints()) {
+                    if (!nodeConstraints.getResourceConstraints().isEmpty()) {
+                        // If the resource may run on cloud(s), select best matching types
+                        if (nodeConstraints.getResourceConstraints().get("type").contains("cloud")) {
+                            // Prepare VM name depending on requirement type ('execute' targets the fragment name, others target node/host name)
+                            String vmName = constrainedNode.getType().equalsIgnoreCase("execute") ? relationship.getFragmentName() : constrainedNode.getType();
+                            for (Map.Entry<String, List<String>> hostingConstraint : nodeConstraints.getHostingConstraints().entrySet()) {
+                                String required = hostingConstraint.getValue().get(0);
+
+                                // TODO: manage more constraints on values if needed
+                                int constraint;
+                                if (required.contains("RangeMin")) {
+                                    constraint = Integer.valueOf(required.split(",")[0].split(" ")[1]);
+                                } else if (required.contains("GreaterOrEqual")) {
+                                    constraint = Integer.valueOf(required.split(" ")[1]);
+                                } else {
+                                    constraint = Integer.valueOf(required);
+                                }
+
+                                // TODO: manage more units if needed
+                                if (hostingConstraint.getKey().equalsIgnoreCase("num_cpus")) {
+                                    cpu.setConsumption(vms.get(vmName), constraint);
+                                } else if (hostingConstraint.getKey().equalsIgnoreCase("mem_size")) {
+                                    // Mem in GB only
+                                    if (required.contains("MB")) {
+                                        constraint = Math.round(constraint / 1024);
+                                    }
+                                    mem.setConsumption(vms.get(vmName), constraint);
+                                } else if (hostingConstraint.getKey().equalsIgnoreCase("storage_size")) {
+                                    // Storage in GB only
+                                    if (required.contains("MB")) {
+                                        constraint = Math.round(constraint / 1024);
+                                    }
+                                    disk.setConsumption(vms.get(vmName), constraint);
+                                } else {
+                                    logger.error("Unrecognized hosting constraint: " + hostingConstraint.getKey());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void detectResourceAvailability() {
+        // Set state for public clouds: online and running
+        for (Map.Entry<String, Node> public_cloud : publicClouds.entrySet()) {
+            map.on(public_cloud.getValue());
+        }
+        cstrs.addAll(Online.newOnline(mo.getMapping().getAllNodes()));
+        logger.info(String.format("%s public clouds are set online",publicClouds.keySet().toString()));
+
+        // Proceed similarly with private cloud.
+        for (Map.Entry<String, Node> public_cloud : privateClouds.entrySet()) {
+            map.on(public_cloud.getValue());
+        }
+        cstrs.addAll(Online.newOnline(mo.getMapping().getAllNodes()));
+        logger.info(String.format("%s private clouds are set online",privateClouds.keySet().toString()));
+
+        // TODO : with edge resource, we will need to act check the effective reachability of the need. Point to be discussed.
+
+        // TODO: set the state for edge devices
+        // All edge nodes are online and running
+        /*for (Map.Entry<String, Node> edgeNode : edgeNodes.entrySet()) {
+            map.on(edgeNode.getValue());
+        }*/
+    }
+
+    public void defineFragmentDeployability() {
+        for (Map.Entry<String, VM> vm : vms.entrySet()) {
+            map.ready(vm.getValue());
+        }
+        cstrs.addAll(Running.newRunning(mo.getMapping().getAllVMs()));
+    }
+
+    public void configurePlacementConstraint() {
+        // Apply placement constraints
+        for (PlacementConstraint placementConstraint : placementConstraints) {
+            // TODO: manage more constraints if needed, use a dedicated method
+            if (placementConstraint.getType().contains("Spread")) {
+                Set<VM> constrained_vms = new HashSet<>();
+                // Check if the VM actually exists (this is currently triggered as edge devices are not yet managed)
+                if (vms.entrySet().containsAll(placementConstraint.getTargets())) {
+                    for (String target : placementConstraint.getTargets()) {
+                        constrained_vms.add(vms.get(target));
+                    }
+                    cstrs.add(new Spread(constrained_vms));
+                }
+                else {
+                    logger.warn("Non consistent 'Spread' constraint detected (probably due to a missing edge device).");
+                }
+            }
+            if (placementConstraint.getType().contains("Gather")) {
+                Set<VM> constrained_vms = new HashSet<>();
+                // Check if the VM actually exists (this is currently triggered as edge devices are not yet managed)
+                if (vms.entrySet().containsAll(placementConstraint.getTargets())) {
+                    for (String target : placementConstraint.getTargets()) {
+                        constrained_vms.add(vms.get(target));
+                    }
+                    cstrs.add(new Gather(constrained_vms));
+                }
+                else {
+                    logger.warn("Non consistent 'Gather' constraint detected (probably due to a missing edge device).");
+                }
+            }
+            if (placementConstraint.getType().contains("Precedence")) {
+                Set<VM> constrained_vms = new LinkedHashSet<>();
+                // Check if the VM actually exists (this is currently triggered as edge devices are not yet managed)
+                logger.info(placementConstraint.getTargets().toString());
+                if (vms.entrySet().containsAll(placementConstraint.getTargets())) {
+                    // Here is the former implementation of the constraint.
+                /*    for (String target : placementConstraint.getTargets()) {
+                        logger.info(String.format("Enforcing precedence constraints on the fragment %s", target));
+                        constrained_vms.add(vms.get(target));
+                    }
+                    String vm = placementConstraint.getDevices().stream().findFirst().get();
+                    cstrs.add(new PrecedingRunning(vms.get(vm), Sets.newHashSet(constrained_vms)));*/
+                    String[] ordonnedVmAllocation = (String[]) placementConstraint.getTargets().toArray();
+                    for(int i = 0; i < ordonnedVmAllocation.length -2; i++) {
+                        HashSet<VM> tmp = Sets.newHashSet();
+                        tmp.add(vms.get(ordonnedVmAllocation[i]));
+                       cstrs.add(new PrecedingRunning(vms.get(ordonnedVmAllocation[i+1]),tmp));
+                    }
+                } else {
+                    logger.warn("Non consistent 'Precedence' constraint detected (probably due to a missing edge device).");
+                }
+            }
+    }
+        // TODO: Ban constraints are only put on edge devices
+            /*if (constraint.getType().contains("Ban")) {
+                Set<Node> constrained_nodes = new HashSet<>();
+                for (String node : constraint.getDevices()) {
+                    constrained_nodes.add(edgeNodes.get(node));
+                }
+                String vm = null;
+                for (String target : constraint.getTargets()) {
+                    vm = target;
+                }
+                cstrs.add(new Ban(vms.get(vm), Sets.newHashSet(constrained_nodes)));
+            }*/
+    }
+
+    // TODO: Add precedence constraints from relationships. 'proxy', 'master', and 'balanced_by' nodes must be started before fragment's host ('execute' node))
+
 }

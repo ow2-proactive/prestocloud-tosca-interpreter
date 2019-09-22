@@ -124,6 +124,14 @@ public class TOSCAParserApp {
             ps.populatePublicAndPrivateCloud();
             logger.info("(8/) Configuration of regions computing capability");
             ps.setCapacity();
+            logger.info("(9/) Configuring constraints from the fragment specification");
+            ps.configuringNodeConstraint();
+            logger.info("(10/) Checking and defining the resource availability");
+            ps.detectResourceAvailability();
+            logger.info("(11/) Defining fragment deployability");
+            ps.defineFragmentDeployability();
+            logger.info("(12/) Enforcing policy constraint in APSC");
+            ps.configurePlacementConstraint();
         } catch (Exception e) {
             logger.error(String.format("Error while parsing the Type-level TOSCA document", e.getMessage()));
             e.printStackTrace();
