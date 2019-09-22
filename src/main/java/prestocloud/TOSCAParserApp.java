@@ -26,7 +26,6 @@
 
 package prestocloud;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -51,7 +50,6 @@ import prestocloud.btrplace.tosca.GetVMTemplatesDetailsResult;
 import prestocloud.btrplace.tosca.ParsingUtils;
 import prestocloud.component.ICSARRepositorySearchService;
 import prestocloud.tosca.model.ArchiveRoot;
-import prestocloud.tosca.parser.ParsingException;
 import prestocloud.tosca.parser.ParsingResult;
 import prestocloud.tosca.parser.ToscaParser;
 import prestocloud.tosca.repository.LocalRepositoryImpl;
@@ -114,23 +112,25 @@ public class TOSCAParserApp {
             ParsingSpace ps = new ParsingSpace(parsingResult, vmTemplatesParsingResult ,parser,resourcesPath);
             logger.info("(3/) Interpreting TOSCA specification");
             ps.retrieveResourceFromParsing();
-            logger.info("(4/) Determining the best suited cloud VM type for identified computing resources");
+            logger.info("(4/) Identifying fragments related to precedence constraints ...");
+            ps.identifiesNodeRelatedToPrecedenceConstraints();
+            logger.info("(5/) Determining the best suited cloud VM type for identified computing resources");
             ps.selectBestCloudVmType();
-            logger.info("(5/) Preparing APSC context (Btrplace)");
+            logger.info("(6/) Preparing APSC context (Btrplace)");
             ps.configureBtrPlace();
-            logger.info("(6/) Creating btrplace resources (Vms & Edge)");
+            logger.info("(7/) Creating btrplace resources (Vms & Edge)");
             ps.createVmsResourceInBtrPlace();
-            logger.info("(7/) Populating the model with regions from public and private cloud");
+            logger.info("(8/) Populating the model with regions from public and private cloud");
             ps.populatePublicAndPrivateCloud();
-            logger.info("(8/) Configuration of regions computing capability");
+            logger.info("(9/) Configuration of regions computing capability");
             ps.setCapacity();
-            logger.info("(9/) Configuring constraints from the fragment specification");
-            ps.configuringNodeConstraint();
-            logger.info("(10/) Checking and defining the resource availability");
+            logger.info("(10/) Configuring constraints from the fragment specification");
+            ps.configuringNodeComputingRequirementConstraint();
+            logger.info("(11/) Checking and defining the resource availability");
             ps.detectResourceAvailability();
-            logger.info("(11/) Defining fragment deployability");
+            logger.info("(12/) Defining fragment deployability");
             ps.defineFragmentDeployability();
-            logger.info("(12/) Enforcing policy constraint in APSC");
+            logger.info("(13/) Enforcing policy constraint in APSC");
             ps.configurePlacementConstraint();
         } catch (Exception e) {
             logger.error(String.format("Error while parsing the Type-level TOSCA document", e.getMessage()));

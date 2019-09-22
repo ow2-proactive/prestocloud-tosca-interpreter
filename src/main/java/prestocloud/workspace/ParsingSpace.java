@@ -47,6 +47,9 @@ public class ParsingSpace {
     // TODO: deal with health checks
     private List<HealthCheck> healthChecks;
     private Map<String, Map<String, Map<String, Map<String, String>>>> selectedCloudVMTypes = new HashMap<>();
+    private Map<String,String> balancingNodes = new HashMap<>();
+    private Map<String,String> proxyingNodes = new HashMap<>();
+    private Map<String,String> masteringNodes = new HashMap<>();
 
     //btrplace model related attributes
     Map<String, VM> vms = new HashMap<>();
@@ -84,6 +87,25 @@ public class ParsingSpace {
         optimizationVariables = ParsingUtils.getOptimizationVariables(parsingResult);
         healthChecks = ParsingUtils.getHealthChecks(parsingResult);
         return true;
+    }
+
+    public void identifiesNodeRelatedToPrecedenceConstraints() {
+        ConstrainedNode constraints;
+        for (Relationship relationship : relationships) {
+            if (relationship.getHostingNode().getType().equals("execute")) {
+                constraints = relationship.getHostingNode();
+                if (constraints.derivedTypes.contains("prestocloud.nodes.proxy.faas")) {
+                    logger.info(String.format("%s fragment has been identified as operating a FaaS proxy node",relationship.getFragmentName()));
+                    this.proxyingNodes.put(constraints.getName(), relationship.getFragmentName());
+                } else if (constraints.derivedTypes.contains("prestocloud.nodes.master.jppf")) {
+                    logger.info(String.format("%s fragment has been identified as operating a JPPF master node",relationship.getFragmentName()));
+                    this.masteringNodes.put(constraints.getName(), relationship.getFragmentName());
+                } else if (constraints.derivedTypes.contains("prestocloud.nodes.proxy")) {
+                    logger.info(String.format("%s fragment has been identified as operating a load-balancing node",relationship.getFragmentName()));
+                    this.balancingNodes.put(constraints.getName(), relationship.getFragmentName());
+                }
+            }
+        }
     }
 
     public boolean selectBestCloudVmType() throws Exception{
@@ -132,19 +154,59 @@ public class ParsingSpace {
     }
 
     public void createVmsResourceInBtrPlace() {
+        String nodeName;
+        String dependencyNode;
+        // For each fragment to be deployed ....
         for (Map.Entry<String, Map<String, Map<String, Map<String, String>>>> selectedFragmentTypes : selectedCloudVMTypes.entrySet()) {
+            // For each relationship in the fragment definition
             for (Map.Entry<String, Map<String, Map<String, String>>> selectedTypes : selectedFragmentTypes.getValue().entrySet()) {
+                nodeName = selectedFragmentTypes.getKey();
                 // Add the fragment's execute node first
                 if (selectedTypes.getKey().equalsIgnoreCase("execute")) {
-                    vms.put(selectedFragmentTypes.getKey(), mo.newVM());
-                    logger.info(String.format("Registering fragment %s ...",selectedFragmentTypes.getKey()));
-                }
-                else {
-                    // We can have duplicates (eg. a 'proxy' may be linked to multiple fragments)
-                    String nodeName = selectedTypes.getValue().keySet().stream().findFirst().get();
                     if (!vms.containsKey(nodeName)) {
                         vms.put(nodeName, mo.newVM());
-                        logger.info(String.format("Registering %s ...",nodeName));
+                        logger.info(String.format("Registering fragment %s ...", selectedFragmentTypes.getKey()));
+                    }
+                } else if (selectedTypes.getKey().equalsIgnoreCase("master")) {
+                    if (!vms.containsKey(nodeName)) {
+                        vms.put(nodeName, mo.newVM());
+                        logger.info(String.format("Registering slave fragment %s ...",nodeName));
+                    }
+                    dependencyNode = masteringNodes.get(selectedTypes.getValue().keySet().stream().findFirst().get());
+                    if (!vms.containsKey(dependencyNode)) {
+                        vms.put(dependencyNode, mo.newVM());
+                        logger.info(String.format("Registering master fragment %s ...",dependencyNode));
+                    }
+                    cstrs.add(new PrecedingRunning(vms.get(nodeName),vms.get(dependencyNode)));
+                } else if (selectedTypes.getKey().equalsIgnoreCase("balanced_by")) {
+                    if (!vms.containsKey(nodeName)) {
+                        vms.put(nodeName, mo.newVM());
+                        logger.info(String.format("Registering balanced fragment %s ...",nodeName));
+                    }
+                    dependencyNode = balancingNodes.get(selectedTypes.getValue().keySet().stream().findFirst().get());
+                    if (!vms.containsKey(dependencyNode)) {
+                        vms.put(dependencyNode, mo.newVM());
+                        logger.info(String.format("Registering balancing fragment %s ...",dependencyNode));
+                    }
+                    cstrs.add(new PrecedingRunning(vms.get(nodeName),vms.get(dependencyNode)));
+                } else if (selectedTypes.getKey().equalsIgnoreCase("proxy")) {
+                    if (!vms.containsKey(nodeName)) {
+                        vms.put(nodeName, mo.newVM());
+                        logger.info(String.format("Registering proxified fragment %s ...",nodeName));
+                    }
+                    dependencyNode = proxyingNodes.get(selectedTypes.getValue().keySet().stream().findFirst().get());
+                    if (!vms.containsKey(dependencyNode)) {
+                        vms.put(dependencyNode, mo.newVM());
+                        logger.info(String.format("Registering proxying fragment %s ...",dependencyNode));
+                    }
+                    cstrs.add(new PrecedingRunning(vms.get(nodeName),vms.get(dependencyNode)));
+                } else {
+                    // TODO infer precedence constraints from proxy, master and balancedby relationships
+                    // We can have duplicates (eg. a 'proxy' may be linked to multiple fragments)
+                    nodeName = selectedTypes.getValue().keySet().stream().findFirst().get();
+                    if (!vms.containsKey(nodeName)) {
+                        vms.put(nodeName, mo.newVM());
+                        logger.warn(String.format("Registering an unclassified fragment %s ...",nodeName));
                     }
                 }
             }
@@ -223,7 +285,7 @@ public class ParsingSpace {
         }
     }
 
-    public void configuringNodeConstraint() {
+    public void configuringNodeComputingRequirementConstraint() {
         // Set consumption of all required nodes/hosts
         for (Relationship relationship : relationships) {
             for (ConstrainedNode constrainedNode : relationship.getAllConstrainedNodes()) {
@@ -310,7 +372,7 @@ public class ParsingSpace {
             if (placementConstraint.getType().contains("Spread")) {
                 Set<VM> constrained_vms = new HashSet<>();
                 // Check if the VM actually exists (this is currently triggered as edge devices are not yet managed)
-                if (vms.entrySet().containsAll(placementConstraint.getTargets())) {
+                if (vms.keySet().containsAll(placementConstraint.getTargets())) {
                     for (String target : placementConstraint.getTargets()) {
                         constrained_vms.add(vms.get(target));
                     }
@@ -323,7 +385,7 @@ public class ParsingSpace {
             if (placementConstraint.getType().contains("Gather")) {
                 Set<VM> constrained_vms = new HashSet<>();
                 // Check if the VM actually exists (this is currently triggered as edge devices are not yet managed)
-                if (vms.entrySet().containsAll(placementConstraint.getTargets())) {
+                if (vms.keySet().containsAll(placementConstraint.getTargets())) {
                     for (String target : placementConstraint.getTargets()) {
                         constrained_vms.add(vms.get(target));
                     }
@@ -337,7 +399,7 @@ public class ParsingSpace {
                 Set<VM> constrained_vms = new LinkedHashSet<>();
                 // Check if the VM actually exists (this is currently triggered as edge devices are not yet managed)
                 logger.info(placementConstraint.getTargets().toString());
-                if (vms.entrySet().containsAll(placementConstraint.getTargets())) {
+                if (vms.keySet().containsAll(placementConstraint.getTargets())) {
                     // Here is the former implementation of the constraint.
                 /*    for (String target : placementConstraint.getTargets()) {
                         logger.info(String.format("Enforcing precedence constraints on the fragment %s", target));
@@ -345,11 +407,11 @@ public class ParsingSpace {
                     }
                     String vm = placementConstraint.getDevices().stream().findFirst().get();
                     cstrs.add(new PrecedingRunning(vms.get(vm), Sets.newHashSet(constrained_vms)));*/
-                    String[] ordonnedVmAllocation = (String[]) placementConstraint.getTargets().toArray();
+                    Object[] ordonnedVmAllocation = placementConstraint.getTargets().toArray();
                     for(int i = 0; i < ordonnedVmAllocation.length -2; i++) {
                         HashSet<VM> tmp = Sets.newHashSet();
-                        tmp.add(vms.get(ordonnedVmAllocation[i]));
-                       cstrs.add(new PrecedingRunning(vms.get(ordonnedVmAllocation[i+1]),tmp));
+                        tmp.add(vms.get((String) ordonnedVmAllocation[i]));
+                       cstrs.add(new PrecedingRunning(vms.get( (String) ordonnedVmAllocation[i+1]),tmp));
                     }
                 } else {
                     logger.warn("Non consistent 'Precedence' constraint detected (probably due to a missing edge device).");

@@ -452,7 +452,6 @@ public class ParsingUtils {
         Map<String, Double> selectedTypes = new HashMap<>();
         Map<String, Map<String, Map<String, String>>> VMTypes;
         Path expectedPath = Paths.get(repositoryPath, String.format("%s-vm-templates.yml", cloud));
-        System.out.println("Cloud val = " + cloud);
 
         if (!Files.exists(expectedPath)) {
 //            System.out.println("Cloud of type " + cloud + " not found.");

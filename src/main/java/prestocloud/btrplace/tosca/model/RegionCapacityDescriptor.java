@@ -28,16 +28,7 @@ public class RegionCapacityDescriptor implements Comparable<RegionCapacityDescri
         if (this.cpucapacity == null) {
             return Integer.MAX_VALUE;
         } else {
-            String[] result = this.cpucapacity.split("");
-            if (result.length == 2) {
-                if (result[1].equals("MB")) {
-                    return Integer.parseInt(this.cpucapacity) / 1024;
-                } else {
-                    return Integer.parseInt(this.cpucapacity);
-                }
-            } else {
-                return  Integer.MAX_VALUE;
-            }
+            return Integer.parseInt(this.cpucapacity);
         }
     }
 
