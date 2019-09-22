@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class)
 public class ParsingSpace {
 
-    public final List<String>  PUBLIC_CLOUDS_DEFINITION = Arrays.asList("amazon azure gce".split(" "));
+    public final List<String> PUBLIC_CLOUDS_DEFINITION = Arrays.asList("amazon azure gce".split(" "));
 
     private Logger logger = LoggerFactory.getLogger(TOSCAParserApp.class);
 

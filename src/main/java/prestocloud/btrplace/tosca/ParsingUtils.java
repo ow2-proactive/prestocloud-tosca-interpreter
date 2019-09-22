@@ -668,7 +668,8 @@ public class ParsingUtils {
                         }
                         if (dockerKey.equalsIgnoreCase("ports")) {
                             for (HashMap<String, String> port : ((ArrayList<HashMap<String, String>>)dockerProperty.getValue().get(dockerKey))) {
-                                for (String portKey : port.keySet()) {
+                                docker.addNetworkMapping(port.get("target"),port.get("published"),port.get("protocol"));
+                                /*for (String portKey : port.keySet()) {
                                     if (portKey.equalsIgnoreCase("protocol")) {
                                         docker.setPortProtocol(port.get(portKey));
                                     }
@@ -678,7 +679,7 @@ public class ParsingUtils {
                                     if (portKey.equalsIgnoreCase("target")) {
                                         docker.setPortTarget(port.get(portKey));
                                     }
-                                }
+                                }*/
                             }
                         }
                     }

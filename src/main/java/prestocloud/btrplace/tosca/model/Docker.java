@@ -28,8 +28,13 @@ package prestocloud.btrplace.tosca.model;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * @author ActiveEon Team
@@ -49,16 +54,20 @@ public class Docker {
     public String cmd;
     @Getter @Setter
     public Map<String, String> variables;
-    @Getter @Setter
-    public String portProtocol;
-    @Getter @Setter
-    public String portTarget;
-    @Getter @Setter
-    public String portPublished;
+    private List<DockerNetworkMapping> mappingList;
+
+    public static final String EMPTY_STRING = "";
+    private final Pattern registryIdentifier = Pattern.compile("^(\\S+)\\/(\\S+)$");
 
     public Docker(String fragmentName) {
         this.fragmentName = fragmentName;
         variables = new HashMap<>();
+        this.mappingList = new ArrayList<>();
+    }
+
+    public void addNetworkMapping(String target, String published, String protocol) {
+        DockerNetworkMapping tmp = new DockerNetworkMapping(target, published, protocol);
+        mappingList.add(tmp);
     }
 
     public void addVariable(String key, String value) {
@@ -67,12 +76,57 @@ public class Docker {
 
     // TODO: print full docker commandline
     public String printCmdline() {
-        if (cmd != null) {
+        /*if (cmd != null) {
             return "docker run " + image + " " + cmd;
         }
         else {
             return "docker run " + image;
+        }*/
+        if (image != null) {
+            return String.format("docker run %s %s %s %s",preparePortsForwarding() ,prepareEnvironement(),prepareRegistry(),prepareCmd());
+        } else {
+            return EMPTY_STRING;
         }
     }
+
+    private String prepareRegistry() {
+        if (this.registry == null) {
+            return image;
+        } else if (this.registry.length() == 0) {
+            return image;
+        } else {
+            // We check a registry is not already set in the image specificiation.
+            Matcher matcher = registryIdentifier.matcher(this.image);
+            if (matcher.matches()) {
+               return registry + "/" + matcher.group(2);
+            } else {
+                // No problem
+                return registry + "/" + image;
+            }
+        }
+    }
+
+    private String prepareEnvironement() {
+        StringBuilder result = new StringBuilder();
+        for (Map.Entry<String,String> variable : variables.entrySet()) {
+           result.append(String.format(" -e %s=%s ",variable.getKey(),variable.getValue()));
+        }
+        return result.toString();
+    }
+
+    private String preparePortsForwarding() {
+        return this.mappingList.stream().map(DockerNetworkMapping::getDockerCliArg).collect(Collectors.joining(" ")) + "";
+    }
+
+    private String prepareCmd() {
+        if (cmd == null) {
+            return EMPTY_STRING;
+        } else if (cmd.length() == 0) {
+            return  EMPTY_STRING;
+        } else {
+            return " " + cmd;
+        }
+    }
+
 }
 
