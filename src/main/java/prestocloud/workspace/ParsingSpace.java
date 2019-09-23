@@ -216,9 +216,8 @@ public class ParsingSpace {
                         vms.put(dependencyNode, mo.newVM());
                         logger.info(String.format("Registering proxying fragment %s ...",dependencyNode));
                     }
-                    cstrs.add(new PrecedingRunning(vms.get(nodeName),vms.get(dependencyNode)));
+                    //cstrs.add(new PrecedingRunning(vms.get(nodeName),vms.get(dependencyNode)));
                 } else {
-                    // TODO infer precedence constraints from proxy, master and balancedby relationships
                     // We can have duplicates (eg. a 'proxy' may be linked to multiple fragments)
                     nodeName = selectedTypes.getValue().keySet().stream().findFirst().get();
                     if (!vms.containsKey(nodeName)) {
