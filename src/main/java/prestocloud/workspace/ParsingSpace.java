@@ -57,6 +57,7 @@ public class ParsingSpace {
     private List<VMTemplateDetails> vmTemplatesDetails;
     // TODO: deal with health checks
     private List<HealthCheck> healthChecks;
+    private Map<String,SshKey> sshKeys;
     private Map<String, Map<String, Map<String, Map<String, String>>>> selectedCloudVMTypes = new HashMap<>();
     private Map<String,String> balancingNodes = new HashMap<>();
     private Map<String,String> proxyingNodes = new HashMap<>();
@@ -96,6 +97,7 @@ public class ParsingSpace {
         placementConstraints = ParsingUtils.getConstraints(parsingResult);
         dockers = ParsingUtils.getDockers(parsingResult);
         optimizationVariables = ParsingUtils.getOptimizationVariables(parsingResult);
+        sshKeys = ParsingUtils.getSshKeys(parsingResult);
         healthChecks = ParsingUtils.getHealthChecks(parsingResult);
         return true;
     }
@@ -519,7 +521,10 @@ public class ParsingSpace {
                String vmName = vms.entrySet().stream().filter(vm -> vm.getValue().equals(((BootVM) action).getVM())).findFirst().get().getKey();
 
                // Retrieve node/host name
-               String nodeName = publicClouds.entrySet().stream().filter(pc -> pc.getValue().equals(((BootVM) action).getDestinationNode())).findFirst().get().getKey();
+               Set<Map.Entry<String, Node>> tmp = new HashSet<>();
+               tmp.addAll(publicClouds.entrySet());
+               tmp.addAll(privateClouds.entrySet());
+               String nodeName = tmp.stream().filter(pc -> pc.getValue().equals(((BootVM) action).getDestinationNode())).findFirst().get().getKey();
 
                String selectedVMType = getSelectedCloudVMType(selectedCloudVMTypes, vmName, nodeName);
                JSONObject jo = new JSONObject();
@@ -530,6 +535,11 @@ public class ParsingSpace {
                jo.put("cloud", nodeName.split(" ")[0]);
                jo.put("region", nodeName.split(" ")[1]);
                jo.put("type", selectedVMType);
+               if  (this.sshKeys.containsKey(vmName)) {
+                   if (this.sshKeys.get(vmName).hasKey()) {
+                       jo.put("ssh_key",this.sshKeys.get(vmName).getPublicKey());
+                   }
+               }
 
                // Docker command is optional because 'proxy', 'master', and 'balanced_by' nodes don't have one
                Optional<Docker> docker = dockers.stream().filter(d -> d.getFragmentName().equalsIgnoreCase(vmName)).findFirst();

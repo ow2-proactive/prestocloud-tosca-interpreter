@@ -721,6 +721,31 @@ public class ParsingUtils {
         return healthChecks;
     }
 
+    public static Map<String,SshKey>  getSshKeys(ParsingResult<ArchiveRoot> parsingResult) {
+        Map<String,SshKey> sshKeys = new HashMap<>();
+
+        // Look for fragments in the node templates
+        Map<String, NodeTemplate> nodeTemplates = parsingResult.getResult().getTopology().getNodeTemplates();
+        String framgentName;
+        String nodeName;
+        String ssh;
+        for (Map.Entry<String, NodeTemplate> nodeTemplateFragment : nodeTemplates.entrySet()) {
+            // Fragment detected
+            if (nodeTemplateFragment.getValue().getType().startsWith("prestocloud.nodes.fragment")) {
+                 framgentName = nodeTemplateFragment.getValue().getName();
+                 nodeName = nodeTemplateFragment.getValue().getRelationships().get("execute").getTarget();
+                 ScalarPropertyValue property = (ScalarPropertyValue) nodeTemplates.get(nodeName).getProperties().get("ssh_key");
+                 if (property != null) {
+                     ssh = property.getValue().toString();
+                 } else {
+                     ssh = null;
+                 }
+                 sshKeys.put(framgentName, new SshKey(framgentName,ssh));
+            }
+        }
+        return sshKeys;
+    }
+
     public static List<OptimizationVariables> getOptimizationVariables(ParsingResult<ArchiveRoot> parsingResult) {
 
         List<OptimizationVariables> allOptimizationVariables = new ArrayList<>();
