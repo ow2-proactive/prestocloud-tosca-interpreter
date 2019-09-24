@@ -812,7 +812,7 @@ public class ParsingUtils {
                         memorycapacity = cloudProperties.getValue().get("memorycapacity");
                         diskcapacity = cloudProperties.getValue().get("diskcapacity");
                         coordinates = cloudProperties.getValue().get("gps_coordinates");
-                        if (!regionsPerCloudPerCloudfile.keySet().contains(type)) {
+                        if (!regionsPerCloud.keySet().contains(type)) {
                             regionsPerCloud.put(type,new TreeSet<RegionCapacityDescriptor>());
                         }
                         regionsPerCloud.get(type).add(new RegionCapacityDescriptor(region,cpucapacity,memorycapacity,diskcapacity));

@@ -142,7 +142,7 @@ public class ParsingSpace {
                                             nodeConstraints.getHostingConstraints());
                                     selectedRegionAndType.forEach(s -> {
                                        String[] tmp = s.split(" ");
-                                       selectedTypes.put(cloudFile.toLowerCase() + " " + tmp[0], tmp[1]);
+                                       selectedTypes.put(cloud.toLowerCase() + " " + tmp[0], tmp[1]);
                                     });
                                     /*String region = selectedRegionAndType.split(" ")[0];
                                     String vmType = selectedRegionAndType.split(" ")[1];
