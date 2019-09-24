@@ -47,6 +47,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -782,16 +783,19 @@ public class ParsingUtils {
     public static GetVMTemplatesDetailsResult getVMTemplatesDetails(ToscaParser parser, String repositoryPath) throws IOException, ParsingException {
 
         List<VMTemplateDetails> vmTemplatesDetails = new ArrayList<>();
-        HashMap<String,Set<RegionCapacityDescriptor>>  regionsPerClouds = new HashMap<>();
-        HashMap<String,List<RegionCapacityDescriptor>> definitiveRegionPerCloud = new HashMap<>();
-        Pattern vmFilenameMatcher = Pattern.compile("^[\\S]*-vm-templates.yml$");
+        Map<String,Map<String,Set<RegionCapacityDescriptor>>> regionsPerCloudPerCloudfile = new HashMap<>();
+        Map<String,Map<String,List<RegionCapacityDescriptor>>> definitiveRegionPerCloudPerCloudFile = new HashMap<>();
+        Pattern vmFilenameMatcher = Pattern.compile("^([\\S]*)-vm-templates.yml$");
 
         // Let's parse all available cloud resource - I select only specificiation file matching one kind of spec.
-        String[] listOfClouds = Files.list(Paths.get(repositoryPath)).filter(Files::isRegularFile).filter(path -> (vmFilenameMatcher.matcher(path.toString()).find())).map(Path::toString).toArray(String[]::new);
+        Path[] listOfCloudsResourceFile = Files.list(Paths.get(repositoryPath)).filter(Files::isRegularFile).filter(path -> (vmFilenameMatcher.matcher(path.toString()).find())).toArray(Path[]::new);
 
+        Map<String,Set<RegionCapacityDescriptor>>  regionsPerCloud;
+        String cloudFileName;
         //For each available loud file specificiation
-        for(String cloud : listOfClouds) {
-            Map<String, Map<String, Map<String, String>>> vMTypes = getCloudNodesTemplates(parser.parseFile(Paths.get(cloud)), null);
+        for(Path cloudFile: listOfCloudsResourceFile) {
+            regionsPerCloud = new HashMap<>();
+            Map<String, Map<String, Map<String, String>>> vMTypes = getCloudNodesTemplates(parser.parseFile(cloudFile), null);
             // For each available VM type ...
             for (Map.Entry<String, Map<String, Map<String, String>>> hostingConstraint : vMTypes.entrySet()) {
                 Double price = null;
@@ -808,65 +812,31 @@ public class ParsingUtils {
                         memorycapacity = cloudProperties.getValue().get("memorycapacity");
                         diskcapacity = cloudProperties.getValue().get("diskcapacity");
                         coordinates = cloudProperties.getValue().get("gps_coordinates");
-                        if (!regionsPerClouds.keySet().contains(type)) {
-                            regionsPerClouds.put(type,new TreeSet<RegionCapacityDescriptor>());
+                        if (!regionsPerCloudPerCloudfile.keySet().contains(type)) {
+                            regionsPerCloud.put(type,new TreeSet<RegionCapacityDescriptor>());
                         }
-                        regionsPerClouds.get(type).add(new RegionCapacityDescriptor(region,cpucapacity,memorycapacity,diskcapacity));
+                        regionsPerCloud.get(type).add(new RegionCapacityDescriptor(region,cpucapacity,memorycapacity,diskcapacity));
                     }
                 }
                 VMTemplateDetails VMTemplateDetails = new VMTemplateDetails(hostingConstraint.getKey(), name, type, region, coordinates, price);
                 vmTemplatesDetails.add(VMTemplateDetails);
+                cloudFileName = cloudFile.getFileName().toString();
+                regionsPerCloudPerCloudfile.put(cloudFileName.substring(0,cloudFileName.length() -17),regionsPerCloud);
             }
         }
-
-/*        // Amazon
-        Map<String, Map<String, Map<String, String>>> amazonVMTypes = getCloudNodesTemplates(parser.parseFile(Paths.get(repositoryPath, "amazon-vm-templates.yml")), null);
-        for (Map.Entry<String, Map<String, Map<String, String>>> hostingConstraint : amazonVMTypes.entrySet()) {
-            Double price = null;
-            String name = null, type = null, region = null, coordinates = null;
-            for (Map.Entry<String, Map<String, String>> cloudProperties : hostingConstraint.getValue().entrySet()) {
-                if (cloudProperties.getKey().equalsIgnoreCase("host")) {
-                    price = Double.valueOf(cloudProperties.getValue().get("price"));
-                }
-                if (cloudProperties.getKey().equalsIgnoreCase("cloud")) {
-                    name = cloudProperties.getValue().get("cloud_name");
-                    type = cloudProperties.getValue().get("cloud_type");
-                    region = cloudProperties.getValue().get("cloud_region");
-                    coordinates = cloudProperties.getValue().get("gps_coordinates");
-                }
-            }
-            VMTemplateDetails VMTemplateDetails = new VMTemplateDetails(hostingConstraint.getKey(), name, type, region, coordinates, price);
-            vmTemplatesDetails.add(VMTemplateDetails);
-        }
-
-        // Azure
-        Map<String, Map<String, Map<String, String>>> azureVMTypes = getCloudNodesTemplates(parser.parseFile(Paths.get(repositoryPath, "azure-vm-templates.yml")), null);
-        for (Map.Entry<String, Map<String, Map<String, String>>> hostingConstraint : azureVMTypes.entrySet()) {
-            Double price = null;
-            String name = null, type = null, region = null, coordinates = null;
-            for (Map.Entry<String, Map<String, String>> cloudProperties : hostingConstraint.getValue().entrySet()) {
-                if (cloudProperties.getKey().equalsIgnoreCase("host")) {
-                    price = Double.valueOf(cloudProperties.getValue().get("price"));
-                }
-                if (cloudProperties.getKey().equalsIgnoreCase("cloud")) {
-                    name = cloudProperties.getValue().get("cloud_name");
-                    type = cloudProperties.getValue().get("cloud_type");
-                    region = cloudProperties.getValue().get("cloud_region");
-                    coordinates = cloudProperties.getValue().get("gps_coordinates");
-                }
-            }
-            VMTemplateDetails VMTemplateDetails = new VMTemplateDetails(hostingConstraint.getKey(), name, type, region, coordinates, price);
-            vmTemplatesDetails.add(VMTemplateDetails);
-        }*/
 
         GetVMTemplatesDetailsResult result = new GetVMTemplatesDetailsResult();
         result.vmTemplatesDetails = vmTemplatesDetails;
-        regionsPerClouds.forEach((s, regionCapacityDescriptors) -> {
-            ArrayList<RegionCapacityDescriptor> tmp = new ArrayList<>();
-            tmp.addAll(regionCapacityDescriptors);
-            definitiveRegionPerCloud.put(s,tmp);
+        regionsPerCloudPerCloudfile.forEach((cloudfile, stringSetMap) -> {
+            Map<String,List<RegionCapacityDescriptor>> tmp2 = new HashMap<>();
+            stringSetMap.forEach((cloudType, regionCapacityDescriptors) -> {
+                List<RegionCapacityDescriptor> tmp = new ArrayList<>();
+                tmp.addAll(regionCapacityDescriptors);
+                tmp2.put(cloudType,tmp);
+            });
+            definitiveRegionPerCloudPerCloudFile.put(cloudfile,tmp2);
         });
-        result.regionsPerClouds = definitiveRegionPerCloud;
+        result.regionsPerCloudPerCloudFile = definitiveRegionPerCloudPerCloudFile;
         return result;
     }
 }

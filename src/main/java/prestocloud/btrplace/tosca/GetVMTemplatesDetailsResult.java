@@ -5,10 +5,12 @@ import prestocloud.btrplace.tosca.model.VMTemplateDetails;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GetVMTemplatesDetailsResult {
 
-    public HashMap<String, List<RegionCapacityDescriptor>> regionsPerClouds;
+
+    public Map<String,Map<String, List<RegionCapacityDescriptor>>> regionsPerCloudPerCloudFile;
 
     public List<VMTemplateDetails> vmTemplatesDetails;
 

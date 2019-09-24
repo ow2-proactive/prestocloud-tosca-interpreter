@@ -42,14 +42,14 @@ public class ParsingSpace {
 
     private Logger logger = LoggerFactory.getLogger(TOSCAParserApp.class);
 
-    private HashMap<String, List<RegionCapacityDescriptor>> regionsPerClouds;
+    private Map<String,Map<String, List<RegionCapacityDescriptor>>> regionsPerCloudPerCloudFile;
     private ParsingResult<ArchiveRoot> parsingResult;
     private ToscaParser parser;
     private String resourcesPath;
 
     // We describe couples of element we want to d integrate from our parsing.
     private Map<String, String> metadata;
-    private List<String> supportedClouds;
+    private List<String> supportedCloudsResourceFiles;
     private List<Relationship> relationships;
     private List<PlacementConstraint> placementConstraints;
     private List<Docker> dockers;
@@ -72,7 +72,7 @@ public class ParsingSpace {
     private Mapping map;
     private CostView cv;
 
-    // Public and Private Cloud identificiation
+    // Public and Private Cloud identification - Contains Btrplace models.
     Map<String, Node> publicClouds = new HashMap<>();
     Map<String, Node> privateClouds = new HashMap<>();
     Map<String,RegionCapacityDescriptor> regionCapabilityDescriptorPerCloud = new HashMap<>();
@@ -85,14 +85,14 @@ public class ParsingSpace {
         this.parser = parser;
         this.resourcesPath  = resourcesPath;
         this.vmTemplatesDetails = getVMTemplatesDetailsResult.vmTemplatesDetails;
-        this.regionsPerClouds = getVMTemplatesDetailsResult.regionsPerClouds;
+        this.regionsPerCloudPerCloudFile = getVMTemplatesDetailsResult.regionsPerCloudPerCloudFile;
     }
 
     public boolean retrieveResourceFromParsing() {
         // Retrieving main data from the parsed TOSCA.
         metadata = ParsingUtils.getMetadata(parsingResult);
-        supportedClouds = ParsingUtils.getListOfCloudsFromMetadata(metadata);
-        logger.info(String.format("%d supported cloud have been found",supportedClouds.size()));
+        supportedCloudsResourceFiles = ParsingUtils.getListOfCloudsFromMetadata(metadata);
+        logger.info(String.format("%d supported cloud have been found", supportedCloudsResourceFiles.size()));
         relationships = ParsingUtils.getRelationships(parsingResult);
         placementConstraints = ParsingUtils.getConstraints(parsingResult);
         dockers = ParsingUtils.getDockers(parsingResult);
@@ -132,20 +132,22 @@ public class ParsingSpace {
                         if (nodeConstraints.getResourceConstraints().get("type").contains("cloud")) {
                             // Loop for all clouds supported (metadata)
                             Map<String, String> selectedTypes = new HashMap<>();
-                            for (String cloud : supportedClouds) {
-                                List<String> selectedRegionAndType = ParsingUtils.findBestSuitableRegionAndVMType(
-                                        parser,
-                                        resourcesPath,
-                                        cloud,
-                                        this.regionsPerClouds.get(cloud).stream().map(RegionCapacityDescriptor::getRegion).collect(Collectors.toList()),
-                                        nodeConstraints.getHostingConstraints());
-                                selectedRegionAndType.forEach(s -> {
-                                   String[] tmp = s.split(" ");
-                                   selectedTypes.put(cloud.toLowerCase() + " " + tmp[0], tmp[1]);
-                                });
-                                /*String region = selectedRegionAndType.split(" ")[0];
-                                String vmType = selectedRegionAndType.split(" ")[1];
-                                selectedTypes.put(cloud.toLowerCase() + " " + region, vmType);*/
+                            for (String cloudFile : supportedCloudsResourceFiles) {
+                                    for (String cloud : this.regionsPerCloudPerCloudFile.get(cloudFile).keySet()) {
+                                    List<String> selectedRegionAndType = ParsingUtils.findBestSuitableRegionAndVMType(
+                                            parser,
+                                            resourcesPath,
+                                            cloudFile,
+                                            this.regionsPerCloudPerCloudFile.get(cloudFile).get(cloud).stream().map(RegionCapacityDescriptor::getRegion).collect(Collectors.toList()),
+                                            nodeConstraints.getHostingConstraints());
+                                    selectedRegionAndType.forEach(s -> {
+                                       String[] tmp = s.split(" ");
+                                       selectedTypes.put(cloudFile.toLowerCase() + " " + tmp[0], tmp[1]);
+                                    });
+                                    /*String region = selectedRegionAndType.split(" ")[0];
+                                    String vmType = selectedRegionAndType.split(" ")[1];
+                                    selectedTypes.put(cloud.toLowerCase() + " " + region, vmType);*/
+                                }
                             }
                             allSelectedTypes.put(constrainedNode.getName(), selectedTypes);
                             allSelectedTypesWithRequirement.put(constrainedNode.getType(), allSelectedTypes);
@@ -241,26 +243,18 @@ public class ParsingSpace {
 
     public void populatePublicAndPrivateCloud() {
         String placementString;
-        for (String cloud : supportedClouds) {
-            for (RegionCapacityDescriptor region : regionsPerClouds.get(cloud)) {
-                placementString = cloud + " " + region.getRegion();
-                regionCapabilityDescriptorPerCloud.put(placementString,region);
-                if (PUBLIC_CLOUDS_DEFINITION.contains(cloud)) {
-                    publicClouds.put(placementString, mo.newNode());
-                } else {
-                    privateClouds.put(cloud + " " + region.getRegion(), mo.newNode());
+        for(String supportedCloud : this.supportedCloudsResourceFiles) {
+            for (String cloud : regionsPerCloudPerCloudFile.get(supportedCloud).keySet()) {
+                for (RegionCapacityDescriptor region : regionsPerCloudPerCloudFile.get(supportedCloud).get(cloud)) {
+                    placementString = cloud + " " + region.getRegion();
+                    regionCapabilityDescriptorPerCloud.put(placementString, region);
+                    if (PUBLIC_CLOUDS_DEFINITION.stream().anyMatch(s -> s.contains(cloud))) {
+                        publicClouds.put(placementString, mo.newNode());
+                    } else {
+                        privateClouds.put(cloud + " " + region.getRegion(), mo.newNode());
+                    }
                 }
             }
-/*                if (cloud.equalsIgnoreCase("azure")) {
-                    for (String region : azureRegions) {
-                        publicClouds.put("azure " + region, mo.newNode());
-                    }
-                }
-                if (cloud.equalsIgnoreCase("amazon")) {
-                    for (String region : amazonRegions) {
-                        publicClouds.put("amazon " + region, mo.newNode());
-                    }
-               }*/
         }
     }
 
