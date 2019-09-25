@@ -88,10 +88,21 @@ public class ParsingSpace {
         this.regionsPerCloudPerCloudFile = getVMTemplatesDetailsResult.regionsPerCloudPerCloudFile;
     }
 
-    public boolean retrieveResourceFromParsing() {
+    public boolean retrieveResourceFromParsing() throws Exception {
         // Retrieving main data from the parsed TOSCA.
         metadata = ParsingUtils.getMetadata(parsingResult);
         supportedCloudsResourceFiles = ParsingUtils.getListOfCloudsFromMetadata(metadata);
+        Optional<Set<String>> cloudListFromRegion = this.regionsPerCloudPerCloudFile.values().stream().map(Map::keySet).reduce((strings, strings2) -> {
+            Set<String> result = new HashSet<>();
+            result.addAll(strings);
+            result.addAll(strings2);
+            return strings;});
+         if (!cloudListFromRegion.isPresent()) {
+             throw new Exception("No clouds were detected from the region");
+         }
+         if (cloudListFromRegion.get().containsAll(supportedCloudsResourceFiles)){
+             throw new Exception("There is a mismatch between  specified clouds in Type-level TOSCA and the clouds sepcified in the repository");
+         }
         logger.info(String.format("%d supported cloud have been found", supportedCloudsResourceFiles.size()));
         relationships = ParsingUtils.getRelationships(parsingResult);
         placementConstraints = ParsingUtils.getConstraints(parsingResult);

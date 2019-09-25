@@ -424,6 +424,7 @@ public class ParsingUtils {
 
     public static List<String> getListOfCloudsFromMetadata(Map<String, String> metadata) {
         List<String> clouds = new ArrayList<>();
+        List<String> oppositeClouds = new ArrayList<>();
         for (Map.Entry<String, String> entry : metadata.entrySet()) {
             if (entry.getKey().contains("ProviderName")) {
                 String cloud_id = entry.getKey().split("_")[1];
@@ -431,19 +432,23 @@ public class ParsingUtils {
                     if (entryCloud.getKey().contains("ProviderRequired" + "_" + cloud_id)) {
                         if (entryCloud.getValue().equalsIgnoreCase("true")) {
                             clouds.add(entry.getValue().toLowerCase());
+                        } else {
+                            oppositeClouds.add(entry.getValue().toLowerCase());
                         }
                         break;
                     }
                     if (entryCloud.getKey().contains("ProviderExcluded" + "_" + cloud_id)) {
                         if (entryCloud.getValue().equalsIgnoreCase("false")) {
                             clouds.add(entry.getValue().toLowerCase());
+                        } else {
+                            oppositeClouds.add(entry.getValue().toLowerCase());
                         }
                         break;
                     }
                 }
             }
         }
-        return clouds;
+        return (clouds.size() > 0) ? clouds : oppositeClouds;
     }
 
     /**
