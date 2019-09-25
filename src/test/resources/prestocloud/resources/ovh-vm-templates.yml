@@ -1,0 +1,127 @@
+tosca_definitions_version: tosca_prestocloud_mapping_1_2
+
+metadata:
+  template_name: Amazon cloud descriptions
+  template_author: ActiveEon
+  template_version: 1.0.0-SNAPSHOT
+
+description: Cloud descriptions for OVH.
+
+imports:
+  - tosca-normative-types:1.2
+  - resource-descriptions:1.0
+
+dsl_definitions:
+
+  ovh_france_gravelines: &ovh_france_gravelines
+    cloud_name: ovh_france_gravelines
+    cloud_type: openstack
+    cloud_region: ovh-france-gravelines
+    cpucapacity: 64
+    memorycapacity: 496 GB
+    diskcapacity: 19500 GB
+    gps_coordinates: "31U 440485mE 5649663mN"
+
+topology_template:
+
+  node_templates:
+
+    b2_15_flex_ovh_france_gravelines:
+      type: prestocloud.nodes.compute.cloud.openstack
+      description: PrEstoCloud OpenStack compute node.
+      properties:
+        name: b2-15-flex
+        type: cloud
+        cloud: *ovh_france_gravelines
+      capabilities:
+        resource:
+          properties:
+            name: b2-15-flex
+            type: cloud
+            cloud: *ovh_france_gravelines
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: 15 GB
+            disk_size: 100 GB
+            price: 0.1399
+
+    b2_7_flex_ovh_france_gravelines:
+      type: prestocloud.nodes.compute.cloud.openstack
+      description: PrEstoCloud OpenStack compute node.
+      properties:
+        name: b2-7-flex
+        type: cloud
+        cloud: *ovh_france_gravelines
+      capabilities:
+        resource:
+          properties:
+            name: b2-7-flex
+            type: cloud
+            cloud: *ovh_france_gravelines
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: 7 GB
+            disk_size: 50 GB
+            price: 0.0739
+
+    b2_30_flex_ovh_france_gravelines:
+      type: prestocloud.nodes.compute.cloud.openstack
+      description: PrEstoCloud OpenStack compute node.
+      properties:
+        name: b2-30-flex
+        type: cloud
+        cloud: *ovh_france_gravelines
+      capabilities:
+        resource:
+          properties:
+            name: b2-7-flex
+            type: cloud
+            cloud: *ovh_france_gravelines
+        host:
+          properties:
+            num_cpus: 8
+            mem_size: 30 GB
+            disk_size: 200 GB
+            price: 0.2839
+
+    b2_60_flex_ovh_france_gravelines:
+      type: prestocloud.nodes.compute.cloud.openstack
+      description: PrEstoCloud OpenStack compute node.
+      properties:
+        name: b2-60-flex
+        type: cloud
+        cloud: *ovh_france_gravelines
+      capabilities:
+        resource:
+          properties:
+            name: b2-60-flex
+            type: cloud
+            cloud: *ovh_france_gravelines
+        host:
+          properties:
+            num_cpus: 16
+            mem_size: 60 GB
+            disk_size: 400 GB
+            price: 0.0739
+
+    b2_120_flex_ovh_france_gravelines:
+      type: prestocloud.nodes.compute.cloud.openstack
+      description: PrEstoCloud OpenStack compute node.
+      properties:
+        name: b2-120-flex
+        type: cloud
+        cloud: *ovh_france_gravelines
+      capabilities:
+        resource:
+          properties:
+            name: b2-120-flex
+            type: cloud
+            cloud: *ovh_france_gravelines
+        host:
+          properties:
+            num_cpus: 32
+            mem_size: 120 GB
+            disk_size: 400 GB
+            price: 1.0839
