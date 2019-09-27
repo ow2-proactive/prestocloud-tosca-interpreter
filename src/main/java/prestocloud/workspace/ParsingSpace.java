@@ -10,8 +10,7 @@ import org.btrplace.model.*;
 import org.btrplace.model.constraint.*;
 import org.btrplace.model.view.ShareableResource;
 import org.btrplace.plan.ReconfigurationPlan;
-import org.btrplace.plan.event.Action;
-import org.btrplace.plan.event.BootVM;
+import org.btrplace.plan.event.*;
 import org.btrplace.scheduler.choco.ChocoScheduler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -504,9 +503,17 @@ public class ParsingSpace {
         }
 
         // TODO: save the mapping to a proper place to reimport it later
-        /*File tmp = File.createTempFile("presto-plan-", ".json");
-        final ReconfigurationPlanConverter rpc = new ReconfigurationPlanConverter();
-        rpc.toJSON(p).writeJSONString(Files.newBufferedWriter(tmp.toPath()));*/
+       /* try {
+            File tmp = File.createTempFile("presto-plan-", ".json");
+//            final ReconfigurationPlanConverter rpc = new ReconfigurationPlanConverter();
+            ModelConverter rpc = new ModelConverter();
+            Model dst = p.getResult();
+            dst.detach(this.cv);
+            rpc.toJSON(dst).writeJSONString(Files.newBufferedWriter(tmp.toPath()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error(e.getMessage());
+        }*/
 
         // Get list of computed actions
         actions = p.getActions();
@@ -519,37 +526,14 @@ public class ParsingSpace {
        for (Action action : actions) {
 
            // TODO: manage more actions if needed (eg. "MigrateVM" to transform in delete and boot actions)
-           if (action instanceof BootVM) {
-
-               // Retrieve VM/fragment name
-               String vmName = vms.entrySet().stream().filter(vm -> vm.getValue().equals(((BootVM) action).getVM())).findFirst().get().getKey();
-
-               // Retrieve node/host name
-               Set<Map.Entry<String, Node>> tmp = new HashSet<>();
-               tmp.addAll(publicClouds.entrySet());
-               tmp.addAll(privateClouds.entrySet());
-               String nodeName = tmp.stream().filter(pc -> pc.getValue().equals(((BootVM) action).getDestinationNode())).findFirst().get().getKey();
-
-               String selectedVMType = getSelectedCloudVMType(selectedCloudVMTypes, vmName, nodeName);
-               JSONObject jo = new JSONObject();
-               jo.put("action", "boot");
-               jo.put("start", action.getStart());
-               jo.put("end", action.getEnd());
-               jo.put("fragment", vmName);
-               jo.put("cloud", nodeName.split(" ")[0]);
-               jo.put("region", nodeName.split(" ")[1]);
-               jo.put("type", selectedVMType);
-               if  (this.sshKeys.containsKey(vmName)) {
-                   if (this.sshKeys.get(vmName).hasKey()) {
-                       jo.put("ssh_key",this.sshKeys.get(vmName).getPublicKey());
-                   }
-               }
-
-               // Docker command is optional because 'proxy', 'master', and 'balanced_by' nodes don't have one
-               Optional<Docker> docker = dockers.stream().filter(d -> d.getFragmentName().equalsIgnoreCase(vmName)).findFirst();
-               docker.ifPresent(dck -> jo.put("docker", dck.printCmdline()));
-
-               ja.add(jo);
+           if (action instanceof BootVM || action instanceof ResumeVM) {
+                generationBootVMAndResumeVMOutput(action, ja);
+           } else if (action instanceof MigrateVM) {
+                generationMigrateVMOutput(action,ja);
+           } else if (action instanceof ShutdownVM || action instanceof SuspendVM) {
+                generationShutdownVMAndSuspendVMOutput(action,ja);
+           } else {
+               throw new IllegalArgumentException("Fragment management action has not been understood");
            }
        }
        try {
@@ -560,6 +544,130 @@ public class ParsingSpace {
           return  "";
        }
    }
+
+   private boolean generationBootVMAndResumeVMOutput(Action action, JSONArray ja) {
+       // Retrieve VM/fragment name
+       String vmName;
+       if (action instanceof BootVM) {
+           vmName = vms.entrySet().stream().filter(vm -> vm.getValue().equals(((BootVM) action).getVM())).findFirst().get().getKey();
+       } else {
+           vmName = vms.entrySet().stream().filter(vm -> vm.getValue().equals(((ResumeVM) action).getVM())).findFirst().get().getKey();
+       }
+
+       // Retrieve node/host name
+       Set<Map.Entry<String, Node>> tmp = new HashSet<>();
+       tmp.addAll(publicClouds.entrySet());
+       tmp.addAll(privateClouds.entrySet());
+       String nodeName;
+       if (action instanceof BootVM) {
+           nodeName = tmp.stream().filter(pc -> pc.getValue().equals(((BootVM) action).getDestinationNode())).findFirst().get().getKey();
+       } else {
+           nodeName = tmp.stream().filter(pc -> pc.getValue().equals(((ResumeVM) action).getDestinationNode())).findFirst().get().getKey();
+       }
+
+       String selectedVMType = getSelectedCloudVMType(selectedCloudVMTypes, vmName, nodeName);
+       JSONObject jo = new JSONObject();
+       jo.put("action", "boot");
+       jo.put("start", action.getStart());
+       jo.put("end", action.getEnd());
+       jo.put("fragment", vmName);
+       jo.put("cloud", nodeName.split(" ")[0]);
+       jo.put("region", nodeName.split(" ")[1]);
+       jo.put("type", selectedVMType);
+       if  (this.sshKeys.containsKey(vmName)) {
+           if (this.sshKeys.get(vmName).hasKey()) {
+               jo.put("ssh_key",this.sshKeys.get(vmName).getPublicKey());
+           }
+       }
+
+       // Docker command is optional because 'proxy', 'master', and 'balanced_by' nodes don't have one
+       Optional<Docker> docker = dockers.stream().filter(d -> d.getFragmentName().equalsIgnoreCase(vmName)).findFirst();
+       docker.ifPresent(dck -> jo.put("docker", dck.printCmdline()));
+
+       ja.add(jo);
+       return true;
+   }
+
+    private boolean generationMigrateVMOutput(Action action, JSONArray ja) {
+        // Retrieve VM/fragment name
+        String vmName;
+        vmName = vms.entrySet().stream().filter(vm -> vm.getValue().equals(((MigrateVM) action).getVM())).findFirst().get().getKey();
+
+        // Retrieve node/host name
+        Set<Map.Entry<String, Node>> tmp = new HashSet<>();
+        tmp.addAll(publicClouds.entrySet());
+        tmp.addAll(privateClouds.entrySet());
+        String nodeNameSrc = tmp.stream().filter(pc -> pc.getValue().equals(((MigrateVM) action).getSourceNode())).findFirst().get().getKey();
+        String nodeName = tmp.stream().filter(pc -> pc.getValue().equals(((MigrateVM) action).getDestinationNode())).findFirst().get().getKey();
+
+        String selectedVMType = getSelectedCloudVMType(selectedCloudVMTypes, vmName, nodeName);
+        JSONObject jo = new JSONObject();
+        jo.put("action", "migrate");
+        jo.put("start", action.getStart());
+        jo.put("end", action.getEnd());
+        jo.put("fragment", vmName);
+        jo.put("cloud", nodeName.split(" ")[0]);
+        jo.put("region", nodeName.split(" ")[1]);
+        jo.put("cloudsrc", nodeNameSrc.split(" ")[0]);
+        jo.put("regionsrc", nodeNameSrc.split(" ")[1]);
+        jo.put("type", selectedVMType);
+        if  (this.sshKeys.containsKey(vmName)) {
+            if (this.sshKeys.get(vmName).hasKey()) {
+                jo.put("ssh_key",this.sshKeys.get(vmName).getPublicKey());
+            }
+        }
+
+        // Docker command is optional because 'proxy', 'master', and 'balanced_by' nodes don't have one
+        Optional<Docker> docker = dockers.stream().filter(d -> d.getFragmentName().equalsIgnoreCase(vmName)).findFirst();
+        docker.ifPresent(dck -> jo.put("docker", dck.printCmdline()));
+
+        ja.add(jo);
+        return true;
+    }
+
+
+    private boolean generationShutdownVMAndSuspendVMOutput(Action action, JSONArray ja) {
+        // Retrieve VM/fragment name
+        String vmName;
+        if (action instanceof ShutdownVM) {
+            vmName = vms.entrySet().stream().filter(vm -> vm.getValue().equals(((ShutdownVM) action).getVM())).findFirst().get().getKey();
+        } else {
+            vmName = vms.entrySet().stream().filter(vm -> vm.getValue().equals(((SuspendVM) action).getVM())).findFirst().get().getKey();
+        }
+
+        // Retrieve node/host name
+        Set<Map.Entry<String, Node>> tmp = new HashSet<>();
+        tmp.addAll(publicClouds.entrySet());
+        tmp.addAll(privateClouds.entrySet());
+        String nodeName;
+        if (action instanceof ShutdownVM) {
+            nodeName = tmp.stream().filter(pc -> pc.getValue().equals(((ShutdownVM) action).getNode())).findFirst().get().getKey();
+        } else {
+            nodeName = tmp.stream().filter(pc -> pc.getValue().equals(((SuspendVM) action).getSourceNode())).findFirst().get().getKey();
+        }
+
+        String selectedVMType = getSelectedCloudVMType(selectedCloudVMTypes, vmName, nodeName);
+        JSONObject jo = new JSONObject();
+        jo.put("action", "boot");
+        jo.put("start", action.getStart());
+        jo.put("end", action.getEnd());
+        jo.put("fragment", vmName);
+        jo.put("cloudsrc", nodeName.split(" ")[0]);
+        jo.put("regionsrc", nodeName.split(" ")[1]);
+        jo.put("type", selectedVMType);
+        if  (this.sshKeys.containsKey(vmName)) {
+            if (this.sshKeys.get(vmName).hasKey()) {
+                jo.put("ssh_key",this.sshKeys.get(vmName).getPublicKey());
+            }
+        }
+
+        // Docker command is optional because 'proxy', 'master', and 'balanced_by' nodes don't have one
+        Optional<Docker> docker = dockers.stream().filter(d -> d.getFragmentName().equalsIgnoreCase(vmName)).findFirst();
+        docker.ifPresent(dck -> jo.put("docker", dck.printCmdline()));
+
+        ja.add(jo);
+        return true;
+    }
 
     /**
      * Simple helper method to retrieve the selected cloud VM type for a fragment name *or* a node name (eg. proxy, master, etc.).
