@@ -4,7 +4,7 @@
  * Workflows & Scheduling, Orchestration, Cloud Automation
  * and Big Data Analysis on Enterprise Grids & Clouds.
  *
- * Copyright (c) 2007 - 2017 ActiveEon
+ * Copyright (c) 2007 - 2019 ActiveEon
  * Contact: contact@activeeon.com
  *
  * This library is free software: you can redistribute it and/or
@@ -28,13 +28,11 @@ package prestocloud;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import javax.annotation.Resource;
 
 import lombok.extern.slf4j.Slf4j;
-import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -44,7 +42,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import lombok.Getter;
@@ -64,7 +61,6 @@ import prestocloud.workspace.ParsingSpace;
 
 @SpringBootApplication
 @EnableAspectJAutoProxy(proxyTargetClass = true)
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class)
 @Slf4j
 public class TOSCAParserApp {
@@ -92,7 +88,7 @@ public class TOSCAParserApp {
                System.exit(1);
             }
 
-            if (!Files.exists(Paths.get(args[0])) || !Files.exists(Paths.get(args[1])) || !Files.exists(Paths.get(args[2]))) {
+            if (!Paths.get(args[0]).toFile().exists() || !Paths.get(args[1]).toFile().exists() || !Paths.get(args[2]).toFile().exists()) {
                logger.error("Either the repository directory or the specified file to be parsed is not found.");
                System.exit(1);
             }
@@ -113,57 +109,62 @@ public class TOSCAParserApp {
 
     public boolean processToscaWithBtrPlace(String resourcesPath, String typeLevelTOSCAFile, String outputFile, String mappingFile) {
         try {
-            logger.info("(1/17) Parsing the type-level TOSCA file");
+            logger.info("(1/18) Parsing the type-level TOSCA file");
             ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get(typeLevelTOSCAFile));
-            logger.info("(2/17) Parsing VM cloud resource TOSCA file");
+            logger.info("(2/18) Parsing VM cloud resource TOSCA file");
             GetVMTemplatesDetailsResult vmTemplatesParsingResult = ParsingUtils.getVMTemplatesDetails(parser, resourcesPath);
             ParsingSpace ps = new ParsingSpace(parsingResult, vmTemplatesParsingResult ,parser,resourcesPath);
-            logger.info("(3/17) Interpreting TOSCA specification");
+            logger.info("(3/18) Interpreting TOSCA specification");
             ps.retrieveResourceFromParsing();
-            logger.info("(4/17) Identifying fragments related to precedence constraints ...");
+            logger.info("(4/18) Identifying fragments related to precedence constraints ...");
             ps.identifiesNodeRelatedToPrecedenceConstraints();
-            logger.info("(5/17) Determining the best suited cloud VM type for identified computing resources");
+            logger.info("(5/18) Determining the best suited cloud VM type for identified computing resources");
             ps.selectBestCloudVmType();
-            logger.info("(6/17) Preparing APSC context (Btrplace)");
+            logger.info("(6/18) Preparing APSC context (Btrplace)");
             ps.configureBtrPlace();
-            logger.info("(7/17) Creating btrplace resources (Vms & Edge)");
-            ps.createVmsResourceInBtrPlace();
-            logger.info("(8/17) Populating the model with regions from public and private cloud");
+            logger.info("(7/18) Creating btrplace resources (Vms & Edge)");
+            ps.createVmsInBtrPlaceModel();
+            logger.info("(8/18) Populating the model with regions from public and private cloud");
             ps.populatePublicAndPrivateCloud();
-            logger.info("(9/17) Configuration of regions computing capability");
+            logger.info("(9/18) Configuration of regions computing capability");
             ps.setCapacity();
-            logger.info("(10/17) Configuring constraints from the fragment specification");
+            logger.info("(10/18) Configuring constraints from the fragment specification");
             ps.configuringNodeComputingRequirementConstraint();
-            logger.info("(11/17) Checking and defining the resource availability");
+            logger.info("(11/18) Checking and defining the resource availability");
             ps.detectResourceAvailability();
-            logger.info("(12/17) Defining fragment deployability");
+            logger.info("(12/18) Defining fragment deployability");
             ps.defineFragmentDeployability();
-            logger.info("(13/17) Enforcing policy constraint in APSC");
+            logger.info("(13/18) Enforcing policy constraint in APSC");
             ps.configurePlacementConstraint();
-            logger.info("(14/17) Retrieving cost-related information");
+            logger.info("(14/18) Retrieving cost-related information");
             ps.extractCost();
-            logger.info("(15/17) Solving ...");
+            logger.info("(15/18) Solving ...");
             if (!ps.performedBtrplaceSolving()) {
-                throw new Exception("No Btrplace reconfiguration plan was determined");
+                throw new IllegalStateException("No Btrplace reconfiguration plan was determined");
             } else {
-                logger.info("(16/17) Writing management plan output");
+                logger.info("(16/18) Writing management plan output");
                 writeResutl(ps.generationJsonOutput(),outputFile);
-                logger.info("(17/17) Writing the mapping output");
+                logger.info("(17/18) Writing the mapping output");
                 writeResutl(ps.generateOutputMapping(),mappingFile);
-                logger.info("(18/17) The type-level TOSCA processing has ended successfully");
+                logger.info("(18/18) The type-level TOSCA processing has ended successfully");
                 return true;
             }
         } catch (Exception e) {
-            logger.error(String.format("Error while parsing the Type-level TOSCA document", e.getMessage()));
-            e.printStackTrace();
+            logger.error("Error while parsing the Type-level TOSCA document : {}", e.getMessage());
+            logger.error(e.getCause().getMessage());
             return false;
         }
     }
 
     private void writeResutl(String result, String path) throws IOException {
         FileWriter file = new FileWriter(path);
-        file.write(result);
-        file.flush();
-        file.close();
+        try {
+            file.write(result);
+            file.flush();
+        } catch (IOException e) {
+            logger.error("Error while writing to {} : {}", path, e.getMessage());
+        } finally {
+            file.close();
+        }
     }
 }
