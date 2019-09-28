@@ -86,14 +86,20 @@ public class TOSCAParserApp {
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
         return args -> {
             // First argument must be the repository path (example: "src/main/resources/repository/" or "/mnt/glusterfs")
+
+            if (args.length != 5) {
+               logger.error("Missing argument: the expected arguments are (i) the TOSCA types directory, (ii) the directory conatining the resource description file, (iii) the type level file to proceed, (iv) the management output file and (v) the file mapping node and deployed node");
+               System.exit(1);
+            }
+
             if (!Files.exists(Paths.get(args[0])) || !Files.exists(Paths.get(args[1])) || !Files.exists(Paths.get(args[2]))) {
-               System.err.println("Either the repository directory or the specified file to be parsed is not found.");
+               logger.error("Either the repository directory or the specified file to be parsed is not found.");
                System.exit(1);
             }
             ((LocalRepositoryImpl)csarRepositorySearchService).setPath(args[0]);
 
             // Second argument must be the path of the file to parse (example: "src/test/resources/prestocloud/ICCS-example.yml")
-            boolean parsingSuccess = processToscaWithBtrPlace(args[1], args[2], args[3]);
+            boolean parsingSuccess = processToscaWithBtrPlace(args[1], args[2], args[3], args[4]);
 
             if (parsingSuccess) {
                 logger.info("The parsing ended successfully");
@@ -105,7 +111,7 @@ public class TOSCAParserApp {
         };
     }
 
-    public boolean processToscaWithBtrPlace(String resourcesPath, String typeLevelTOSCAFile, String outputFile) {
+    public boolean processToscaWithBtrPlace(String resourcesPath, String typeLevelTOSCAFile, String outputFile, String mappingFile) {
         try {
             logger.info("(1/17) Parsing the type-level TOSCA file");
             ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get(typeLevelTOSCAFile));
@@ -140,9 +146,11 @@ public class TOSCAParserApp {
             if (!ps.performedBtrplaceSolving()) {
                 throw new Exception("No Btrplace reconfiguration plan was determined");
             } else {
-                logger.info("(16/17) Writing output");
+                logger.info("(16/17) Writing management plan output");
                 writeResutl(ps.generationJsonOutput(),outputFile);
-                logger.info("(17/17) The type-level TOSCA processing has ended successfully");
+                logger.info("(17/17) Writing the mapping output");
+                writeResutl(ps.generateOutputMapping(),mappingFile);
+                logger.info("(18/17) The type-level TOSCA processing has ended successfully");
                 return true;
             }
         } catch (Exception e) {
