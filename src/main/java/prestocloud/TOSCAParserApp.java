@@ -26,8 +26,9 @@
 
 package prestocloud;
 
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import javax.annotation.Resource;
@@ -123,40 +124,48 @@ public class TOSCAParserApp {
             logger.info("(6/18) Preparing APSC context (Btrplace)");
             ps.configureBtrPlace();
             logger.info("(7/18) Creating btrplace resources (Vms & Edge)");
-            ps.createVmsInBtrPlaceModel();
+            ps.populateVmsInBtrPlaceModel();
             logger.info("(8/18) Populating the model with regions from public and private cloud");
-            ps.populatePublicAndPrivateCloud();
+            ps.populateNodesInBtrPlaceModel();
             logger.info("(9/18) Configuration of regions computing capability");
+            ps.setOnlineNode();
+            if (Paths.get(mappingFile).toFile().exists()) {
+                logger.info("(10/18) Loading mapping file : Interpreting the current fragment deployment");
+                ps.loadExistingMapping(readFile(mappingFile));
+            } else {
+                logger.info("(10/18) Loading mapping file : the file doesn't exist or is empty: Assuming a new fragment deployment");
+            }
+            logger.info("(11/18) Configuration of regions computing capability");
             ps.setCapacity();
-            logger.info("(10/18) Configuring constraints from the fragment specification");
+            logger.info("(12/18) Configuring constraints from the fragment specification");
             ps.configuringNodeComputingRequirementConstraint();
-            logger.info("(11/18) Checking and defining the resource availability");
+            logger.info("(13/18) Checking and defining the resource availability");
             ps.detectResourceAvailability();
-            logger.info("(12/18) Defining fragment deployability");
+            logger.info("(14/18) Defining fragment deployability");
             ps.defineFragmentDeployability();
-            logger.info("(13/18) Enforcing policy constraint in APSC");
+            logger.info("(15/18) Enforcing policy constraint in APSC");
             ps.configurePlacementConstraint();
-            logger.info("(14/18) Retrieving cost-related information");
+            logger.info("(16/18) Retrieving cost-related information");
             ps.extractCost();
-            logger.info("(15/18) Solving ...");
+            logger.info("(17/18) Solving ...");
             if (!ps.performedBtrplaceSolving()) {
                 throw new IllegalStateException("No Btrplace reconfiguration plan was determined");
             } else {
-                logger.info("(16/18) Writing management plan output");
-                writeResutl(ps.generationJsonOutput(),outputFile);
-                logger.info("(17/18) Writing the mapping output");
-                writeResutl(ps.generateOutputMapping(),mappingFile);
-                logger.info("(18/18) The type-level TOSCA processing has ended successfully");
+                logger.info("(18/18) Writing management plan output");
+                writeResult(ps.generationJsonOutput(), outputFile);
+                logger.info("(19/18) Writing the mapping output");
+                writeResult(ps.generateOutputMapping(), mappingFile);
+                logger.info("(20/18) The type-level TOSCA processing has ended successfully");
                 return true;
             }
         } catch (Exception e) {
             logger.error("Error while parsing the Type-level TOSCA document : {}", e.getMessage());
-            logger.error(e.getCause().getMessage());
+            logger.error(" --> ", e);
             return false;
         }
     }
 
-    private void writeResutl(String result, String path) throws IOException {
+    private void writeResult(String result, String path) throws IOException {
         FileWriter file = new FileWriter(path);
         try {
             file.write(result);
@@ -165,6 +174,20 @@ public class TOSCAParserApp {
             logger.error("Error while writing to {} : {}", path, e.getMessage());
         } finally {
             file.close();
+        }
+    }
+
+    private String readFile(String path) throws IOException {
+        Path filepath = Paths.get(path);
+        File file = filepath.toFile();
+        if (!file.exists()) {
+            throw new IllegalStateException("Unable to access file");
+        }
+        try {
+            return new String(Files.readAllBytes(filepath));
+        } catch (IOException e) {
+            logger.error("Unable to read the file {} : {}", path, e.getMessage());
+            throw e;
         }
     }
 }

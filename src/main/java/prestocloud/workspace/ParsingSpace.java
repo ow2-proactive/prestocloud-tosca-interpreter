@@ -6,6 +6,9 @@ import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
+import net.minidev.json.JSONUtil;
+import net.minidev.json.JSONValue;
+import net.minidev.json.writer.JsonReader;
 import org.btrplace.model.*;
 import org.btrplace.model.constraint.*;
 import org.btrplace.model.view.ShareableResource;
@@ -115,7 +118,7 @@ public class ParsingSpace {
         for (Relationship relationship : relationships) {
             if (relationship.getHostingNode().getType().equals("execute")) {
                 constraints = relationship.getHostingNode();
-                if (constraints.derivedTypes.contains("prestocloud.nodes.proxy.faas")) {
+                if (constraints.derivedTypes.contains("prestocloud.nodes.proxy.faas") || constraints.derivedTypes.contains("prestocloud.nodes.agent.faas")) {
                     logger.info("{} fragment has been identified as operating a FaaS proxy node", relationship.getFragmentName());
                     this.proxyingNodes.put(constraints.getName(), relationship.getFragmentName());
                 } else if (constraints.derivedTypes.contains("prestocloud.nodes.master.jppf")) {
@@ -155,12 +158,12 @@ public class ParsingSpace {
                                 }
                             }
                             allSelectedTypes.put(constrainedNode.getName(), selectedTypes);
-                            allSelectedTypesWithRequirement.put(constrainedNode.getType(), allSelectedTypes);
                         } else {
                             logger.warn("Edge-only hosting resource constraint found: {}", constrainedNode.getName());
                         }
                     }
                 }
+                allSelectedTypesWithRequirement.put(constrainedNode.getType(), allSelectedTypes);
             }
             selectedCloudVMTypes.put(relationship.getFragmentName(), allSelectedTypesWithRequirement);
             logger.debug("{} types were identified for the fragment {}", allSelectedTypes.size(), relationship.getFragmentName());
@@ -177,36 +180,36 @@ public class ParsingSpace {
         mo.attach(cv);
     }
 
-    public void createVmsInBtrPlaceModel() {
-        String nodeName;
+    public void populateVmsInBtrPlaceModel() {
+        String vmsName;
         String dependencyNode;
         // For each fragment to be deployed ....
         for (Map.Entry<String, Map<String, Map<String, Map<String, String>>>> selectedFragmentTypes : selectedCloudVMTypes.entrySet()) {
             // For each relationship in the fragment definition
             for (Map.Entry<String, Map<String, Map<String, String>>> selectedTypes : selectedFragmentTypes.getValue().entrySet()) {
-                nodeName = selectedFragmentTypes.getKey();
+                vmsName = selectedFragmentTypes.getKey();
                 // Add the fragment's execute node first
                 if (selectedTypes.getKey().equalsIgnoreCase("execute")) {
-                    proceedVmRegistration(nodeName, "Registering fragment {} ...");
+                    proceedVmRegistration(vmsName, "Registering fragment {} ...");
                 } else if (selectedTypes.getKey().equalsIgnoreCase("master")) {
-                    proceedVmRegistration(nodeName, "Registering slave fragment {} ...");
+                    proceedVmRegistration(vmsName, "Registering slave fragment {} ...");
                     dependencyNode = masteringNodes.get(retrieveDependencyFragment(selectedTypes));
                     proceedVmRegistration(dependencyNode, "Registering master fragment {} ...");
-                    cstrs.add(new PrecedingRunning(vmsPerName.get(nodeName), vmsPerName.get(dependencyNode)));
+                    //cstrs.add(new PrecedingRunning(vmsPerName.get(vmsName), vmsPerName.get(dependencyNode)));
                 } else if (selectedTypes.getKey().equalsIgnoreCase("balanced_by")) {
-                    proceedVmRegistration(nodeName, "Registering balanced fragment {} ...");
+                    proceedVmRegistration(vmsName, "Registering balanced fragment {} ...");
                     dependencyNode = balancingNodes.get(retrieveDependencyFragment(selectedTypes));
                     proceedVmRegistration(dependencyNode, "Registering balancing fragment {} ...");
-                    cstrs.add(new PrecedingRunning(vmsPerName.get(nodeName), vmsPerName.get(dependencyNode)));
+                    //cstrs.add(new PrecedingRunning(vmsPerName.get(vmsName), vmsPerName.get(dependencyNode)));
                 } else if (selectedTypes.getKey().equalsIgnoreCase("proxy")) {
-                    proceedVmRegistration(nodeName, "Registering proxified fragment {} ...");
+                    proceedVmRegistration(vmsName, "Registering proxified fragment {} ...");
                     dependencyNode = proxyingNodes.get(retrieveDependencyFragment(selectedTypes));
                     proceedVmRegistration(dependencyNode, "Registering proxying fragment {} ...");
                     //cstrs.add(new PrecedingRunning(vms.get(nodeName),vms.get(dependencyNode)));
                 } else {
                     // We can have duplicates (eg. a 'proxy' may be linked to multiple fragments)
-                    nodeName = retrieveDependencyFragment(selectedTypes);
-                    proceedVmRegistration(nodeName, "Registering an unclassified fragment {} ...");
+                    vmsName = retrieveDependencyFragment(selectedTypes);
+                    proceedVmRegistration(vmsName, "Registering an unclassified fragment {} ...");
                 }
             }
         }
@@ -239,23 +242,64 @@ public class ParsingSpace {
         }
     }
 
-    public void populatePublicAndPrivateCloud() {
+    public void populateNodesInBtrPlaceModel() {
         String placementString;
         Node node;
-        for(String supportedCloud : this.supportedCloudsResourceFiles) {
-            for (String cloud : regionsPerCloudPerCloudFile.get(supportedCloud).keySet()) {
-                for (RegionCapacityDescriptor region : regionsPerCloudPerCloudFile.get(supportedCloud).get(cloud)) {
+        //for(String supportedCloud : this.supportedCloudsResourceFiles) {
+        for (String cloudFile : this.regionsPerCloudPerCloudFile.keySet()) {
+            for (String cloud : regionsPerCloudPerCloudFile.get(cloudFile).keySet()) {
+                for (RegionCapacityDescriptor region : regionsPerCloudPerCloudFile.get(cloudFile).get(cloud)) {
                     placementString = cloud + " " + region.getRegion();
                     regionCapabilityDescriptorPerCloud.put(placementString, region);
                     if (!nodePerName.containsKey(placementString)) {
                         node = mo.newNode();
+                        map.addOfflineNode(node);
                         nodePerName.put(placementString,node);
                         namePerNode.put(node,placementString);
+                        logger.info("Registering node {} as {} ...", placementString, node);
                     }
                 }
             }
         }
     }
+
+    public void setOnlineNode() {
+        String placementString;
+        for (String supportedCloud : this.supportedCloudsResourceFiles) {
+            for (String cloud : regionsPerCloudPerCloudFile.get(supportedCloud).keySet()) {
+                for (RegionCapacityDescriptor region : regionsPerCloudPerCloudFile.get(supportedCloud).get(cloud)) {
+                    placementString = cloud + " " + region.getRegion();
+                    map.addOnlineNode(nodePerName.get(placementString));
+                    logger.info("Setting the whitelisted node {} online ...", placementString);
+                }
+            }
+        }
+    }
+
+    public void loadExistingMapping(String mappingContent) {
+        if (!JSONValue.isValidJson(mappingContent)) {
+            throw new IllegalArgumentException("The provided mappping is not valid. I leave.");
+        }
+        JSONArray ja = (JSONArray) JSONValue.parse(mappingContent);
+        String nodeName;
+        JSONObject nodeAssignation;
+        Optional<String> tmp;
+        String operatedVMSonNode;
+        for (Object nodeAssignationObject : ja) {
+            nodeAssignation = (JSONObject) nodeAssignationObject;
+            tmp = nodeAssignation.keySet().stream().findFirst();
+            if (!tmp.isPresent()) {
+                logger.warn("Malformed JSON Object entree in the mapping file, I skip this entree");
+                continue;
+            }
+            nodeName = tmp.get();
+            for (Object operatedVMonNodeObject : (JSONArray) nodeAssignation.get(nodeName)) {
+                operatedVMSonNode = (String) operatedVMonNodeObject;
+                logger.info("Reading mapping : Node {} is operating VM {}", nodeName, operatedVMSonNode);
+            }
+        }
+    }
+
 
     public void setCapacity() {
         // Create and attach cpu, memory and disk resources
@@ -339,11 +383,12 @@ public class ParsingSpace {
 
     public void detectResourceAvailability() {
         // Set state for public clouds: online and running
-        for (Map.Entry<String, Node> cloud : nodePerName.entrySet()) {
-            map.on(cloud.getValue());
+        /*for (Map.Entry<String, Node> nodeEntree : nodePerName.entrySet()) {
+            map.on(nodeEntree.getValue());
         }
-        cstrs.addAll(Online.newOnline(mo.getMapping().getAllNodes()));
-        logger.info("{} public and private clouds are set online", nodePerName.keySet());
+        cstrs.addAll(Online.newOnline(mo.getMapping().getAllNodes()));*/
+        //logger.info("{} public and private clouds are set online", nodePerName.keySet());
+        logger.info("{} public and private clouds are set online", map.getAllNodes().stream().filter(node -> (map.isOnline(node))).map(node -> (namePerNode.get(node))).collect((Collectors.toList())));
 
         // TODO : with edge resource, we will need to act check the effective reachability of the need. Point to be discussed.
         // TODO: set the state for edge devices
