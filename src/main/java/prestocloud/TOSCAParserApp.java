@@ -128,7 +128,7 @@ public class TOSCAParserApp {
             logger.info("(8/18) Populating the model with regions from public and private cloud");
             ps.populateNodesInBtrPlaceModel();
             logger.info("(9/18) Configuration of regions computing capability");
-            ps.setOnlineNode();
+            ps.setNodeToKeep();
             if (Paths.get(mappingFile).toFile().exists()) {
                 logger.info("(10/18) Loading mapping file : Interpreting the current fragment deployment");
                 ps.loadExistingMapping(readFile(mappingFile));

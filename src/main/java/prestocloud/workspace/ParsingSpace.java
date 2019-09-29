@@ -64,6 +64,7 @@ public class ParsingSpace {
     //btrplace model related attributes
     private Map<String, VM> vmsPerName = new HashMap<>();
     private Map<VM, String> namePerVM = new HashMap<>();
+    private List<VM> alreadyRunningVms = new ArrayList<>();
     private ShareableResource cpu = new ShareableResource("cpu");
     private ShareableResource mem = new ShareableResource("memory");
     private ShareableResource disk = new ShareableResource("disk");
@@ -74,7 +75,8 @@ public class ParsingSpace {
     // Public and Private Cloud identification - Contains Btrplace models.
     private Map<String, Node> nodePerName = new HashMap<>();
     private Map<Node,String> namePerNode = new HashMap<>();
-    Map<String,RegionCapacityDescriptor> regionCapabilityDescriptorPerCloud = new HashMap<>();
+    private Map<String, RegionCapacityDescriptor> regionCapabilityDescriptorPerCloud = new HashMap<>();
+    private HashMap<String, Boolean> cloudsToKeep = new HashMap<>();
 
     private final List<SatConstraint> cstrs = new ArrayList<>();
     private Mapping dstmapping;
@@ -253,9 +255,10 @@ public class ParsingSpace {
                     regionCapabilityDescriptorPerCloud.put(placementString, region);
                     if (!nodePerName.containsKey(placementString)) {
                         node = mo.newNode();
-                        map.addOfflineNode(node);
+                        map.addOnlineNode(node);
                         nodePerName.put(placementString,node);
                         namePerNode.put(node,placementString);
+                        cloudsToKeep.put(placementString, false);
                         logger.info("Registering node {} as {} ...", placementString, node);
                     }
                 }
@@ -263,15 +266,26 @@ public class ParsingSpace {
         }
     }
 
-    public void setOnlineNode() {
+    public void setNodeToKeep() {
         String placementString;
         for (String supportedCloud : this.supportedCloudsResourceFiles) {
             for (String cloud : regionsPerCloudPerCloudFile.get(supportedCloud).keySet()) {
                 for (RegionCapacityDescriptor region : regionsPerCloudPerCloudFile.get(supportedCloud).get(cloud)) {
                     placementString = cloud + " " + region.getRegion();
-                    map.addOnlineNode(nodePerName.get(placementString));
+//                    map.addOnlineNode(nodePerName.get(placementString));
+                    cloudsToKeep.put(placementString, true);
                     logger.info("Setting the whitelisted node {} online ...", placementString);
                 }
+            }
+        }
+        /*cloudsToKeep.entrySet().stream().filter(stringBooleanEntry -> (!stringBooleanEntry.getValue())).forEach(stringBooleanEntry -> {
+            cstrs.add(new Offline(nodePerName.get(stringBooleanEntry.getKey())));
+        });*/
+        for (Map.Entry<String, Boolean> entree : cloudsToKeep.entrySet()) {
+            if (entree.getValue()) {
+                cstrs.add(new Online(nodePerName.get(entree.getKey())));
+            } else {
+                cstrs.add(new Offline(nodePerName.get(entree.getKey())));
             }
         }
     }
@@ -301,16 +315,17 @@ public class ParsingSpace {
     }
 
     private void proceedExistingVMRegistration(String operatedVMSonNode, String nodeName) {
-        logger.info("Reading mapping : Node {} is operating VM {}", nodeName, operatedVMSonNode);
         if (this.vmsPerName.containsKey(operatedVMSonNode)) {
             // The fragment is referenced by the type-level TOSCA: This fragment is expected to be running by the end of the parsing
+            logger.info("Reading mapping : Node {} is operating VM {}, left to be running", nodeName, operatedVMSonNode);
             map.addRunningVM(this.vmsPerName.get(operatedVMSonNode),this.nodePerName.get(nodeName));
         } else {
-            // The fragment is no more referenced: We register this node as running, but constraint it to be removed.
+            // The fragment is no more referenced: We register this VM as running, but constraint it to be removed.
             proceedVmRegistration(operatedVMSonNode,"Registering fragment to be removed {}");
             map.addRunningVM(this.vmsPerName.get(operatedVMSonNode),this.nodePerName.get(nodeName));
             cstrs.add(new Killed(this.vmsPerName.get(operatedVMSonNode)));
         }
+        alreadyRunningVms.add(this.vmsPerName.get(operatedVMSonNode));
     }
 
 
@@ -401,7 +416,7 @@ public class ParsingSpace {
         }
         cstrs.addAll(Online.newOnline(mo.getMapping().getAllNodes()));*/
         //logger.info("{} public and private clouds are set online", nodePerName.keySet());
-        logger.info("{} public and private clouds are set online", map.getAllNodes().stream().filter(node -> (map.isOnline(node))).map(node -> (namePerNode.get(node))).collect((Collectors.toList())));
+        //logger.info("{} public and private clouds are set online", map.getAllNodes().stream().filter(node -> (map.isOnline(node))).map(node -> (namePerNode.get(node))).collect((Collectors.toList())));
 
         // TODO : with edge resource, we will need to act check the effective reachability of the need. Point to be discussed.
         // TODO: set the state for edge devices
@@ -413,7 +428,7 @@ public class ParsingSpace {
 
     public void defineFragmentDeployability() {
         for (Map.Entry<String, VM> vm : vmsPerName.entrySet()) {
-            if (!map.getState(vm.getValue()).equals(VMState.RUNNING)) {
+            if (!alreadyRunningVms.contains(vm.getValue())) {
                 map.ready(vm.getValue());
             }
         }
