@@ -246,24 +246,28 @@ public class ParsingSpace {
 
     public void populateNodesInBtrPlaceModel() {
         String placementString;
-        Node node;
         for (String cloudFile : this.supportedCloudsResourceFiles) {
-            //for (String cloudFile : this.regionsPerCloudPerCloudFile.keySet()) {
+        //for (String cloudFile : this.regionsPerCloudPerCloudFile.keySet()) {
             for (String cloud : regionsPerCloudPerCloudFile.get(cloudFile).keySet()) {
                 for (RegionCapacityDescriptor region : regionsPerCloudPerCloudFile.get(cloudFile).get(cloud)) {
                     placementString = cloud + " " + region.getRegion();
                     regionCapabilityDescriptorPerCloud.put(placementString, region);
                     if (!nodePerName.containsKey(placementString)) {
-                        node = mo.newNode();
-                        map.addOnlineNode(node);
-                        nodePerName.put(placementString,node);
-                        namePerNode.put(node,placementString);
-                        cloudsToKeep.put(placementString, false);
-                        logger.info("Registering node {} as {} ...", placementString, node);
+                        registerNewNode(placementString,false,"Registering node {} as {} ...");
                     }
                 }
             }
         }
+    }
+
+
+    private void registerNewNode(String placementString,boolean isToBeKept, String loggerMessage) {
+        Node node = mo.newNode();
+        map.addOnlineNode(node);
+        nodePerName.put(placementString,node);
+        namePerNode.put(node,placementString);
+        cloudsToKeep.put(placementString, isToBeKept);
+        logger.info(loggerMessage, placementString, node);
     }
 
     public void setNodeToKeep() {
@@ -282,10 +286,15 @@ public class ParsingSpace {
             cstrs.add(new Offline(nodePerName.get(stringBooleanEntry.getKey())));
         });*/
         for (Map.Entry<String, Boolean> entree : cloudsToKeep.entrySet()) {
+            Node node = nodePerName.get(entree.getKey());
             if (entree.getValue()) {
-                cstrs.add(new Online(nodePerName.get(entree.getKey())));
+                cstrs.add(new Online(node));
             } else {
-                cstrs.add(new Offline(nodePerName.get(entree.getKey())));
+                //cstrs.add(new Offline(nodePerName.get(entree.getKey())));
+                cstrs.add(new Online(nodePerName.get(entree.getKey())));
+                for (VM vm : map.getAllVMs()) {
+                    cstrs.add(new Ban(vm,node));
+                }
             }
         }
     }
@@ -315,7 +324,12 @@ public class ParsingSpace {
     }
 
     private void proceedExistingVMRegistration(String operatedVMSonNode, String nodeName) {
-        if (this.vmsPerName.containsKey(operatedVMSonNode)) {
+        boolean vmReferencedAsToscaFragment = this.vmsPerName.containsKey(operatedVMSonNode);
+        boolean nodeReferencedInRequiredProvider = this.nodePerName.containsKey(nodeName);
+        if (!nodeReferencedInRequiredProvider) {
+            registerNewNode(nodeName,false,"Registering a node from an excluded provider {} as {}");
+        }
+        if (vmReferencedAsToscaFragment) {
             // The fragment is referenced by the type-level TOSCA: This fragment is expected to be running by the end of the parsing
             logger.info("Reading mapping : Node {} is operating VM {}, left to be running", nodeName, operatedVMSonNode);
             map.addRunningVM(this.vmsPerName.get(operatedVMSonNode),this.nodePerName.get(nodeName));
