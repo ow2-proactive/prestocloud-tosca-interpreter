@@ -233,12 +233,12 @@ public class ParsingSpace {
         }
     }
 
-    private void proceedVmRegistration(String nodeName, String loggerMessage) {
-        if (!vmsPerName.containsKey(nodeName)) {
+    private void proceedVmRegistration(String vmName, String loggerMessage) {
+        if (!vmsPerName.containsKey(vmName)) {
             VM newVM = mo.newVM();
-            vmsPerName.put(nodeName, newVM);
-            namePerVM.put(newVM, nodeName);
-            logger.warn(loggerMessage, nodeName);
+            vmsPerName.put(vmName, newVM);
+            namePerVM.put(newVM, vmName);
+            logger.warn(loggerMessage, vmName);
         }
     }
 
@@ -295,8 +295,21 @@ public class ParsingSpace {
             nodeName = tmp.get();
             for (Object operatedVMonNodeObject : (JSONArray) nodeAssignation.get(nodeName)) {
                 operatedVMSonNode = (String) operatedVMonNodeObject;
-                logger.info("Reading mapping : Node {} is operating VM {}", nodeName, operatedVMSonNode);
+                proceedExistingVMRegistration(operatedVMSonNode,nodeName);
             }
+        }
+    }
+
+    private void proceedExistingVMRegistration(String operatedVMSonNode, String nodeName) {
+        logger.info("Reading mapping : Node {} is operating VM {}", nodeName, operatedVMSonNode);
+        if (this.vmsPerName.containsKey(operatedVMSonNode)) {
+            // The fragment is referenced by the type-level TOSCA: This fragment is expected to be running by the end of the parsing
+            map.addRunningVM(this.vmsPerName.get(operatedVMSonNode),this.nodePerName.get(nodeName));
+        } else {
+            // The fragment is no more referenced: We register this node as running, but constraint it to be removed.
+            proceedVmRegistration(operatedVMSonNode,"Registering fragment to be removed {}");
+            map.addRunningVM(this.vmsPerName.get(operatedVMSonNode),this.nodePerName.get(nodeName));
+            cstrs.add(new Killed(this.vmsPerName.get(operatedVMSonNode)));
         }
     }
 
@@ -400,7 +413,9 @@ public class ParsingSpace {
 
     public void defineFragmentDeployability() {
         for (Map.Entry<String, VM> vm : vmsPerName.entrySet()) {
-            map.ready(vm.getValue());
+            if (!map.getState(vm.getValue()).equals(VMState.RUNNING)) {
+                map.ready(vm.getValue());
+            }
         }
         cstrs.addAll(Running.newRunning(map.getAllVMs()));
     }
