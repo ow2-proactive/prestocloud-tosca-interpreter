@@ -301,7 +301,7 @@ public class ParsingSpace {
 
     public void loadExistingMapping(String mappingContent) {
         if (!JSONValue.isValidJson(mappingContent)) {
-            throw new IllegalArgumentException("The provided mappping is not valid. I leave.");
+            throw new IllegalArgumentException("The provided mapping is not valid. I leave.");
         }
         JSONArray ja = (JSONArray) JSONValue.parse(mappingContent);
         String nodeName;
