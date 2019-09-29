@@ -79,6 +79,7 @@ public class ParsingSpace {
     private HashMap<String, Boolean> cloudsToKeep = new HashMap<>();
 
     private final List<SatConstraint> cstrs = new ArrayList<>();
+    private final List<VM> vmToStop = new ArrayList<>();
     private Mapping dstmapping;
     private Set<Action> actions;
 
@@ -246,8 +247,8 @@ public class ParsingSpace {
 
     public void populateNodesInBtrPlaceModel() {
         String placementString;
-        for (String cloudFile : this.supportedCloudsResourceFiles) {
-        //for (String cloudFile : this.regionsPerCloudPerCloudFile.keySet()) {
+        //for (String cloudFile : this.supportedCloudsResourceFiles) {
+        for (String cloudFile : this.regionsPerCloudPerCloudFile.keySet()) {
             for (String cloud : regionsPerCloudPerCloudFile.get(cloudFile).keySet()) {
                 for (RegionCapacityDescriptor region : regionsPerCloudPerCloudFile.get(cloudFile).get(cloud)) {
                     placementString = cloud + " " + region.getRegion();
@@ -276,7 +277,7 @@ public class ParsingSpace {
             for (String cloud : regionsPerCloudPerCloudFile.get(supportedCloud).keySet()) {
                 for (RegionCapacityDescriptor region : regionsPerCloudPerCloudFile.get(supportedCloud).get(cloud)) {
                     placementString = cloud + " " + region.getRegion();
-//                    map.addOnlineNode(nodePerName.get(placementString));
+                    map.addOnlineNode(nodePerName.get(placementString));
                     cloudsToKeep.put(placementString, true);
                     logger.info("Setting the whitelisted node {} online ...", placementString);
                 }
@@ -337,7 +338,8 @@ public class ParsingSpace {
             // The fragment is no more referenced: We register this VM as running, but constraint it to be removed.
             proceedVmRegistration(operatedVMSonNode,"Registering fragment to be removed {}");
             map.addRunningVM(this.vmsPerName.get(operatedVMSonNode),this.nodePerName.get(nodeName));
-            cstrs.add(new Killed(this.vmsPerName.get(operatedVMSonNode)));
+            cstrs.add(new Ready(this.vmsPerName.get(operatedVMSonNode)));
+            vmToStop.add(this.vmsPerName.get(operatedVMSonNode));
         }
         alreadyRunningVms.add(this.vmsPerName.get(operatedVMSonNode));
     }
@@ -445,8 +447,11 @@ public class ParsingSpace {
             if (!alreadyRunningVms.contains(vm.getValue())) {
                 map.ready(vm.getValue());
             }
+            if (!vmToStop.contains(vm.getValue())) {
+                //cstrs.addAll(Running.newRunning(map.getAllVMs()));
+                cstrs.add(new Running(vm.getValue()));
+            }
         }
-        cstrs.addAll(Running.newRunning(map.getAllVMs()));
     }
 
     public void configurePlacementConstraint() {
@@ -688,7 +693,7 @@ public class ParsingSpace {
 
         String selectedVMType = getSelectedCloudVMType(selectedCloudVMTypes, vmName, nodeName);
         JSONObject jo = new JSONObject();
-        jo.put("action", "boot");
+        jo.put("action", "delete");
         jo.put("start", action.getStart());
         jo.put("end", action.getEnd());
         jo.put("fragment", vmName);
