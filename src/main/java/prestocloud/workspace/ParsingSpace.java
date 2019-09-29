@@ -245,8 +245,8 @@ public class ParsingSpace {
     public void populateNodesInBtrPlaceModel() {
         String placementString;
         Node node;
-        //for(String supportedCloud : this.supportedCloudsResourceFiles) {
-        for (String cloudFile : this.regionsPerCloudPerCloudFile.keySet()) {
+        for (String cloudFile : this.supportedCloudsResourceFiles) {
+            //for (String cloudFile : this.regionsPerCloudPerCloudFile.keySet()) {
             for (String cloud : regionsPerCloudPerCloudFile.get(cloudFile).keySet()) {
                 for (RegionCapacityDescriptor region : regionsPerCloudPerCloudFile.get(cloudFile).get(cloud)) {
                     placementString = cloud + " " + region.getRegion();
@@ -402,7 +402,7 @@ public class ParsingSpace {
         for (Map.Entry<String, VM> vm : vmsPerName.entrySet()) {
             map.ready(vm.getValue());
         }
-        cstrs.addAll(Running.newRunning(mo.getMapping().getAllVMs()));
+        cstrs.addAll(Running.newRunning(map.getAllVMs()));
     }
 
     public void configurePlacementConstraint() {
