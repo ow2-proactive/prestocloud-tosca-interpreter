@@ -118,7 +118,7 @@ public class TOSCAParserApp {
             logger.info("(3/20) Interpreting TOSCA specification");
             ps.retrieveResourceFromParsing();
             logger.info("(4/20) Identifying fragments related to precedence constraints ...");
-            ps.identifiesNodeRelatedToPrecedenceConstraints();
+            ps.classifyNodeAccordingToRelationships();
             logger.info("(5/20) Determining the best suited cloud VM type for identified computing resources");
             ps.selectBestCloudVmType();
             logger.info("(6/20) Preparing APSC context (Btrplace)");

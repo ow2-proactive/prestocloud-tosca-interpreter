@@ -55,6 +55,7 @@ public class ParsingSpace {
     private List<HealthCheck> healthChecks;
     private Map<String,SshKey> sshKeys;
     private Map<String, Map<String, Map<String, Map<String, String>>>> selectedCloudVMTypes = new HashMap<>();
+    private Map<String, String> hostingNodePerFragment = new HashMap<>();
     private Map<String,String> balancingNodes = new HashMap<>();
     private Map<String,String> proxyingNodes = new HashMap<>();
     private Map<String,String> masteringNodes = new HashMap<>();
@@ -114,11 +115,12 @@ public class ParsingSpace {
         return true;
     }
 
-    public void identifiesNodeRelatedToPrecedenceConstraints() {
+    public void classifyNodeAccordingToRelationships() {
         ConstrainedNode constraints;
         for (Relationship relationship : relationships) {
             if (relationship.getHostingNode().getType().equals("execute")) {
                 constraints = relationship.getHostingNode();
+                hostingNodePerFragment.put(relationship.getFragmentName(), constraints.name);
                 if (constraints.derivedTypes.contains("prestocloud.nodes.proxy.faas") || constraints.derivedTypes.contains("prestocloud.nodes.agent.faas")) {
                     logger.info("{} fragment has been identified as operating a FaaS proxy node", relationship.getFragmentName());
                     this.proxyingNodes.put(constraints.getName(), relationship.getFragmentName());
@@ -606,6 +608,7 @@ public class ParsingSpace {
         jo.put(OutputField.ACTION_CLOUD, nodeName.split(" ")[0]);
         jo.put(OutputField.ACTION_REGION, nodeName.split(" ")[1]);
         jo.put(OutputField.ACTION_TYPE, selectedVMType);
+        jo.put(OutputField.ACTION_NODE, this.hostingNodePerFragment.get(vmName));
        if  (this.sshKeys.containsKey(vmName)) {
            if (this.sshKeys.get(vmName).hasKey()) {
                jo.put(OutputField.ACTION_SSH_KEY, this.sshKeys.get(vmName).getPublicKey());
@@ -638,6 +641,7 @@ public class ParsingSpace {
         jo.put(OutputField.ACTION_CLOUDSRC, nodeNameSrc.split(" ")[0]);
         jo.put(OutputField.ACTION_REGIONSRC, nodeNameSrc.split(" ")[1]);
         jo.put(OutputField.ACTION_TYPE, selectedVMType);
+        jo.put(OutputField.ACTION_NODE, this.hostingNodePerFragment.get(vmName));
         if  (this.sshKeys.containsKey(vmName)) {
             if (this.sshKeys.get(vmName).hasKey()) {
                 jo.put(OutputField.ACTION_SSH_KEY, this.sshKeys.get(vmName).getPublicKey());
@@ -764,7 +768,7 @@ public class ParsingSpace {
         public static final String ACTION_TYPE = "type";
         public static final String ACTION_SSH_KEY = "ssh_key";
         public static final String ACTION_DOCKER = "docker";
-
+        public static final String ACTION_NODE = "node";
     }
 }
 
