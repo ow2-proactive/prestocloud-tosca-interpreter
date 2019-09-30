@@ -292,10 +292,7 @@ public class ParsingSpace {
                 cstrs.add(new Online(node));
             } else {
                 //cstrs.add(new Offline(nodePerName.get(entree.getKey())));
-                cstrs.add(new Online(nodePerName.get(entree.getKey())));
-                for (VM vm : map.getAllVMs()) {
-                    cstrs.add(new Ban(vm,node));
-                }
+                cstrs.add(new RunningCapacity(nodePerName.get(entree.getKey()), 0));
             }
         }
     }
