@@ -6,9 +6,7 @@ import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
-import net.minidev.json.JSONUtil;
 import net.minidev.json.JSONValue;
-import net.minidev.json.writer.JsonReader;
 import org.btrplace.model.*;
 import org.btrplace.model.constraint.*;
 import org.btrplace.model.view.ShareableResource;
@@ -176,8 +174,6 @@ public class ParsingSpace {
 
     public void configureBtrPlace() {
         mo = new DefaultModel();
-        // TODO: import previous mapping if this run is not for initial placement
-        //Model mo = new ReconfigurationPlanConverter().fromJSON("").getResult().copy();
         map = mo.getMapping();
         cv = new CostView();
         mo.attach(cv);
@@ -247,7 +243,6 @@ public class ParsingSpace {
 
     public void populateNodesInBtrPlaceModel() {
         String placementString;
-        //for (String cloudFile : this.supportedCloudsResourceFiles) {
         for (String cloudFile : this.regionsPerCloudPerCloudFile.keySet()) {
             for (String cloud : regionsPerCloudPerCloudFile.get(cloudFile).keySet()) {
                 for (RegionCapacityDescriptor region : regionsPerCloudPerCloudFile.get(cloudFile).get(cloud)) {
@@ -283,15 +278,11 @@ public class ParsingSpace {
                 }
             }
         }
-        /*cloudsToKeep.entrySet().stream().filter(stringBooleanEntry -> (!stringBooleanEntry.getValue())).forEach(stringBooleanEntry -> {
-            cstrs.add(new Offline(nodePerName.get(stringBooleanEntry.getKey())));
-        });*/
         for (Map.Entry<String, Boolean> entree : cloudsToKeep.entrySet()) {
             Node node = nodePerName.get(entree.getKey());
-            if (entree.getValue()) {
+            if (Boolean.TRUE.equals(entree.getValue())) {
                 cstrs.add(new Online(node));
             } else {
-                //cstrs.add(new Offline(nodePerName.get(entree.getKey())));
                 cstrs.add(new RunningCapacity(nodePerName.get(entree.getKey()), 0));
             }
         }
@@ -423,14 +414,6 @@ public class ParsingSpace {
     }
 
     public void detectResourceAvailability() {
-        // Set state for public clouds: online and running
-        /*for (Map.Entry<String, Node> nodeEntree : nodePerName.entrySet()) {
-            map.on(nodeEntree.getValue());
-        }
-        cstrs.addAll(Online.newOnline(mo.getMapping().getAllNodes()));*/
-        //logger.info("{} public and private clouds are set online", nodePerName.keySet());
-        //logger.info("{} public and private clouds are set online", map.getAllNodes().stream().filter(node -> (map.isOnline(node))).map(node -> (namePerNode.get(node))).collect((Collectors.toList())));
-
         // TODO : with edge resource, we will need to act check the effective reachability of the need. Point to be discussed.
         // TODO: set the state for edge devices
         // All edge nodes are online and running
@@ -445,7 +428,6 @@ public class ParsingSpace {
                 map.ready(vm.getValue());
             }
             if (!vmToStop.contains(vm.getValue())) {
-                //cstrs.addAll(Running.newRunning(map.getAllVMs()));
                 cstrs.add(new Running(vm.getValue()));
             }
         }
@@ -617,27 +599,27 @@ public class ParsingSpace {
 
        String selectedVMType = getSelectedCloudVMType(selectedCloudVMTypes, vmName, nodeName);
        JSONObject jo = new JSONObject();
-       jo.put("action", "boot");
-       jo.put("start", action.getStart());
-       jo.put("end", action.getEnd());
-       jo.put("fragment", vmName);
-       jo.put("cloud", nodeName.split(" ")[0]);
-       jo.put("region", nodeName.split(" ")[1]);
-       jo.put("type", selectedVMType);
+        jo.put(OutputField.ACTION, OutputField.ACTION_BOOT);
+        jo.put(OutputField.ACTION_START, action.getStart());
+        jo.put(OutputField.ACTION_END, action.getEnd());
+        jo.put(OutputField.ACTION_FRAGMENT, vmName);
+        jo.put(OutputField.ACTION_CLOUD, nodeName.split(" ")[0]);
+        jo.put(OutputField.ACTION_REGION, nodeName.split(" ")[1]);
+        jo.put(OutputField.ACTION_TYPE, selectedVMType);
        if  (this.sshKeys.containsKey(vmName)) {
            if (this.sshKeys.get(vmName).hasKey()) {
-               jo.put("ssh_key",this.sshKeys.get(vmName).getPublicKey());
+               jo.put(OutputField.ACTION_SSH_KEY, this.sshKeys.get(vmName).getPublicKey());
            }
        }
 
        // Docker command is optional because 'proxy', 'master', and 'balanced_by' nodes don't have one
        Optional<Docker> docker = dockers.stream().filter(d -> d.getFragmentName().equalsIgnoreCase(vmName)).findFirst();
-       docker.ifPresent(dck -> jo.put("docker", dck.printCmdline()));
+        docker.ifPresent(dck -> jo.put(OutputField.ACTION_DOCKER, dck.printCmdline()));
 
        ja.add(jo);
    }
 
-    private boolean generationMigrateVMOutput(Action action, JSONArray ja) {
+    private void generationMigrateVMOutput(Action action, JSONArray ja) {
         // Retrieve VM/fragment name
         String vmName = namePerVM.get(((MigrateVM) action).getVM());
 
@@ -647,31 +629,30 @@ public class ParsingSpace {
 
         String selectedVMType = getSelectedCloudVMType(selectedCloudVMTypes, vmName, nodeName);
         JSONObject jo = new JSONObject();
-        jo.put("action", "migrate");
-        jo.put("start", action.getStart());
-        jo.put("end", action.getEnd());
-        jo.put("fragment", vmName);
-        jo.put("cloud", nodeName.split(" ")[0]);
-        jo.put("region", nodeName.split(" ")[1]);
-        jo.put("cloudsrc", nodeNameSrc.split(" ")[0]);
-        jo.put("regionsrc", nodeNameSrc.split(" ")[1]);
-        jo.put("type", selectedVMType);
+        jo.put(OutputField.ACTION, OutputField.ACTION_MIGRATE);
+        jo.put(OutputField.ACTION_START, action.getStart());
+        jo.put(OutputField.ACTION_END, action.getEnd());
+        jo.put(OutputField.ACTION_FRAGMENT, vmName);
+        jo.put(OutputField.ACTION_CLOUD, nodeName.split(" ")[0]);
+        jo.put(OutputField.ACTION_REGION, nodeName.split(" ")[1]);
+        jo.put(OutputField.ACTION_CLOUDSRC, nodeNameSrc.split(" ")[0]);
+        jo.put(OutputField.ACTION_REGIONSRC, nodeNameSrc.split(" ")[1]);
+        jo.put(OutputField.ACTION_TYPE, selectedVMType);
         if  (this.sshKeys.containsKey(vmName)) {
             if (this.sshKeys.get(vmName).hasKey()) {
-                jo.put("ssh_key",this.sshKeys.get(vmName).getPublicKey());
+                jo.put(OutputField.ACTION_SSH_KEY, this.sshKeys.get(vmName).getPublicKey());
             }
         }
 
         // Docker command is optional because 'proxy', 'master', and 'balanced_by' nodes don't have one
         Optional<Docker> docker = dockers.stream().filter(d -> d.getFragmentName().equalsIgnoreCase(vmName)).findFirst();
-        docker.ifPresent(dck -> jo.put("docker", dck.printCmdline()));
+        docker.ifPresent(dck -> jo.put(OutputField.ACTION_DOCKER, dck.printCmdline()));
 
         ja.add(jo);
-        return true;
     }
 
 
-    private boolean generationShutdownVMAndSuspendVMOutput(Action action, JSONArray ja) {
+    private void generationShutdownVMAndSuspendVMOutput(Action action, JSONArray ja) {
         // Retrieve VM/fragment name
         String vmName;
         if (action instanceof ShutdownVM) {
@@ -690,25 +671,24 @@ public class ParsingSpace {
 
         String selectedVMType = getSelectedCloudVMType(selectedCloudVMTypes, vmName, nodeName);
         JSONObject jo = new JSONObject();
-        jo.put("action", "delete");
-        jo.put("start", action.getStart());
-        jo.put("end", action.getEnd());
-        jo.put("fragment", vmName);
-        jo.put("cloudsrc", nodeName.split(" ")[0]);
-        jo.put("regionsrc", nodeName.split(" ")[1]);
-        jo.put("type", selectedVMType);
+        jo.put(OutputField.ACTION, OutputField.ACTION_DELETE);
+        jo.put(OutputField.ACTION_START, action.getStart());
+        jo.put(OutputField.ACTION_END, action.getEnd());
+        jo.put(OutputField.ACTION_FRAGMENT, vmName);
+        jo.put(OutputField.ACTION_CLOUDSRC, nodeName.split(" ")[0]);
+        jo.put(OutputField.ACTION_REGIONSRC, nodeName.split(" ")[1]);
+        jo.put(OutputField.ACTION_TYPE, selectedVMType);
         if  (this.sshKeys.containsKey(vmName)) {
             if (this.sshKeys.get(vmName).hasKey()) {
-                jo.put("ssh_key",this.sshKeys.get(vmName).getPublicKey());
+                jo.put(OutputField.ACTION_SSH_KEY, this.sshKeys.get(vmName).getPublicKey());
             }
         }
 
         // Docker command is optional because 'proxy', 'master', and 'balanced_by' nodes don't have one
         Optional<Docker> docker = dockers.stream().filter(d -> d.getFragmentName().equalsIgnoreCase(vmName)).findFirst();
-        docker.ifPresent(dck -> jo.put("docker", dck.printCmdline()));
+        docker.ifPresent(dck -> jo.put(OutputField.ACTION_DOCKER, dck.printCmdline()));
 
         ja.add(jo);
-        return true;
     }
 
     public String generateOutputMapping() {
@@ -768,4 +748,23 @@ public class ParsingSpace {
         // This should never return null as a matching type must have be found for each VM
         return null;
     }
+
+    private static class OutputField {
+        public static final String ACTION = "action";
+        public static final String ACTION_BOOT = "boot";
+        public static final String ACTION_MIGRATE = "migrate";
+        public static final String ACTION_DELETE = "delete";
+        public static final String ACTION_START = "start";
+        public static final String ACTION_END = "end";
+        public static final String ACTION_FRAGMENT = "fragment";
+        public static final String ACTION_REGION = "region";
+        public static final String ACTION_CLOUD = "cloud";
+        public static final String ACTION_REGIONSRC = "regionsrc";
+        public static final String ACTION_CLOUDSRC = "cloudsrc";
+        public static final String ACTION_TYPE = "type";
+        public static final String ACTION_SSH_KEY = "ssh_key";
+        public static final String ACTION_DOCKER = "docker";
+
+    }
 }
+
