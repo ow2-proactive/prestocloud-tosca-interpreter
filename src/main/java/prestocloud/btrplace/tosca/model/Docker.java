@@ -83,7 +83,7 @@ public class Docker {
             return "docker run " + image;
         }*/
         if (image != null) {
-            return String.format("docker run %s %s %s %s",preparePortsForwarding() ,prepareEnvironement(),prepareRegistry(),prepareCmd());
+            return String.format("docker run -d --rm %s %s %s %s",preparePortsForwarding() ,prepareEnvironement(),prepareRegistry(),prepareCmd());
         } else {
             return EMPTY_STRING;
         }
