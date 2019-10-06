@@ -416,12 +416,60 @@ public class ParsingSpace {
     }
 
     public void detectResourceAvailability() {
+        //We verify if we are running inside the main WF environement
+        String cloudList = System.getenv().getOrDefault("variables_CLOUD_LIST", null);
+        if (cloudList != null) {
+            logger.info("ADIAM environment detected. I'll check cloud availability");
+            //If the cloud resource is not detected as online, I'll add a banning constrain.
+            banUnreferencedCloudInCloudList(cloudList);
+        }
+
         // TODO : with edge resource, we will need to act check the effective reachability of the need. Point to be discussed.
         // TODO: set the state for edge devices
         // All edge nodes are online and running
         /*for (Map.Entry<String, Node> edgeNode : edgeNodes.entrySet()) {
             map.on(edgeNode.getValue());
         }*/
+    }
+
+    private void banUnreferencedCloudInCloudList(String cloudList) {
+        if (!JSONValue.isValidJson(cloudList)) {
+            throw new IllegalArgumentException();
+        }
+        JSONArray ja = (JSONArray) JSONValue.parse(cloudList);
+        JSONObject cloud;
+        String cloudName;
+        String cloudType;
+        String region;
+        HashMap<String, String> identifiedClouds = new HashMap<>();
+        for (Object entree : ja) {
+            cloud = (JSONObject) entree;
+            cloudName = cloud.getAsString("CLOUD_NAME");
+            cloudType = cloud.getAsString("CLOUD_TYPE");
+            if (cloudType.equalsIgnoreCase("aws")) {
+                cloudType = "amazon";
+                region = cloud.getAsString("AWS_DEFAULT_REGION");
+            } else if (cloudType.equalsIgnoreCase("azure")) {
+                cloudType = "azure";
+                region = cloud.getAsString("AZ_LOCATION");
+            } else if (cloudType.equalsIgnoreCase("openstack")) {
+                cloudType = "openstack";
+                region = cloud.getAsString("OpenStack_REGION");
+            } else {
+                logger.error("Unable to recognize cloud type of cloud={}. I skip it", cloudName);
+                continue;
+            }
+            identifiedClouds.put(cloudName, cloudType + " " + region);
+        }
+        identifiedClouds.forEach((s, s2) -> {
+            logger.info(" Cloud named {} in CLOUD_LIST is recognized as {} and is still whitelisted", s, s2);
+        });
+        // Proceeding to the effective Ban of the resource.
+        List<String> cloudsToIgnore = this.cloudsToKeep.entrySet().stream().filter(stringBooleanEntry -> (stringBooleanEntry.getValue())).filter(stringBooleanEntry -> (!identifiedClouds.containsValue(stringBooleanEntry.getKey()))).map(Map.Entry::getKey).collect(Collectors.toList());
+        for (String placementString : cloudsToIgnore) {
+            logger.info("Cloud {} is not in the CLOUD_LIST Workflow variable, I blacklist it", placementString);
+            cstrs.add(new RunningCapacity(this.nodePerName.get(placementString), 0));
+        }
     }
 
     public void defineFragmentDeployability() {
