@@ -16,7 +16,7 @@ dsl_definitions:
   ovh_france_gravelines: &ovh_france_gravelines
     cloud_name: ovh_france_gravelines
     cloud_type: openstack
-    cloud_region: ovh-france-gravelines
+    cloud_region: GRA5
     cpucapacity: 64
     memorycapacity: 496 GB
     diskcapacity: 19500 GB
@@ -25,7 +25,7 @@ dsl_definitions:
   ovh_uk_london: &ovh_uk_london
     cloud_name: ovh_uk_london
     cloud_type: openstack
-    cloud_region: ovh_uk_london
+    cloud_region: UK1
     cpucapacity: 64
     memorycapacity: 496 GB
     diskcapacity: 19500 GB
