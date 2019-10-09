@@ -732,7 +732,7 @@ public class ParsingUtils {
             if (nodeTemplateFragment.getValue().getType().startsWith("prestocloud.nodes.fragment")) {
                  framgentName = nodeTemplateFragment.getValue().getName();
                  nodeName = nodeTemplateFragment.getValue().getRelationships().get("execute").getTarget();
-                 ScalarPropertyValue property = (ScalarPropertyValue) nodeTemplates.get(nodeName).getProperties().get("ssh_key");
+                ScalarPropertyValue property = (ScalarPropertyValue) nodeTemplates.get(nodeName).getProperties().get("ssh_pub_key");
                  if (property != null) {
                      ssh = property.getValue().toString();
                  } else {
