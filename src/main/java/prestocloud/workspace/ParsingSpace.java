@@ -454,7 +454,7 @@ public class ParsingSpace {
                 region = cloud.getAsString("AZ_LOCATION");
             } else if (cloudType.equalsIgnoreCase("openstack")) {
                 cloudType = "openstack";
-                region = cloud.getAsString("OpenStack_REGION");
+                region = cloud.getAsString("OS_REGION_NAME");
             } else {
                 logger.error("Unable to recognize cloud type of cloud={}. I skip it", cloudName);
                 continue;
