@@ -738,7 +738,7 @@ public class ParsingUtils {
                  } else {
                      ssh = null;
                  }
-                 sshKeys.put(framgentName, new SshKey(framgentName,ssh));
+                sshKeys.put(framgentName, new SshKey(framgentName, System.getenv().getOrDefault("$credentials_prestocloud_key_" + framgentName, ssh)));
             }
         }
         return sshKeys;
