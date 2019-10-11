@@ -36,6 +36,7 @@ import org.prestocloud.tosca.model.templates.NodeTemplate;
 import org.prestocloud.tosca.model.templates.PolicyTemplate;
 import org.prestocloud.tosca.model.types.NodeType;
 import prestocloud.btrplace.tosca.model.*;
+import prestocloud.model.VmTypeCostRegistration;
 import prestocloud.model.common.Tag;
 import prestocloud.tosca.model.ArchiveRoot;
 import prestocloud.tosca.parser.ParsingException;
@@ -47,7 +48,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -456,7 +456,7 @@ public class ParsingUtils {
      */
     public static List<String> findBestSuitableRegionAndVMType(ToscaParser parser, String repositoryPath, String cloud, List<String> regions, Map<String, List<String>> hostingConstraints) throws Exception {
 
-        Map<String, Double> selectedTypes = new HashMap<>();
+        Map<String, VmTypeCostRegistration> selectedTypes = new HashMap<>();
         Map<String, Map<String, Map<String, String>>> VMTypes;
         Path expectedPath = Paths.get(repositoryPath, String.format("%s-vm-templates.yml", cloud));
 
@@ -466,24 +466,6 @@ public class ParsingUtils {
  //           return null;
         }
         VMTypes = getCloudNodesTemplates(parser.parseFile(expectedPath), regions);
- /*        if (cloud.equalsIgnoreCase("amazon")) {
-            VMTypes = getCloudNodesTemplates(parser.parseFile(Paths.get(repositoryPath,"amazon-vm-templates.yml")), regions);
-        }
-        else if (cloud.equalsIgnoreCase("azure")) {
-            VMTypes = getCloudNodesTemplates(parser.parseFile(Paths.get(repositoryPath,"azure-vm-templates.yml")), regions);
-        }
-        else if (cloud.equalsIgnoreCase("openstack")) {
-            System.out.println("OpenStack types not yet defined (flavors must be customized).");
-
-            // TODO: manage private clouds custom templates
-            //VMTypes = getCloudNodesTemplates(parser.parseFile(Paths.get(repositoryPath, "openstack-vm-templates.yml")), regions);
-
-            return null;
-        }
-        else {
-            System.out.println("Cloud of type " + cloud + " not found.");
-            return null;
-        }*/
 
         // Extract hosting infos from local data struct
         boolean cpu, mem, disk, price;
@@ -623,7 +605,16 @@ public class ParsingUtils {
                 if (cpu && mem && disk && price) {
                     //System.out.println("Best suitable type found: " + hostingConstraint.getKey());
                     //return hostingConstraint.getValue().get("cloud").get("name");
-                    selectedTypes.put(hostingConstraint.getValue().get("cloud").get("cloud_region") + " " + hostingConstraint.getValue().get("cloud").get("name"), Double.valueOf(hostingConstraint.getValue().get("host").get("price")));
+//                    selectedTypes.put(hostingConstraint.getValue().get("cloud").get("cloud_region") + " " + hostingConstraint.getValue().get("cloud").get("name"), Double.valueOf(hostingConstraint.getValue().get("host").get("price")));
+                    String region = hostingConstraint.getValue().get("cloud").get("cloud_region");
+                    VmTypeCostRegistration vtcr = new VmTypeCostRegistration(hostingConstraint.getValue().get("cloud").get("name"), Double.valueOf(hostingConstraint.getValue().get("host").get("price")));
+                    if (selectedTypes.containsKey(region)) {
+                        if (vtcr.compareTo(selectedTypes.get(region)) < 0) {
+                            selectedTypes.put(region, vtcr);
+                        }
+                    } else {
+                        selectedTypes.put(region, vtcr);
+                    }
                 }
             }
         }
@@ -634,7 +625,8 @@ public class ParsingUtils {
         }
         else {
             //return selectedTypes.entrySet().stream().sorted(Map.Entry.comparingByValue()).findFirst().get().getKey();
-            return selectedTypes.entrySet().parallelStream().map(Map.Entry::getKey).collect(Collectors.toList());
+            //return selectedTypes.entrySet().parallelStream().map(Map.Entry::getKey).collect(Collectors.toList());
+            return selectedTypes.entrySet().parallelStream().map(val -> (val.getKey() + " " + val.getValue().toString())).collect(Collectors.toList());
         }
     }
 
@@ -740,13 +732,13 @@ public class ParsingUtils {
             if (nodeTemplateFragment.getValue().getType().startsWith("prestocloud.nodes.fragment")) {
                  framgentName = nodeTemplateFragment.getValue().getName();
                  nodeName = nodeTemplateFragment.getValue().getRelationships().get("execute").getTarget();
-                 ScalarPropertyValue property = (ScalarPropertyValue) nodeTemplates.get(nodeName).getProperties().get("ssh_key");
+                ScalarPropertyValue property = (ScalarPropertyValue) nodeTemplates.get(nodeName).getProperties().get("ssh_pub_key");
                  if (property != null) {
                      ssh = property.getValue().toString();
                  } else {
                      ssh = null;
                  }
-                 sshKeys.put(framgentName, new SshKey(framgentName,ssh));
+                sshKeys.put(framgentName, new SshKey(framgentName, System.getenv().getOrDefault("$credentials_prestocloud_key_" + framgentName, ssh)));
             }
         }
         return sshKeys;

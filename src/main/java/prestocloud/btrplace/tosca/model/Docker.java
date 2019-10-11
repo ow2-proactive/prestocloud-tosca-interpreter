@@ -83,7 +83,8 @@ public class Docker {
             return "docker run " + image;
         }*/
         if (image != null) {
-            return String.format("docker run %s %s %s %s",preparePortsForwarding() ,prepareEnvironement(),prepareRegistry(),prepareCmd());
+            String registryString = prepareRegistry();
+            return String.format("docker pull %s && docker run -d --rm %s %s %s %s", registryString, preparePortsForwarding(), prepareEnvironement(), registryString, prepareCmd());
         } else {
             return EMPTY_STRING;
         }
@@ -95,7 +96,7 @@ public class Docker {
         } else if (this.registry.length() == 0) {
             return image;
         } else {
-            // We check a registry is not already set in the image specificiation.
+            // We check a registry is not already set in the image specification.
             Matcher matcher = registryIdentifier.matcher(this.image);
             if (matcher.matches()) {
                return registry + "/" + matcher.group(2);

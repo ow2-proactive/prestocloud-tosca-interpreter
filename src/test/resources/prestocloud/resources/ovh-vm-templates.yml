@@ -16,12 +16,22 @@ dsl_definitions:
   ovh_france_gravelines: &ovh_france_gravelines
     cloud_name: ovh_france_gravelines
     cloud_type: openstack
-    cloud_region: ovh-france-gravelines
+    cloud_region: GRA5
     cpucapacity: 64
     memorycapacity: 496 GB
     diskcapacity: 19500 GB
     gps_coordinates: "31U 440485mE 5649663mN"
 
+  ovh_uk_london: &ovh_uk_london
+    cloud_name: ovh_uk_london
+    cloud_type: openstack
+    cloud_region: UK1
+    cpucapacity: 64
+    memorycapacity: 496 GB
+    diskcapacity: 19500 GB
+    gps_coordinates: "31U 440485mE 5649663mN"
+
+    
 topology_template:
 
   node_templates:
@@ -125,3 +135,103 @@ topology_template:
             mem_size: 120 GB
             disk_size: 400 GB
             price: 1.0839
+
+    b2_15_flex_ovh_uk_london:
+      type: prestocloud.nodes.compute.cloud.openstack
+      description: PrEstoCloud OpenStack compute node.
+      properties:
+        name: b2-15-flex
+        type: cloud
+        cloud: *ovh_uk_london
+      capabilities:
+        resource:
+          properties:
+            name: b2-15-flex
+            type: cloud
+            cloud: *ovh_uk_london
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: 15 GB
+            disk_size: 100 GB
+            price: 0.1169
+
+    b2_7_flex_ovh_uk_london:
+      type: prestocloud.nodes.compute.cloud.openstack
+      description: PrEstoCloud OpenStack compute node.
+      properties:
+        name: b2-7-flex
+        type: cloud
+        cloud: *ovh_uk_london
+      capabilities:
+        resource:
+          properties:
+            name: b2-7-flex
+            type: cloud
+            cloud: *ovh_uk_london
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: 7 GB
+            disk_size: 50 GB
+            price: 0.0619
+
+    b2_30_flex_ovh_uk_london:
+      type: prestocloud.nodes.compute.cloud.openstack
+      description: PrEstoCloud OpenStack compute node.
+      properties:
+        name: b2-30-flex
+        type: cloud
+        cloud: *ovh_uk_london
+      capabilities:
+        resource:
+          properties:
+            name: b2-7-flex
+            type: cloud
+            cloud: *ovh_uk_london
+        host:
+          properties:
+            num_cpus: 8
+            mem_size: 30 GB
+            disk_size: 200 GB
+            price: 0.2369
+
+    b2_60_flex_ovh_uk_london:
+      type: prestocloud.nodes.compute.cloud.openstack
+      description: PrEstoCloud OpenStack compute node.
+      properties:
+        name: b2-60-flex
+        type: cloud
+        cloud: *ovh_uk_london
+      capabilities:
+        resource:
+          properties:
+            name: b2-60-flex
+            type: cloud
+            cloud: *ovh_uk_london
+        host:
+          properties:
+            num_cpus: 16
+            mem_size: 60 GB
+            disk_size: 400 GB
+            price: 0.4589
+
+    b2_120_flex_ovh_uk_london:
+      type: prestocloud.nodes.compute.cloud.openstack
+      description: PrEstoCloud OpenStack compute node.
+      properties:
+        name: b2-120-flex
+        type: cloud
+        cloud: *ovh_uk_london
+      capabilities:
+        resource:
+          properties:
+            name: b2-120-flex
+            type: cloud
+            cloud: *ovh_uk_london
+        host:
+          properties:
+            num_cpus: 32
+            mem_size: 120 GB
+            disk_size: 400 GB
+            price: 0.9029
