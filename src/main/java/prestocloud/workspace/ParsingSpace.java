@@ -13,6 +13,8 @@ import org.btrplace.model.view.ShareableResource;
 import org.btrplace.plan.ReconfigurationPlan;
 import org.btrplace.plan.event.*;
 import org.btrplace.scheduler.choco.ChocoScheduler;
+import org.prestocloud.tosca.model.templates.NodeTemplate;
+import org.prestocloud.tosca.model.templates.Topology;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
@@ -30,6 +32,9 @@ import prestocloud.tosca.model.ArchiveRoot;
 import prestocloud.tosca.parser.*;
 
 import java.util.*;
+import java.util.regex.MatchResult;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -38,6 +43,7 @@ import java.util.stream.Collectors;
 public class ParsingSpace {
 
     private Logger logger = LoggerFactory.getLogger(ParsingSpace.class);
+    private static final Pattern NETWORK_IP_PATTERN = Pattern.compile("(\\{ get_property: \\[([\\w,]+),host,([\\w,]+),([\\w,]+),[\\d]+\\] \\})");
 
     private Map<String,Map<String, List<RegionCapacityDescriptor>>> regionsPerCloudPerCloudFile;
     private ParsingResult<ArchiveRoot> parsingResult;
@@ -665,7 +671,7 @@ public class ParsingSpace {
 
        // Docker command is optional because 'proxy', 'master', and 'balanced_by' nodes don't have one
        Optional<Docker> docker = dockers.stream().filter(d -> d.getFragmentName().equalsIgnoreCase(vmName)).findFirst();
-        docker.ifPresent(dck -> jo.put(OutputField.ACTION_DOCKER, dck.printCmdline()));
+        docker.ifPresent(dck -> jo.put(OutputField.ACTION_DOCKER, replaceHostPropertyValuesToMacros(dck.printCmdline())));
 
        ja.add(jo);
    }
@@ -698,7 +704,7 @@ public class ParsingSpace {
 
         // Docker command is optional because 'proxy', 'master', and 'balanced_by' nodes don't have one
         Optional<Docker> docker = dockers.stream().filter(d -> d.getFragmentName().equalsIgnoreCase(vmName)).findFirst();
-        docker.ifPresent(dck -> jo.put(OutputField.ACTION_DOCKER, dck.printCmdline()));
+        docker.ifPresent(dck -> jo.put(OutputField.ACTION_DOCKER, replaceHostPropertyValuesToMacros(dck.printCmdline())));
 
         ja.add(jo);
     }
@@ -738,7 +744,7 @@ public class ParsingSpace {
 
         // Docker command is optional because 'proxy', 'master', and 'balanced_by' nodes don't have one
         Optional<Docker> docker = dockers.stream().filter(d -> d.getFragmentName().equalsIgnoreCase(vmName)).findFirst();
-        docker.ifPresent(dck -> jo.put(OutputField.ACTION_DOCKER, dck.printCmdline()));
+        docker.ifPresent(dck -> jo.put(OutputField.ACTION_DOCKER, replaceHostPropertyValuesToMacros(dck.printCmdline())));
 
         ja.add(jo);
     }
@@ -799,6 +805,45 @@ public class ParsingSpace {
         }
         // This should never return null as a matching type must have be found for each VM
         return null;
+    }
+
+    private String replaceHostPropertyValuesToMacros(String dockerCommand) {
+        Matcher m = NETWORK_IP_PATTERN.matcher(dockerCommand);
+        String result = dockerCommand;
+        String wholePropertyDeclaration;
+        String hostProperties;
+        String processingNodeName;
+        int nmbGroup = m.groupCount();
+        while (m.find()) {
+            for (int i = 0; i + 3 < nmbGroup; i += 3) {
+                wholePropertyDeclaration = m.group(1 + i);
+                processingNodeName = m.group(2 + i);
+                hostProperties = m.group(3 + i);
+                result = processReplacement(result, wholePropertyDeclaration, processingNodeName, hostProperties);
+            }
+        }
+        return result;
+    }
+
+    private String processReplacement(String result, String wholePropertyDeclaration, String processingNodeName, String hostProperties) {
+        Optional<Map.Entry<String, String>> fragmentName = hostingNodePerFragment.entrySet().stream().filter(valkey -> (valkey.getValue().equals(processingNodeName))).findFirst();
+        if (fragmentName.isPresent()) {
+            return result.replace(wholePropertyDeclaration, String.format("@%s_%s", hostProperties, fragmentName.get().getValue()));
+        } else {
+            //return result.replace(wholePropertyDeclaration, String.format("@%s_%s",hostProperties, relationship.get().getHostingNode().name));
+            //throw new IllegalStateException("No fragment found for processing node" + processingNodeName);
+            ArchiveRoot parsingResult = this.parsingResult.getResult();
+            Topology topology = parsingResult.getTopology();
+            Map<String, NodeTemplate> nodeTemplates = topology.getNodeTemplates();
+            NodeTemplate nodeTemplate = nodeTemplates.get(processingNodeName);
+            String fragmentType = nodeTemplate.getType();
+            fragmentName = hostingNodePerFragment.entrySet().stream().filter(valkey -> (valkey.getValue().equals(fragmentType))).findFirst();
+            if (fragmentName.isPresent()) {
+                return result.replace(wholePropertyDeclaration, String.format("@%s_%s", hostProperties, fragmentName.get().getValue()));
+            } else {
+                return "";
+            }
+        }
     }
 
     private static class OutputField {
