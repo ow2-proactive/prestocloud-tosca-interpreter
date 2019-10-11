@@ -32,7 +32,6 @@ import prestocloud.tosca.model.ArchiveRoot;
 import prestocloud.tosca.parser.*;
 
 import java.util.*;
-import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -202,17 +201,14 @@ public class ParsingSpace {
                     proceedVmRegistration(vmsName, "Registering slave fragment {} ...");
                     dependencyNode = masteringNodes.get(retrieveDependencyFragment(selectedTypes));
                     proceedVmRegistration(dependencyNode, "Registering master fragment {} ...");
-                    //cstrs.add(new PrecedingRunning(vmsPerName.get(vmsName), vmsPerName.get(dependencyNode)));
                 } else if (selectedTypes.getKey().equalsIgnoreCase("balanced_by")) {
                     proceedVmRegistration(vmsName, "Registering balanced fragment {} ...");
                     dependencyNode = balancingNodes.get(retrieveDependencyFragment(selectedTypes));
                     proceedVmRegistration(dependencyNode, "Registering balancing fragment {} ...");
-                    //cstrs.add(new PrecedingRunning(vmsPerName.get(vmsName), vmsPerName.get(dependencyNode)));
                 } else if (selectedTypes.getKey().equalsIgnoreCase("proxy")) {
                     proceedVmRegistration(vmsName, "Registering proxified fragment {} ...");
                     dependencyNode = proxyingNodes.get(retrieveDependencyFragment(selectedTypes));
                     proceedVmRegistration(dependencyNode, "Registering proxying fragment {} ...");
-                    //cstrs.add(new PrecedingRunning(vms.get(nodeName),vms.get(dependencyNode)));
                 } else {
                     // We can have duplicates (eg. a 'proxy' may be linked to multiple fragments)
                     vmsName = retrieveDependencyFragment(selectedTypes);
@@ -467,9 +463,7 @@ public class ParsingSpace {
             }
             identifiedClouds.put(cloudName, cloudType + " " + region);
         }
-        identifiedClouds.forEach((s, s2) -> {
-            logger.info(" Cloud named {} in CLOUD_LIST is recognized as {} and is still whitelisted", s, s2);
-        });
+        identifiedClouds.forEach((s, s2) -> logger.info(" Cloud named {} in CLOUD_LIST is recognized as {} and is still whitelisted", s, s2));
         // Proceeding to the effective Ban of the resource.
         List<String> cloudsToIgnore = this.cloudsToKeep.entrySet().stream().filter(stringBooleanEntry -> (stringBooleanEntry.getValue())).filter(stringBooleanEntry -> (!identifiedClouds.containsValue(stringBooleanEntry.getKey()))).map(Map.Entry::getKey).collect(Collectors.toList());
         for (String placementString : cloudsToIgnore) {
@@ -830,19 +824,13 @@ public class ParsingSpace {
         if (fragmentName.isPresent()) {
             return result.replace(wholePropertyDeclaration, String.format("@%s_%s", hostProperties, fragmentName.get().getValue()));
         } else {
-            //return result.replace(wholePropertyDeclaration, String.format("@%s_%s",hostProperties, relationship.get().getHostingNode().name));
-            //throw new IllegalStateException("No fragment found for processing node" + processingNodeName);
-            ArchiveRoot parsingResult = this.parsingResult.getResult();
-            Topology topology = parsingResult.getTopology();
+            ArchiveRoot pr = this.parsingResult.getResult();
+            Topology topology = pr.getTopology();
             Map<String, NodeTemplate> nodeTemplates = topology.getNodeTemplates();
             NodeTemplate nodeTemplate = nodeTemplates.get(processingNodeName);
             String fragmentType = nodeTemplate.getType();
             fragmentName = hostingNodePerFragment.entrySet().stream().filter(valkey -> (valkey.getValue().equals(fragmentType))).findFirst();
-            if (fragmentName.isPresent()) {
-                return result.replace(wholePropertyDeclaration, String.format("@%s_%s", hostProperties, fragmentName.get().getValue()));
-            } else {
-                return "";
-            }
+            return fragmentName.map(stringStringEntry -> result.replace(wholePropertyDeclaration, String.format("@%s_%s", hostProperties, stringStringEntry.getValue()))).orElse("");
         }
     }
 
