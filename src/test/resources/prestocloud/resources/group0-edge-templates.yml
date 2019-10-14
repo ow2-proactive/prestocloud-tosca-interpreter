@@ -17,8 +17,7 @@ dsl_definitions:
     edge_type: raspberry
     edge_location: ""
     edge_credentials:
-      properties:
-        username: pi
+      username: pi
 
 topology_template:
 
@@ -31,13 +30,13 @@ topology_template:
         name: rpi2
         type: edge
         edge: *raspberry_pi
-      capability:
-        resoures:
+      capabilities:
+        resource:
           properties:
             name: rpi2
             type: edge
             edge: *raspberry_pi
-        hosts:
+        host:
           properties:
             num_cpus: 1
             mem_size: 1 GB

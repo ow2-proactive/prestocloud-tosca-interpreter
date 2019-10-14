@@ -192,7 +192,6 @@ public class ParsingUtils {
      * node template name -> capability name -> property -> value
      *
      * @param parsingResult template parsing results
-     * @param regions       list of regions to take into consideration
      * @return templates information.
      * @throws IOException
      * @throws ParsingException
