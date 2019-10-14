@@ -30,6 +30,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -48,6 +49,7 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import lombok.Getter;
 import prestocloud.btrplace.tosca.GetVMTemplatesDetailsResult;
 import prestocloud.btrplace.tosca.ParsingUtils;
+import prestocloud.btrplace.tosca.model.EdgeResourceTemplateDetails;
 import prestocloud.component.ICSARRepositorySearchService;
 import prestocloud.tosca.model.ArchiveRoot;
 import prestocloud.tosca.parser.ParsingResult;
@@ -114,7 +116,9 @@ public class TOSCAParserApp {
             ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get(typeLevelTOSCAFile));
             logger.info("(2/20) Parsing VM cloud resource TOSCA file");
             GetVMTemplatesDetailsResult vmTemplatesParsingResult = ParsingUtils.getVMTemplatesDetails(parser, resourcesPath);
-            ParsingSpace ps = new ParsingSpace(parsingResult, vmTemplatesParsingResult ,parser,resourcesPath);
+            logger.info("(3/21) Parsing Edge resource TOSCA file");
+            List<EdgeResourceTemplateDetails> edgeResourceTemplateDetails = ParsingUtils.getEdgeResourceTemplateDetails(parser, resourcesPath);
+            ParsingSpace ps = new ParsingSpace(parsingResult, vmTemplatesParsingResult, edgeResourceTemplateDetails, parser, resourcesPath);
             logger.info("(3/20) Interpreting TOSCA specification");
             ps.retrieveResourceFromParsing();
             logger.info("(4/20) Identifying fragments related to precedence constraints ...");

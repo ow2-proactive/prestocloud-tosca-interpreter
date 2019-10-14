@@ -51,11 +51,13 @@ public class ParsingSpace {
 
     // We describe couples of element we want to d integrate from our parsing.
     private List<String> supportedCloudsResourceFiles;
+    private List<String> supportedEdgeResourceFiles;
     private List<Relationship> relationships;
     private List<PlacementConstraint> placementConstraints;
     private List<Docker> dockers;
     private List<OptimizationVariables> optimizationVariables;
     private List<VMTemplateDetails> vmTemplatesDetails;
+    private List<EdgeResourceTemplateDetails> edgeResourceDetails;
     // TODO: deal with health checks
     private List<HealthCheck> healthChecks;
     private Map<String,SshKey> sshKeys;
@@ -87,12 +89,13 @@ public class ParsingSpace {
     private Mapping dstmapping;
     private Set<Action> actions;
 
-    public ParsingSpace(ParsingResult<ArchiveRoot> result, GetVMTemplatesDetailsResult getVMTemplatesDetailsResult, ToscaParser parser, String resourcesPath) {
+    public ParsingSpace(ParsingResult<ArchiveRoot> result, GetVMTemplatesDetailsResult getVMTemplatesDetailsResult, List<EdgeResourceTemplateDetails> edgeResourceTemplateDetails, ToscaParser parser, String resourcesPath) {
         this.parsingResult = result;
         this.parser = parser;
         this.resourcesPath  = resourcesPath;
         this.vmTemplatesDetails = getVMTemplatesDetailsResult.vmTemplatesDetails;
         this.regionsPerCloudPerCloudFile = getVMTemplatesDetailsResult.regionsPerCloudPerCloudFile;
+        this.edgeResourceDetails = edgeResourceTemplateDetails;
     }
 
     public boolean retrieveResourceFromParsing() {
