@@ -1026,6 +1026,7 @@ public class ParsingUtils {
                         ertd.temperatureSensor = Optional.ofNullable(cloudProperties.getValue().get("temperature"));
                     }
                 }
+                edgeResourceTemplateDetails.add(ertd);
             }
         }
         return edgeResourceTemplateDetails;
