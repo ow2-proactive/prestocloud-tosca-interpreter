@@ -84,9 +84,19 @@ public class Docker {
         }*/
         if (image != null) {
             String registryString = prepareRegistry();
-            return String.format("docker pull %s && docker run -d --rm %s %s %s %s", registryString, preparePortsForwarding(), prepareEnvironement(), registryString, prepareCmd());
+            return String.format("%sdocker pull %s && docker run -d --rm %s %s %s %s", prepareLogin(), registryString, preparePortsForwarding(), prepareEnvironement(), registryString, prepareCmd());
         } else {
             return EMPTY_STRING;
+        }
+    }
+
+    private String prepareLogin() {
+        if (this.registry == null) {
+            return Docker.EMPTY_STRING;
+        } else if (this.registry.length() == 0) {
+            return Docker.EMPTY_STRING;
+        } else {
+            return String.format("docker login -u @credentials_prestocloud_%s_username -p @credentials_prestocloud_%s_password %s && ", registry, registry, registry);
         }
     }
 

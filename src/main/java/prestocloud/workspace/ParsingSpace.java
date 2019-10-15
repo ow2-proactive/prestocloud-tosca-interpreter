@@ -114,6 +114,7 @@ public class ParsingSpace {
              throw new IllegalArgumentException("There is a mismatch between specified clouds in Type-level TOSCA and the clouds specified in the repository");
          }
         logger.info("{} supported cloud have been found", supportedCloudsResourceFiles.size());
+        logger.info("{} types of Edge devices have been found", this.edgeResourceDetails.size());
         relationships = ParsingUtils.getRelationships(parsingResult);
         placementConstraints = ParsingUtils.getConstraints(parsingResult);
         dockers = ParsingUtils.getDockers(parsingResult);
@@ -261,6 +262,7 @@ public class ParsingSpace {
                 }
             }
         }
+        //Todo: populate edge nodes
     }
 
 
@@ -363,7 +365,7 @@ public class ParsingSpace {
         for (Map.Entry<String, Node> edgeNode : edgeNodes.entrySet()) {
             disk.setCapacity(edgeNode.getValue(), 60);
         }*/
-
+        // TODO Properly handle edge here
         for (Map.Entry<String, Node> cloud : nodePerName.entrySet()) {
             cpu.setCapacity(cloud.getValue(), this.regionCapabilityDescriptorPerCloud.get(cloud.getKey()).getCpuCapacity());
             mem.setCapacity(cloud.getValue(), this.regionCapabilityDescriptorPerCloud.get(cloud.getKey()).getMemoryCapacity());
@@ -833,7 +835,7 @@ public class ParsingSpace {
             NodeTemplate nodeTemplate = nodeTemplates.get(processingNodeName);
             String fragmentType = nodeTemplate.getType();
             fragmentName = hostingNodePerFragment.entrySet().stream().filter(valkey -> (valkey.getValue().equals(fragmentType))).findFirst();
-            return fragmentName.map(stringStringEntry -> result.replace(wholePropertyDeclaration, String.format("@%s_%s", hostProperties, stringStringEntry.getValue()))).orElse("");
+            return fragmentName.map(stringStringEntry -> result.replace(wholePropertyDeclaration, String.format("@variables_%s_%s", hostProperties, stringStringEntry.getValue()))).orElse("");
         }
     }
 
