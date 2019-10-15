@@ -827,7 +827,7 @@ public class ParsingSpace {
     private String processReplacement(String result, String wholePropertyDeclaration, String processingNodeName, String hostProperties) {
         Optional<Map.Entry<String, String>> fragmentName = hostingNodePerFragment.entrySet().stream().filter(valkey -> (valkey.getValue().equals(processingNodeName))).findFirst();
         if (fragmentName.isPresent()) {
-            return result.replace(wholePropertyDeclaration, String.format("@%s_%s", hostProperties, fragmentName.get().getValue()));
+            return result.replace(wholePropertyDeclaration, String.format("@%s_%s", hostProperties, fragmentName.get().getKey()));
         } else {
             ArchiveRoot pr = this.parsingResult.getResult();
             Topology topology = pr.getTopology();
@@ -835,7 +835,7 @@ public class ParsingSpace {
             NodeTemplate nodeTemplate = nodeTemplates.get(processingNodeName);
             String fragmentType = nodeTemplate.getType();
             fragmentName = hostingNodePerFragment.entrySet().stream().filter(valkey -> (valkey.getValue().equals(fragmentType))).findFirst();
-            return fragmentName.map(stringStringEntry -> result.replace(wholePropertyDeclaration, String.format("@variables_%s_%s", hostProperties, stringStringEntry.getValue()))).orElse("");
+            return fragmentName.map(stringStringEntry -> result.replace(wholePropertyDeclaration, String.format("@variables_%s_%s", hostProperties, stringStringEntry.getKey()))).orElse("");
         }
     }
 
