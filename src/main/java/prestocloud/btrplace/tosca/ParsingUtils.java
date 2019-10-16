@@ -374,6 +374,9 @@ public class ParsingUtils {
 
         // Look for fragments in the node templates
         Map<String, NodeTemplate> nodeTemplates = parsingResult.getResult().getTopology().getNodeTemplates();
+        if (nodeTemplates == null) {
+            nodeTemplates = new HashMap<>();
+        }
         for (Map.Entry<String, NodeTemplate> nodeTemplateFragment : nodeTemplates.entrySet()) {
             if (nodeTemplateFragment.getValue().getType().equalsIgnoreCase("prestocloud.nodes.fragment.jppf")) {
                 relationships.addAll(getJPPFRelationships(parsingResult));
@@ -786,12 +789,31 @@ public class ParsingUtils {
         }
     }
 
+    public static Map<String, String> getfragmentIds(ParsingResult<ArchiveRoot> parsingResult) {
+        Map<String, String> ids = new HashMap<>();
+
+        Map<String, NodeTemplate> nodeTemplates = parsingResult.getResult().getTopology().getNodeTemplates();
+        if (nodeTemplates == null) {
+            nodeTemplates = new HashMap<>();
+        }
+        for (Map.Entry<String, NodeTemplate> nodeTemplateFragment : nodeTemplates.entrySet()) {
+            // Fragment detected
+            if (nodeTemplateFragment.getValue().getType().startsWith("prestocloud.nodes.fragment")) {
+                ids.put(nodeTemplateFragment.getValue().getName(), ((ScalarPropertyValue) nodeTemplateFragment.getValue().getProperties().get("id")).getValue());
+            }
+        }
+        return ids;
+    }
+
     public static List<Docker> getDockers(ParsingResult<ArchiveRoot> parsingResult) {
 
         List<Docker> dockers = new ArrayList<>();
 
         // Look for fragments in the node templates
         Map<String, NodeTemplate> nodeTemplates = parsingResult.getResult().getTopology().getNodeTemplates();
+        if (nodeTemplates == null) {
+            nodeTemplates = new HashMap<>();
+        }
         for (Map.Entry<String, NodeTemplate> nodeTemplateFragment : nodeTemplates.entrySet()) {
             // Fragment detected
             if (nodeTemplateFragment.getValue().getType().startsWith("prestocloud.nodes.fragment")) {
@@ -850,6 +872,9 @@ public class ParsingUtils {
 
         // Look for fragments in the node templates
         Map<String, NodeTemplate> nodeTemplates = parsingResult.getResult().getTopology().getNodeTemplates();
+        if (nodeTemplates == null) {
+            nodeTemplates = new HashMap<>();
+        }
         for (Map.Entry<String, NodeTemplate> nodeTemplateFragment : nodeTemplates.entrySet()) {
             // Fragment detected
             if (nodeTemplateFragment.getValue().getType().startsWith("prestocloud.nodes.fragment")) {
@@ -877,9 +902,11 @@ public class ParsingUtils {
 
     public static Map<String,SshKey>  getSshKeys(ParsingResult<ArchiveRoot> parsingResult) {
         Map<String,SshKey> sshKeys = new HashMap<>();
-
         // Look for fragments in the node templates
         Map<String, NodeTemplate> nodeTemplates = parsingResult.getResult().getTopology().getNodeTemplates();
+        if (nodeTemplates == null) {
+            nodeTemplates = new HashMap<>();
+        }
         String framgentName;
         String nodeName;
         String ssh;
@@ -906,6 +933,9 @@ public class ParsingUtils {
 
         // Look for fragments in the node templates
         Map<String, NodeTemplate> nodeTemplates = parsingResult.getResult().getTopology().getNodeTemplates();
+        if (nodeTemplates == null) {
+            nodeTemplates = new HashMap<>();
+        }
         for (Map.Entry<String, NodeTemplate> nodeTemplateFragment : nodeTemplates.entrySet()) {
             // Fragment detected
             if (nodeTemplateFragment.getValue().getType().startsWith("prestocloud.nodes.fragment")) {
