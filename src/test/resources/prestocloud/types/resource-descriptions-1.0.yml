@@ -23,7 +23,7 @@ node_types:
       id:
         type: string
         description: The id of the resource.
-        required: false
+        required: true
       type:
         type: string
         description: Indicates the type of the resource (cloud or edge).
