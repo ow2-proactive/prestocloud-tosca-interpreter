@@ -119,6 +119,7 @@ public class ParsingSpace {
         relationships = ParsingUtils.getRelationships(parsingResult);
         placementConstraints = ParsingUtils.getConstraints(parsingResult);
         dockers = ParsingUtils.getDockers(parsingResult);
+        idPerFragment = ParsingUtils.getfragmentIds(parsingResult);
         optimizationVariables = ParsingUtils.getOptimizationVariables(parsingResult);
         sshKeys = ParsingUtils.getSshKeys(parsingResult);
         healthChecks = ParsingUtils.getHealthChecks(parsingResult);
@@ -659,6 +660,7 @@ public class ParsingSpace {
         jo.put(OutputField.ACTION_START, action.getStart());
         jo.put(OutputField.ACTION_END, action.getEnd());
         jo.put(OutputField.ACTION_FRAGMENT, vmName);
+        jo.put(OutputField.ACTION_ID, this.idPerFragment.getOrDefault(vmName, ""));
         jo.put(OutputField.ACTION_CLOUD, nodeName.split(" ")[0]);
         jo.put(OutputField.ACTION_REGION, nodeName.split(" ")[1]);
         jo.put(OutputField.ACTION_TYPE, selectedVMType);
@@ -690,6 +692,7 @@ public class ParsingSpace {
         jo.put(OutputField.ACTION_START, action.getStart());
         jo.put(OutputField.ACTION_END, action.getEnd());
         jo.put(OutputField.ACTION_FRAGMENT, vmName);
+        jo.put(OutputField.ACTION_ID, this.idPerFragment.getOrDefault(vmName, ""));
         jo.put(OutputField.ACTION_CLOUD, nodeName.split(" ")[0]);
         jo.put(OutputField.ACTION_REGION, nodeName.split(" ")[1]);
         jo.put(OutputField.ACTION_CLOUDSRC, nodeNameSrc.split(" ")[0]);
@@ -733,6 +736,7 @@ public class ParsingSpace {
         jo.put(OutputField.ACTION_START, action.getStart());
         jo.put(OutputField.ACTION_END, action.getEnd());
         jo.put(OutputField.ACTION_FRAGMENT, vmName);
+        jo.put(OutputField.ACTION_ID, this.idPerFragment.getOrDefault(vmName, ""));
         jo.put(OutputField.ACTION_CLOUDSRC, nodeName.split(" ")[0]);
         jo.put(OutputField.ACTION_REGIONSRC, nodeName.split(" ")[1]);
         jo.put(OutputField.ACTION_TYPE, selectedVMType);
@@ -848,6 +852,7 @@ public class ParsingSpace {
         public static final String ACTION_START = "start";
         public static final String ACTION_END = "end";
         public static final String ACTION_FRAGMENT = "fragment";
+        public static final String ACTION_ID = "id";
         public static final String ACTION_REGION = "region";
         public static final String ACTION_CLOUD = "cloud";
         public static final String ACTION_REGIONSRC = "regionsrc";
