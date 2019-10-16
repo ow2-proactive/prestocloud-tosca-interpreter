@@ -61,6 +61,7 @@ public class ParsingSpace {
     // TODO: deal with health checks
     private List<HealthCheck> healthChecks;
     private Map<String,SshKey> sshKeys;
+    private Map<String, String> idPerFragment;
     private Map<String, Map<String, Map<String, Map<String, String>>>> selectedCloudVMTypes = new HashMap<>();
     private Map<String, String> hostingNodePerFragment = new HashMap<>();
     private Map<String,String> balancingNodes = new HashMap<>();
