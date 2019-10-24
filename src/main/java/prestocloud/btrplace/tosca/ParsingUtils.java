@@ -927,6 +927,30 @@ public class ParsingUtils {
         return sshKeys;
     }
 
+    public static Map<String, Boolean> getScalableFragments(ParsingResult<ArchiveRoot> parsingResult) {
+        Map<String, Boolean> result = new HashMap<>();
+        // Look for fragments in the node templates
+        Map<String, NodeTemplate> nodeTemplates = parsingResult.getResult().getTopology().getNodeTemplates();
+        if (nodeTemplates == null) {
+            nodeTemplates = new HashMap<>();
+        }
+        String fragmentName;
+        Boolean isFragmentScalable;
+        for (Map.Entry<String, NodeTemplate> nodeTemplateFragment : nodeTemplates.entrySet()) {
+            // Fragment detected
+            if (nodeTemplateFragment.getValue().getType().startsWith("prestocloud.nodes.fragment")) {
+                fragmentName = nodeTemplateFragment.getValue().getName();
+                ScalarPropertyValue property = (ScalarPropertyValue) nodeTemplateFragment.getValue().getProperties().get("scalable");
+                if (property != null) {
+                    isFragmentScalable = property.getValue().toString().equalsIgnoreCase("true");
+                } else {
+                    isFragmentScalable = false;
+                }
+                result.put(fragmentName, isFragmentScalable);
+            }
+        }
+        return result;
+    }
     public static List<OptimizationVariables> getOptimizationVariables(ParsingResult<ArchiveRoot> parsingResult) {
 
         List<OptimizationVariables> allOptimizationVariables = new ArrayList<>();

@@ -58,6 +58,7 @@ public class ParsingSpace {
     private List<OptimizationVariables> optimizationVariables;
     private List<VMTemplateDetails> vmTemplatesDetails;
     private List<EdgeResourceTemplateDetails> edgeResourceDetails;
+    private Map<String, Boolean> scalablePerfragments;
     // TODO: deal with health checks
     private List<HealthCheck> healthChecks;
     private Map<String,SshKey> sshKeys;
@@ -123,6 +124,7 @@ public class ParsingSpace {
         optimizationVariables = ParsingUtils.getOptimizationVariables(parsingResult);
         sshKeys = ParsingUtils.getSshKeys(parsingResult);
         healthChecks = ParsingUtils.getHealthChecks(parsingResult);
+        scalablePerfragments = ParsingUtils.getScalableFragments(parsingResult);
         return true;
     }
 
@@ -665,6 +667,7 @@ public class ParsingSpace {
         jo.put(OutputField.ACTION_REGION, nodeName.split(" ")[1]);
         jo.put(OutputField.ACTION_TYPE, selectedVMType);
         jo.put(OutputField.ACTION_NODE, this.hostingNodePerFragment.get(vmName));
+        jo.put(OutputField.ACTION_SCALABLE, this.scalablePerfragments.getOrDefault(vmName, false));
        if  (this.sshKeys.containsKey(vmName)) {
            if (this.sshKeys.get(vmName).hasKey()) {
                jo.put(OutputField.ACTION_SSH_KEY, this.sshKeys.get(vmName).getPublicKey());
@@ -674,6 +677,7 @@ public class ParsingSpace {
        // Docker command is optional because 'proxy', 'master', and 'balanced_by' nodes don't have one
        Optional<Docker> docker = dockers.stream().filter(d -> d.getFragmentName().equalsIgnoreCase(vmName)).findFirst();
         docker.ifPresent(dck -> jo.put(OutputField.ACTION_DOCKER, replaceHostPropertyValuesToMacros(dck.printCmdline())));
+        docker.ifPresent(dck -> jo.put(OutputField.ACTION_PORTS, dck.getAllExposedPorts()));
 
        ja.add(jo);
    }
@@ -699,6 +703,7 @@ public class ParsingSpace {
         jo.put(OutputField.ACTION_REGIONSRC, nodeNameSrc.split(" ")[1]);
         jo.put(OutputField.ACTION_TYPE, selectedVMType);
         jo.put(OutputField.ACTION_NODE, this.hostingNodePerFragment.get(vmName));
+        jo.put(OutputField.ACTION_SCALABLE, this.scalablePerfragments.getOrDefault(vmName, false));
         if  (this.sshKeys.containsKey(vmName)) {
             if (this.sshKeys.get(vmName).hasKey()) {
                 jo.put(OutputField.ACTION_SSH_KEY, this.sshKeys.get(vmName).getPublicKey());
@@ -740,6 +745,7 @@ public class ParsingSpace {
         jo.put(OutputField.ACTION_CLOUDSRC, nodeName.split(" ")[0]);
         jo.put(OutputField.ACTION_REGIONSRC, nodeName.split(" ")[1]);
         jo.put(OutputField.ACTION_TYPE, selectedVMType);
+        jo.put(OutputField.ACTION_SCALABLE, this.scalablePerfragments.getOrDefault(vmName, false));
         if  (this.sshKeys.containsKey(vmName)) {
             if (this.sshKeys.get(vmName).hasKey()) {
                 jo.put(OutputField.ACTION_SSH_KEY, this.sshKeys.get(vmName).getPublicKey());
@@ -861,6 +867,8 @@ public class ParsingSpace {
         public static final String ACTION_SSH_KEY = "ssh_key";
         public static final String ACTION_DOCKER = "docker";
         public static final String ACTION_NODE = "node";
+        public static final String ACTION_PORTS = "ports";
+        public static final String ACTION_SCALABLE = "scalable";
     }
 }
 

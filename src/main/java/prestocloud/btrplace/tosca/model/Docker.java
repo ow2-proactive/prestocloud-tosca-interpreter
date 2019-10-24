@@ -57,7 +57,7 @@ public class Docker {
     private List<DockerNetworkMapping> mappingList;
 
     public static final String EMPTY_STRING = "";
-    private final Pattern registryIdentifier = Pattern.compile("^(\\S+)\\/(\\S+)$");
+    private static final Pattern registryIdentifier = Pattern.compile("^(\\S+)\\/(\\S+)$");
 
     public Docker(String fragmentName) {
         this.fragmentName = fragmentName;
@@ -137,6 +137,10 @@ public class Docker {
         } else {
             return " " + cmd;
         }
+    }
+
+    public String getAllExposedPorts() {
+        return this.mappingList.stream().map(dockerNetworkMapping -> dockerNetworkMapping.getPublicPort()).collect(Collectors.joining(";"));
     }
 
 }

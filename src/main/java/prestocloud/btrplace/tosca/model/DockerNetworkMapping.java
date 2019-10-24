@@ -27,5 +27,9 @@ public class DockerNetworkMapping {
             this.val = input.toLowerCase();
         }
     }
+
+    public String getPublicPort() {
+        return this.publish;
+    }
 }
 
