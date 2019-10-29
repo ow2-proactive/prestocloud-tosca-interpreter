@@ -104,6 +104,9 @@ public class ParsingSpace {
         // Retrieving main data from the parsed TOSCA.
         Map<String, String> metadata = ParsingUtils.getMetadata(parsingResult);
         supportedCloudsResourceFiles = ParsingUtils.getListOfCloudsFromMetadata(metadata);
+        if (supportedCloudsResourceFiles.size() == 0) {
+            this.regionsPerCloudPerCloudFile.keySet().stream().forEach(s -> supportedCloudsResourceFiles.add(s));
+        }
         Optional<Set<String>> cloudListFromRegion = this.regionsPerCloudPerCloudFile.values().stream().map(Map::keySet).reduce((strings, strings2) -> {
             Set<String> result = new HashSet<>();
             result.addAll(strings);
