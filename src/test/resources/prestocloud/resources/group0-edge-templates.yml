@@ -27,6 +27,7 @@ topology_template:
       type: prestocloud.nodes.compute.edge
       description: An example of Raspberry 2
       properties:
+        id: "::1"
         name: rpi2
         type: edge
         edge: *raspberry_pi
