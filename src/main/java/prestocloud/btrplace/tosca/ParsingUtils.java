@@ -336,7 +336,7 @@ public class ParsingUtils {
                     }
                 }
             }
-            edgeNodeTemplate.put(nodeTemplate.getValue().getName(), typesCapabilities);
+            edgeNodeTemplate.put(String.format ("%s %s", nodeTemplate.getValue().getName(), ((ScalarPropertyValue) nodeTemplate.getValue().getProperties().get("id")).getValue()),typesCapabilities);
         }
         return edgeNodeTemplate;
     }
@@ -805,10 +805,17 @@ public class ParsingUtils {
         return ids;
     }
 
-    public static List<Docker> getDockers(ParsingResult<ArchiveRoot> parsingResult) {
+    public static List<Docker> getDockersCloud(ParsingResult<ArchiveRoot> parsingResult) {
+        return getDockers(parsingResult,"docker_cloud");
+    }
 
+
+    public static List<Docker> getDockersEdge(ParsingResult<ArchiveRoot> parsingResult) {
+        return getDockers(parsingResult,"docker_edge");
+    }
+
+    private static List<Docker> getDockers(ParsingResult<ArchiveRoot> parsingResult, String resourceType) {
         List<Docker> dockers = new ArrayList<>();
-
         // Look for fragments in the node templates
         Map<String, NodeTemplate> nodeTemplates = parsingResult.getResult().getTopology().getNodeTemplates();
         if (nodeTemplates == null) {
@@ -819,12 +826,7 @@ public class ParsingUtils {
             if (nodeTemplateFragment.getValue().getType().startsWith("prestocloud.nodes.fragment")) {
                 Docker docker = new Docker(nodeTemplateFragment.getValue().getName());
                 // Look for one of the 'docker' property
-                String resourceType = "docker_cloud";
                 ComplexPropertyValue dockerProperty = (ComplexPropertyValue) nodeTemplateFragment.getValue().getProperties().get(resourceType);
-                if (dockerProperty == null) {
-                    resourceType = "docker_edge";
-                    dockerProperty = (ComplexPropertyValue) nodeTemplateFragment.getValue().getProperties().get(resourceType);
-                }
                 if (dockerProperty != null) {
                     docker.setResourceType(resourceType);
                     for (String dockerKey : dockerProperty.getValue().keySet()) {
@@ -1057,6 +1059,7 @@ public class ParsingUtils {
             for (Map.Entry<String, Map<String, Map<String, String>>> hostingConstraint : edgeTypes.entrySet()) {
                 // For each properties
                 EdgeResourceTemplateDetails ertd = new EdgeResourceTemplateDetails();
+                ertd.id = hostingConstraint.getKey().split(" ")[1];
                 for (Map.Entry<String, Map<String, String>> cloudProperties : hostingConstraint.getValue().entrySet()) {
                     if (cloudProperties.getKey().equalsIgnoreCase("host")) {
                         ertd.price = Optional.ofNullable(Double.valueOf(cloudProperties.getValue().get("price")) + "");
@@ -1067,7 +1070,6 @@ public class ParsingUtils {
                     if (cloudProperties.getKey().equalsIgnoreCase("edge")) {
                         ertd.edgeType = cloudProperties.getValue().get("edge_type");
                         ertd.name = Optional.ofNullable(cloudProperties.getValue().get("name"));
-                        ertd.id = Optional.ofNullable(cloudProperties.getValue().get("id"));
                         ertd.location = cloudProperties.getValue().get("edge_location");
                         ertd.gps_coordinate = Optional.ofNullable(cloudProperties.getValue().get("gps_coordinates"));
                         ertd.username = cloudProperties.getValue().get("username");

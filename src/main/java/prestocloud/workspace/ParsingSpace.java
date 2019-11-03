@@ -43,6 +43,9 @@ public class ParsingSpace {
 
     private Logger logger = LoggerFactory.getLogger(ParsingSpace.class);
     private static final Pattern NETWORK_IP_PATTERN = Pattern.compile("(\\{ get_property: \\[([\\w,]+),host,([\\w,]+),([\\w,]+),[\\d]+\\] \\})");
+    // TODO: use a valid reference location to compute distances ("Sophia Antipolis" for testing only, must be retrieved from fragment's properties or dependencies)
+    // Point to be discussed with ICCS.
+    String sophiaAntipolisUTM = "32T 342479mE 4831495mN";
 
     private Map<String,Map<String, List<RegionCapacityDescriptor>>> regionsPerCloudPerCloudFile;
     private ParsingResult<ArchiveRoot> parsingResult;
@@ -51,10 +54,10 @@ public class ParsingSpace {
 
     // We describe couples of element we want to d integrate from our parsing.
     private List<String> supportedCloudsResourceFiles;
-    private List<String> supportedEdgeResourceFiles;
     private List<Relationship> relationships;
     private List<PlacementConstraint> placementConstraints;
-    private List<Docker> dockers;
+    private List<Docker> dockersCloud;
+    private List<Docker> dockersEdge;
     private List<OptimizationVariables> optimizationVariables;
     private List<VMTemplateDetails> vmTemplatesDetails;
     private List<EdgeResourceTemplateDetails> edgeResourceDetails;
@@ -84,7 +87,9 @@ public class ParsingSpace {
     private Map<String, Node> nodePerName = new HashMap<>();
     private Map<Node,String> namePerNode = new HashMap<>();
     private Map<String, RegionCapacityDescriptor> regionCapabilityDescriptorPerCloud = new HashMap<>();
+    private Map<String, RegionCapacityDescriptor> regionCapabilityDescriptorPerEdge = new HashMap<>();
     private HashMap<String, Boolean> cloudsToKeep = new HashMap<>();
+    private HashMap<String, Boolean> edgeToKeep = new HashMap<>();
 
     private final List<SatConstraint> cstrs = new ArrayList<>();
     private final List<VM> vmToStop = new ArrayList<>();
@@ -104,7 +109,7 @@ public class ParsingSpace {
         // Retrieving main data from the parsed TOSCA.
         Map<String, String> metadata = ParsingUtils.getMetadata(parsingResult);
         supportedCloudsResourceFiles = ParsingUtils.getListOfCloudsFromMetadata(metadata);
-        if (supportedCloudsResourceFiles.size() == 0) {
+        if (supportedCloudsResourceFiles.isEmpty()) {
             this.regionsPerCloudPerCloudFile.keySet().stream().forEach(s -> supportedCloudsResourceFiles.add(s));
         }
         Optional<Set<String>> cloudListFromRegion = this.regionsPerCloudPerCloudFile.values().stream().map(Map::keySet).reduce((strings, strings2) -> {
@@ -122,7 +127,8 @@ public class ParsingSpace {
         logger.info("{} types of Edge devices have been found", this.edgeResourceDetails.size());
         relationships = ParsingUtils.getRelationships(parsingResult);
         placementConstraints = ParsingUtils.getConstraints(parsingResult);
-        dockers = ParsingUtils.getDockers(parsingResult);
+        dockersCloud = ParsingUtils.getDockersCloud(parsingResult);
+        dockersEdge = ParsingUtils.getDockersEdge(parsingResult);
         idPerFragment = ParsingUtils.getfragmentIds(parsingResult);
         optimizationVariables = ParsingUtils.getOptimizationVariables(parsingResult);
         sshKeys = ParsingUtils.getSshKeys(parsingResult);
@@ -227,15 +233,6 @@ public class ParsingSpace {
                 }
             }
         }
-
-        // TODO: declare edge devices, it depends how we get them
-        /* Declare some edge devices (nodes)
-        Map<String, Node> edgeNodes = new HashMap<>();
-        for (String edgeNodeName : Arrays.asList("acfdgex98", "kdsfk31fw", "f2553fdfs", "bd5fgdx32")) {
-            Node edgeNode = mo.newNode();
-            edgeNodes.put(edgeNodeName, edgeNode);
-            cv.edgeHost(edgeNode);
-        }*/
     }
 
     private String retrieveDependencyFragment(Map.Entry<String, Map<String, Map<String, String>>> selectedTypes) {
@@ -258,31 +255,39 @@ public class ParsingSpace {
 
     public void populateNodesInBtrPlaceModel() {
         String placementString;
+        // Proceeding w/ cloud nodes
         for (String cloudFile : this.regionsPerCloudPerCloudFile.keySet()) {
             for (String cloud : regionsPerCloudPerCloudFile.get(cloudFile).keySet()) {
                 for (RegionCapacityDescriptor region : regionsPerCloudPerCloudFile.get(cloudFile).get(cloud)) {
                     placementString = cloud + " " + region.getRegion();
                     regionCapabilityDescriptorPerCloud.put(placementString, region);
                     if (!nodePerName.containsKey(placementString)) {
-                        registerNewNode(placementString,false,"Registering node {} as {} ...");
+                        registerNewNode(placementString,false,"Registering node {} as {} ...",cloudsToKeep);
                     }
                 }
             }
         }
-        //Todo: populate edge nodes
+        // Proceeding w/ edge nodes
+        for (EdgeResourceTemplateDetails edgeResource : this.edgeResourceDetails) {
+            placementString = "edge " + edgeResource.id;
+            regionCapabilityDescriptorPerEdge.put(placementString, new RegionCapacityDescriptor(placementString,edgeResource.num_cpus,edgeResource.mem_size,edgeResource.disk_size.orElse("0 GB")));
+            if (!nodePerName.containsKey(placementString)) {
+                registerNewNode(placementString,false,"Registering edge node {} as {} ...",edgeToKeep);
+            }
+        }
     }
 
 
-    private void registerNewNode(String placementString,boolean isToBeKept, String loggerMessage) {
+    private void registerNewNode(String placementString,boolean isToBeKept, String loggerMessage, Map<String,Boolean> arrayToKeep) {
         Node node = mo.newNode();
         map.addOnlineNode(node);
         nodePerName.put(placementString,node);
         namePerNode.put(node,placementString);
-        cloudsToKeep.put(placementString, isToBeKept);
+        arrayToKeep.put(placementString, isToBeKept);
         logger.info(loggerMessage, placementString, node);
     }
 
-    public void setNodeToKeep() {
+    public void setCloudNodeToKeep() {
         String placementString;
         for (String supportedCloud : this.supportedCloudsResourceFiles) {
             for (String cloud : regionsPerCloudPerCloudFile.get(supportedCloud).keySet()) {
@@ -290,7 +295,7 @@ public class ParsingSpace {
                     placementString = cloud + " " + region.getRegion();
                     map.addOnlineNode(nodePerName.get(placementString));
                     cloudsToKeep.put(placementString, true);
-                    logger.info("Setting the whitelisted node {} online ...", placementString);
+                    logger.info("Setting the cloud whitelisted node {} online ...", placementString);
                 }
             }
         }
@@ -299,6 +304,35 @@ public class ParsingSpace {
             if (Boolean.TRUE.equals(entree.getValue())) {
                 cstrs.add(new Online(node));
             } else {
+                cstrs.add(new RunningCapacity(nodePerName.get(entree.getKey()), 0));
+            }
+        }
+    }
+
+    public void loadRunningEdgeNode(String edgeGwNodeFileContent) {
+        // Could also be labelled setEdgeNodeToBeKept()
+        if (!JSONValue.isValidJson(edgeGwNodeFileContent)) {
+            throw new IllegalArgumentException("The provided mapping is not valid. I leave.");
+        }
+        JSONObject jo = (JSONObject) JSONValue.parse(edgeGwNodeFileContent);
+        JSONObject resobject = (JSONObject) jo.get("resobject");
+        JSONArray nodesArray = (JSONArray) resobject.get("nodes");
+        JSONObject nodeJson;
+        String nodeName;
+        for(Object node : nodesArray) {
+            nodeJson = (JSONObject) node;
+            nodeName = (String)  nodeJson.get("nodeid");
+            map.addOnlineNode(nodePerName.get("edge " + nodeName));
+            edgeToKeep.put("edge " + nodeName ,Boolean.TRUE);
+            logger.info("Edge node {} is acknowledged as available",nodeName);
+        }
+        for (Map.Entry<String, Boolean> entree : edgeToKeep.entrySet()) {
+            Node node = nodePerName.get(entree.getKey());
+            if (Boolean.TRUE.equals(entree.getValue())) {
+                cstrs.add(new Online(node));
+                cstrs.add(new RunningCapacity(nodePerName.get(entree.getKey()), 1));
+            } else {
+                logger.info("Edge node {} is reported as down",entree.getKey());
                 cstrs.add(new RunningCapacity(nodePerName.get(entree.getKey()), 0));
             }
         }
@@ -332,20 +366,33 @@ public class ParsingSpace {
         boolean vmReferencedAsToscaFragment = this.vmsPerName.containsKey(operatedVMSonNode);
         boolean nodeReferencedInRequiredProvider = this.nodePerName.containsKey(nodeName);
         if (!nodeReferencedInRequiredProvider) {
-            registerNewNode(nodeName,false,"Registering a node from an excluded provider {} as {}");
+            if (isPlacementStringRelatedToEdge(nodeName)) {
+                registerNewNode(nodeName,false,"Registering a edge node from an excluded provider {} as {}",edgeToKeep);
+            } else {
+                registerNewNode(nodeName,false,"Registering a cloud node from an excluded provider {} as {}",cloudsToKeep);
+            }
         }
         if (vmReferencedAsToscaFragment) {
             // The fragment is referenced by the type-level TOSCA: This fragment is expected to be running by the end of the parsing
             logger.info("Reading mapping : Node {} is operating VM {}, left to be running", nodeName, operatedVMSonNode);
             map.addRunningVM(this.vmsPerName.get(operatedVMSonNode),this.nodePerName.get(nodeName));
         } else {
-            // The fragment is no more referenced: We register this VM as running, but constraint it to be removed.
+            // The fragment is no more referenced: we register this VM as running, but constraint it to be removed.
             proceedVmRegistration(operatedVMSonNode,"Registering fragment to be removed {}");
             map.addRunningVM(this.vmsPerName.get(operatedVMSonNode),this.nodePerName.get(nodeName));
             cstrs.add(new Ready(this.vmsPerName.get(operatedVMSonNode)));
             vmToStop.add(this.vmsPerName.get(operatedVMSonNode));
         }
         alreadyRunningVms.add(this.vmsPerName.get(operatedVMSonNode));
+    }
+
+    private boolean isPlacementStringRelatedToEdge(String placementString) {
+        String[] tmp = placementString.split(" ");
+        if (tmp.length == 2) {
+            return tmp[0].equals("edge");
+        } else {
+            return false;
+        }
     }
 
 
@@ -355,28 +402,16 @@ public class ParsingSpace {
         mo.attach(mem);
         mo.attach(disk);
 
-        // TODO: set cpu for edge devices
-        /* Set edge devices cpu
-        for (Map.Entry<String, Node> edgeNode : edgeNodes.entrySet()) {
-            cpu.setCapacity(edgeNode.getValue(), 4);
-        }*/
-
-        // TODO: set memory for edge devices
-        /* Set edge devices memory
-        for (Map.Entry<String, Node> edgeNode : edgeNodes.entrySet()) {
-            mem.setCapacity(edgeNode.getValue(), 2);
-        }*/
-
-        // TODO: set disk for edge devices
-        /* Set edge devices disk
-        for (Map.Entry<String, Node> edgeNode : edgeNodes.entrySet()) {
-            disk.setCapacity(edgeNode.getValue(), 60);
-        }*/
-        // TODO Properly handle edge here
-        for (Map.Entry<String, Node> cloud : nodePerName.entrySet()) {
-            cpu.setCapacity(cloud.getValue(), this.regionCapabilityDescriptorPerCloud.get(cloud.getKey()).getCpuCapacity());
-            mem.setCapacity(cloud.getValue(), this.regionCapabilityDescriptorPerCloud.get(cloud.getKey()).getMemoryCapacity());
-            disk.setCapacity(cloud.getValue(), this.regionCapabilityDescriptorPerCloud.get(cloud.getKey()).getDiskCapacity());
+        for (Map.Entry<String, Node> nodeEntree : nodePerName.entrySet()) {
+            if (isPlacementStringRelatedToEdge(nodeEntree.getKey())) {
+                cpu.setCapacity(nodeEntree.getValue(), this.regionCapabilityDescriptorPerEdge.get(nodeEntree.getKey()).getCpuCapacity());
+                mem.setCapacity(nodeEntree.getValue(), this.regionCapabilityDescriptorPerEdge.get(nodeEntree.getKey()).getMemoryCapacity());
+                disk.setCapacity(nodeEntree.getValue(), this.regionCapabilityDescriptorPerEdge.get(nodeEntree.getKey()).getDiskCapacity());
+            } else {
+                cpu.setCapacity(nodeEntree.getValue(), this.regionCapabilityDescriptorPerCloud.get(nodeEntree.getKey()).getCpuCapacity());
+                mem.setCapacity(nodeEntree.getValue(), this.regionCapabilityDescriptorPerCloud.get(nodeEntree.getKey()).getMemoryCapacity());
+                disk.setCapacity(nodeEntree.getValue(), this.regionCapabilityDescriptorPerCloud.get(nodeEntree.getKey()).getDiskCapacity());
+            }
         }
     }
 
@@ -388,43 +423,52 @@ public class ParsingSpace {
                     if (!nodeConstraints.getResourceConstraints().isEmpty()) {
                         // If the resource may run on cloud(s), select best matching types
                         if (nodeConstraints.getResourceConstraints().get("type").contains("cloud")) {
-                            // Prepare VM name depending on requirement type ('execute' targets the fragment name, others target node/host name)
-                            String vmName = constrainedNode.getType().equalsIgnoreCase("execute") ? relationship.getFragmentName() : constrainedNode.getType();
-                            for (Map.Entry<String, List<String>> hostingConstraint : nodeConstraints.getHostingConstraints().entrySet()) {
-                                String required = hostingConstraint.getValue().get(0);
-
-                                // TODO: manage more constraints on values if needed
-                                int constraint;
-                                if (required.contains("RangeMin")) {
-                                    constraint = Integer.parseInt(required.split(",")[0].split(" ")[1]);
-                                } else if (required.contains("GreaterOrEqual")) {
-                                    constraint = Integer.parseInt(required.split(" ")[1]);
-                                } else {
-                                    constraint = Integer.parseInt(required);
-                                }
-
-                                // TODO: manage more units if needed
-                                if (hostingConstraint.getKey().equalsIgnoreCase("num_cpus")) {
-                                    cpu.setConsumption(vmsPerName.get(vmName), constraint);
-                                } else if (hostingConstraint.getKey().equalsIgnoreCase("mem_size")) {
-                                    // Mem in GB only
-                                    if (required.contains("MB")) {
-                                        constraint = constraint / 1024;
-                                    }
-                                    mem.setConsumption(vmsPerName.get(vmName), constraint);
-                                } else if (hostingConstraint.getKey().equalsIgnoreCase("storage_size")) {
-                                    // Storage in GB only
-                                    if (required.contains("MB")) {
-                                        constraint = constraint / 1024;
-                                    }
-                                    disk.setConsumption(vmsPerName.get(vmName), constraint);
-                                } else {
-                                    logger.error("Unrecognized hosting constraint: {} ", hostingConstraint.getKey());
-                                }
-                            }
+                            configureGeneralHostingConstrains(constrainedNode,relationship,nodeConstraints);
+                        } else if (nodeConstraints.getResourceConstraints().get("type").contains("edge")) {
+                           // Retrieve constrains from the edge resources hosting
+                            configureGeneralHostingConstrains(constrainedNode,relationship,nodeConstraints);
+                            // Add support for edge-specific resource constrain: no additional constrain found.
+                            // Should be a topic to be discuss w/ Andreas
+                        } else {
+                           logger.error("Unrecognized hosting type: {}", nodeConstraints);
                         }
                     }
                 }
+            }
+        }
+    }
+
+    private void configureGeneralHostingConstrains(ConstrainedNode constrainedNode, Relationship relationship, NodeConstraints nodeConstraints) {
+        // Prepare VM name depending on requirement type ('execute' targets the fragment name, others target node/host name)
+        String vmName = constrainedNode.getType().equalsIgnoreCase("execute") ? relationship.getFragmentName() : constrainedNode.getType();
+        for (Map.Entry<String, List<String>> hostingConstraint : nodeConstraints.getHostingConstraints().entrySet()) {
+            String required = hostingConstraint.getValue().get(0);
+
+            int constraint;
+            if (required.contains("RangeMin")) {
+                constraint = Integer.parseInt(required.split(",")[0].split(" ")[1]);
+            } else if (required.contains("GreaterOrEqual")) {
+                constraint = Integer.parseInt(required.split(" ")[1]);
+            } else {
+                constraint = Integer.parseInt(required);
+            }
+
+            if (hostingConstraint.getKey().equalsIgnoreCase("num_cpus")) {
+                cpu.setConsumption(vmsPerName.get(vmName), constraint);
+            } else if (hostingConstraint.getKey().equalsIgnoreCase("mem_size")) {
+                // Mem in GB only
+                if (required.contains("MB")) {
+                    constraint = constraint / 1024;
+                }
+                mem.setConsumption(vmsPerName.get(vmName), constraint);
+            } else if (hostingConstraint.getKey().equalsIgnoreCase("storage_size")) {
+                // Storage in GB only
+                if (required.contains("MB")) {
+                    constraint = constraint / 1024;
+                }
+                disk.setConsumption(vmsPerName.get(vmName), constraint);
+            } else {
+                logger.error("Unrecognized hosting constraint: {} ", hostingConstraint.getKey());
             }
         }
     }
@@ -437,13 +481,7 @@ public class ParsingSpace {
             //If the cloud resource is not detected as online, I'll add a banning constrain.
             banUnreferencedCloudInCloudList(cloudList);
         }
-
-        // TODO : with edge resource, we will need to act check the effective reachability of the need. Point to be discussed.
-        // TODO: set the state for edge devices
-        // All edge nodes are online and running
-        /*for (Map.Entry<String, Node> edgeNode : edgeNodes.entrySet()) {
-            map.on(edgeNode.getValue());
-        }*/
+        // Edge device availability is already tackled in loadRunningEdgeNode
     }
 
     private void banUnreferencedCloudInCloudList(String cloudList) {
@@ -499,6 +537,7 @@ public class ParsingSpace {
         // Apply placement constraints
         for (PlacementConstraint placementConstraint : placementConstraints) {
             // TODO: manage more constraints if needed, use a dedicated method
+            // AFAIK: this is not the case
             if (placementConstraint.getType().contains("Spread")) {
                 Set<VM> constrainedVms = new HashSet<>();
                 // Check if the VM actually exists (this is currently triggered as edge devices are not yet managed)
@@ -539,56 +578,73 @@ public class ParsingSpace {
                 }
             }
     }
-        // TODO: Ban constraints are only put on edge devices
-            /*if (constraint.getType().contains("Ban")) {
-                Set<Node> constrained_nodes = new HashSet<>();
-                for (String node : constraint.getDevices()) {
-                    constrained_nodes.add(edgeNodes.get(node));
-                }
-                String vm = null;
-                for (String target : constraint.getTargets()) {
-                    vm = target;
-                }
-                cstrs.add(new Ban(vms.get(vm), Sets.newHashSet(constrained_nodes)));
-            }*/
     }
 
     public void extractCost() {
-        // TODO: use a valid reference location to compute distances ("Sophia Antipolis" for testing only, must be retrieved from fragment's properties or dependencies)
-        // Point to be discussed with ICCS.
-        String sophiaAntipolisUTM = "32T 342479mE 4831495mN";
 
         // Set cost view for each node <-> vm pair (values are extracted from optimization objective variables & VM templates details)
-        // TODO: do it also for edge devices
         for (Map.Entry<String, VM> vm : vmsPerName.entrySet()) {
             // Find corresponding optimisation variables, note that they are only set on fragment (not their dependencies like proxy, master, etc.)
             Optional<OptimizationVariables> vmOptimVars = optimizationVariables.stream().filter(optimVars -> optimVars.getFragmentName().equalsIgnoreCase(vm.getKey())).findFirst();
             for (Map.Entry<String, Node> node : nodePerName.entrySet()) {
-                // Find corresponding VM template
-                Optional<VMTemplateDetails> tmp = vmTemplatesDetails.stream().filter(vmTplDetails -> (vmTplDetails.getCloud() + " " + vmTplDetails.getRegion()).equalsIgnoreCase(node.getKey())).findFirst();
-                if (tmp.isPresent()) {
-                    VMTemplateDetails vmTemplateDetails = tmp.get();
-                    // Default to 1
-                    int affinity = 1;
-                    int distance = 1;
-                    int cost = 1;
-                    if (vmOptimVars.isPresent()) {
-                        // Check if a specific affinity was set for this specific node (VM cloud and region match)
-                        for (Map.Entry<String, Integer> friendliness : vmOptimVars.get().getFriendliness().entrySet()) {
-                            if (friendliness.getKey().equalsIgnoreCase(vmTemplateDetails.getCloud() + "_" + vmTemplateDetails.getRegion())) {
-                                affinity = friendliness.getValue();
-                            }
-                        }
-                        distance = vmOptimVars.get().getDistance();
-                        cost = vmOptimVars.get().getCost();
-                    }
-                    // Set default values for 'dependent' hosting nodes
-                    cv.publicHost(node.getValue(), vm.getValue(), vmTemplateDetails.getPrice(), UTM2Deg.getDistance(sophiaAntipolisUTM, vmTemplateDetails.getGeolocation()), affinity, distance, cost);
+                if (node.getKey().startsWith("edge")) {
+                    proceedCostExtractionEdge(vm, vmOptimVars,node);
+                } else {
+                    proceedCostExtractionCloud(vm, vmOptimVars,node);
                 }
             }
         }
     }
 
+    private void proceedCostExtractionCloud(Map.Entry<String, VM> vm, Optional<OptimizationVariables> vmOptimVars, Map.Entry<String, Node> node ) {
+        // Find corresponding VM template
+        Optional<VMTemplateDetails> tmp = vmTemplatesDetails.stream().filter(vmTplDetails -> (vmTplDetails.getCloud() + " " + vmTplDetails.getRegion()).equalsIgnoreCase(node.getKey())).findFirst();
+        if (tmp.isPresent()) {
+            VMTemplateDetails vmTemplateDetails = tmp.get();
+            // Default to 1
+            int affinity = 1;
+            int distance = 1;
+            int cost = 1;
+            if (vmOptimVars.isPresent()) {
+                // Check if a specific affinity was set for this specific node (VM cloud and region match)
+                for (Map.Entry<String, Integer> friendliness : vmOptimVars.get().getFriendliness().entrySet()) {
+                    if (friendliness.getKey().equalsIgnoreCase(vmTemplateDetails.getCloud() + "_" + vmTemplateDetails.getRegion())) {
+                        affinity = friendliness.getValue();
+                    }
+                }
+                distance = vmOptimVars.get().getDistance();
+                cost = vmOptimVars.get().getCost();
+            }
+            // Set default values for 'dependent' hosting nodes
+            cv.publicHost(node.getValue(), vm.getValue(), vmTemplateDetails.getPrice(), UTM2Deg.getDistance(sophiaAntipolisUTM, vmTemplateDetails.getGeolocation()), affinity, distance, cost);
+        }
+    }
+
+    // TODO: Check if this method works as expected.
+    private void proceedCostExtractionEdge(Map.Entry<String, VM> vm,Optional<OptimizationVariables> vmOptimVars, Map.Entry<String, Node> node ) {
+        // Find corresponding VM template
+        Optional<EdgeResourceTemplateDetails> tmp = edgeResourceDetails.stream().filter(edgeResourceTemplateDetails -> ("edge " + edgeResourceTemplateDetails.id).equals(node.getKey())).findFirst();
+        if (tmp.isPresent()) {
+            EdgeResourceTemplateDetails edgeTemplateDetails = tmp.get();
+            // Default to 1
+            int affinity = 1;
+            int distance = 1;
+            int cost = 1;
+            if (vmOptimVars.isPresent()) {
+                // Check if a specific affinity was set for this specific node (VM cloud and region match)
+                for (Map.Entry<String, Integer> friendliness : vmOptimVars.get().getFriendliness().entrySet()) {
+                    if (friendliness.getKey().equalsIgnoreCase("edge_" + edgeTemplateDetails.id)) {
+                        affinity = friendliness.getValue();
+                    }
+                }
+                distance = vmOptimVars.get().getDistance();
+                cost = vmOptimVars.get().getCost();
+            }
+            // Set default values for 'dependent' hosting nodes
+            cv.edgeHost(node.getValue());
+            // TODO Update btrplace costview
+        }
+    }
     public boolean performedBtrplaceSolving() {
         // Create an instance with MinCost objective
         Instance ii = new Instance(mo, cstrs, new MinCost());
@@ -600,19 +656,6 @@ public class ParsingSpace {
         if (p == null) {
             return false;
         }
-
-        // TODO: save the mapping to a proper place to reimport it later
-       /* try {
-            File tmp = File.createTempFile("presto-plan-", ".json");
-//            final ReconfigurationPlanConverter rpc = new ReconfigurationPlanConverter();
-            ModelConverter rpc = new ModelConverter();
-            Model dst = p.getResult();
-            dst.detach(this.cv);
-            rpc.toJSON(dst).writeJSONString(Files.newBufferedWriter(tmp.toPath()));
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.error(e.getMessage());
-        }*/
 
         // Get list of computed actions
         actions = p.getActions();
@@ -645,6 +688,8 @@ public class ParsingSpace {
     private void generationBootVMAndResumeVMOutput(Action action, JSONArray ja) {
        // Retrieve VM/fragment name
        String vmName;
+       String cloud;
+       String region;
        if (action instanceof BootVM) {
            vmName = namePerVM.get(((BootVM) action).getVM());
        } else {
@@ -661,13 +706,15 @@ public class ParsingSpace {
 
        String selectedVMType = getSelectedCloudVMType(selectedCloudVMTypes, vmName, nodeName);
        JSONObject jo = new JSONObject();
+        cloud = nodeName.split(" ")[0];
+        region = nodeName.split(" ")[1];
         jo.put(OutputField.ACTION, OutputField.ACTION_BOOT);
         jo.put(OutputField.ACTION_START, action.getStart());
         jo.put(OutputField.ACTION_END, action.getEnd());
         jo.put(OutputField.ACTION_FRAGMENT, vmName);
         jo.put(OutputField.ACTION_ID, this.idPerFragment.getOrDefault(vmName, ""));
-        jo.put(OutputField.ACTION_CLOUD, nodeName.split(" ")[0]);
-        jo.put(OutputField.ACTION_REGION, nodeName.split(" ")[1]);
+        jo.put(OutputField.ACTION_CLOUD, cloud );
+        jo.put(OutputField.ACTION_REGION, region );
         jo.put(OutputField.ACTION_TYPE, selectedVMType);
         jo.put(OutputField.ACTION_NODE, this.hostingNodePerFragment.get(vmName));
         jo.put(OutputField.ACTION_SCALABLE, this.scalablePerfragments.getOrDefault(vmName, false));
@@ -678,7 +725,12 @@ public class ParsingSpace {
        }
 
        // Docker command is optional because 'proxy', 'master', and 'balanced_by' nodes don't have one
-       Optional<Docker> docker = dockers.stream().filter(d -> d.getFragmentName().equalsIgnoreCase(vmName)).findFirst();
+       Optional<Docker> docker;
+       if (cloud.equals("edge")) {
+           docker = dockersEdge.stream().filter(d -> d.getFragmentName().equalsIgnoreCase(vmName)).findFirst();
+       } else {
+           docker = dockersCloud.stream().filter(d -> d.getFragmentName().equalsIgnoreCase(vmName)).findFirst();
+       }
         docker.ifPresent(dck -> jo.put(OutputField.ACTION_DOCKER, replaceHostPropertyValuesToMacros(dck.printCmdline())));
         docker.ifPresent(dck -> jo.put(OutputField.ACTION_PORTS, dck.getAllExposedPorts()));
 
@@ -688,20 +740,23 @@ public class ParsingSpace {
     private void generationMigrateVMOutput(Action action, JSONArray ja) {
         // Retrieve VM/fragment name
         String vmName = namePerVM.get(((MigrateVM) action).getVM());
-
+        String cloud;
+        String region;
         // Retrieve node/host name
         String nodeNameSrc = namePerNode.get(((MigrateVM) action).getSourceNode());
         String nodeName = namePerNode.get(((MigrateVM) action).getDestinationNode());
 
         String selectedVMType = getSelectedCloudVMType(selectedCloudVMTypes, vmName, nodeName);
         JSONObject jo = new JSONObject();
+        cloud = nodeName.split(" ")[0];
+        region = nodeName.split(" ")[1];
         jo.put(OutputField.ACTION, OutputField.ACTION_MIGRATE);
         jo.put(OutputField.ACTION_START, action.getStart());
         jo.put(OutputField.ACTION_END, action.getEnd());
         jo.put(OutputField.ACTION_FRAGMENT, vmName);
         jo.put(OutputField.ACTION_ID, this.idPerFragment.getOrDefault(vmName, ""));
-        jo.put(OutputField.ACTION_CLOUD, nodeName.split(" ")[0]);
-        jo.put(OutputField.ACTION_REGION, nodeName.split(" ")[1]);
+        jo.put(OutputField.ACTION_CLOUD, cloud);
+        jo.put(OutputField.ACTION_REGION, region);
         jo.put(OutputField.ACTION_CLOUDSRC, nodeNameSrc.split(" ")[0]);
         jo.put(OutputField.ACTION_REGIONSRC, nodeNameSrc.split(" ")[1]);
         jo.put(OutputField.ACTION_TYPE, selectedVMType);
@@ -714,7 +769,12 @@ public class ParsingSpace {
         }
 
         // Docker command is optional because 'proxy', 'master', and 'balanced_by' nodes don't have one
-        Optional<Docker> docker = dockers.stream().filter(d -> d.getFragmentName().equalsIgnoreCase(vmName)).findFirst();
+        Optional<Docker> docker;
+        if (cloud.equals("edge")) {
+            docker = dockersEdge.stream().filter(d -> d.getFragmentName().equalsIgnoreCase(vmName)).findFirst();
+        } else {
+            docker = dockersCloud.stream().filter(d -> d.getFragmentName().equalsIgnoreCase(vmName)).findFirst();
+        }
         docker.ifPresent(dck -> jo.put(OutputField.ACTION_DOCKER, replaceHostPropertyValuesToMacros(dck.printCmdline())));
 
         ja.add(jo);
@@ -754,10 +814,6 @@ public class ParsingSpace {
                 jo.put(OutputField.ACTION_SSH_KEY, this.sshKeys.get(vmName).getPublicKey());
             }
         }
-
-        // Docker command is optional because 'proxy', 'master', and 'balanced_by' nodes don't have one
-        Optional<Docker> docker = dockers.stream().filter(d -> d.getFragmentName().equalsIgnoreCase(vmName)).findFirst();
-        docker.ifPresent(dck -> jo.put(OutputField.ACTION_DOCKER, replaceHostPropertyValuesToMacros(dck.printCmdline())));
 
         ja.add(jo);
     }

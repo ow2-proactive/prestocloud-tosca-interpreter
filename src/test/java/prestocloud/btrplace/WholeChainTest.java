@@ -112,7 +112,7 @@ public class WholeChainTest {
         List<String> supportedClouds = ParsingUtils.getListOfCloudsFromMetadata(metadata);
         List<Relationship> relationships = ParsingUtils.getRelationships(parsingResult);
         List<PlacementConstraint> placementConstraints = ParsingUtils.getConstraints(parsingResult);
-        List<Docker> dockers = ParsingUtils.getDockers(parsingResult);
+        List<Docker> dockers = ParsingUtils.getDockersCloud(parsingResult);
         List<OptimizationVariables> optimizationVariables = ParsingUtils.getOptimizationVariables(parsingResult);
         List<VMTemplateDetails> vmTemplatesDetails = ParsingUtils.getVMTemplatesDetails(parser, resourcesPath).vmTemplatesDetails;
         // TODO: deal with health checks

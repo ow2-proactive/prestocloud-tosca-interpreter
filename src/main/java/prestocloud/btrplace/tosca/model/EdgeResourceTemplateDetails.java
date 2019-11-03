@@ -5,7 +5,7 @@ import java.util.Optional;
 public class EdgeResourceTemplateDetails {
 
     public Optional<String> name;
-    public Optional<String> id;
+    public String id;
     public String edgeType;
     public String location;
     public Optional<String> gps_coordinate;
