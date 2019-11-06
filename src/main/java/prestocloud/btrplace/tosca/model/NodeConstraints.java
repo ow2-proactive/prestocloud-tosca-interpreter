@@ -16,11 +16,15 @@ public class NodeConstraints {
     public Map<String, List<String>> resourceConstraints;
     @Getter @Setter
     public Map<String, List<String>> osConstraints;
+    @Getter
+    @Setter
+    public Map<String, List<String>> sensorsConstraints;
 
     public NodeConstraints() {
         hostingConstraints = new HashMap<>();
         resourceConstraints = new HashMap<>();
         osConstraints = new HashMap<>();
+        sensorsConstraints = new HashMap<>();
     }
 
     public void addHostingConstraint(String name, List<String> hostingConstraint) {
@@ -33,5 +37,9 @@ public class NodeConstraints {
 
     public void addOSConstraint(String name, List<String> osConstraint) {
         osConstraints.put(name, osConstraint);
+    }
+
+    public void addSensorsConstraint(String name, List<String> sensorsConstraint) {
+        sensorsConstraints.put(name, sensorsConstraint);
     }
 }

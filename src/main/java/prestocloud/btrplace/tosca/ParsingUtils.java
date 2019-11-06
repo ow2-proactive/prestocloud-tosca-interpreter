@@ -561,10 +561,26 @@ public class ParsingUtils {
                             nodeConstraints.addResourceConstraint(properties.getKey(), constraints);
                         }
                     }
-                    // Find the sensors properties
                     if (capability.getKey().equalsIgnoreCase("sensors")) {
-                        // TODO: get sensors requirements
+                        for (Map.Entry<String, List<PropertyConstraint>> properties : capability.getValue().getProperties().entrySet()) {
+                            List<String> constraints = new ArrayList<>();
+                            for (PropertyConstraint propertyConstraint : properties.getValue()) {
+                                if (propertyConstraint instanceof EqualConstraint) {
+                                    constraints.add(((EqualConstraint) propertyConstraint).getEqual());
+                                } else if (propertyConstraint instanceof ValidValuesConstraint) {
+                                    constraints.addAll(((ValidValuesConstraint) propertyConstraint).getValidValues());
+                                } else {
+                                    // Constraint not yet managed
+                                    System.out.println("Sensors constraint not managed: " + propertyConstraint.toString());
+                                }
+                            }
+                            nodeConstraints.addSensorsConstraint(properties.getKey(), constraints);
+                        }
                     }
+                    // Find the sensors properties
+                    /*if (capability.getKey().equalsIgnoreCase("sensors")) {
+                        // TODO: get sensors requirements
+                    }*/
                 }
                 node.addConstraints(nodeConstraints);
             }

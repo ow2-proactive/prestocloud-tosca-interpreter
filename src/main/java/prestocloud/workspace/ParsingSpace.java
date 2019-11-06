@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
 public class ParsingSpace {
 
     private Logger logger = LoggerFactory.getLogger(ParsingSpace.class);
-    private static final Pattern NETWORK_IP_PATTERN = Pattern.compile("(\\{ get_property: \\[([\\w,]+),host,([\\w,]+),([\\w,]+),[\\d]+\\] \\})");
+    private static final Pattern NETWORK_IP_PATTERN = Pattern.compile("(\\{ get_property: \\[([\\w,-]+),host,([\\w,]+),([\\w,]+),[\\d]+\\] \\})");
     // TODO: use a valid reference location to compute distances ("Sophia Antipolis" for testing only, must be retrieved from fragment's properties or dependencies)
     // Point to be discussed with ICCS.
     String sophiaAntipolisUTM = "32T 342479mE 4831495mN";
@@ -69,6 +69,7 @@ public class ParsingSpace {
     private Map<String, Map<String, Map<String, Map<String, String>>>> selectedCloudVMTypes = new HashMap<>();
     private Map<String, String> hostingNodePerFragment = new HashMap<>();
     private Map<String,String> balancingNodes = new HashMap<>();
+    private Map<String, String> balancedNodes = new HashMap<>();
     private Map<String,String> proxyingNodes = new HashMap<>();
     private Map<String,String> masteringNodes = new HashMap<>();
 
@@ -184,7 +185,7 @@ public class ParsingSpace {
                             }
                             allSelectedTypes.put(constrainedNode.getName(), selectedTypes);
                         } else {
-                            logger.warn("Edge-only hosting resource constraint found: {}", constrainedNode.getName());
+                            //logger.warn("Edge-only hosting resource constraint found: {}", constrainedNode.getName());
                         }
                     }
                 }
@@ -216,27 +217,28 @@ public class ParsingSpace {
                     proceedVmRegistration(vmsName, "Registering fragment {} ...");
                 } else if (selectedTypes.getKey().equalsIgnoreCase("master")) {
                     proceedVmRegistration(vmsName, "Registering slave fragment {} ...");
-                    dependencyNode = masteringNodes.get(retrieveDependencyFragment(selectedTypes));
+                    dependencyNode = masteringNodes.get(retrieveDependencyFragment(selectedTypes, masteringNodes));
                     proceedVmRegistration(dependencyNode, "Registering master fragment {} ...");
                 } else if (selectedTypes.getKey().equalsIgnoreCase("balanced_by")) {
                     proceedVmRegistration(vmsName, "Registering balanced fragment {} ...");
-                    dependencyNode = balancingNodes.get(retrieveDependencyFragment(selectedTypes));
+                    dependencyNode = balancingNodes.get(retrieveDependencyFragment(selectedTypes, balancingNodes));
+                    balancedNodes.put(vmsName, dependencyNode);
                     proceedVmRegistration(dependencyNode, "Registering balancing fragment {} ...");
                 } else if (selectedTypes.getKey().equalsIgnoreCase("proxy")) {
                     proceedVmRegistration(vmsName, "Registering proxified fragment {} ...");
-                    dependencyNode = proxyingNodes.get(retrieveDependencyFragment(selectedTypes));
+                    dependencyNode = proxyingNodes.get(retrieveDependencyFragment(selectedTypes, proxyingNodes));
                     proceedVmRegistration(dependencyNode, "Registering proxying fragment {} ...");
                 } else {
                     // We can have duplicates (eg. a 'proxy' may be linked to multiple fragments)
-                    vmsName = retrieveDependencyFragment(selectedTypes);
+                    vmsName = retrieveDependencyFragment(selectedTypes, null);
                     proceedVmRegistration(vmsName, "Registering an unclassified fragment {} ...");
                 }
             }
         }
     }
 
-    private String retrieveDependencyFragment(Map.Entry<String, Map<String, Map<String, String>>> selectedTypes) {
-        Optional<String> tmp = selectedTypes.getValue().keySet().stream().findFirst();
+    private String retrieveDependencyFragment(Map.Entry<String, Map<String, Map<String, String>>> selectedTypes, Map<String, String> typingNode) {
+        Optional<String> tmp = selectedTypes.getValue().keySet().stream().filter(s -> (typingNode.containsKey(s))).findFirst();
         if (tmp.isPresent()) {
             return tmp.get();
         } else {
@@ -718,6 +720,9 @@ public class ParsingSpace {
         jo.put(OutputField.ACTION_TYPE, selectedVMType);
         jo.put(OutputField.ACTION_NODE, this.hostingNodePerFragment.get(vmName));
         jo.put(OutputField.ACTION_SCALABLE, this.scalablePerfragments.getOrDefault(vmName, false));
+        if (balancedNodes.containsKey(vmName)) {
+            jo.put(OutputField.ACTION_LOADBALANCED_BY, balancedNodes.get(vmName));
+        }
        if  (this.sshKeys.containsKey(vmName)) {
            if (this.sshKeys.get(vmName).hasKey()) {
                jo.put(OutputField.ACTION_SSH_KEY, this.sshKeys.get(vmName).getPublicKey());
@@ -928,6 +933,7 @@ public class ParsingSpace {
         public static final String ACTION_NODE = "node";
         public static final String ACTION_PORTS = "ports";
         public static final String ACTION_SCALABLE = "scalable";
+        public static final String ACTION_LOADBALANCED_BY = "balanced_by";
     }
 }
 
