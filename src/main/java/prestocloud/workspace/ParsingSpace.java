@@ -321,9 +321,14 @@ public class ParsingSpace {
         JSONArray nodesArray = (JSONArray) resobject.get("nodes");
         JSONObject nodeJson;
         String nodeName;
+        List<String> referencedEdgeDevice = this.edgeResourceDetails.stream().map(edgeResourceTemplateDetails -> edgeResourceTemplateDetails.id).collect(Collectors.toList());
         for(Object node : nodesArray) {
             nodeJson = (JSONObject) node;
             nodeName = (String)  nodeJson.get("nodeid");
+            if (!referencedEdgeDevice.contains(nodeName)) {
+                logger.info("{} has not reconized as a knwn resource, I skip it.", nodeName);
+                continue;
+            }
             map.addOnlineNode(nodePerName.get("edge " + nodeName));
             edgeToKeep.put("edge " + nodeName ,Boolean.TRUE);
             logger.info("Edge node {} is acknowledged as available",nodeName);
