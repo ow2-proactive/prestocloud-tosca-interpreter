@@ -126,7 +126,11 @@ public class Docker {
     }
 
     private String preparePortsForwarding() {
-        return this.mappingList.stream().map(DockerNetworkMapping::getDockerCliArg).collect(Collectors.joining(" ")) + "";
+        if (this.mappingList.stream().anyMatch(dockerNetworkMapping -> dockerNetworkMapping.getPublicPort().equals("-1"))) {
+            return " --network host ";
+        } else {
+            return this.mappingList.stream().map(DockerNetworkMapping::getDockerCliArg).collect(Collectors.joining(" ")) + "";
+        }
     }
 
     private String prepareCmd() {
