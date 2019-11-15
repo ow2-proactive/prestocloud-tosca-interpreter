@@ -127,7 +127,7 @@ public class Docker {
 
     private String preparePortsForwarding() {
         if (this.mappingList.stream().anyMatch(dockerNetworkMapping -> dockerNetworkMapping.getPublicPort().equals("-1"))) {
-            return " --network host ";
+            return " --net=host " + this.mappingList.stream().filter(dockerNetworkMapping -> !dockerNetworkMapping.getPublicPort().equals("-1")).map(DockerNetworkMapping::getDockerCliArg).collect(Collectors.joining(" "));
         } else {
             return this.mappingList.stream().map(DockerNetworkMapping::getDockerCliArg).collect(Collectors.joining(" ")) + "";
         }
