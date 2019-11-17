@@ -422,22 +422,48 @@ public class ParsingSpace {
         }
     }
 
-    public void configuringNodeComputingRequirementConstraint() {
-        // Set consumption of all required nodes/hosts
+    public void configuringVmsResourcesRequirementConstraint() {
+        /* Set consumption of all required VM based on the requirement of processing nodes in TOSCA file
+        Strategy (discussed w/ CNRS): fragment requirement for cloud are now useless: they are taken into account during the prior selection of prefered VM type in TOSCA
+        Now, we prioritize on edge requirements, and only enforce cloud requirements if no edge requirement exist.
+         */
+        Set<String> edgeConfiguredVms = new HashSet<>();
+        Set<String> cloudConfiguredVms = new HashSet<>();
+        configureingVMsResourceConfigurationConstraintForEdge(edgeConfiguredVms);
+        configureingVMsResourceConfigurationConstraintForCloud(edgeConfiguredVms, cloudConfiguredVms);
+        Set<String> edgeOnlyVms = edgeConfiguredVms.parallelStream().filter(s -> !cloudConfiguredVms.contains(s)).collect(Collectors.toSet());
+        Set<String> cloudOnlyVms = cloudConfiguredVms.parallelStream().filter(s -> !edgeConfiguredVms.contains(s)).collect(Collectors.toSet());
+        // Implementing Fence constrains
+        if (edgeOnlyVms.size() > 0) {
+            // If we have at least one vm/framgent to be hosted specifically on a edge node ...
+            logger.info(" The following fragment were reconized to have to be run on edge-specific nodes: {}", edgeOnlyVms);
+            Set<Node> edgeNodes = edgeToKeep.entrySet().parallelStream().filter(stringBooleanEntry -> stringBooleanEntry.getValue()).map(Map.Entry::getKey).map(s -> nodePerName.get(s)).collect(Collectors.toSet());
+            edgeOnlyVms.forEach(s -> cstrs.add(new Fence(vmsPerName.get(s), edgeNodes)));
+        }
+        if (cloudOnlyVms.size() > 0) {
+            // If we have at least one vm/framgent to be hosted specifically on a cloud node ...
+            logger.info(" The following fragment were reconized to have to be run on cloud-specific nodes : {}", cloudOnlyVms);
+            Set<Node> cloudNodes = cloudsToKeep.entrySet().parallelStream().filter(stringBooleanEntry -> stringBooleanEntry.getValue()).map(Map.Entry::getKey).map(s -> nodePerName.get(s)).collect(Collectors.toSet());
+            cloudOnlyVms.forEach(s -> cstrs.add(new Fence(vmsPerName.get(s), cloudNodes)));
+        }
+    }
+
+    private void configureingVMsResourceConfigurationConstraintForEdge(Set<String> edgeConfiguredVms) {
+        String vmName;
         for (Relationship relationship : relationships) {
             for (ConstrainedNode constrainedNode : relationship.getAllConstrainedNodes()) {
                 for (NodeConstraints nodeConstraints : constrainedNode.getConstraints()) {
                     if (!nodeConstraints.getResourceConstraints().isEmpty()) {
-                        // If the resource may run on cloud(s), select best matching types
-                        if (nodeConstraints.getResourceConstraints().get("type").contains("cloud")) {
-                            configureGeneralHostingConstrains(constrainedNode,relationship,nodeConstraints);
-                        } else if (nodeConstraints.getResourceConstraints().get("type").contains("edge")) {
-                           // Retrieve constrains from the edge resources hosting
-                            configureGeneralHostingConstrains(constrainedNode,relationship,nodeConstraints);
-                            // Add support for edge-specific resource constrain: no additional constrain found.
-                            // Should be a topic to be discuss w/ Andreas
-                        } else {
-                           logger.error("Unrecognized hosting type: {}", nodeConstraints);
+                        if (nodeConstraints.getResourceConstraints().get("type").contains("edge")) {
+                            vmName = constrainedNode.getType().equalsIgnoreCase("execute") ? relationship.getFragmentName() : constrainedNode.getType();
+                            if (!edgeConfiguredVms.contains(vmName)) {
+                                logger.info("Enforcing edge node constrains on VM {} in Btrplace model", vmName);
+                                // Retrieve constrains from the edge resources hosting
+                                configureGeneralHostingConstrains(vmName, nodeConstraints);
+                                // Add support for edge-specific resource constrain: no additional constrain found.
+                                // Should be a topic to be discuss w/ Andreas
+                                edgeConfiguredVms.add(vmName);
+                            }
                         }
                     }
                 }
@@ -445,9 +471,31 @@ public class ParsingSpace {
         }
     }
 
-    private void configureGeneralHostingConstrains(ConstrainedNode constrainedNode, Relationship relationship, NodeConstraints nodeConstraints) {
+    private void configureingVMsResourceConfigurationConstraintForCloud(Set<String> edgeConfiguredVms, Set<String> cloudConfiguredVms) {
+        String vmName;
+        for (Relationship relationship : relationships) {
+            for (ConstrainedNode constrainedNode : relationship.getAllConstrainedNodes()) {
+                for (NodeConstraints nodeConstraints : constrainedNode.getConstraints()) {
+                    if (!nodeConstraints.getResourceConstraints().isEmpty()) {
+                        // If the resource may run on cloud(s), select best matching types
+                        if (nodeConstraints.getResourceConstraints().get("type").contains("cloud")) {
+                            vmName = constrainedNode.getType().equalsIgnoreCase("execute") ? relationship.getFragmentName() : constrainedNode.getType();
+                            if (!cloudConfiguredVms.contains(vmName)) {
+                                if (!edgeConfiguredVms.contains(vmName)) {
+                                    logger.info("Enforcing cloud node constrains on VM {} in Btrplace model", vmName);
+                                    configureGeneralHostingConstrains(vmName, nodeConstraints);
+                                }
+                                cloudConfiguredVms.add(vmName);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void configureGeneralHostingConstrains(String vmName, NodeConstraints nodeConstraints) {
         // Prepare VM name depending on requirement type ('execute' targets the fragment name, others target node/host name)
-        String vmName = constrainedNode.getType().equalsIgnoreCase("execute") ? relationship.getFragmentName() : constrainedNode.getType();
         for (Map.Entry<String, List<String>> hostingConstraint : nodeConstraints.getHostingConstraints().entrySet()) {
             String required = hostingConstraint.getValue().get(0);
 
@@ -588,14 +636,13 @@ public class ParsingSpace {
     }
 
     public void extractCost() {
-
         // Set cost view for each node <-> vm pair (values are extracted from optimization objective variables & VM templates details)
         for (Map.Entry<String, VM> vm : vmsPerName.entrySet()) {
             // Find corresponding optimisation variables, note that they are only set on fragment (not their dependencies like proxy, master, etc.)
             Optional<OptimizationVariables> vmOptimVars = optimizationVariables.stream().filter(optimVars -> optimVars.getFragmentName().equalsIgnoreCase(vm.getKey())).findFirst();
             for (Map.Entry<String, Node> node : nodePerName.entrySet()) {
                 if (node.getKey().startsWith("edge")) {
-                    proceedCostExtractionEdge(vm, vmOptimVars,node);
+                    proceedCostExtractionEdge(node);
                 } else {
                     proceedCostExtractionCloud(vm, vmOptimVars,node);
                 }
@@ -627,30 +674,10 @@ public class ParsingSpace {
         }
     }
 
-    // TODO: Check if this method works as expected.
-    private void proceedCostExtractionEdge(Map.Entry<String, VM> vm,Optional<OptimizationVariables> vmOptimVars, Map.Entry<String, Node> node ) {
-        // Find corresponding VM template
-        Optional<EdgeResourceTemplateDetails> tmp = edgeResourceDetails.stream().filter(edgeResourceTemplateDetails -> ("edge " + edgeResourceTemplateDetails.id).equals(node.getKey())).findFirst();
-        if (tmp.isPresent()) {
-            EdgeResourceTemplateDetails edgeTemplateDetails = tmp.get();
-            // Default to 1
-            int affinity = 1;
-            int distance = 1;
-            int cost = 1;
-            if (vmOptimVars.isPresent()) {
-                // Check if a specific affinity was set for this specific node (VM cloud and region match)
-                for (Map.Entry<String, Integer> friendliness : vmOptimVars.get().getFriendliness().entrySet()) {
-                    if (friendliness.getKey().equalsIgnoreCase("edge_" + edgeTemplateDetails.id)) {
-                        affinity = friendliness.getValue();
-                    }
-                }
-                distance = vmOptimVars.get().getDistance();
-                cost = vmOptimVars.get().getCost();
-            }
-            // Set default values for 'dependent' hosting nodes
-            cv.edgeHost(node.getValue());
-            // TODO Update btrplace costview
-        }
+    private void proceedCostExtractionEdge(Map.Entry<String, Node> node) {
+        // Set default values for 'dependent' hosting nodes
+        cv.edgeHost(node.getValue());
+
     }
     public boolean performedBtrplaceSolving() {
         // Create an instance with MinCost objective

@@ -142,7 +142,7 @@ public class TOSCAParserApp {
             logger.info("(12/22) Configuration of regions computing capability");
             ps.setCapacity();
             logger.info("(13/22) Configuring constraints from the fragment specification");
-            ps.configuringNodeComputingRequirementConstraint();
+            ps.configuringVmsResourcesRequirementConstraint();
             if (Paths.get(edgeStatusFile).toFile().exists()) {
                 logger.info("(14/22) Loading data for edge devices availability");
                 ps.loadRunningEdgeNode(readFile(edgeStatusFile));
