@@ -84,7 +84,7 @@ public class Docker {
         }*/
         if (image != null) {
             String registryString = prepareRegistry();
-            return String.format("%sdocker pull %s && docker run -d --rm %s %s %s %s", prepareLogin(), registryString, preparePortsForwarding(), prepareEnvironement(), registryString, prepareCmd());
+            return String.format("%sdocker pull %s && docker run -d  %s %s %s %s", prepareLogin(), registryString, preparePortsForwarding(), prepareEnvironement(), registryString, prepareCmd());
         } else {
             return EMPTY_STRING;
         }
