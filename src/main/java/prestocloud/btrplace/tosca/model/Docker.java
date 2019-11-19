@@ -74,7 +74,6 @@ public class Docker {
         variables.put(key, value);
     }
 
-    // TODO: print full docker commandline
     public String printCmdline() {
         /*if (cmd != null) {
             return "docker run " + image + " " + cmd;

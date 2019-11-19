@@ -441,7 +441,7 @@ public class ParsingSpace {
             edgeOnlyVms.forEach(s -> cstrs.add(new Fence(vmsPerName.get(s), edgeNodes)));
         }
         if (cloudOnlyVms.size() > 0) {
-            // If we have at least one vm/framgent to be hosted specifically on a cloud node ...
+            // If we have at least one vm/fragment to be hosted specifically on a cloud node ...
             logger.info(" The following fragment were reconized to have to be run on cloud-specific nodes : {}", cloudOnlyVms);
             Set<Node> cloudNodes = cloudsToKeep.entrySet().parallelStream().filter(stringBooleanEntry -> stringBooleanEntry.getValue()).map(Map.Entry::getKey).map(s -> nodePerName.get(s)).collect(Collectors.toSet());
             cloudOnlyVms.forEach(s -> cstrs.add(new Fence(vmsPerName.get(s), cloudNodes)));
@@ -454,8 +454,8 @@ public class ParsingSpace {
             for (ConstrainedNode constrainedNode : relationship.getAllConstrainedNodes()) {
                 for (NodeConstraints nodeConstraints : constrainedNode.getConstraints()) {
                     if (!nodeConstraints.getResourceConstraints().isEmpty()) {
-                        if (nodeConstraints.getResourceConstraints().get("type").contains("edge")) {
-                            vmName = constrainedNode.getType().equalsIgnoreCase("execute") ? relationship.getFragmentName() : constrainedNode.getType();
+                        if (nodeConstraints.getResourceConstraints().get("type").contains("edge") && constrainedNode.getType().equalsIgnoreCase("execute")) {
+                            vmName = relationship.getFragmentName();
                             if (!edgeConfiguredVms.contains(vmName)) {
                                 logger.info("Enforcing edge node constrains on VM {} in Btrplace model", vmName);
                                 // Retrieve constrains from the edge resources hosting
@@ -478,8 +478,8 @@ public class ParsingSpace {
                 for (NodeConstraints nodeConstraints : constrainedNode.getConstraints()) {
                     if (!nodeConstraints.getResourceConstraints().isEmpty()) {
                         // If the resource may run on cloud(s), select best matching types
-                        if (nodeConstraints.getResourceConstraints().get("type").contains("cloud")) {
-                            vmName = constrainedNode.getType().equalsIgnoreCase("execute") ? relationship.getFragmentName() : constrainedNode.getType();
+                        if (nodeConstraints.getResourceConstraints().get("type").contains("cloud") && constrainedNode.getType().equalsIgnoreCase("execute")) {
+                            vmName = relationship.getFragmentName();
                             if (!cloudConfiguredVms.contains(vmName)) {
                                 if (!edgeConfiguredVms.contains(vmName)) {
                                     logger.info("Enforcing cloud node constrains on VM {} in Btrplace model", vmName);
