@@ -1067,7 +1067,7 @@ public class ParsingUtils {
 
     public static List<EdgeResourceTemplateDetails> getEdgeResourceTemplateDetails(ToscaParser parser, String repositoryPath) throws IOException, ParsingException {
         List<EdgeResourceTemplateDetails> edgeResourceTemplateDetails = new ArrayList<>();
-        Pattern edgeFilenameMatcher = Pattern.compile("^([\\S]*)-edge-templates.yml$");
+        Pattern edgeFilenameMatcher = Pattern.compile("^([\\S]*)-("+System.getenv("PA_USER")+")?edge-templates.yml$");
         Path[] listOfCloudsResourceFile = Files.list(Paths.get(repositoryPath)).filter(Files::isRegularFile).filter(path -> (edgeFilenameMatcher.matcher(path.toString()).find())).toArray(Path[]::new);
 
         for (Path edgeFile : listOfCloudsResourceFile) {
