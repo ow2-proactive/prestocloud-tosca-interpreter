@@ -779,7 +779,7 @@ public class ParsingSpace {
         String vmName = namePerVM.get(((MigrateVM) action).getVM());
         String cloud;
         String region;
-        // Retrieve node/host name
+        // Retrieve node/host nameBugfix: nullPointer w/ edge or cloud specific node
         String nodeNameSrc = namePerNode.get(((MigrateVM) action).getSourceNode());
         String nodeName = namePerNode.get(((MigrateVM) action).getDestinationNode());
 
