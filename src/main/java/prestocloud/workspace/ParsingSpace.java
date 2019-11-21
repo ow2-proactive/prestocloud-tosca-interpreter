@@ -976,7 +976,8 @@ public class ParsingSpace {
             if (tmp2.isPresent()) {
                 return tmp2.get().get(nodeName);
             } else {
-                throw new IllegalStateException("No property execute doesn't reference any TOSCA node");
+                return "";
+                //throw new IllegalStateException("No property execute doesn't reference any TOSCA node");
             }
 
         } else {
