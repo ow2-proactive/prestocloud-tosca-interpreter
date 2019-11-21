@@ -57,7 +57,7 @@ public class Docker {
     private List<DockerNetworkMapping> mappingList;
 
     public static final String EMPTY_STRING = "";
-    private final Pattern registryIdentifier = Pattern.compile("^(\\S+)\\/(\\S+)$");
+    private static final Pattern registryIdentifier = Pattern.compile("^(\\S+)\\/(\\S+)$");
 
     public Docker(String fragmentName) {
         this.fragmentName = fragmentName;
@@ -74,7 +74,6 @@ public class Docker {
         variables.put(key, value);
     }
 
-    // TODO: print full docker commandline
     public String printCmdline() {
         /*if (cmd != null) {
             return "docker run " + image + " " + cmd;
@@ -84,9 +83,19 @@ public class Docker {
         }*/
         if (image != null) {
             String registryString = prepareRegistry();
-            return String.format("docker pull %s && docker run -d --rm %s %s %s %s", registryString, preparePortsForwarding(), prepareEnvironement(), registryString, prepareCmd());
+            return String.format("%sdocker pull %s && docker run -d --rm --restart unless-stopped  %s %s %s %s", prepareLogin(), registryString, preparePortsForwarding(), prepareEnvironement(), registryString, prepareCmd());
         } else {
             return EMPTY_STRING;
+        }
+    }
+
+    private String prepareLogin() {
+        if (this.registry == null) {
+            return Docker.EMPTY_STRING;
+        } else if (this.registry.length() == 0) {
+            return Docker.EMPTY_STRING;
+        } else {
+            return String.format("docker login -u @credentials_prestocloud_%s_username -p @credentials_prestocloud_%s_password %s && ", registry, registry, registry);
         }
     }
 
@@ -116,7 +125,11 @@ public class Docker {
     }
 
     private String preparePortsForwarding() {
-        return this.mappingList.stream().map(DockerNetworkMapping::getDockerCliArg).collect(Collectors.joining(" ")) + "";
+        if (this.mappingList.stream().anyMatch(dockerNetworkMapping -> dockerNetworkMapping.getPublicPort().equals("-1"))) {
+            return " --net=host " + this.mappingList.stream().filter(dockerNetworkMapping -> !dockerNetworkMapping.getPublicPort().equals("-1")).map(DockerNetworkMapping::getDockerCliArg).collect(Collectors.joining(" "));
+        } else {
+            return this.mappingList.stream().map(DockerNetworkMapping::getDockerCliArg).collect(Collectors.joining(" ")) + "";
+        }
     }
 
     private String prepareCmd() {
@@ -127,6 +140,10 @@ public class Docker {
         } else {
             return " " + cmd;
         }
+    }
+
+    public String getAllExposedPorts() {
+        return this.mappingList.stream().map(dockerNetworkMapping -> dockerNetworkMapping.getPublicPort()).collect(Collectors.joining(";"));
     }
 
 }

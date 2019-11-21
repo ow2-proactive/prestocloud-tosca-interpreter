@@ -1,0 +1,48 @@
+tosca_definitions_version: tosca_prestocloud_mapping_1_2
+
+metadata:
+  template_name: RPI2 resource descriptions
+  template_author: ActiveEon
+  template_version: 1.0.0-SNAPSHOT
+
+description: Edge resource description for RPI2.
+
+imports:
+  - tosca-normative-types:1.2
+  - resource-descriptions:1.0
+
+dsl_definitions:
+
+  raspberry_pi: &raspberry_pi
+    edge_type: raspberry
+    edge_location: ""
+    edge_credentials:
+      username: pi
+
+topology_template:
+
+  node_templates:
+
+    rpi2:
+      type: prestocloud.nodes.compute.edge
+      description: An example of Raspberry 2
+      properties:
+        id: "::1"
+        name: rpi2
+        type: edge
+        edge: *raspberry_pi
+      capabilities:
+        resource:
+          properties:
+            name: rpi2
+            type: edge
+            edge: *raspberry_pi
+        host:
+          properties:
+            num_cpus: 1
+            mem_size: 1 GB
+            disk_size: 8 GB
+            price: 0
+        sensors:
+          properties:
+            camera: "/dev/video0"

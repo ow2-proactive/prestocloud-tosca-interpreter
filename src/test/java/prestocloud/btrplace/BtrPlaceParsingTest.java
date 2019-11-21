@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class)
@@ -71,7 +72,7 @@ public class BtrPlaceParsingTest {
         Map<String, String> metadata = ParsingUtils.getMetadata(parsingResult);
         Assert.assertEquals(11, metadata.size());
 
-        List<String> clouds = ParsingUtils.getListOfCloudsFromMetadata(metadata);
+        Set<String> clouds = ParsingUtils.getListOfCloudsFromMetadata(metadata);
         Assert.assertEquals(2, clouds.size());
 
         List<PlacementConstraint> placementConstraints = ParsingUtils.getConstraints(parsingResult);
@@ -89,7 +90,7 @@ public class BtrPlaceParsingTest {
         Map<String, String> metadata = ParsingUtils.getMetadata(parsingResult);
         Assert.assertEquals(14, metadata.size());
 
-        List<String> clouds = ParsingUtils.getListOfCloudsFromMetadata(metadata);
+        Set<String> clouds = ParsingUtils.getListOfCloudsFromMetadata(metadata);
         Assert.assertEquals(2, clouds.size());
 
         List<PlacementConstraint> placementConstraints = ParsingUtils.getConstraints(parsingResult);

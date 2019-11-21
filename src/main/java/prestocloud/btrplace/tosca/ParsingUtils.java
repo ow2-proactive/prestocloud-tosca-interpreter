@@ -185,6 +185,162 @@ public class ParsingUtils {
         return vmTypes;
     }
 
+    /**
+     * Extract templates information.
+     * <p>
+     * Return structure:
+     * node template name -> capability name -> property -> value
+     *
+     * @param parsingResult template parsing results
+     * @return templates information.
+     * @throws IOException
+     * @throws ParsingException
+     */
+    public static Map<String, Map<String, Map<String, String>>> getEdgeNodesTemplates(ParsingResult<ArchiveRoot> parsingResult) throws IOException, ParsingException {
+
+        // First make sure there is no parsing error
+        Assert.assertEquals(0, parsingResult.getContext().getParsingErrors().size());
+
+        Map<String, Map<String, Map<String, String>>> edgeNodeTemplate = new HashMap<>();
+
+        // Look for node templates
+        Map<String, NodeTemplate> nodeTemplates = parsingResult.getResult().getTopology().getNodeTemplates();
+        for (Map.Entry<String, NodeTemplate> nodeTemplate : nodeTemplates.entrySet()) {
+
+            // Look for capabilities
+            Map<String, Map<String, String>> typesCapabilities = new HashMap<>();
+            for (Map.Entry<String, Capability> capabilities : nodeTemplate.getValue().getCapabilities().entrySet()) {
+                // Get 'host' capability properties
+                if (capabilities.getKey().equalsIgnoreCase("host")) {
+                    Map<String, String> hostCapabilities = new HashMap<>();
+                    //System.out.println("Host properties: ");
+                    for (Map.Entry<String, AbstractPropertyValue> properties : capabilities.getValue().getProperties().entrySet()) {
+                        if (properties.getKey().equalsIgnoreCase("num_cpus")) {
+                            String num_cpus = ((ScalarPropertyValue) properties.getValue()).getValue();
+                            hostCapabilities.put("num_cpus", num_cpus);
+                            //System.out.println("- " + properties.getKey() + " = " + num_cpus);
+                        }
+                        if (properties.getKey().equalsIgnoreCase("mem_size")) {
+                            String mem_size = ((ScalarPropertyValue) properties.getValue()).getValue();
+                            hostCapabilities.put("mem_size", mem_size);
+                            //System.out.println("- " + properties.getKey() + " = " + mem_size);
+                        }
+                        if (properties.getKey().equalsIgnoreCase("disk_size")) {
+                            if (properties.getValue() != null) {
+                                String disk_size = ((ScalarPropertyValue) properties.getValue()).getValue();
+                                hostCapabilities.put("disk_size", disk_size);
+                                //System.out.println("- " + properties.getKey() + " = " + disk_size);
+                            }
+                        }
+                        if (properties.getKey().equalsIgnoreCase("price")) {
+                            String price = ((ScalarPropertyValue) properties.getValue()).getValue();
+                            hostCapabilities.put("price", price);
+                            //System.out.println("- " + properties.getKey() + " = " + price);
+                        }
+                    }
+                    typesCapabilities.put(capabilities.getKey(), hostCapabilities);
+                }
+                // Get sensors capability
+                if (capabilities.getKey().equalsIgnoreCase("sensors")) {
+                    Map<String, String> sensorCapabilities = new HashMap<>();
+                    String camera = null, temperature = null, microphone = null;
+                    for (Map.Entry<String, AbstractPropertyValue> properties : capabilities.getValue().getProperties().entrySet()) {
+                        if (properties.getKey().equalsIgnoreCase("temperature")) {
+                            temperature = ((ScalarPropertyValue) properties.getValue()).getValue();
+                            sensorCapabilities.put("temperature", temperature);
+                        }
+                        if (properties.getKey().equalsIgnoreCase("camera")) {
+                            camera = ((ScalarPropertyValue) properties.getValue()).getValue();
+                            sensorCapabilities.put("camera", camera);
+                        }
+                        if (properties.getKey().equalsIgnoreCase("microphone")) {
+                            microphone = ((ScalarPropertyValue) properties.getValue()).getValue();
+                            sensorCapabilities.put("microphone", microphone);
+                        }
+                    }
+                    typesCapabilities.put(capabilities.getKey(), sensorCapabilities);
+                }
+                // Get 'resource' capability properties
+                if (capabilities.getKey().equalsIgnoreCase("resource")) {
+                    Map<String, String> resourceCapabilities = new HashMap<>();
+                    //System.out.println("Resource properties: ");
+                    String type = null, name = null;
+                    for (Map.Entry<String, AbstractPropertyValue> properties : capabilities.getValue().getProperties().entrySet()) {
+                        if (properties.getKey().equalsIgnoreCase("type")) {
+                            type = ((ScalarPropertyValue) properties.getValue()).getValue();
+                            resourceCapabilities.put("type", type);
+                            //System.out.println("- " + properties.getKey() + " = " + type);
+                        }
+                        if (properties.getKey().equalsIgnoreCase("name")) {
+                            name = ((ScalarPropertyValue) properties.getValue()).getValue();
+                            resourceCapabilities.put("name", name);
+                            //System.out.println("- " + properties.getKey() + " = " + type);
+                        }
+                        // Edge based resource detected
+                        if (type != null && type.equalsIgnoreCase("edge") && properties.getKey().equalsIgnoreCase("edge")) {
+                            //System.out.println("- " + properties.getKey() + ":");
+                            ComplexPropertyValue edgeResource = (ComplexPropertyValue) properties.getValue();
+                            for (Map.Entry<String, Object> edgeProperties : edgeResource.getValue().entrySet()) {
+                                if (edgeProperties.getKey().equalsIgnoreCase("edge_type")) {
+                                    resourceCapabilities.put("edge_type", edgeProperties.getValue().toString());
+                                    //System.out.println(" - " + cloudProperties.getKey() + " = " + cloudProperties.getValue());
+                                }
+                                if (edgeProperties.getKey().equalsIgnoreCase("edge_location")) {
+                                    resourceCapabilities.put("edge_location", edgeProperties.getValue().toString());
+                                    //System.out.println(" - " + cloudProperties.getKey() + " = " + cloudProperties.getValue());
+                                }
+                                if (edgeProperties.getKey().equalsIgnoreCase("gps_coordinates")) {
+                                    resourceCapabilities.put("gps_coordinates", edgeProperties.getValue().toString());
+                                }
+                                if (edgeProperties.getKey().equalsIgnoreCase("edge_credentials")) {
+                                    HashMap<String, Object> edge_credentials = (HashMap<String, Object>) edgeProperties.getValue();
+                                    for (Map.Entry<String, Object> edgeCredentialsProperties : edge_credentials.entrySet()) {
+                                        if (edgeCredentialsProperties.getKey().equalsIgnoreCase("username")) {
+                                            //System.out.println("  - " + cloudNetworkProperties.getKey() + " = " + cloudNetworkProperties.getValue());
+                                            resourceCapabilities.put("username", edgeCredentialsProperties.getValue().toString());
+                                        }
+                                        if (edgeCredentialsProperties.getKey().equalsIgnoreCase("password")) {
+                                            //System.out.println("  - " + cloudNetworkProperties.getKey() + " = " + cloudNetworkProperties.getValue());
+                                            resourceCapabilities.put("password", edgeCredentialsProperties.getValue().toString());
+                                        }
+                                        if (edgeCredentialsProperties.getKey().equalsIgnoreCase("privatekey")) {
+                                            resourceCapabilities.put("privatekey", edgeCredentialsProperties.getValue().toString());
+                                            //System.out.println("  - " + cloudNetworkProperties.getKey() + " = " + cloudNetworkProperties.getValue());
+                                        }
+                                    }
+                                    //resourceCapabilities.put("edge_credentials", edgeProperties.getValue().toString());
+                                    //System.out.println(" - " + cloudProperties.getKey() + " = " + cloudProperties.getValue());
+                                }
+                                // Get networking information
+                                if (edgeProperties.getKey().equalsIgnoreCase("edge_network")) {
+                                    //System.out.println(" - " + cloudProperties.getKey() + ":");
+                                    HashMap<String, Object> edge_network = (HashMap<String, Object>) edgeProperties.getValue();
+                                    for (Map.Entry<String, Object> edgeNetworkProperties : edge_network.entrySet()) {
+                                        if (edgeNetworkProperties.getKey().equalsIgnoreCase("network_id")) {
+                                            //System.out.println("  - " + cloudNetworkProperties.getKey() + " = " + cloudNetworkProperties.getValue());
+                                        }
+                                        if (edgeNetworkProperties.getKey().equalsIgnoreCase("network_name")) {
+                                            //System.out.println("  - " + cloudNetworkProperties.getKey() + " = " + cloudNetworkProperties.getValue());
+                                        }
+                                        if (edgeNetworkProperties.getKey().equalsIgnoreCase("addresses")) {
+                                            //System.out.println("  - " + cloudNetworkProperties.getKey());
+                                            for (String address : (List<String>) edgeNetworkProperties.getValue()) {
+                                                //System.out.println("    - " + address);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            typesCapabilities.put("edge", resourceCapabilities);
+                        }
+                    }
+                }
+            }
+            edgeNodeTemplate.put(String.format ("%s %s", nodeTemplate.getValue().getName(), ((ScalarPropertyValue) nodeTemplate.getValue().getProperties().get("id")).getValue()),typesCapabilities);
+        }
+        return edgeNodeTemplate;
+    }
+
     public static List<PlacementConstraint> getConstraints(ParsingResult<ArchiveRoot> parsingResult) {
         List<PlacementConstraint> placementConstraints = new ArrayList<>();
 
@@ -218,6 +374,9 @@ public class ParsingUtils {
 
         // Look for fragments in the node templates
         Map<String, NodeTemplate> nodeTemplates = parsingResult.getResult().getTopology().getNodeTemplates();
+        if (nodeTemplates == null) {
+            nodeTemplates = new HashMap<>();
+        }
         for (Map.Entry<String, NodeTemplate> nodeTemplateFragment : nodeTemplates.entrySet()) {
             if (nodeTemplateFragment.getValue().getType().equalsIgnoreCase("prestocloud.nodes.fragment.jppf")) {
                 relationships.addAll(getJPPFRelationships(parsingResult));
@@ -402,10 +561,26 @@ public class ParsingUtils {
                             nodeConstraints.addResourceConstraint(properties.getKey(), constraints);
                         }
                     }
-                    // Find the sensors properties
                     if (capability.getKey().equalsIgnoreCase("sensors")) {
-                        // TODO: get sensors requirements
+                        for (Map.Entry<String, List<PropertyConstraint>> properties : capability.getValue().getProperties().entrySet()) {
+                            List<String> constraints = new ArrayList<>();
+                            for (PropertyConstraint propertyConstraint : properties.getValue()) {
+                                if (propertyConstraint instanceof EqualConstraint) {
+                                    constraints.add(((EqualConstraint) propertyConstraint).getEqual());
+                                } else if (propertyConstraint instanceof ValidValuesConstraint) {
+                                    constraints.addAll(((ValidValuesConstraint) propertyConstraint).getValidValues());
+                                } else {
+                                    // Constraint not yet managed
+                                    System.out.println("Sensors constraint not managed: " + propertyConstraint.toString());
+                                }
+                            }
+                            nodeConstraints.addSensorsConstraint(properties.getKey(), constraints);
+                        }
                     }
+                    // Find the sensors properties
+                    /*if (capability.getKey().equalsIgnoreCase("sensors")) {
+                        // TODO: get sensors requirements
+                    }*/
                 }
                 node.addConstraints(nodeConstraints);
             }
@@ -422,9 +597,9 @@ public class ParsingUtils {
         return metadata;
     }
 
-    public static List<String> getListOfCloudsFromMetadata(Map<String, String> metadata) {
-        List<String> clouds = new ArrayList<>();
-        List<String> oppositeClouds = new ArrayList<>();
+    public static Set<String> getListOfCloudsFromMetadata(Map<String, String> metadata) {
+        Set<String> clouds = new HashSet<>();
+        Set<String> oppositeClouds = new HashSet<>();
         for (Map.Entry<String, String> entry : metadata.entrySet()) {
             if (entry.getKey().contains("ProviderName")) {
                 String cloud_id = entry.getKey().split("_")[1];
@@ -494,7 +669,6 @@ public class ParsingUtils {
                         }
                         available = Integer.valueOf(hostingConstraint.getValue().get("host").get("num_cpus"));
                         if (required <= available) {
-                            //System.out.println("Good type for cpu: " + hostingConstraint.getKey());
                             cpu = true;
                         }
                     }
@@ -594,7 +768,6 @@ public class ParsingUtils {
                         }
                         available = Double.valueOf(hostingConstraint.getValue().get("host").get("price"));
                         if (required <= available) {
-                            //System.out.println("Good type for price: " + hostingConstraint.getKey());
                             price = true;
                         }
                     }
@@ -603,9 +776,6 @@ public class ParsingUtils {
                     price = true;
                 }
                 if (cpu && mem && disk && price) {
-                    //System.out.println("Best suitable type found: " + hostingConstraint.getKey());
-                    //return hostingConstraint.getValue().get("cloud").get("name");
-//                    selectedTypes.put(hostingConstraint.getValue().get("cloud").get("cloud_region") + " " + hostingConstraint.getValue().get("cloud").get("name"), Double.valueOf(hostingConstraint.getValue().get("host").get("price")));
                     String region = hostingConstraint.getValue().get("cloud").get("cloud_region");
                     VmTypeCostRegistration vtcr = new VmTypeCostRegistration(hostingConstraint.getValue().get("cloud").get("name"), Double.valueOf(hostingConstraint.getValue().get("host").get("price")));
                     if (selectedTypes.containsKey(region)) {
@@ -620,33 +790,51 @@ public class ParsingUtils {
         }
 
         if (selectedTypes.isEmpty()) {
-//            System.out.println("No suitable type found for hosting constraints: " + hostingConstraints);
             throw new Exception("No suitable type found for hosting constraints: " + hostingConstraints);
         }
         else {
-            //return selectedTypes.entrySet().stream().sorted(Map.Entry.comparingByValue()).findFirst().get().getKey();
-            //return selectedTypes.entrySet().parallelStream().map(Map.Entry::getKey).collect(Collectors.toList());
             return selectedTypes.entrySet().parallelStream().map(val -> (val.getKey() + " " + val.getValue().toString())).collect(Collectors.toList());
         }
     }
 
-    public static List<Docker> getDockers(ParsingResult<ArchiveRoot> parsingResult) {
+    public static Map<String, String> getfragmentIds(ParsingResult<ArchiveRoot> parsingResult) {
+        Map<String, String> ids = new HashMap<>();
 
+        Map<String, NodeTemplate> nodeTemplates = parsingResult.getResult().getTopology().getNodeTemplates();
+        if (nodeTemplates == null) {
+            nodeTemplates = new HashMap<>();
+        }
+        for (Map.Entry<String, NodeTemplate> nodeTemplateFragment : nodeTemplates.entrySet()) {
+            // Fragment detected
+            if (nodeTemplateFragment.getValue().getType().startsWith("prestocloud.nodes.fragment")) {
+                ids.put(nodeTemplateFragment.getValue().getName(), ((ScalarPropertyValue) nodeTemplateFragment.getValue().getProperties().get("id")).getValue());
+            }
+        }
+        return ids;
+    }
+
+    public static List<Docker> getDockersCloud(ParsingResult<ArchiveRoot> parsingResult) {
+        return getDockers(parsingResult,"docker_cloud");
+    }
+
+
+    public static List<Docker> getDockersEdge(ParsingResult<ArchiveRoot> parsingResult) {
+        return getDockers(parsingResult,"docker_edge");
+    }
+
+    private static List<Docker> getDockers(ParsingResult<ArchiveRoot> parsingResult, String resourceType) {
         List<Docker> dockers = new ArrayList<>();
-
         // Look for fragments in the node templates
         Map<String, NodeTemplate> nodeTemplates = parsingResult.getResult().getTopology().getNodeTemplates();
+        if (nodeTemplates == null) {
+            nodeTemplates = new HashMap<>();
+        }
         for (Map.Entry<String, NodeTemplate> nodeTemplateFragment : nodeTemplates.entrySet()) {
             // Fragment detected
             if (nodeTemplateFragment.getValue().getType().startsWith("prestocloud.nodes.fragment")) {
                 Docker docker = new Docker(nodeTemplateFragment.getValue().getName());
                 // Look for one of the 'docker' property
-                String resourceType = "docker_cloud";
                 ComplexPropertyValue dockerProperty = (ComplexPropertyValue) nodeTemplateFragment.getValue().getProperties().get(resourceType);
-                if (dockerProperty == null) {
-                    resourceType = "docker_edge";
-                    dockerProperty = (ComplexPropertyValue) nodeTemplateFragment.getValue().getProperties().get(resourceType);
-                }
                 if (dockerProperty != null) {
                     docker.setResourceType(resourceType);
                     for (String dockerKey : dockerProperty.getValue().keySet()) {
@@ -694,6 +882,9 @@ public class ParsingUtils {
 
         // Look for fragments in the node templates
         Map<String, NodeTemplate> nodeTemplates = parsingResult.getResult().getTopology().getNodeTemplates();
+        if (nodeTemplates == null) {
+            nodeTemplates = new HashMap<>();
+        }
         for (Map.Entry<String, NodeTemplate> nodeTemplateFragment : nodeTemplates.entrySet()) {
             // Fragment detected
             if (nodeTemplateFragment.getValue().getType().startsWith("prestocloud.nodes.fragment")) {
@@ -721,9 +912,11 @@ public class ParsingUtils {
 
     public static Map<String,SshKey>  getSshKeys(ParsingResult<ArchiveRoot> parsingResult) {
         Map<String,SshKey> sshKeys = new HashMap<>();
-
         // Look for fragments in the node templates
         Map<String, NodeTemplate> nodeTemplates = parsingResult.getResult().getTopology().getNodeTemplates();
+        if (nodeTemplates == null) {
+            nodeTemplates = new HashMap<>();
+        }
         String framgentName;
         String nodeName;
         String ssh;
@@ -744,12 +937,39 @@ public class ParsingUtils {
         return sshKeys;
     }
 
+    public static Map<String, Boolean> getScalableFragments(ParsingResult<ArchiveRoot> parsingResult) {
+        Map<String, Boolean> result = new HashMap<>();
+        // Look for fragments in the node templates
+        Map<String, NodeTemplate> nodeTemplates = parsingResult.getResult().getTopology().getNodeTemplates();
+        if (nodeTemplates == null) {
+            nodeTemplates = new HashMap<>();
+        }
+        String fragmentName;
+        Boolean isFragmentScalable;
+        for (Map.Entry<String, NodeTemplate> nodeTemplateFragment : nodeTemplates.entrySet()) {
+            // Fragment detected
+            if (nodeTemplateFragment.getValue().getType().startsWith("prestocloud.nodes.fragment")) {
+                fragmentName = nodeTemplateFragment.getValue().getName();
+                ScalarPropertyValue property = (ScalarPropertyValue) nodeTemplateFragment.getValue().getProperties().get("scalable");
+                if (property != null) {
+                    isFragmentScalable = property.getValue().toString().equalsIgnoreCase("true");
+                } else {
+                    isFragmentScalable = false;
+                }
+                result.put(fragmentName, isFragmentScalable);
+            }
+        }
+        return result;
+    }
     public static List<OptimizationVariables> getOptimizationVariables(ParsingResult<ArchiveRoot> parsingResult) {
 
         List<OptimizationVariables> allOptimizationVariables = new ArrayList<>();
 
         // Look for fragments in the node templates
         Map<String, NodeTemplate> nodeTemplates = parsingResult.getResult().getTopology().getNodeTemplates();
+        if (nodeTemplates == null) {
+            nodeTemplates = new HashMap<>();
+        }
         for (Map.Entry<String, NodeTemplate> nodeTemplateFragment : nodeTemplates.entrySet()) {
             // Fragment detected
             if (nodeTemplateFragment.getValue().getType().startsWith("prestocloud.nodes.fragment")) {
@@ -784,7 +1004,7 @@ public class ParsingUtils {
         Map<String,Map<String,List<RegionCapacityDescriptor>>> definitiveRegionPerCloudPerCloudFile = new HashMap<>();
         Pattern vmFilenameMatcher = Pattern.compile("^([\\S]*)-vm-templates.yml$");
 
-        // Let's parse all available cloud resource - I select only specificiation file matching one kind of spec.
+        // Let's parse all available cloud resource - I select only specification file matching one kind of spec.
         Path[] listOfCloudsResourceFile = Files.list(Paths.get(repositoryPath)).filter(Files::isRegularFile).filter(path -> (vmFilenameMatcher.matcher(path.toString()).find())).toArray(Path[]::new);
 
         Map<String,Set<RegionCapacityDescriptor>>  regionsPerCloud;
@@ -835,6 +1055,45 @@ public class ParsingUtils {
         });
         result.regionsPerCloudPerCloudFile = definitiveRegionPerCloudPerCloudFile;
         return result;
+    }
+
+    public static List<EdgeResourceTemplateDetails> getEdgeResourceTemplateDetails(ToscaParser parser, String repositoryPath) throws IOException, ParsingException {
+        List<EdgeResourceTemplateDetails> edgeResourceTemplateDetails = new ArrayList<>();
+        Pattern edgeFilenameMatcher = Pattern.compile("^([\\S]*)-("+System.getenv("PA_USER")+")?edge-templates.yml$");
+        Path[] listOfCloudsResourceFile = Files.list(Paths.get(repositoryPath)).filter(Files::isRegularFile).filter(path -> (edgeFilenameMatcher.matcher(path.toString()).find())).toArray(Path[]::new);
+
+        for (Path edgeFile : listOfCloudsResourceFile) {
+            Map<String, Map<String, Map<String, String>>> edgeTypes = getEdgeNodesTemplates(parser.parseFile(edgeFile));
+            for (Map.Entry<String, Map<String, Map<String, String>>> hostingConstraint : edgeTypes.entrySet()) {
+                // For each properties
+                EdgeResourceTemplateDetails ertd = new EdgeResourceTemplateDetails();
+                ertd.id = hostingConstraint.getKey().split(" ")[1];
+                for (Map.Entry<String, Map<String, String>> cloudProperties : hostingConstraint.getValue().entrySet()) {
+                    if (cloudProperties.getKey().equalsIgnoreCase("host")) {
+                        ertd.price = Optional.ofNullable(Double.valueOf(cloudProperties.getValue().get("price")) + "");
+                        ertd.num_cpus = cloudProperties.getValue().get("num_cpus");
+                        ertd.mem_size = cloudProperties.getValue().get("mem_size");
+                        ertd.disk_size = Optional.ofNullable(cloudProperties.getValue().get("disk_size"));
+                    }
+                    if (cloudProperties.getKey().equalsIgnoreCase("edge")) {
+                        ertd.edgeType = cloudProperties.getValue().get("edge_type");
+                        ertd.name = Optional.ofNullable(cloudProperties.getValue().get("name"));
+                        ertd.location = cloudProperties.getValue().get("edge_location");
+                        ertd.gps_coordinate = Optional.ofNullable(cloudProperties.getValue().get("gps_coordinates"));
+                        ertd.username = cloudProperties.getValue().get("username");
+                        ertd.password = Optional.ofNullable(cloudProperties.getValue().get("password"));
+                        ertd.privatekey = Optional.ofNullable(cloudProperties.getValue().get("privatekey"));
+                    }
+                    if (cloudProperties.getKey().equalsIgnoreCase("sensors")) {
+                        ertd.cameraSensor = Optional.ofNullable(cloudProperties.getValue().get("camera"));
+                        ertd.microphoneSensor = Optional.ofNullable(cloudProperties.getValue().get("microphone"));
+                        ertd.temperatureSensor = Optional.ofNullable(cloudProperties.getValue().get("temperature"));
+                    }
+                }
+                edgeResourceTemplateDetails.add(ertd);
+            }
+        }
+        return edgeResourceTemplateDetails;
     }
 }
 
