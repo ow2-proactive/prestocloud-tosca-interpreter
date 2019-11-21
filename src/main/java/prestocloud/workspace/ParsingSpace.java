@@ -446,7 +446,7 @@ public class ParsingSpace {
         Set<String> edgeOnlyVms = edgeConfiguredVms.parallelStream().filter(s -> !cloudConfiguredVms.contains(s)).collect(Collectors.toSet());
         Set<String> cloudOnlyVms = cloudConfiguredVms.parallelStream().filter(s -> !edgeConfiguredVms.contains(s)).collect(Collectors.toSet());
         // Implementing Fence constraint
-        if (edgeOnlyVms.isEmpty()) {
+        if (!edgeOnlyVms.isEmpty()) {
             // If we have at least one vm/framgent to be hosted specifically on a edge node ...
             logger.info(" -- The following fragments were reconized to have to be run on edge-specific nodes: {}", edgeOnlyVms);
             Set<Node> edgeNodes = edgeToKeep.entrySet().parallelStream()
@@ -455,7 +455,7 @@ public class ParsingSpace {
                     .collect(Collectors.toSet());
             edgeOnlyVms.forEach(s -> cstrs.add(new Fence(vmsPerName.get(s), edgeNodes)));
         }
-        if (cloudOnlyVms.isEmpty()) {
+        if (!cloudOnlyVms.isEmpty()) {
             // If we have at least one vm/fragment to be hosted specifically on a cloud node ...
             logger.info(" -- The following fragments were reconized to have to be run on cloud-specific nodes : {}", cloudOnlyVms);
             Set<Node> cloudNodes = cloudsToKeep.entrySet().parallelStream()
