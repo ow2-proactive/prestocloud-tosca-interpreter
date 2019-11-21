@@ -961,6 +961,31 @@ public class ParsingUtils {
         }
         return result;
     }
+
+    public static Map<String, Integer> getOccurencePerFragments(ParsingResult<ArchiveRoot> parsingResult) {
+        Map<String, Integer> result = new HashMap<>();
+        // Look for fragments in the node templates
+        Map<String, NodeTemplate> nodeTemplates = parsingResult.getResult().getTopology().getNodeTemplates();
+        if (nodeTemplates == null) {
+            nodeTemplates = new HashMap<>();
+        }
+        String fragmentName;
+        Integer occurence;
+        for (Map.Entry<String, NodeTemplate> nodeTemplateFragment : nodeTemplates.entrySet()) {
+            // Fragment detected
+            if (nodeTemplateFragment.getValue().getType().startsWith("prestocloud.nodes.fragment")) {
+                fragmentName = nodeTemplateFragment.getValue().getName();
+                ScalarPropertyValue property = (ScalarPropertyValue) nodeTemplateFragment.getValue().getProperties().get("occurrences");
+                if (property != null) {
+                    occurence = Integer.parseInt(property.getValue());
+                } else {
+                    occurence = 1;
+                }
+                result.put(fragmentName, occurence);
+            }
+        }
+        return result;
+    }
     public static List<OptimizationVariables> getOptimizationVariables(ParsingResult<ArchiveRoot> parsingResult) {
 
         List<OptimizationVariables> allOptimizationVariables = new ArrayList<>();

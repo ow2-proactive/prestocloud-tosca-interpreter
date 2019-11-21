@@ -44,7 +44,6 @@ public class ParsingSpace {
     private Logger logger = LoggerFactory.getLogger(ParsingSpace.class);
     private static final Pattern NETWORK_IP_PATTERN = Pattern.compile("(\\{ get_property: \\[([\\w,-]+),host,([\\w,]+),([\\w,]+),[\\d]+\\] \\})");
     // TODO: use a valid reference location to compute distances ("Sophia Antipolis" for testing only, must be retrieved from fragment's properties or dependencies)
-    // Point to be discussed with ICCS.
     String sophiaAntipolisUTM = "32T 342479mE 4831495mN";
 
     private Map<String,Map<String, List<RegionCapacityDescriptor>>> regionsPerCloudPerCloudFile;
@@ -61,6 +60,7 @@ public class ParsingSpace {
     private List<OptimizationVariables> optimizationVariables;
     private List<VMTemplateDetails> vmTemplatesDetails;
     private List<EdgeResourceTemplateDetails> edgeResourceDetails;
+    private Map<String, Integer> OccurencePerFragment;
     private Map<String, Boolean> scalablePerfragments;
     // TODO: deal with health checks
     private List<HealthCheck> healthChecks;
@@ -134,6 +134,7 @@ public class ParsingSpace {
         optimizationVariables = ParsingUtils.getOptimizationVariables(parsingResult);
         sshKeys = ParsingUtils.getSshKeys(parsingResult);
         healthChecks = ParsingUtils.getHealthChecks(parsingResult);
+        OccurencePerFragment = ParsingUtils.getOccurencePerFragments(parsingResult);
         scalablePerfragments = ParsingUtils.getScalableFragments(parsingResult);
         return true;
     }
