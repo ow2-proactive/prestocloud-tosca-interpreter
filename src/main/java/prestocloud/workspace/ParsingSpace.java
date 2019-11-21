@@ -124,8 +124,8 @@ public class ParsingSpace {
          if (cloudListFromRegion.get().containsAll(supportedCloudsResourceFiles)){
              throw new IllegalArgumentException("There is a mismatch between specified clouds in Type-level TOSCA and the clouds specified in the repository");
          }
-        logger.info("{} supported cloud have been found", supportedCloudsResourceFiles.size());
-        logger.info("{} types of Edge devices have been found", this.edgeResourceDetails.size());
+        logger.info(" -- {} supported cloud have been found", supportedCloudsResourceFiles.size());
+        logger.info(" -- {} types of Edge devices have been found", this.edgeResourceDetails.size());
         relationships = ParsingUtils.getRelationships(parsingResult);
         placementConstraints = ParsingUtils.getConstraints(parsingResult);
         dockersCloud = ParsingUtils.getDockersCloud(parsingResult);
@@ -145,13 +145,13 @@ public class ParsingSpace {
                 constraints = relationship.getHostingNode();
                 hostingNodePerFragment.put(relationship.getFragmentName(), constraints.name);
                 if (constraints.derivedTypes.contains("prestocloud.nodes.proxy.faas") || constraints.derivedTypes.contains("prestocloud.nodes.agent.faas")) {
-                    logger.info("{} fragment has been identified as operating a FaaS proxy node", relationship.getFragmentName());
+                    logger.info(" -- {} fragment has been identified as operating a FaaS proxy node", relationship.getFragmentName());
                     this.proxyingNodes.put(constraints.getName(), relationship.getFragmentName());
                 } else if (constraints.derivedTypes.contains("prestocloud.nodes.master.jppf")) {
-                    logger.info("{} fragment has been identified as operating a JPPF master node", relationship.getFragmentName());
+                    logger.info(" -- {} fragment has been identified as operating a JPPF master node", relationship.getFragmentName());
                     this.masteringNodes.put(constraints.getName(), relationship.getFragmentName());
                 } else if (constraints.derivedTypes.contains("prestocloud.nodes.proxy")) {
-                    logger.info("{} fragment has been identified as operating a load-balancing node", relationship.getFragmentName());
+                    logger.info(" -- {} fragment has been identified as operating a load-balancing node", relationship.getFragmentName());
                     this.balancingNodes.put(constraints.getName(), relationship.getFragmentName());
                 }
             }
@@ -163,7 +163,7 @@ public class ParsingSpace {
             Map<String, Map<String, Map<String, String>>> allSelectedTypesWithRequirement = new HashMap<>();
             Map<String, Map<String, String>> allSelectedTypes = new HashMap<>();
             for (ConstrainedNode constrainedNode : relationship.getAllConstrainedNodes()) {
-                logger.info("Analyzing constrains on node={}", constrainedNode.name);
+                logger.info(" -- Analyzing constraints on node {}", constrainedNode.name);
                 for (NodeConstraints nodeConstraints : constrainedNode.getConstraints()) {
                     if (!nodeConstraints.getResourceConstraints().isEmpty()) {
                         // If the resource may run on cloud(s), select best matching types
@@ -185,8 +185,6 @@ public class ParsingSpace {
                                 }
                             }
                             allSelectedTypes.put(constrainedNode.getName(), selectedTypes);
-                        } else {
-                            //logger.warn("Edge-only hosting resource constraint found: {}", constrainedNode.getName());
                         }
                     }
                 }
@@ -215,24 +213,24 @@ public class ParsingSpace {
                 vmsName = selectedFragmentTypes.getKey();
                 // Add the fragment's execute node first
                 if (selectedTypes.getKey().equalsIgnoreCase("execute")) {
-                    proceedVmRegistration(vmsName, "Registering fragment {} ...");
+                    proceedVmRegistration(vmsName, " -- Registering fragment {} ...");
                 } else if (selectedTypes.getKey().equalsIgnoreCase("master")) {
-                    proceedVmRegistration(vmsName, "Registering slave fragment {} ...");
+                    proceedVmRegistration(vmsName, " -- Registering slave fragment {} ...");
                     dependencyNode = masteringNodes.get(retrieveDependencyFragment(selectedTypes, masteringNodes));
-                    proceedVmRegistration(dependencyNode, "Registering master fragment {} ...");
+                    proceedVmRegistration(dependencyNode, " -- Registering master fragment {} ...");
                 } else if (selectedTypes.getKey().equalsIgnoreCase("balanced_by")) {
-                    proceedVmRegistration(vmsName, "Registering balanced fragment {} ...");
+                    proceedVmRegistration(vmsName, " -- Registering balanced fragment {} ...");
                     dependencyNode = balancingNodes.get(retrieveDependencyFragment(selectedTypes, balancingNodes));
                     balancedNodes.put(vmsName, dependencyNode);
-                    proceedVmRegistration(dependencyNode, "Registering balancing fragment {} ...");
+                    proceedVmRegistration(dependencyNode, " -- Registering balancing fragment {} ...");
                 } else if (selectedTypes.getKey().equalsIgnoreCase("proxy")) {
-                    proceedVmRegistration(vmsName, "Registering proxified fragment {} ...");
+                    proceedVmRegistration(vmsName, " -- Registering proxified fragment {} ...");
                     dependencyNode = proxyingNodes.get(retrieveDependencyFragment(selectedTypes, proxyingNodes));
-                    proceedVmRegistration(dependencyNode, "Registering proxying fragment {} ...");
+                    proceedVmRegistration(dependencyNode, " -- Registering proxying fragment {} ...");
                 } else {
                     // We can have duplicates (eg. a 'proxy' may be linked to multiple fragments)
                     vmsName = retrieveDependencyFragment(selectedTypes, null);
-                    proceedVmRegistration(vmsName, "Registering an unclassified fragment {} ...");
+                    proceedVmRegistration(vmsName, " -- Registering an unclassified fragment {} ...");
                 }
             }
         }
@@ -265,7 +263,7 @@ public class ParsingSpace {
                     placementString = cloud + " " + region.getRegion();
                     regionCapabilityDescriptorPerCloud.put(placementString, region);
                     if (!nodePerName.containsKey(placementString)) {
-                        registerNewNode(placementString,false,"Registering node {} as {} ...",cloudsToKeep);
+                        registerNewNode(placementString, false, " -- Registering node {} as {} ...", cloudsToKeep);
                     }
                 }
             }
@@ -275,7 +273,7 @@ public class ParsingSpace {
             placementString = "edge " + edgeResource.id;
             regionCapabilityDescriptorPerEdge.put(placementString, new RegionCapacityDescriptor(placementString,edgeResource.num_cpus,edgeResource.mem_size,edgeResource.disk_size.orElse("0 GB")));
             if (!nodePerName.containsKey(placementString)) {
-                registerNewNode(placementString,false,"Registering edge node {} as {} ...",edgeToKeep);
+                registerNewNode(placementString, false, " -- Registering edge node {} as {} ...", edgeToKeep);
             }
         }
     }
@@ -298,7 +296,7 @@ public class ParsingSpace {
                     placementString = cloud + " " + region.getRegion();
                     map.addOnlineNode(nodePerName.get(placementString));
                     cloudsToKeep.put(placementString, true);
-                    logger.info("Setting the cloud whitelisted node {} online ...", placementString);
+                    logger.info(" -- Setting the cloud whitelisted node {} online ...", placementString);
                 }
             }
         }
@@ -332,7 +330,7 @@ public class ParsingSpace {
             }
             map.addOnlineNode(nodePerName.get("edge " + nodeName));
             edgeToKeep.put("edge " + nodeName ,Boolean.TRUE);
-            logger.info("Edge node {} is acknowledged as available",nodeName);
+            logger.info(" -- Edge node {} is acknowledged as available", nodeName);
         }
         for (Map.Entry<String, Boolean> entree : edgeToKeep.entrySet()) {
             Node node = nodePerName.get(entree.getKey());
@@ -375,18 +373,18 @@ public class ParsingSpace {
         boolean nodeReferencedInRequiredProvider = this.nodePerName.containsKey(nodeName);
         if (!nodeReferencedInRequiredProvider) {
             if (isPlacementStringRelatedToEdge(nodeName)) {
-                registerNewNode(nodeName,false,"Registering a edge node from an excluded provider {} as {}",edgeToKeep);
+                registerNewNode(nodeName, false, "-- Registering a edge node from an excluded provider {} as {}", edgeToKeep);
             } else {
-                registerNewNode(nodeName,false,"Registering a cloud node from an excluded provider {} as {}",cloudsToKeep);
+                registerNewNode(nodeName, false, " -- Registering a cloud node from an excluded provider {} as {}", cloudsToKeep);
             }
         }
         if (vmReferencedAsToscaFragment) {
             // The fragment is referenced by the type-level TOSCA: This fragment is expected to be running by the end of the parsing
-            logger.info("Reading mapping: Node {} is operating VM {}, left to be running", nodeName, operatedVMSonNode);
+            logger.info(" -- Reading mapping: Node {} is operating VM {}, left to be running", nodeName, operatedVMSonNode);
             map.addRunningVM(this.vmsPerName.get(operatedVMSonNode),this.nodePerName.get(nodeName));
         } else {
             // The fragment is no more referenced: we register this VM as running, but constraint it to be removed.
-            proceedVmRegistration(operatedVMSonNode,"Registering fragment to be removed {}");
+            proceedVmRegistration(operatedVMSonNode, " -- Registering fragment to be removed {}");
             map.addRunningVM(this.vmsPerName.get(operatedVMSonNode),this.nodePerName.get(nodeName));
             cstrs.add(new Ready(this.vmsPerName.get(operatedVMSonNode)));
             vmToStop.add(this.vmsPerName.get(operatedVMSonNode));
@@ -438,10 +436,10 @@ public class ParsingSpace {
         retrieveSensorsConstraintPerFragment(cameraConstraintPerFragmentName, microphoneConstraintPerFragmentName, temperatureConstrainPerFragmentName);
         Set<String> edgeOnlyVms = edgeConfiguredVms.parallelStream().filter(s -> !cloudConfiguredVms.contains(s)).collect(Collectors.toSet());
         Set<String> cloudOnlyVms = cloudConfiguredVms.parallelStream().filter(s -> !edgeConfiguredVms.contains(s)).collect(Collectors.toSet());
-        // Implementing Fence constrains
+        // Implementing Fence constraint
         if (edgeOnlyVms.isEmpty()) {
             // If we have at least one vm/framgent to be hosted specifically on a edge node ...
-            logger.info("The following fragments were reconized to have to be run on edge-specific nodes: {}", edgeOnlyVms);
+            logger.info(" -- The following fragments were reconized to have to be run on edge-specific nodes: {}", edgeOnlyVms);
             Set<Node> edgeNodes = edgeToKeep.entrySet().parallelStream()
                     .filter(Map.Entry::getValue)
                     .map(Map.Entry::getKey).map(s -> nodePerName.get(s))
@@ -450,7 +448,7 @@ public class ParsingSpace {
         }
         if (cloudOnlyVms.isEmpty()) {
             // If we have at least one vm/fragment to be hosted specifically on a cloud node ...
-            logger.info("The following fragments were reconized to have to be run on cloud-specific nodes : {}", cloudOnlyVms);
+            logger.info(" -- The following fragments were reconized to have to be run on cloud-specific nodes : {}", cloudOnlyVms);
             Set<Node> cloudNodes = cloudsToKeep.entrySet().parallelStream()
                     .filter(Map.Entry::getValue)
                     .map(Map.Entry::getKey).map(s -> nodePerName.get(s))
@@ -466,7 +464,7 @@ public class ParsingSpace {
                         .map(match -> String.format("edge %s", match.id))
                         .map(nodeName -> nodePerName.get(nodeName))
                         .collect(Collectors.toSet());
-                logger.info("Enforcing constraint camera sensors constraints for fragment {} on nodes {}", constrain.getKey(), matchingEdgeDevice);
+                logger.info(" -- Enforcing constraint camera sensors constraints for fragment {} on nodes {}", constrain.getKey(), matchingEdgeDevice);
                 cstrs.add(new Fence(vmsPerName.get(constrain.getKey()), matchingEdgeDevice));
             }
         }
@@ -479,7 +477,7 @@ public class ParsingSpace {
                         .map(match -> String.format("edge %s", match.id))
                         .map(nodeName -> nodePerName.get(nodeName))
                         .collect(Collectors.toSet());
-                logger.info("Enforcing constraint microphone sensors constraints for fragment {} on nodes {}", constrain.getKey(), matchingEdgeDevice);
+                logger.info(" -- Enforcing constraint microphone sensors constraints for fragment {} on nodes {}", constrain.getKey(), matchingEdgeDevice);
                 cstrs.add(new Fence(vmsPerName.get(constrain.getKey()), matchingEdgeDevice));
             }
         }
@@ -492,7 +490,7 @@ public class ParsingSpace {
                         .map(match -> String.format("edge %s", match.id))
                         .map(nodeName -> nodePerName.get(nodeName))
                         .collect(Collectors.toSet());
-                logger.info("Enforcing constraint temperature sensors constraints for fragment {} on nodes {}", constrain.getKey(), matchingEdgeDevice);
+                logger.info(" -- Enforcing constraint temperature sensors constraints for fragment {} on nodes {}", constrain.getKey(), matchingEdgeDevice);
                 cstrs.add(new Fence(vmsPerName.get(constrain.getKey()), matchingEdgeDevice));
             }
         }
@@ -507,10 +505,10 @@ public class ParsingSpace {
                         if (nodeConstraints.getResourceConstraints().get("type").contains("edge") && constrainedNode.getType().equalsIgnoreCase("execute")) {
                             vmName = relationship.getFragmentName();
                             if (!edgeConfiguredVms.contains(vmName)) {
-                                logger.info("Enforcing edge node constraint on VM {} in Btrplace model", vmName);
-                                // Retrieve constrains from the edge resources hosting
+                                logger.info(" -- Enforcing edge node constraint on VM {} in Btrplace model", vmName);
+                                // Retrieve constraints from the edge resources hosting
                                 configureGeneralHostingConstrains(vmName, nodeConstraints);
-                                // Add support for edge-specific resource constrain: no additional constrain found.
+                                // Add support for edge-specific resource constrain: no additional constraint found.
                                 // Should be a topic to be discuss w/ Andreas
                                 edgeConfiguredVms.add(vmName);
                             }
@@ -532,7 +530,7 @@ public class ParsingSpace {
                             vmName = relationship.getFragmentName();
                             if (!cloudConfiguredVms.contains(vmName)) {
                                 if (!edgeConfiguredVms.contains(vmName)) {
-                                    logger.info("Enforcing cloud node constrains on VM {} in Btrplace model", vmName);
+                                    logger.info(" -- Enforcing cloud node constraints on VM {} in Btrplace model", vmName);
                                     configureGeneralHostingConstrains(vmName, nodeConstraints);
                                 }
                                 cloudConfiguredVms.add(vmName);
@@ -550,7 +548,7 @@ public class ParsingSpace {
                 for (NodeConstraints nodeConstraints : constrainedNode.getConstraints()) {
                     // Configure here sensors
                     if (!nodeConstraints.getSensorsConstraints().isEmpty() && constrainedNode.getType().equalsIgnoreCase("execute")) {
-                        logger.info("Sensor constraints detected for fragment vmName={}", relationship.getFragmentName());
+                        logger.info(" -- Sensor constraints detected for fragment vmName={}", relationship.getFragmentName());
                         if (nodeConstraints.getSensorsConstraints().get("camera") != null) {
                             cameraPerFragment.put(relationship.getFragmentName(), nodeConstraints.getSensorsConstraints().get("camera"));
                         }
@@ -604,7 +602,7 @@ public class ParsingSpace {
         //We verify if we are running inside the main WF environement
         String cloudList = System.getenv().getOrDefault("variables_CLOUD_LIST", null);
         if (cloudList != null) {
-            logger.info("ADIAM environment detected. I'll check cloud availability");
+            logger.info(" -- ADIAM environment detected. I'll check cloud availability");
             //If the cloud resource is not detected as online, I'll add a banning constrain.
             banUnreferencedCloudInCloudList(cloudList);
         }
@@ -640,7 +638,7 @@ public class ParsingSpace {
             }
             identifiedClouds.put(cloudName, cloudType + " " + region);
         }
-        identifiedClouds.forEach((s, s2) -> logger.info(" Cloud named {} in CLOUD_LIST is recognized as {} and is still whitelisted", s, s2));
+        identifiedClouds.forEach((s, s2) -> logger.info(" -- Cloud named {} in CLOUD_LIST is recognized as {} and is still whitelisted", s, s2));
         // Proceeding to the effective Ban of the resource.
         List<String> cloudsToIgnore = this.cloudsToKeep.entrySet().stream()
                 .filter(Map.Entry::getValue)
@@ -648,7 +646,7 @@ public class ParsingSpace {
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
         for (String placementString : cloudsToIgnore) {
-            logger.info("Cloud {} is not in the CLOUD_LIST Workflow variable, I blacklist it", placementString);
+            logger.info(" -- Cloud {} is not in the CLOUD_LIST Workflow variable, I blacklist it", placementString);
             cstrs.add(new RunningCapacity(this.nodePerName.get(placementString), 0));
         }
     }
