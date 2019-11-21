@@ -109,7 +109,7 @@ public class WholeChainTest {
 
         // Extract all required information
         Map<String, String> metadata = ParsingUtils.getMetadata(parsingResult);
-        List<String> supportedClouds = ParsingUtils.getListOfCloudsFromMetadata(metadata);
+        Set<String> supportedClouds = ParsingUtils.getListOfCloudsFromMetadata(metadata);
         List<Relationship> relationships = ParsingUtils.getRelationships(parsingResult);
         List<PlacementConstraint> placementConstraints = ParsingUtils.getConstraints(parsingResult);
         List<Docker> dockers = ParsingUtils.getDockersCloud(parsingResult);

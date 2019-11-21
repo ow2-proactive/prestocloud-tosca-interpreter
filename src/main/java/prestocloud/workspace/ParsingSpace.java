@@ -53,7 +53,7 @@ public class ParsingSpace {
     private String resourcesPath;
 
     // We describe couples of element we want to d integrate from our parsing.
-    private List<String> supportedCloudsResourceFiles;
+    private Set<String> supportedCloudsResourceFiles;
     private List<Relationship> relationships;
     private List<PlacementConstraint> placementConstraints;
     private List<Docker> dockersCloud;
@@ -163,6 +163,7 @@ public class ParsingSpace {
             Map<String, Map<String, Map<String, String>>> allSelectedTypesWithRequirement = new HashMap<>();
             Map<String, Map<String, String>> allSelectedTypes = new HashMap<>();
             for (ConstrainedNode constrainedNode : relationship.getAllConstrainedNodes()) {
+                logger.info("Analyzing constrains on node={}", constrainedNode.name);
                 for (NodeConstraints nodeConstraints : constrainedNode.getConstraints()) {
                     if (!nodeConstraints.getResourceConstraints().isEmpty()) {
                         // If the resource may run on cloud(s), select best matching types
@@ -326,7 +327,7 @@ public class ParsingSpace {
             nodeJson = (JSONObject) node;
             nodeName = (String)  nodeJson.get("nodeid");
             if (!referencedEdgeDevice.contains(nodeName)) {
-                logger.info("{} has not reconized as a knwn resource, I skip it.", nodeName);
+                logger.info("{} has not reconized as a known resource, I skip it.", nodeName);
                 continue;
             }
             map.addOnlineNode(nodePerName.get("edge " + nodeName));
@@ -381,7 +382,7 @@ public class ParsingSpace {
         }
         if (vmReferencedAsToscaFragment) {
             // The fragment is referenced by the type-level TOSCA: This fragment is expected to be running by the end of the parsing
-            logger.info("Reading mapping : Node {} is operating VM {}, left to be running", nodeName, operatedVMSonNode);
+            logger.info("Reading mapping: Node {} is operating VM {}, left to be running", nodeName, operatedVMSonNode);
             map.addRunningVM(this.vmsPerName.get(operatedVMSonNode),this.nodePerName.get(nodeName));
         } else {
             // The fragment is no more referenced: we register this VM as running, but constraint it to be removed.
@@ -429,22 +430,71 @@ public class ParsingSpace {
          */
         Set<String> edgeConfiguredVms = new HashSet<>();
         Set<String> cloudConfiguredVms = new HashSet<>();
+        Map<String, List<String>> cameraConstraintPerFragmentName = new HashMap<>();
+        Map<String, List<String>> microphoneConstraintPerFragmentName = new HashMap<>();
+        Map<String, List<String>> temperatureConstrainPerFragmentName = new HashMap<>();
         configureingVMsResourceConfigurationConstraintForEdge(edgeConfiguredVms);
-        configureingVMsResourceConfigurationConstraintForCloud(edgeConfiguredVms, cloudConfiguredVms);
+        configureingVMsResourceConfigurationConstraint(edgeConfiguredVms, cloudConfiguredVms);
+        retrieveSensorsConstraintPerFragment(cameraConstraintPerFragmentName, microphoneConstraintPerFragmentName, temperatureConstrainPerFragmentName);
         Set<String> edgeOnlyVms = edgeConfiguredVms.parallelStream().filter(s -> !cloudConfiguredVms.contains(s)).collect(Collectors.toSet());
         Set<String> cloudOnlyVms = cloudConfiguredVms.parallelStream().filter(s -> !edgeConfiguredVms.contains(s)).collect(Collectors.toSet());
         // Implementing Fence constrains
-        if (edgeOnlyVms.size() > 0) {
+        if (edgeOnlyVms.isEmpty()) {
             // If we have at least one vm/framgent to be hosted specifically on a edge node ...
-            logger.info(" The following fragment were reconized to have to be run on edge-specific nodes: {}", edgeOnlyVms);
-            Set<Node> edgeNodes = edgeToKeep.entrySet().parallelStream().filter(stringBooleanEntry -> stringBooleanEntry.getValue()).map(Map.Entry::getKey).map(s -> nodePerName.get(s)).collect(Collectors.toSet());
+            logger.info("The following fragments were reconized to have to be run on edge-specific nodes: {}", edgeOnlyVms);
+            Set<Node> edgeNodes = edgeToKeep.entrySet().parallelStream()
+                    .filter(Map.Entry::getValue)
+                    .map(Map.Entry::getKey).map(s -> nodePerName.get(s))
+                    .collect(Collectors.toSet());
             edgeOnlyVms.forEach(s -> cstrs.add(new Fence(vmsPerName.get(s), edgeNodes)));
         }
-        if (cloudOnlyVms.size() > 0) {
+        if (cloudOnlyVms.isEmpty()) {
             // If we have at least one vm/fragment to be hosted specifically on a cloud node ...
-            logger.info(" The following fragment were reconized to have to be run on cloud-specific nodes : {}", cloudOnlyVms);
-            Set<Node> cloudNodes = cloudsToKeep.entrySet().parallelStream().filter(stringBooleanEntry -> stringBooleanEntry.getValue()).map(Map.Entry::getKey).map(s -> nodePerName.get(s)).collect(Collectors.toSet());
+            logger.info("The following fragments were reconized to have to be run on cloud-specific nodes : {}", cloudOnlyVms);
+            Set<Node> cloudNodes = cloudsToKeep.entrySet().parallelStream()
+                    .filter(Map.Entry::getValue)
+                    .map(Map.Entry::getKey).map(s -> nodePerName.get(s))
+                    .collect(Collectors.toSet());
             cloudOnlyVms.forEach(s -> cstrs.add(new Fence(vmsPerName.get(s), cloudNodes)));
+        }
+        if (!cameraConstraintPerFragmentName.isEmpty()) {
+            Set<Node> matchingEdgeDevice;
+            for (Map.Entry<String, List<String>> constrain : cameraConstraintPerFragmentName.entrySet()) {
+                matchingEdgeDevice = edgeResourceDetails.stream()
+                        .filter(details -> details.cameraSensor.isPresent())
+                        .filter(detail -> constrain.getValue().parallelStream().anyMatch(specs -> specs.equals(detail.cameraSensor.get())))
+                        .map(match -> String.format("edge %s", match.id))
+                        .map(nodeName -> nodePerName.get(nodeName))
+                        .collect(Collectors.toSet());
+                logger.info("Enforcing constraint camera sensors constraints for fragment {} on nodes {}", constrain.getKey(), matchingEdgeDevice);
+                cstrs.add(new Fence(vmsPerName.get(constrain.getKey()), matchingEdgeDevice));
+            }
+        }
+        if (!microphoneConstraintPerFragmentName.isEmpty()) {
+            Set<Node> matchingEdgeDevice;
+            for (Map.Entry<String, List<String>> constrain : microphoneConstraintPerFragmentName.entrySet()) {
+                matchingEdgeDevice = edgeResourceDetails.stream()
+                        .filter(details -> details.microphoneSensor.isPresent())
+                        .filter(detail -> constrain.getValue().parallelStream().anyMatch(specs -> specs.equals(detail.microphoneSensor.get())))
+                        .map(match -> String.format("edge %s", match.id))
+                        .map(nodeName -> nodePerName.get(nodeName))
+                        .collect(Collectors.toSet());
+                logger.info("Enforcing constraint microphone sensors constraints for fragment {} on nodes {}", constrain.getKey(), matchingEdgeDevice);
+                cstrs.add(new Fence(vmsPerName.get(constrain.getKey()), matchingEdgeDevice));
+            }
+        }
+        if (!temperatureConstrainPerFragmentName.isEmpty()) {
+            Set<Node> matchingEdgeDevice;
+            for (Map.Entry<String, List<String>> constrain : temperatureConstrainPerFragmentName.entrySet()) {
+                matchingEdgeDevice = edgeResourceDetails.stream()
+                        .filter(details -> details.temperatureSensor.isPresent())
+                        .filter(detail -> constrain.getValue().parallelStream().anyMatch(specs -> specs.equals(detail.temperatureSensor.get())))
+                        .map(match -> String.format("edge %s", match.id))
+                        .map(nodeName -> nodePerName.get(nodeName))
+                        .collect(Collectors.toSet());
+                logger.info("Enforcing constraint temperature sensors constraints for fragment {} on nodes {}", constrain.getKey(), matchingEdgeDevice);
+                cstrs.add(new Fence(vmsPerName.get(constrain.getKey()), matchingEdgeDevice));
+            }
         }
     }
 
@@ -457,7 +507,7 @@ public class ParsingSpace {
                         if (nodeConstraints.getResourceConstraints().get("type").contains("edge") && constrainedNode.getType().equalsIgnoreCase("execute")) {
                             vmName = relationship.getFragmentName();
                             if (!edgeConfiguredVms.contains(vmName)) {
-                                logger.info("Enforcing edge node constrains on VM {} in Btrplace model", vmName);
+                                logger.info("Enforcing edge node constraint on VM {} in Btrplace model", vmName);
                                 // Retrieve constrains from the edge resources hosting
                                 configureGeneralHostingConstrains(vmName, nodeConstraints);
                                 // Add support for edge-specific resource constrain: no additional constrain found.
@@ -471,7 +521,7 @@ public class ParsingSpace {
         }
     }
 
-    private void configureingVMsResourceConfigurationConstraintForCloud(Set<String> edgeConfiguredVms, Set<String> cloudConfiguredVms) {
+    private void configureingVMsResourceConfigurationConstraint(Set<String> edgeConfiguredVms, Set<String> cloudConfiguredVms) {
         String vmName;
         for (Relationship relationship : relationships) {
             for (ConstrainedNode constrainedNode : relationship.getAllConstrainedNodes()) {
@@ -487,6 +537,28 @@ public class ParsingSpace {
                                 }
                                 cloudConfiguredVms.add(vmName);
                             }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void retrieveSensorsConstraintPerFragment(Map<String, List<String>> cameraPerFragment, Map<String, List<String>> microphonePerFragment, Map<String, List<String>> temperaturePerFragment) {
+        for (Relationship relationship : relationships) {
+            for (ConstrainedNode constrainedNode : relationship.getAllConstrainedNodes()) {
+                for (NodeConstraints nodeConstraints : constrainedNode.getConstraints()) {
+                    // Configure here sensors
+                    if (!nodeConstraints.getSensorsConstraints().isEmpty() && constrainedNode.getType().equalsIgnoreCase("execute")) {
+                        logger.info("Sensor constraints detected for fragment vmName={}", relationship.getFragmentName());
+                        if (nodeConstraints.getSensorsConstraints().get("camera") != null) {
+                            cameraPerFragment.put(relationship.getFragmentName(), nodeConstraints.getSensorsConstraints().get("camera"));
+                        }
+                        if (nodeConstraints.getSensorsConstraints().get("microphone") != null) {
+                            microphonePerFragment.put(relationship.getFragmentName(), nodeConstraints.getSensorsConstraints().get("microphone"));
+                        }
+                        if (nodeConstraints.getSensorsConstraints().get("temperature") != null) {
+                            temperaturePerFragment.put(relationship.getFragmentName(), nodeConstraints.getSensorsConstraints().get("temperature"));
                         }
                     }
                 }
@@ -570,7 +642,11 @@ public class ParsingSpace {
         }
         identifiedClouds.forEach((s, s2) -> logger.info(" Cloud named {} in CLOUD_LIST is recognized as {} and is still whitelisted", s, s2));
         // Proceeding to the effective Ban of the resource.
-        List<String> cloudsToIgnore = this.cloudsToKeep.entrySet().stream().filter(stringBooleanEntry -> (stringBooleanEntry.getValue())).filter(stringBooleanEntry -> (!identifiedClouds.containsValue(stringBooleanEntry.getKey()))).map(Map.Entry::getKey).collect(Collectors.toList());
+        List<String> cloudsToIgnore = this.cloudsToKeep.entrySet().stream()
+                .filter(Map.Entry::getValue)
+                .filter(stringBooleanEntry -> (!identifiedClouds.containsValue(stringBooleanEntry.getKey())))
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
         for (String placementString : cloudsToIgnore) {
             logger.info("Cloud {} is not in the CLOUD_LIST Workflow variable, I blacklist it", placementString);
             cstrs.add(new RunningCapacity(this.nodePerName.get(placementString), 0));
@@ -591,11 +667,8 @@ public class ParsingSpace {
     public void configurePlacementConstraint() {
         // Apply placement constraints
         for (PlacementConstraint placementConstraint : placementConstraints) {
-            // TODO: manage more constraints if needed, use a dedicated method
-            // AFAIK: this is not the case
             if (placementConstraint.getType().contains("Spread")) {
                 Set<VM> constrainedVms = new HashSet<>();
-                // Check if the VM actually exists (this is currently triggered as edge devices are not yet managed)
                 if (vmsPerName.keySet().containsAll(placementConstraint.getTargets())) {
                     for (String target : placementConstraint.getTargets()) {
                         constrainedVms.add(vmsPerName.get(target));

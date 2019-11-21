@@ -597,9 +597,9 @@ public class ParsingUtils {
         return metadata;
     }
 
-    public static List<String> getListOfCloudsFromMetadata(Map<String, String> metadata) {
-        List<String> clouds = new ArrayList<>();
-        List<String> oppositeClouds = new ArrayList<>();
+    public static Set<String> getListOfCloudsFromMetadata(Map<String, String> metadata) {
+        Set<String> clouds = new HashSet<>();
+        Set<String> oppositeClouds = new HashSet<>();
         for (Map.Entry<String, String> entry : metadata.entrySet()) {
             if (entry.getKey().contains("ProviderName")) {
                 String cloud_id = entry.getKey().split("_")[1];
@@ -669,7 +669,6 @@ public class ParsingUtils {
                         }
                         available = Integer.valueOf(hostingConstraint.getValue().get("host").get("num_cpus"));
                         if (required <= available) {
-                            //System.out.println("Good type for cpu: " + hostingConstraint.getKey());
                             cpu = true;
                         }
                     }
@@ -769,7 +768,6 @@ public class ParsingUtils {
                         }
                         available = Double.valueOf(hostingConstraint.getValue().get("host").get("price"));
                         if (required <= available) {
-                            //System.out.println("Good type for price: " + hostingConstraint.getKey());
                             price = true;
                         }
                     }
@@ -778,9 +776,6 @@ public class ParsingUtils {
                     price = true;
                 }
                 if (cpu && mem && disk && price) {
-                    //System.out.println("Best suitable type found: " + hostingConstraint.getKey());
-                    //return hostingConstraint.getValue().get("cloud").get("name");
-//                    selectedTypes.put(hostingConstraint.getValue().get("cloud").get("cloud_region") + " " + hostingConstraint.getValue().get("cloud").get("name"), Double.valueOf(hostingConstraint.getValue().get("host").get("price")));
                     String region = hostingConstraint.getValue().get("cloud").get("cloud_region");
                     VmTypeCostRegistration vtcr = new VmTypeCostRegistration(hostingConstraint.getValue().get("cloud").get("name"), Double.valueOf(hostingConstraint.getValue().get("host").get("price")));
                     if (selectedTypes.containsKey(region)) {
@@ -795,12 +790,9 @@ public class ParsingUtils {
         }
 
         if (selectedTypes.isEmpty()) {
-//            System.out.println("No suitable type found for hosting constraints: " + hostingConstraints);
             throw new Exception("No suitable type found for hosting constraints: " + hostingConstraints);
         }
         else {
-            //return selectedTypes.entrySet().stream().sorted(Map.Entry.comparingByValue()).findFirst().get().getKey();
-            //return selectedTypes.entrySet().parallelStream().map(Map.Entry::getKey).collect(Collectors.toList());
             return selectedTypes.entrySet().parallelStream().map(val -> (val.getKey() + " " + val.getValue().toString())).collect(Collectors.toList());
         }
     }
