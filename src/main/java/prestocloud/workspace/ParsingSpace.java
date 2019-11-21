@@ -41,8 +41,12 @@ import java.util.stream.Collectors;
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class)
 public class ParsingSpace {
 
-    private Logger logger = LoggerFactory.getLogger(ParsingSpace.class);
     private static final Pattern NETWORK_IP_PATTERN = Pattern.compile("(\\{ get_property: \\[([\\w,-]+),host,([\\w,]+),([\\w,]+),[\\d]+\\] \\})");
+    private static final String TYPE_EXECUTE = "execute";
+    private static final String TYPE_CLOUD = "cloud";
+    private static final String PLACEMENT_EDGE = "edge ";
+
+    private Logger logger = LoggerFactory.getLogger(ParsingSpace.class);
     // TODO: use a valid reference location to compute distances ("Sophia Antipolis" for testing only, must be retrieved from fragment's properties or dependencies)
     String sophiaAntipolisUTM = "32T 342479mE 4831495mN";
 
@@ -142,7 +146,7 @@ public class ParsingSpace {
     public void classifyNodeAccordingToRelationships() {
         ConstrainedNode constraints;
         for (Relationship relationship : relationships) {
-            if (relationship.getHostingNode().getType().equals("execute")) {
+            if (relationship.getHostingNode().getType().equals(TYPE_EXECUTE)) {
                 constraints = relationship.getHostingNode();
                 hostingNodePerFragment.put(relationship.getFragmentName(), constraints.name);
                 if (constraints.derivedTypes.contains("prestocloud.nodes.proxy.faas") || constraints.derivedTypes.contains("prestocloud.nodes.agent.faas")) {
@@ -159,7 +163,7 @@ public class ParsingSpace {
         }
     }
 
-    public boolean selectBestCloudVmType() throws Exception{
+    public boolean selectBestCloudVmType() throws Exception {
         for (Relationship relationship : relationships) {
             Map<String, Map<String, Map<String, String>>> allSelectedTypesWithRequirement = new HashMap<>();
             Map<String, Map<String, String>> allSelectedTypes = new HashMap<>();
@@ -168,24 +172,8 @@ public class ParsingSpace {
                 for (NodeConstraints nodeConstraints : constrainedNode.getConstraints()) {
                     if (!nodeConstraints.getResourceConstraints().isEmpty()) {
                         // If the resource may run on cloud(s), select best matching types
-                        if (nodeConstraints.getResourceConstraints().get("type").contains("cloud")) {
-                            // Loop for all clouds supported (metadata)
-                            Map<String, String> selectedTypes = new HashMap<>();
-                            for (String cloudFile : supportedCloudsResourceFiles) {
-                                    for (String cloud : this.regionsPerCloudPerCloudFile.get(cloudFile).keySet()) {
-                                    List<String> selectedRegionAndType = ParsingUtils.findBestSuitableRegionAndVMType(
-                                            parser,
-                                            resourcesPath,
-                                            cloudFile,
-                                            this.regionsPerCloudPerCloudFile.get(cloudFile).get(cloud).stream().map(RegionCapacityDescriptor::getRegion).collect(Collectors.toList()),
-                                            nodeConstraints.getHostingConstraints());
-                                    selectedRegionAndType.forEach(s -> {
-                                       String[] tmp = s.split(" ");
-                                       selectedTypes.put(cloud.toLowerCase() + " " + tmp[0], tmp[1]);
-                                    });
-                                }
-                            }
-                            allSelectedTypes.put(constrainedNode.getName(), selectedTypes);
+                        if (nodeConstraints.getResourceConstraints().get("type").contains(TYPE_CLOUD)) {
+                            investigateNodeConstraints(allSelectedTypes, constrainedNode, nodeConstraints);
                         }
                     }
                 }
@@ -195,6 +183,26 @@ public class ParsingSpace {
             logger.debug("{} types were identified for the fragment {}", allSelectedTypes.size(), relationship.getFragmentName());
         }
         return true;
+    }
+
+    private void investigateNodeConstraints(Map<String, Map<String, String>> allSelectedTypes, ConstrainedNode constrainedNode, NodeConstraints nodeConstraints) throws Exception {
+        // Loop for all clouds supported (metadata)
+        Map<String, String> selectedTypes = new HashMap<>();
+        for (String cloudFile : supportedCloudsResourceFiles) {
+            for (String cloud : this.regionsPerCloudPerCloudFile.get(cloudFile).keySet()) {
+                List<String> selectedRegionAndType = ParsingUtils.findBestSuitableRegionAndVMType(
+                        parser,
+                        resourcesPath,
+                        cloudFile,
+                        this.regionsPerCloudPerCloudFile.get(cloudFile).get(cloud).stream().map(RegionCapacityDescriptor::getRegion).collect(Collectors.toList()),
+                        nodeConstraints.getHostingConstraints());
+                selectedRegionAndType.forEach(s -> {
+                    String[] tmp = s.split(" ");
+                    selectedTypes.put(cloud.toLowerCase() + " " + tmp[0], tmp[1]);
+                });
+            }
+        }
+        allSelectedTypes.put(constrainedNode.getName(), selectedTypes);
     }
 
     public void configureBtrPlace() {
@@ -213,7 +221,7 @@ public class ParsingSpace {
             for (Map.Entry<String, Map<String, Map<String, String>>> selectedTypes : selectedFragmentTypes.getValue().entrySet()) {
                 vmsName = selectedFragmentTypes.getKey();
                 // Add the fragment's execute node first
-                if (selectedTypes.getKey().equalsIgnoreCase("execute")) {
+                if (selectedTypes.getKey().equalsIgnoreCase(TYPE_EXECUTE)) {
                     proceedVmRegistration(vmsName, " -- Registering fragment {} ...");
                 } else if (selectedTypes.getKey().equalsIgnoreCase("master")) {
                     proceedVmRegistration(vmsName, " -- Registering slave fragment {} ...");
@@ -271,7 +279,7 @@ public class ParsingSpace {
         }
         // Proceeding w/ edge nodes
         for (EdgeResourceTemplateDetails edgeResource : this.edgeResourceDetails) {
-            placementString = "edge " + edgeResource.id;
+            placementString = PLACEMENT_EDGE + edgeResource.id;
             regionCapabilityDescriptorPerEdge.put(placementString, new RegionCapacityDescriptor(placementString,edgeResource.num_cpus,edgeResource.mem_size,edgeResource.disk_size.orElse("0 GB")));
             if (!nodePerName.containsKey(placementString)) {
                 registerNewNode(placementString, false, " -- Registering edge node {} as {} ...", edgeToKeep);
@@ -329,8 +337,8 @@ public class ParsingSpace {
                 logger.info("{} has not reconized as a known resource, I skip it.", nodeName);
                 continue;
             }
-            map.addOnlineNode(nodePerName.get("edge " + nodeName));
-            edgeToKeep.put("edge " + nodeName ,Boolean.TRUE);
+            map.addOnlineNode(nodePerName.get(PLACEMENT_EDGE + nodeName));
+            edgeToKeep.put(PLACEMENT_EDGE + nodeName, Boolean.TRUE);
             logger.info(" -- Edge node {} is acknowledged as available", nodeName);
         }
         for (Map.Entry<String, Boolean> entree : edgeToKeep.entrySet()) {
@@ -503,7 +511,7 @@ public class ParsingSpace {
             for (ConstrainedNode constrainedNode : relationship.getAllConstrainedNodes()) {
                 for (NodeConstraints nodeConstraints : constrainedNode.getConstraints()) {
                     if (!nodeConstraints.getResourceConstraints().isEmpty()) {
-                        if (nodeConstraints.getResourceConstraints().get("type").contains("edge") && constrainedNode.getType().equalsIgnoreCase("execute")) {
+                        if (nodeConstraints.getResourceConstraints().get("type").contains("edge") && constrainedNode.getType().equalsIgnoreCase(TYPE_EXECUTE)) {
                             vmName = relationship.getFragmentName();
                             if (!edgeConfiguredVms.contains(vmName)) {
                                 logger.info(" -- Enforcing edge node constraint on VM {} in Btrplace model", vmName);
@@ -527,7 +535,7 @@ public class ParsingSpace {
                 for (NodeConstraints nodeConstraints : constrainedNode.getConstraints()) {
                     if (!nodeConstraints.getResourceConstraints().isEmpty()) {
                         // If the resource may run on cloud(s), select best matching types
-                        if (nodeConstraints.getResourceConstraints().get("type").contains("cloud") && constrainedNode.getType().equalsIgnoreCase("execute")) {
+                        if (nodeConstraints.getResourceConstraints().get("type").contains(TYPE_CLOUD) && constrainedNode.getType().equalsIgnoreCase(TYPE_EXECUTE)) {
                             vmName = relationship.getFragmentName();
                             if (!cloudConfiguredVms.contains(vmName)) {
                                 if (!edgeConfiguredVms.contains(vmName)) {
@@ -548,7 +556,7 @@ public class ParsingSpace {
             for (ConstrainedNode constrainedNode : relationship.getAllConstrainedNodes()) {
                 for (NodeConstraints nodeConstraints : constrainedNode.getConstraints()) {
                     // Configure here sensors
-                    if (!nodeConstraints.getSensorsConstraints().isEmpty() && constrainedNode.getType().equalsIgnoreCase("execute")) {
+                    if (!nodeConstraints.getSensorsConstraints().isEmpty() && constrainedNode.getType().equalsIgnoreCase(TYPE_EXECUTE)) {
                         logger.info(" -- Sensor constraints detected for fragment vmName={}", relationship.getFragmentName());
                         if (nodeConstraints.getSensorsConstraints().get("camera") != null) {
                             cameraPerFragment.put(relationship.getFragmentName(), nodeConstraints.getSensorsConstraints().get("camera"));
@@ -964,7 +972,7 @@ public class ParsingSpace {
     private String getSelectedCloudVMType(Map<String, Map<String, Map<String, Map<String, String>>>> selectedCloudVMTypes, String vmName, String nodeName) {
         Map<String, Map<String, Map<String, String>>> tmp = selectedCloudVMTypes.get(vmName);
         if (tmp != null) {
-            Optional<Map<String, String>> tmp2 = tmp.get("execute").values().stream().findFirst();
+            Optional<Map<String, String>> tmp2 = tmp.get(TYPE_EXECUTE).values().stream().findFirst();
             if (tmp2.isPresent()) {
                 return tmp2.get().get(nodeName);
             } else {
