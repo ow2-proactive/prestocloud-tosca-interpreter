@@ -780,7 +780,10 @@ public class ParsingSpace {
 
     private void proceedCostExtractionCloud(Map.Entry<String, VM> vm, Optional<OptimizationVariables> vmOptimVars, Map.Entry<String, Node> node ) {
         // Find corresponding VM template
-        Optional<VMTemplateDetails> tmp = vmTemplatesDetails.stream().filter(vmTplDetails -> (vmTplDetails.getCloud() + " " + vmTplDetails.getRegion()).equalsIgnoreCase(node.getKey())).findFirst();
+        Optional<VMTemplateDetails> tmp = vmTemplatesDetails.stream()
+                .filter(vmTplDetails -> (vmTplDetails.getCloud() + " " + vmTplDetails.getRegion()).equalsIgnoreCase(node.getKey()))
+                .filter(vmtpl -> this.selectedCloudVMTypes.get(fragmentsPerVm.get(vm.getKey())).get(TYPE_EXECUTE).get(hostingNodePerFragment.get(fragmentsPerVm.get(vm.getKey()))).get(String.format("%s %s", vmtpl.cloud, vmtpl.region)).equals(vmtpl.instanceName))
+                .findFirst();
         if (tmp.isPresent()) {
             VMTemplateDetails vmTemplateDetails = tmp.get();
             // Default to 1
