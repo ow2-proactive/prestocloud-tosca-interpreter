@@ -1041,26 +1041,27 @@ public class ParsingUtils {
             // For each available VM type ...
             for (Map.Entry<String, Map<String, Map<String, String>>> hostingConstraint : vMTypes.entrySet()) {
                 Double price = null;
-                String name = null, type = null, region = null, coordinates = null, cpucapacity = null, memorycapacity = null, diskcapacity = null;
+                String name = null, type = null, region = null, coordinates = null, cpucapacity = null, memorycapacity = null, diskcapacity = null, instanceName = null;
                 for (Map.Entry<String, Map<String, String>> cloudProperties : hostingConstraint.getValue().entrySet()) {
                     if (cloudProperties.getKey().equalsIgnoreCase("host")) {
                         price = Double.valueOf(cloudProperties.getValue().get("price"));
+                        cpucapacity = cloudProperties.getValue().get("num_cpus");
+                        memorycapacity = cloudProperties.getValue().get("mem_size");
+                        diskcapacity = cloudProperties.getValue().get("disk_size");
                     }
                     if (cloudProperties.getKey().equalsIgnoreCase("cloud")) {
                         name = cloudProperties.getValue().get("cloud_name");
                         type = cloudProperties.getValue().get("cloud_type");
                         region = cloudProperties.getValue().get("cloud_region");
-                        cpucapacity = cloudProperties.getValue().get("cpucapacity");
-                        memorycapacity = cloudProperties.getValue().get("memorycapacity");
-                        diskcapacity = cloudProperties.getValue().get("diskcapacity");
                         coordinates = cloudProperties.getValue().get("gps_coordinates");
+                        instanceName = cloudProperties.getValue().get("name");
                         if (!regionsPerCloud.keySet().contains(type)) {
                             regionsPerCloud.put(type,new TreeSet<RegionCapacityDescriptor>());
                         }
                         regionsPerCloud.get(type).add(new RegionCapacityDescriptor(region,cpucapacity,memorycapacity,diskcapacity));
                     }
                 }
-                VMTemplateDetails VMTemplateDetails = new VMTemplateDetails(hostingConstraint.getKey(), name, type, region, coordinates, price);
+                VMTemplateDetails VMTemplateDetails = new VMTemplateDetails(hostingConstraint.getKey(), name, type, region, coordinates, price, instanceName);
                 vmTemplatesDetails.add(VMTemplateDetails);
                 cloudFileName = cloudFile.getFileName().toString();
                 regionsPerCloudPerCloudfile.put(cloudFileName.substring(0,cloudFileName.length() -17),regionsPerCloud);

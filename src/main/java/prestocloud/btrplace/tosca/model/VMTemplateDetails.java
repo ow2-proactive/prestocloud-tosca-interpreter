@@ -17,13 +17,17 @@ public class VMTemplateDetails {
     public String geolocation;
     @Getter @Setter
     public double price;
+    @Getter
+    @Setter
+    public String instanceName;
 
-    public VMTemplateDetails(String id, String name, String cloud, String region, String geolocation, double price) {
+    public VMTemplateDetails(String id, String name, String cloud, String region, String geolocation, double price, String instanceName) {
         this.id = id;
         this.name = name;
         this.cloud = cloud;
         this.region = region;
         this.geolocation = geolocation;
         this.price = price;
+        this.instanceName = instanceName;
     }
 }

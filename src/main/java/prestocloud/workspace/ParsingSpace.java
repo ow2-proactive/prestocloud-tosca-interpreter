@@ -32,7 +32,6 @@ import prestocloud.tosca.model.ArchiveRoot;
 import prestocloud.tosca.parser.*;
 
 import java.util.*;
-import java.util.function.BinaryOperator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -51,6 +50,7 @@ public class ParsingSpace {
     // TODO: use a valid reference location to compute distances ("Sophia Antipolis" for testing only, must be retrieved from fragment's properties or dependencies)
     String sophiaAntipolisUTM = "32T 342479mE 4831495mN";
 
+    private Map<String, String> metadata;
     private Map<String,Map<String, List<RegionCapacityDescriptor>>> regionsPerCloudPerCloudFile;
     private ParsingResult<ArchiveRoot> parsingResult;
     private ToscaParser parser;
@@ -115,7 +115,7 @@ public class ParsingSpace {
 
     public boolean retrieveResourceFromParsing() {
         // Retrieving main data from the parsed TOSCA.
-        Map<String, String> metadata = ParsingUtils.getMetadata(parsingResult);
+        metadata = ParsingUtils.getMetadata(parsingResult);
         supportedCloudsResourceFiles = ParsingUtils.getListOfCloudsFromMetadata(metadata);
         if (supportedCloudsResourceFiles.isEmpty()) {
             this.regionsPerCloudPerCloudFile.keySet().stream().forEach(s -> supportedCloudsResourceFiles.add(s));
@@ -875,8 +875,8 @@ public class ParsingSpace {
         jo.put(OutputField.ACTION_END, action.getEnd());
         jo.put(OutputField.ACTION_FRAGMENT, vmName);
         jo.put(OutputField.ACTION_ID, this.idPerFragment.getOrDefault(fragmentsPerVm.get(vmName), ""));
-        jo.put(OutputField.ACTION_CLOUD, cloud );
-        jo.put(OutputField.ACTION_REGION, region );
+        jo.put(OutputField.ACTION_CLOUD, cloud);
+        jo.put(OutputField.ACTION_REGION, region);
         jo.put(OutputField.ACTION_TYPE, selectedVMType);
         jo.put(OutputField.ACTION_NODE, this.hostingNodePerFragment.get(fragmentsPerVm.get(vmName)));
         jo.put(OutputField.ACTION_SCALABLE, this.scalablePerfragments.getOrDefault(fragmentsPerVm.get(vmName), false));
@@ -886,7 +886,7 @@ public class ParsingSpace {
         if (this.sshKeys.containsKey(fragmentsPerVm.get(vmName))) {
             if (this.sshKeys.get(fragmentsPerVm.get(vmName)).hasKey()) {
                 jo.put(OutputField.ACTION_SSH_KEY, this.sshKeys.get(fragmentsPerVm.get(vmName)).getPublicKey());
-           }
+            }
        }
 
        // Docker command is optional because 'proxy', 'master', and 'balanced_by' nodes don't have one
@@ -1066,6 +1066,30 @@ public class ParsingSpace {
             fragmentName = hostingNodePerFragment.entrySet().stream().filter(valkey -> (valkey.getValue().equals(fragmentType))).findFirst();
             return fragmentName.map(stringStringEntry -> result.replace(wholePropertyDeclaration, String.format("@variables_%s_%s", hostProperties, stringStringEntry.getKey()))).orElse("");
         }
+    }
+
+    public double getHourlyCostOfDeployment() {
+        return dstmapping.getRunningVMs().stream()
+                .map(vm -> new AbstractMap.SimpleImmutableEntry<>(vm, dstmapping.getVMLocation(vm)))
+                .map(tupple -> namePerNode.get(tupple.getValue()) + " " + fragmentsPerVm.get(namePerVM.get(tupple.getKey())))
+                .filter(name -> !name.split(" ")[0].equals("edge"))
+                .map(name -> vmTemplatesDetails.parallelStream().filter(vmTpl -> {
+                    String[] splitted = name.split(" ");
+                    String instanceType = this.selectedCloudVMTypes.get(splitted[2]).get(TYPE_EXECUTE).get(hostingNodePerFragment.get(splitted[2])).get(String.format("%s %s", splitted[0], splitted[1]));
+                    return vmTpl.cloud.equalsIgnoreCase(splitted[0]) && vmTpl.region.equalsIgnoreCase(splitted[1]) && vmTpl.instanceName.equalsIgnoreCase(instanceType);
+                }).findAny())
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .mapToDouble(VMTemplateDetails::getPrice)
+                .sum();
+    }
+
+    public double getTimePeriod() {
+        return Double.parseDouble(this.metadata.get("TimePeriod"));
+    }
+
+    public double getCostThreshold() {
+        return Double.parseDouble(this.metadata.get("CostThreshold"));
     }
 
     private static class OutputField {

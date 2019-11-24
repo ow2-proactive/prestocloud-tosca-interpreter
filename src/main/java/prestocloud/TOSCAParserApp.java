@@ -161,6 +161,11 @@ public class TOSCAParserApp {
             if (!ps.performedBtrplaceSolving()) {
                 throw new IllegalStateException("No Btrplace reconfiguration plan was determined");
             } else {
+                double tp = ps.getTimePeriod(), hcod = ps.getHourlyCostOfDeployment(), ct = ps.getCostThreshold();
+                if (tp * hcod > ct) {
+                    throw new IllegalStateException(String.format("Threshold cost limit has exceeded: Time (h): %s , Hourly cost of deployment (Eur/h): %s , Cost threshold (Eur): %s", tp, hcod, ct));
+                }
+                logger.info("Threshold cost limit is accepted: Time (h): {}, Hourly cost of deployment (Eur/h): {}, Cost threshold (Eur): {}", tp, hcod, ct);
                 logger.info("(20/22) Writing management plan output");
                 writeResult(ps.generationJsonOutput(), outputFile);
                 logger.info("(21/22) Writing the mapping output");
