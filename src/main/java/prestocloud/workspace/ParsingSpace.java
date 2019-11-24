@@ -32,6 +32,7 @@ import prestocloud.tosca.model.ArchiveRoot;
 import prestocloud.tosca.parser.*;
 
 import java.util.*;
+import java.util.function.BinaryOperator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -167,6 +168,9 @@ public class ParsingSpace {
 
     public boolean selectBestCloudVmType() throws Exception {
         for (Relationship relationship : relationships) {
+            if (selectedCloudVMTypes.containsKey(relationship.getFragmentName())) {
+                continue;
+            }
             Map<String, Map<String, Map<String, String>>> allSelectedTypesWithRequirement = new HashMap<>();
             Map<String, Map<String, String>> allSelectedTypes = new HashMap<>();
             for (ConstrainedNode constrainedNode : relationship.getAllConstrainedNodes()) {
