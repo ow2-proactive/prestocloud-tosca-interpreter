@@ -780,9 +780,15 @@ public class ParsingSpace {
 
     private void proceedCostExtractionCloud(Map.Entry<String, VM> vm, Optional<OptimizationVariables> vmOptimVars, Map.Entry<String, Node> node ) {
         // Find corresponding VM template
-        Optional<VMTemplateDetails> tmp = vmTemplatesDetails.stream()
+        Optional<VMTemplateDetails> tmp;
+        tmp = vmTemplatesDetails.stream()
                 .filter(vmTplDetails -> (vmTplDetails.getCloud() + " " + vmTplDetails.getRegion()).equalsIgnoreCase(node.getKey()))
-                .filter(vmtpl -> this.selectedCloudVMTypes.get(fragmentsPerVm.get(vm.getKey())).get(TYPE_EXECUTE).get(hostingNodePerFragment.get(fragmentsPerVm.get(vm.getKey()))).get(String.format("%s %s", vmtpl.cloud, vmtpl.region)).equals(vmtpl.instanceName))
+                .filter(vmtpl -> !this.selectedCloudVMTypes.containsKey(fragmentsPerVm.get(vm.getKey())) || this.selectedCloudVMTypes
+                        .get(fragmentsPerVm.get(vm.getKey()))
+                        .get(TYPE_EXECUTE)
+                        .get(hostingNodePerFragment.get(fragmentsPerVm.get(vm.getKey())))
+                        .get(String.format("%s %s", vmtpl.cloud, vmtpl.region))
+                        .equals(vmtpl.instanceName))
                 .findFirst();
         if (tmp.isPresent()) {
             VMTemplateDetails vmTemplateDetails = tmp.get();
@@ -1059,7 +1065,11 @@ public class ParsingSpace {
     private String processReplacement(String result, String wholePropertyDeclaration, String processingNodeName, String hostProperties) {
         Optional<Map.Entry<String, String>> fragmentName = hostingNodePerFragment.entrySet().stream().filter(valkey -> (valkey.getValue().equals(processingNodeName))).findFirst();
         if (fragmentName.isPresent()) {
-            return result.replace(wholePropertyDeclaration, String.format("@%s_%s", hostProperties, fragmentName.get().getKey()));
+            Optional<String> vmName = vmsPerFragment.get(fragmentName.get().getKey()).stream().findFirst();
+            if (!vmName.isPresent()) {
+                throw new IllegalStateException("Unable to find any fragment occurence to work with variable substitution: " + processingNodeName);
+            }
+            return result.replace(wholePropertyDeclaration, String.format("@%s_%s", hostProperties, vmName.get()));
         } else {
             ArchiveRoot pr = this.parsingResult.getResult();
             Topology topology = pr.getTopology();
@@ -1067,7 +1077,9 @@ public class ParsingSpace {
             NodeTemplate nodeTemplate = nodeTemplates.get(processingNodeName);
             String fragmentType = nodeTemplate.getType();
             fragmentName = hostingNodePerFragment.entrySet().stream().filter(valkey -> (valkey.getValue().equals(fragmentType))).findFirst();
-            return fragmentName.map(stringStringEntry -> result.replace(wholePropertyDeclaration, String.format("@variables_%s_%s", hostProperties, stringStringEntry.getKey()))).orElse("");
+            Optional<String> vmName = vmsPerFragment.get(fragmentName.get().getKey()).stream().findFirst();
+            //return fragmentName.map(stringStringEntry -> result.replace(wholePropertyDeclaration, String.format("@variables_%s_%s", hostProperties, stringStringEntry.getKey()))).orElse("");
+            return result.replace(wholePropertyDeclaration, String.format("@%s_%s", hostProperties, vmName.get()));
         }
     }
 
