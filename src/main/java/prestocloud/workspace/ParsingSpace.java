@@ -783,11 +783,17 @@ public class ParsingSpace {
         Optional<VMTemplateDetails> tmp;
         tmp = vmTemplatesDetails.stream()
                 .filter(vmTplDetails -> (vmTplDetails.getCloud() + " " + vmTplDetails.getRegion()).equalsIgnoreCase(node.getKey()))
-                .filter(vmtpl -> !this.selectedCloudVMTypes.containsKey(fragmentsPerVm.get(vm.getKey())) || this.selectedCloudVMTypes
+                .filter(vmtpl -> !this.selectedCloudVMTypes.containsKey(fragmentsPerVm.get(vm.getKey())) ||
+                        this.selectedCloudVMTypes
+                                .get(fragmentsPerVm.get(vm.getKey()))
+                                .containsKey(TYPE_EXECUTE) ||
+                        this.selectedCloudVMTypes
                         .get(fragmentsPerVm.get(vm.getKey()))
                         .get(TYPE_EXECUTE)
                         .get(hostingNodePerFragment.get(fragmentsPerVm.get(vm.getKey())))
-                        .get(String.format("%s %s", vmtpl.cloud, vmtpl.region))
+                                .getOrDefault(
+                                        String.format("%s %s", vmtpl.cloud, vmtpl.region)
+                                        , "")
                         .equals(vmtpl.instanceName))
                 .findFirst();
         if (tmp.isPresent()) {
