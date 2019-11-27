@@ -141,14 +141,14 @@ public class TOSCAParserApp {
             }
             logger.info("(12/22) Configuration of regions computing capability");
             ps.setCapacity();
-            logger.info("(13/22) Configuring constraints from the fragment specification");
-            ps.configuringVmsResourcesRequirementConstraint();
             if (Paths.get(edgeStatusFile).toFile().exists()) {
-                logger.info("(14/22) Loading data for edge devices availability");
+                logger.info("(13/22) Loading data for edge devices availability");
                 ps.loadRunningEdgeNode(readFile(edgeStatusFile));
             } else {
-                logger.info("(14/22) Skipping the load of data for edge devices availability: No file for edge device availability found.");
+                logger.info("(13/22) Skipping the load of data for edge devices availability: No file for edge device availability found.");
             }
+            logger.info("(14/22) Configuring constraints from the fragment specification");
+            ps.configuringVmsResourcesRequirementConstraint();
             logger.info("(15/22) Checking and defining the resource availability");
             ps.detectResourceAvailability();
             logger.info("(16/22) Defining fragment deployability");
@@ -161,6 +161,11 @@ public class TOSCAParserApp {
             if (!ps.performedBtrplaceSolving()) {
                 throw new IllegalStateException("No Btrplace reconfiguration plan was determined");
             } else {
+                double tp = ps.getTimePeriod(), hcod = ps.getHourlyCostOfDeployment(), ct = ps.getCostThreshold();
+                if (tp * hcod > ct) {
+                    throw new IllegalStateException(String.format("Threshold cost limit has exceeded: Time (h): %s , Hourly cost of deployment (Eur/h): %s , Cost threshold (Eur): %s", tp, hcod, ct));
+                }
+                logger.info("Threshold cost limit is accepted: Time (h): {}, Hourly cost of deployment (Eur/h): {}, Cost threshold (Eur): {}", tp, hcod, ct);
                 logger.info("(20/22) Writing management plan output");
                 writeResult(ps.generationJsonOutput(), outputFile);
                 logger.info("(21/22) Writing the mapping output");
