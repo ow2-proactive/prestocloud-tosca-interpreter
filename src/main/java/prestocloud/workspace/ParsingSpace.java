@@ -45,6 +45,7 @@ public class ParsingSpace {
     private static final String TYPE_EXECUTE = "execute";
     private static final String TYPE_CLOUD = "cloud";
     private static final String PLACEMENT_EDGE = "edge ";
+    private  static final int SCHED_TIME_LIMIT = 10;
 
     private Logger logger = LoggerFactory.getLogger(ParsingSpace.class);
     // TODO: use a valid reference location to compute distances ("Sophia Antipolis" for testing only, must be retrieved from fragment's properties or dependencies)
@@ -829,6 +830,7 @@ public class ParsingSpace {
         // Start an optimized scheduler and solve the problem
         final ChocoScheduler sched = PrestoCloudExtensions.newScheduler();
         sched.doOptimize(true);
+        sched.setTimeLimit(SCHED_TIME_LIMIT);
         ReconfigurationPlan p = sched.solve(ii);
         if (p == null) {
             return false;
