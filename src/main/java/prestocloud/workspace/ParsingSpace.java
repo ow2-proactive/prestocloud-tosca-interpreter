@@ -46,6 +46,7 @@ public class ParsingSpace {
     private static final String TYPE_CLOUD = "cloud";
     private static final String PLACEMENT_EDGE = "edge ";
     private  static final int SCHED_TIME_LIMIT = 10;
+    private static final int MAX_NMB_VMS = 100;
 
     private Logger logger = LoggerFactory.getLogger(ParsingSpace.class);
     // TODO: use a valid reference location to compute distances ("Sophia Antipolis" for testing only, must be retrieved from fragment's properties or dependencies)
@@ -368,7 +369,7 @@ public class ParsingSpace {
             nodeJson = (JSONObject) node;
             nodeName = (String)  nodeJson.get("nodeid");
             if (!referencedEdgeDevice.contains(nodeName)) {
-                logger.info("{} has not reconized as a known resource, I skip it.", nodeName);
+                logger.info("{} has not recognized as a known resource, I skip it.", nodeName);
                 continue;
             }
             map.addOnlineNode(nodePerName.get(PLACEMENT_EDGE + nodeName));
@@ -837,6 +838,11 @@ public class ParsingSpace {
         }
 
         // Get list of computed actions
+        int nmbVms = p.getResult().getMapping().getRunningVMs().size();
+        if (nmbVms > MAX_NMB_VMS) {
+            throw new IllegalStateException(String.format("I want to allocate %d vm(s) : the maximum number of allowed VM will be exceeded", nmbVms));
+        }
+        logger.info("{} vm will be allocated",nmbVms);
         actions = p.getActions();
         dstmapping = p.getResult().getMapping();
         return true;
@@ -1077,7 +1083,7 @@ public class ParsingSpace {
             if (!vmName.isPresent()) {
                 throw new IllegalStateException("Unable to find any fragment occurence to work with variable substitution: " + processingNodeName);
             }
-            return result.replace(wholePropertyDeclaration, String.format("@%s_%s", hostProperties, vmName.get()));
+            return result.replace(wholePropertyDeclaration, String.format("@variables_%s_%s", hostProperties, vmName.get()));
         } else {
             ArchiveRoot pr = this.parsingResult.getResult();
             Topology topology = pr.getTopology();
@@ -1087,7 +1093,7 @@ public class ParsingSpace {
             fragmentName = hostingNodePerFragment.entrySet().stream().filter(valkey -> (valkey.getValue().equals(fragmentType))).findFirst();
             Optional<String> vmName = vmsPerFragment.get(fragmentName.get().getKey()).stream().findFirst();
             //return fragmentName.map(stringStringEntry -> result.replace(wholePropertyDeclaration, String.format("@variables_%s_%s", hostProperties, stringStringEntry.getKey()))).orElse("");
-            return result.replace(wholePropertyDeclaration, String.format("@%s_%s", hostProperties, vmName.get()));
+            return result.replace(wholePropertyDeclaration, String.format("@variables_%s_%s", hostProperties, vmName.get()));
         }
     }
 
