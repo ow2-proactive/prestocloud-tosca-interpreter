@@ -86,8 +86,8 @@ public class TOSCAParserApp {
         return args -> {
             // First argument must be the repository path (example: "src/main/resources/repository/" or "/mnt/glusterfs")
 
-            if (args.length != 6) {
-               logger.error("Missing argument: the expected arguments are (i) the TOSCA types directory, (ii) the directory conatining the resource description file, (iii) the type level file to proceed, (iv) the management output file, (v) the file mapping node and deployed node and (vi) the edge status file.");
+            if (args.length != 7) {
+                logger.error("Missing argument: the expected arguments are (i) the TOSCA types directory, (ii) the directory conatining the resource description file, (iii) the type level file to proceed, (iv) the management output file, (v) the instance level tosca template to be produce (vi) the file mapping node and deployed node and (vii) the edge status file.");
                System.exit(1);
             }
 
@@ -98,7 +98,7 @@ public class TOSCAParserApp {
             ((LocalRepositoryImpl)csarRepositorySearchService).setPath(args[0]);
 
             // Second argument must be the path of the file to parse (example: "src/test/resources/prestocloud/ICCS-example.yml")
-            boolean parsingSuccess = processToscaWithBtrPlace(args[1], args[2], args[3], args[4], args[5]);
+            boolean parsingSuccess = processToscaWithBtrPlace(args[1], args[2], args[3], args[4], args[5], args[6]);
 
             if (parsingSuccess) {
                 logger.info("The parsing ended successfully");
@@ -110,7 +110,7 @@ public class TOSCAParserApp {
         };
     }
 
-    public boolean processToscaWithBtrPlace(String resourcesPath, String typeLevelTOSCAFile, String outputFile, String mappingFile, String edgeStatusFile) {
+    public boolean processToscaWithBtrPlace(String resourcesPath, String typeLevelTOSCAFile, String outputFile, String instanceLevelToscaTemplate, String mappingFile, String edgeStatusFile) {
         try {
             logger.info("(1/22) Parsing the type-level TOSCA file");
             ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get(typeLevelTOSCAFile));
@@ -170,7 +170,13 @@ public class TOSCAParserApp {
                 writeResult(ps.generationJsonOutput(), outputFile);
                 logger.info("(21/22) Writing the mapping output");
                 writeResult(ps.generateOutputMapping(), mappingFile);
-                logger.info("(22/22) The type-level TOSCA processing has ended successfully");
+                logger.info("(22/22) Producing instance level TOSCA template");
+                try {
+                    writeResult(ps.generateInstanceLevelToscaTemplate(), instanceLevelToscaTemplate);
+                } catch (IllegalAccessException e) {
+                    logger.info(e.getMessage());
+                }
+                logger.info("(23/22) The type-level TOSCA processing has ended successfully");
                 return true;
             }
         } catch (Exception e) {

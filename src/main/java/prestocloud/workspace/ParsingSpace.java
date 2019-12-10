@@ -1121,6 +1121,17 @@ public class ParsingSpace {
         return Double.parseDouble(this.metadata.get("CostThreshold"));
     }
 
+    public String generateInstanceLevelToscaTemplate() throws IllegalAccessException {
+        String cloudList = System.getenv().getOrDefault("variables_CLOUD_LIST", null);
+        if (cloudList != null) {
+            GeneratorSpace gs = new GeneratorSpace();
+            gs.configureMetadata(metadata);
+            return gs.generate();
+        } else {
+            throw new IllegalAccessException("No ADIAM environement detected. I won't generate an template of isntance level TOSCA file");
+        }
+    }
+
     private static class OutputField {
         public static final String ACTION = "action";
         public static final String ACTION_BOOT = "boot";
