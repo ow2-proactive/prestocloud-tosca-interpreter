@@ -1,20 +1,20 @@
 # TOSCA Parser
 
-This repository contains the tosca parser. This component is in charge of:
+This repository contains the TOSCA parser. This component is in charge of:
 
-- Parsing the type-level TOSCA file stating an application to be parsed
+- Parsing the type-level TOSCA file describing an application to be parsed
 
-- Assess computing resources availability
+- Assessing computing resources availability
 
-- Programm a Btrplace model
+- Programming a Btrplace model
 
-- Execute btrplace solving
+- Executing btrplace solving
 
-- Interpret a reconfiguration plan matching with TOSCA specification and resources availability
+- Interpreting a reconfiguration plan matching with TOSCA specification and resources availability
 
-- Determine hourly operation cost of the new deployment
+- Determining hourly operation cost of the new deployment
 
-In the context of the PrEstoCloud architectecture, this components implements both:
+In the context of the PrEstoCloud architecture, this component implements both:
 
 - *The ADIAM*: It interprets the input from the meta-management layout, and determine which management operation should be enacted.
 
@@ -22,7 +22,7 @@ In the context of the PrEstoCloud architectecture, this components implements bo
 
 ## Building the project
 
-The project use maven to retrieve the build dependcies, do the compiling and the packaging.
+The project use maven to retrieve the build dependencies, perform the compilation and the package the outcome.
 
 1. Perform the compilation with `$ mvn package -Dmaven.test.skip=true`
 
@@ -30,10 +30,10 @@ The project use maven to retrieve the build dependcies, do the compiling and the
 
 ## Testing locally the project
 
-The component can be test offline of the whole ADIAM platform with the following command:
+The component can be tested offline of the whole ADIAM platform with the following command:
 
 ```
-java -jar target/prestocloud-tosca-1.0.0-SNAPSHOT.jar <tosca_repository> <tosca_resource> <type_level_tosca_file> <reconfiguration deployment file> <mapping> <edge status file>
+java -jar target/prestocloud-tosca-1.0.0-SNAPSHOT.jar <tosca_repository> <tosca_resource> <type_level_tosca_file> <reconfiguration_deployment_file> <reconfiguration_deployment_file> <mapping> <edge_status_file>
 ```
 
 The argument are the following:
@@ -44,11 +44,13 @@ The argument are the following:
 
 - *type_level_tosca_file*: Identifying the tosca file to be parsed and interpreted into an ADIAM's reconfiguration plan. This parameter must refer to a valid TOSCA file
 
-- *reconfiguration deployment file*: Pointing to the ADIAM reconfiguration file to be created. This file is to be consumed later by the [ADIAM main workflow](https://gitlab.com/prestocloud-project/adiam-workflows).
+- *instance_level_tosca_file*: Providing the instance level TOSCA file to be produced. The file has not to necessarily exist.
 
-- *mapping*: containing the scheme of an already existing deployment. Can refer to a non-existing file for initial deployment.
+- *reconfiguration_deployment_file*: Pointing to the ADIAM reconfiguration file to be created. This file is to be consumed later by the [ADIAM main workflow](https://gitlab.com/prestocloud-project/adiam-workflows).
 
-- *edge status file*: Mandatorily refering to a file containing an output of the [edge-gateway](https://gitlab.com/prestocloud-project/edge-gateway/tree/master) API call to topology endpoint. An example file should have the following content:
+- *mapping*: Containing the scheme of an already existing deployment. Can refer to a non-existing file for initial deployment.
+
+- *edge_status_file*: Mandatorily referring to a file containing an output of the [edge-gateway](https://gitlab.com/prestocloud-project/edge-gateway/tree/master) API call to topology endpoint. An example file should have the following content:
 ```
 {"rescode":"SUCCESS","message":null,"resobject":{"peers":[],"nodes":[]}}
 
