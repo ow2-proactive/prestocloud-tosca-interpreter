@@ -30,11 +30,14 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
 
 import lombok.extern.slf4j.Slf4j;
+import net.minidev.json.JSONArray;
+import net.minidev.json.JSONValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -150,7 +153,13 @@ public class TOSCAParserApp {
             logger.info("(14/22) Configuring constraints from the fragment specification");
             ps.configuringVmsResourcesRequirementConstraint();
             logger.info("(15/22) Checking and defining the resource availability");
-            ps.detectResourceAvailability();
+            List<Object> availableResources = this.detectResourceAvailability();
+            if (availableResources != null) {
+                logger.info(" -- ADIAM environment detected. I'll check cloud availability");
+                ps.banUnreferencedCloudInCloudList(availableResources);
+            } else {
+                logger.info(" -- No ADIAM detected. Working standalone, and assume all clouds are available to use.");
+            }
             logger.info("(16/22) Defining fragment deployability");
             ps.defineFragmentDeployability();
             logger.info("(17/22) Enforcing policy constraint in APSC");
@@ -210,5 +219,21 @@ public class TOSCAParserApp {
             logger.error("Unable to read the file {} : {}", path, e.getMessage());
             throw e;
         }
+    }
+
+    private List<Object> detectResourceAvailability() {
+        //We verify if we are running inside the main WF environement
+        String cloudList = System.getenv().getOrDefault("variables_CLOUD_LIST", null);
+        if (cloudList != null) {
+            //If the cloud resource is not detected as online, I'll add a banning constrain.
+            if (!JSONValue.isValidJson(cloudList)) {
+                throw new IllegalArgumentException("ADIAM CLOUD_LIST argument is not a valid JSON structure");
+            }
+            JSONArray ja = (JSONArray) JSONValue.parse(cloudList);
+            return new ArrayList<Object>(ja);
+        } else {
+            return null;
+        }
+        // Edge device availability is already tackled in loadRunningEdgeNode in ParsingSpace
     }
 }

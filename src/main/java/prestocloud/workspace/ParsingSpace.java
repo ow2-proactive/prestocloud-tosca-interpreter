@@ -654,22 +654,8 @@ public class ParsingSpace {
         }
     }
 
-    public void detectResourceAvailability() {
-        //We verify if we are running inside the main WF environement
-        String cloudList = System.getenv().getOrDefault("variables_CLOUD_LIST", null);
-        if (cloudList != null) {
-            logger.info(" -- ADIAM environment detected. I'll check cloud availability");
-            //If the cloud resource is not detected as online, I'll add a banning constrain.
-            banUnreferencedCloudInCloudList(cloudList);
-        }
-        // Edge device availability is already tackled in loadRunningEdgeNode
-    }
 
-    private void banUnreferencedCloudInCloudList(String cloudList) {
-        if (!JSONValue.isValidJson(cloudList)) {
-            throw new IllegalArgumentException();
-        }
-        JSONArray ja = (JSONArray) JSONValue.parse(cloudList);
+    public void banUnreferencedCloudInCloudList(List<Object> ja) {
         JSONObject cloud;
         String cloudName;
         String cloudType;
@@ -718,7 +704,6 @@ public class ParsingSpace {
         }
     }
 
-    // TODO: We need to discuss each constraint behaviour regarding allocated the multiplicity of allocated VMs
     public void configurePlacementConstraint() {
         // Apply placement constraints
         for (PlacementConstraint placementConstraint : placementConstraints) {
@@ -1128,7 +1113,7 @@ public class ParsingSpace {
             gs.configureMetadata(metadata);
             return gs.generate();
         } else {
-            throw new IllegalAccessException("No ADIAM environement detected. I won't generate an template of isntance level TOSCA file");
+            throw new IllegalAccessException("No ADIAM environement detected. I won't generate an template of instance level TOSCA file");
         }
     }
 
