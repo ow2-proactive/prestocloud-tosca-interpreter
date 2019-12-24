@@ -5,6 +5,21 @@ import java.util.Optional;
 
 public abstract class GeneratedNode {
 
+    private static final String deploymentStructured = "   # Deployment for %s fragment\n" +
+            "   deployment_node_%s:\n" +
+            "      type: prestocloud.nodes.%s.faas\n" +
+            "      requirements:\n" +
+            "         - host: processing_node_%s\n\n";
+
+    protected static final String fragmentUnstructured = "   %s:\n" +
+            "      type: prestocloud.nodes.fragment.faas\n" +
+            "      properties:\n" +
+            "         id: %s\n" +
+            "         name: %s\n" +
+            "         onloadable: %s\n" +
+            "      requirements:\n" +
+            "         - execute: deployment_node_%s\n";
+
     public boolean isALoadBalancer;
 
     // Host resource
@@ -30,24 +45,11 @@ public abstract class GeneratedNode {
     public abstract String getStructureProcessingNode();
 
     public String getStructureDeploymentNode() {
-        final String textToStructure = "   # Deployment for %s fragment\n" +
-                "   deployment_node_%s:\n" +
-                "      type: prestocloud.nodes.%s.faas\n" +
-                "      requirements:\n" +
-                "         - host: processing_node_%s\n\n";
-        return String.format(textToStructure, fragmentName, fragmentName, isALoadBalancer ? "proxy" : "agent", fragmentName);
+        return String.format(deploymentStructured, fragmentName, fragmentName, isALoadBalancer ? "proxy" : "agent", fragmentName);
     }
 
     public String getStructureFragmentNode() {
-        final String formattext = "   %s:\n" +
-                "      type: prestocloud.nodes.fragment.faas\n" +
-                "      properties:\n" +
-                "         id: %s\n" +
-                "         name: %s\n" +
-                "         onloadable: %s\n" +
-                "      requirements:\n" +
-                "         - execute: deployment_node_%s\n";
-        String formattedText = String.format(formattext, fragmentName, id, fragmentName, onLoadable, fragmentName);
+        String formattedText = String.format(fragmentUnstructured, fragmentName, id, fragmentName, onLoadable, fragmentName);
         return (proxyFragment.isPresent()) ? String.format(formattedText + "         - proxy: processing_nde_%s\n\n", proxyFragment.get()) : formattedText + "\n";
     }
 }
