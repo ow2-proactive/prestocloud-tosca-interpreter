@@ -1,31 +1,29 @@
 package prestocloud.model.generator;
 
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public class GeneratedFragmentFaasOnEdge extends GeneratedNode {
 
-    protected static final String headerUnstructured = "   processing_node_%s:\n" +
+    protected static final String HEADER_UNSTRUCT = "   processing_node_%s:\n" +
             "      type: prestocloud.nodes.compute.edge\n" +
             "      properties:\n" +
             "         id: %s\n" +
             "         type: edge\n";
-    protected static final String headerNameunstructure = "         name: %s\n";
-    protected static final String edgeUnstructured = "         edge:\n" +
+    protected static final String HEADER_NAME_UNSTRUCT = "         name: %s\n";
+    protected static final String EDGE_UNSTRUCT = "         edge:\n" +
             "            edge_type: %s\n" +
             "            edge_location: %s\n" +
             "            edge_credentials:\n" +
             "               username: %s\n";
-    protected static final String edgePasswordUnstructured = "               password: %s\n";
-    protected static final String edgePrivateKeyUnstructured = "               privatekey: %s\n";
-    protected static final String edgeGpsCoordinatesUnstructured = "            gps_coordinates: %s\n";
-    protected static final String networkUnstructured = "         network:\n" +
+    protected static final String EDGE_PASSWD_UNSTRUCT = "               password: %s\n";
+    protected static final String EDGE_PRIVATEKEY_UNSTRUCT = "               privatekey: %s\n";
+    protected static final String EDGE_GPSCOORDINATES_UNSTRUCT = "            gps_coordinates: %s\n";
+    protected static final String NETWORK_UNSTRUCT = "         network:\n" +
             "         network_name: %s\n" +
             "         network_id: %s\n" +
             "         addresses:" +
             "            - @variables_network_%s\n";
-    protected static final String capabilitiesResourceUnstructured = "      capabilities:\n" +
+    protected static final String CAP_RESOURCE_UNSTRUCT = "      capabilities:\n" +
             "         resource:" +
             "            properties:\n" +
             "               type: edge\n" +
@@ -34,26 +32,25 @@ public class GeneratedFragmentFaasOnEdge extends GeneratedNode {
             "                  edge_location: %s\n" +
             "                  edge_credentials:\n" +
             "                     username: %s\n";
-    protected static final String capabilitiesPasswordUnstructured = "      " + edgePasswordUnstructured;
-    protected static final String capabilitiesPrivatekeyUnstructured = "      " + edgePrivateKeyUnstructured;
+    protected static final String CAP_PASWD_UNSTRUCT = "      " + EDGE_PASSWD_UNSTRUCT;
+    protected static final String CAP_PRIVATEKEY_UNSTRUCT = "      " + EDGE_PRIVATEKEY_UNSTRUCT;
 
-    protected static final String capabilitiesHostUnstructured = "         resource:\n" +
+    protected static final String CAP_HOST_UNSTRUCT = "         resource:\n" +
             "            properties:\n" +
             "               num_cpus: %s\n" +
             "               mem_size: %s\n";
-    protected static final String capabilitiesHostDiskSizeUnstructured = "               disk_size: %s\n";
-    protected static final String capabilitiesHostCpuFreqUnstructured = "               cpu_frequency: %s\n";
-    protected static final String capabilitiesHostPriceUnstructured = "               price: %s\n";
-    protected static final String capabilitiesSensorsUnstructured = "         resource:\n" +
+    protected static final String CAP_HOSTDISKSIZE_UNSTRUCT = "               disk_size: %s\n";
+    protected static final String CAP_HOSTCPUFREQ_UNSTRUCT = "               cpu_frequency: %s\n";
+    protected static final String CAP_HOSTPRICE_UNSTRUCT = "               price: %s\n";
+    protected static final String CAP_SENSORS_UNSTRUCT = "         sensors:\n" +
             "            properties:\n";
-    protected static final String capabilitiesSensorsCameraUnstructured = "               camera: %s";
-    protected static final String capabilitiesSensorsMicrophoneUnstructured = "               microphone: %s";
-    protected static final String capabilitiesSensorsTemperatureUnstructured = "               temperature: %s";
+    protected static final String CAP_SENSORSCAMERA_UNSTRUCT = "               camera: %s\n";
+    protected static final String CAP_SENSORSMICROPHONE_UNSTRUCT = "               microphone: %s\n";
+    protected static final String CAP_SENSORSTEMPERATURE_UNSTRUCTURED = "               temperature: %s\n";
 
     // Computing resource - TOSCA Type: prestocloud.nodes.compute.edge, tosca.datatypes.Credential, tosca.datatypes.network.NetworkInfo, prestocloud.capabilities.container, prestocloud.capabilities.resource, prestocloud.capabilities.sensors, prestocloud.datatypes.edge
     public String computeId;
     public Optional<String> computeName;
-    public final String NODE_TYPE = "edge";
     public String edgeType;
     public String edgeLocation;
     public Optional<String> edgeGpsCoordinate;
@@ -69,43 +66,32 @@ public class GeneratedFragmentFaasOnEdge extends GeneratedNode {
 
     public String getStructureProcessingNode() {
         StringBuilder sb = new StringBuilder();
-        sb.append(String.format(headerUnstructured, this.fragmentName, this.computeId));
-        if (this.computeName.isPresent()) {
-            sb.append(String.format(headerNameunstructure, computeName.get()));
-        }
-        sb.append(String.format(edgeUnstructured, this.edgeType, this.edgeLocation, edgeCredentialsUsername));
-        if (edgeCredentialsPassword.isPresent()) {
-            sb.append(String.format(edgePasswordUnstructured, edgeCredentialsPassword.get()));
-        }
-        if (edgeCredentialsPrivateKey.isPresent()) {
-            sb.append(String.format(edgePrivateKeyUnstructured, edgeCredentialsPrivateKey.get()));
-        }
-        if (edgeGpsCoordinate.isPresent()) {
-            sb.append(String.format(edgeGpsCoordinatesUnstructured, edgeGpsCoordinate.get()));
-        }
-        sb.append(String.format(networkUnstructured, networkName, networkId));
-        // Capability structure
-        sb.append(String.format(capabilitiesResourceUnstructured, edgeType, edgeLocation, edgeCredentialsUsername));
-        if (edgeCredentialsPassword.isPresent()) {
-            sb.append(String.format(capabilitiesPasswordUnstructured, edgeCredentialsPassword.get()));
-        }
-        if (edgeCredentialsPrivateKey.isPresent()) {
-            sb.append(String.format(capabilitiesPrivatekeyUnstructured, edgeCredentialsPrivateKey.get()));
-        }
-        sb.append(String.format(capabilitiesHostUnstructured, numCpus, memSize));
-        if (diskSize.isPresent()) {
-            sb.append(String.format(capabilitiesHostDiskSizeUnstructured, diskSize.get()));
-        }
-        if (cpuFrequency.isPresent()) {
-            sb.append(String.format(capabilitiesHostCpuFreqUnstructured, cpuFrequency.get()));
-        }
-        sb.append(String.format(capabilitiesHostPriceUnstructured, price));
+        // Main properties
+        sb.append(String.format(HEADER_UNSTRUCT, fragmentName, computeId));
+        computeName.ifPresent(s -> sb.append(String.format(HEADER_NAME_UNSTRUCT, s)));
+        // Edge properties
+        sb.append(String.format(EDGE_UNSTRUCT, edgeType, edgeLocation, edgeCredentialsUsername));
+        edgeCredentialsPassword.ifPresent(s -> sb.append(String.format(EDGE_PASSWD_UNSTRUCT, s)));
+        edgeCredentialsPrivateKey.ifPresent(s -> sb.append(String.format(EDGE_PRIVATEKEY_UNSTRUCT, s)));
+        edgeGpsCoordinate.ifPresent(s -> sb.append(String.format(EDGE_GPSCOORDINATES_UNSTRUCT, s)));
+        sb.append(String.format(NETWORK_UNSTRUCT, networkName, networkId, fragmentName));
+        // Capability structure  - resource
+        sb.append(String.format(CAP_RESOURCE_UNSTRUCT, edgeType, edgeLocation, edgeCredentialsUsername));
+        edgeCredentialsPassword.ifPresent(s -> sb.append(String.format(CAP_PASWD_UNSTRUCT, s)));
+        edgeCredentialsPrivateKey.ifPresent(s -> sb.append(String.format(CAP_PRIVATEKEY_UNSTRUCT, s)));
+        // Capability structure  - host
+        sb.append(String.format(CAP_HOST_UNSTRUCT, numCpus, memSize));
+        diskSize.ifPresent(s -> sb.append(String.format(CAP_HOSTDISKSIZE_UNSTRUCT, s)));
+        cpuFrequency.ifPresent(s -> sb.append(String.format(CAP_HOSTCPUFREQ_UNSTRUCT, s)));
+        sb.append(String.format(CAP_HOSTPRICE_UNSTRUCT, price));
+        // Capability structure  - sensors
         if (sensorsPropertiesCamera.isPresent() || sensorsPropertiesMicrophone.isPresent() || sensorsPropertiesTemperature.isPresent()) {
-            sb.append(capabilitiesSensorsUnstructured);
-            sensorsPropertiesCamera.ifPresent(s -> sb.append(String.format(capabilitiesSensorsCameraUnstructured, s)));
-            sensorsPropertiesTemperature.ifPresent(s -> sb.append(String.format(capabilitiesSensorsTemperatureUnstructured, s)));
-            sensorsPropertiesMicrophone.ifPresent(s -> sb.append(String.format(capabilitiesSensorsMicrophoneUnstructured, s)));
+            sb.append(CAP_SENSORS_UNSTRUCT);
+            sensorsPropertiesCamera.ifPresent(s -> sb.append(String.format(CAP_SENSORSCAMERA_UNSTRUCT, s)));
+            sensorsPropertiesTemperature.ifPresent(s -> sb.append(String.format(CAP_SENSORSTEMPERATURE_UNSTRUCTURED, s)));
+            sensorsPropertiesMicrophone.ifPresent(s -> sb.append(String.format(CAP_SENSORSMICROPHONE_UNSTRUCT, s)));
         }
+        sb.append("\n");
         return sb.toString();
     }
 

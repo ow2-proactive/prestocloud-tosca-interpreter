@@ -21,6 +21,8 @@ public abstract class GeneratedNode {
             "         - execute: deployment_node_%s\n";
 
     public boolean isALoadBalancer;
+    public String computeId;
+    public Optional<String> computeName;
 
     // Host resource
     public int numCpus;
@@ -50,6 +52,6 @@ public abstract class GeneratedNode {
 
     public String getStructureFragmentNode() {
         String formattedText = String.format(fragmentUnstructured, fragmentName, id, fragmentName, onLoadable, fragmentName);
-        return (proxyFragment.isPresent()) ? String.format(formattedText + "         - proxy: processing_nde_%s\n\n", proxyFragment.get()) : formattedText + "\n";
+        return (proxyFragment.isPresent()) ? String.format(formattedText + "         - proxy: processing_node_%s\n\n", proxyFragment.get()) : formattedText + "\n";
     }
 }
