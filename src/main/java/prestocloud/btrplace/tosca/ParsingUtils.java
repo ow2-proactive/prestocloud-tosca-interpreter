@@ -1061,7 +1061,7 @@ public class ParsingUtils {
                         regionsPerCloud.get(type).add(new RegionCapacityDescriptor(region,cpucapacity,memorycapacity,diskcapacity));
                     }
                 }
-                VMTemplateDetails VMTemplateDetails = new VMTemplateDetails(hostingConstraint.getKey(), name, type, region, coordinates, price, instanceName);
+                VMTemplateDetails VMTemplateDetails = new VMTemplateDetails(hostingConstraint.getKey(), name, type, region, coordinates, price, instanceName, cpucapacity, null, memorycapacity, diskcapacity);
                 vmTemplatesDetails.add(VMTemplateDetails);
                 cloudFileName = cloudFile.getFileName().toString();
                 regionsPerCloudPerCloudfile.put(cloudFileName.substring(0,cloudFileName.length() -17),regionsPerCloud);
@@ -1100,6 +1100,7 @@ public class ParsingUtils {
                         ertd.num_cpus = cloudProperties.getValue().get("num_cpus");
                         ertd.mem_size = cloudProperties.getValue().get("mem_size");
                         ertd.disk_size = Optional.ofNullable(cloudProperties.getValue().get("disk_size"));
+                        ertd.cpu_frequency = Optional.ofNullable(cloudProperties.getValue().get("cpu_frequency"));
                     }
                     if (cloudProperties.getKey().equalsIgnoreCase("edge")) {
                         ertd.edgeType = cloudProperties.getValue().get("edge_type");

@@ -7,41 +7,41 @@ import java.util.Optional;
 
 public class GeneratedFragmentFaasOnCloud extends GeneratedNode {
 
-    protected static final String HEADER_UNSTRUCT = "   processing_node_%s:\n" +
-            "      type: prestocloud.nodes.compute.cloud.%s\n" +
-            "      properties:\n" +
-            "         id: %s\n" +
-            "         type: cloud\n";
-    protected static final String HEADER_NAME_UNSTRUCT = "         name: %s\n";
+    protected static final String HEADER_UNSTRUCT = "      processing_node_%s:\n" +
+            "         type: prestocloud.nodes.compute.cloud.%s\n" +
+            "         properties:\n" +
+            "            id: %s\n" +
+            "            type: cloud\n";
+    protected static final String HEADER_NAME_UNSTRUCT = "            name: %s\n";
 
     // Cloud properties
-    protected static final String CLOUD_UNSTRUCT = "         cloud:\n" +
-            "            cloud_name: %s\n" +
-            "            cloud_type: %s\n" +
-            "            cloud_region: %s\n" +
-            "            cloud_instance: %s\n";
+    protected static final String CLOUD_UNSTRUCT = "            cloud:\n" +
+            "               cloud_name: %s\n" +
+            "               cloud_type: %s\n" +
+            "               cloud_region: %s\n" +
+            "               cloud_instance: %s\n";
 
-    protected static final String CAP_RES_UNSTRUCT = "      capabilities:\n" +
-            "         resources:\n" +
-            "            properties:\n" +
-            "               type: cloud\n" +
-            "               cloud:" +
-            "                  cloud_name: %s\n" +
-            "                  cloud_type: %s\n" +
-            "                  cloud_region: %s\n" +
-            "                  cloud_instance: %s\n";
-    protected static final String CAP_HOST_UNSTRUCT = "         resource:\n" +
-            "            properties:\n" +
-            "               num_cpus: %s\n" +
-            "               mem_size: %s\n";
-    protected static final String CAP_HOSTDISKSIZE_UNSTRUCT = "               disk_size: %s\n";
-    protected static final String CAP_HOSTCPUFREQ_UNSTRUCT = "               cpu_frequency: %s\n";
-    protected static final String CAP_HOSTPRICE_UNSTRUCT = "               price: %s\n";
-    protected static final String NETWORK_UNSTRUCT = "         network:\n" +
-            "         network_name: %s\n" +
-            "         network_id: %s\n" +
-            "         addresses:" +
-            "            - @variables_network_%s\n";
+    protected static final String CAP_RES_UNSTRUCT = "         capabilities:\n" +
+            "            resources:\n" +
+            "               properties:\n" +
+            "                  type: cloud\n" +
+            "                  cloud:\n" +
+            "                     cloud_name: %s\n" +
+            "                     cloud_type: %s\n" +
+            "                     cloud_region: %s\n" +
+            "                     cloud_instance: %s\n";
+    protected static final String CAP_HOST_UNSTRUCT = "            resource:\n" +
+            "               properties:\n" +
+            "                  num_cpus: %s\n" +
+            "                  mem_size: %s\n";
+    protected static final String CAP_HOSTDISKSIZE_UNSTRUCT = "                  disk_size: %s\n";
+    protected static final String CAP_HOSTCPUFREQ_UNSTRUCT = "                  cpu_frequency: %s\n";
+    protected static final String CAP_HOSTPRICE_UNSTRUCT = "                  price: %s\n";
+    protected static final String NETWORK_UNSTRUCT = "            network:\n" +
+            "               network_name: %s\n" +
+            "               network_id: %s\n" +
+            "               addresses:\n" +
+            "                  - @variables_network_%s\n";
 
     // prestocloud.datatypes.cloud
     private String cloudType;
@@ -65,10 +65,10 @@ public class GeneratedFragmentFaasOnCloud extends GeneratedNode {
         this.computeName = Optional.of(clr.getCloudName());
 
         // Host Resource
-        this.cpuFrequency = Optional.empty();
-        this.diskSize = Optional.of(rcd.getDiskCapacity() + " MB");
-        this.numCpus = rcd.getCpuCapacity();
-        this.memSize = rcd.getMemoryCapacity() + " MB";
+        this.cpuFrequency = (vmt.cpuFreq != null) ? Optional.of(vmt.cpuFreq) : Optional.empty();
+        this.diskSize = (vmt.diskSize != null) ? Optional.of(vmt.diskSize) : Optional.empty(); //Optional.of(rcd.getDiskCapacity() + " MB");
+        this.numCpus = Integer.parseInt(vmt.getCpuNum());
+        this.memSize = vmt.getMem();//rcd.getMemoryCapacity() + " MB";
         this.price = vmt.getPrice();
 
         //Compute resource - Network
@@ -114,6 +114,7 @@ public class GeneratedFragmentFaasOnCloud extends GeneratedNode {
         diskSize.ifPresent(s -> sb.append(String.format(CAP_HOSTDISKSIZE_UNSTRUCT, s)));
         cpuFrequency.ifPresent(s -> sb.append(String.format(CAP_HOSTCPUFREQ_UNSTRUCT, s)));
         sb.append(String.format(CAP_HOSTPRICE_UNSTRUCT, price));
+        sb.append("\n\n");
         return sb.toString();
     }
 }

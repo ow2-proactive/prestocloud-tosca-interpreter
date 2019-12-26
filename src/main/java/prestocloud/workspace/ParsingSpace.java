@@ -1118,7 +1118,7 @@ public class ParsingSpace {
             // append
             List<String> toBeAppended = dstmapping.getRunningVMs().stream()
                     .map(vm -> new AbstractMap.SimpleImmutableEntry<>(vm, dstmapping.getVMLocation(vm)))
-                    .map(tupple -> namePerNode.get(tupple.getValue()) + " " + fragmentsPerVm.get(namePerVM.get(tupple.getKey()))).collect(Collectors.toList());
+                    .map(tupple -> namePerNode.get(tupple.getValue()) + " " + namePerVM.get(tupple.getKey())).collect(Collectors.toList());
             String[] splittedRecord;
             String fragmentId;
             boolean isALb;

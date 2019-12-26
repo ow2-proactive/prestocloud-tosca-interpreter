@@ -4,20 +4,20 @@ import java.util.Optional;
 
 public abstract class GeneratedNode {
 
-    private static final String DEPLOYMENT_UNSTRUCT = "   # Deployment for %s fragment\n" +
-            "   deployment_node_%s:\n" +
-            "      type: prestocloud.nodes.%s.faas\n" +
-            "      requirements:\n" +
-            "         - host: processing_node_%s\n\n";
+    private static final String DEPLOYMENT_UNSTRUCT = "      # Deployment for %s fragment\n" +
+            "      deployment_node_%s:\n" +
+            "         type: prestocloud.nodes.%s.faas\n" +
+            "         requirements:\n" +
+            "            - host: processing_node_%s\n\n";
 
-    protected static final String FRAGMENT_UNSTRUCTURED = "   %s:\n" +
-            "      type: prestocloud.nodes.fragment.faas\n" +
-            "      properties:\n" +
-            "         id: %s\n" +
-            "         name: %s\n" +
-            "         onloadable: %s\n" +
-            "      requirements:\n" +
-            "         - execute: deployment_node_%s\n";
+    protected static final String FRAGMENT_UNSTRUCTURED = "      %s:\n" +
+            "         type: prestocloud.nodes.fragment.faas\n" +
+            "         properties:\n" +
+            "            id: %s\n" +
+            "            name: %s\n" +
+            "            onloadable: %s\n" +
+            "         requirements:\n" +
+            "            - execute: deployment_node_%s\n";
 
     // General
     protected boolean isALoadBalancer;

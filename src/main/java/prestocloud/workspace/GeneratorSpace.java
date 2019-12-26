@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class GeneratorSpace {
 
     public static final String DEFAULT_HEADER = "tosca_definitions_version: tosca_prestocloud_mapping_1_2\n";
-    public static final String DEFAULT_DESCRIPTION = "Instance level TOSCA file, generated on " + new Date();
+    public static final String DEFAULT_DESCRIPTION = String.format("Instance level TOSCA file, generated on %s \n", new Date());
     private Map<String, String> metadata;
     private List<EdgeResourceTemplateDetails> edgeResourceDetails;
     private List<VMTemplateDetails> vmTemplateDetailsList;
@@ -62,15 +62,15 @@ public class GeneratorSpace {
     }
 
     public void appendCloudDeployedInstance(String instanceName, String fragmentId, String cloud, String region, String instanceType, boolean isALb) {
-        Optional<CloudListRegistration> clr = cloudList.parallelStream().filter(cloudRegistration -> (cloudRegistration.getRegion().equals(region) && cloudRegistration.getInstanceType().equals(instanceType) && cloudRegistration.getCloudType().equals(cloud))).findAny();
+        Optional<CloudListRegistration> clr = cloudList.parallelStream().filter(cloudRegistration -> (cloudRegistration.getRegion().equals(region) && cloudRegistration.getCloudType().equals(cloud))).findAny();
         RegionCapacityDescriptor rcd = rcdPerRegion.get(String.format("%s %s", cloud, region));
-        Optional<VMTemplateDetails> vmt = vmTemplateDetailsList.parallelStream().filter(vmTemplateDetails -> (vmTemplateDetails.cloud.equals(cloud) && vmTemplateDetails.region.equals(region) && vmTemplateDetails.getInstanceName().equals(instanceType))).findAny();
+        Optional<VMTemplateDetails> vmt = vmTemplateDetailsList.parallelStream().filter(vmTemplateDetails -> (vmTemplateDetails.cloud.equals(cloud) && vmTemplateDetails.region.equals(region) && vmTemplateDetails.instanceName.equals(instanceType))).findAny();
         if (clr.isPresent() && rcd != null && vmt.isPresent()) {
             GeneratedFragmentFaasOnCloud result = new GeneratedFragmentFaasOnCloud(instanceName, fragmentId, isALb, clr.get(), rcd, vmt.get());
             fragments.add(result);
         } else {
             // Something has gone wrong. What happened ?
-            throw new IllegalStateException(String.format("Instance %s: Unable to retrieve cloud specification from specified cloud. CloudList is valid = %s , RegionCapacityDescriptor is valid = %s, VMTemplateDetails = %s", instanceName, clr.isPresent(), rcd != null, vmt.isPresent()));
+            throw new IllegalStateException(String.format("Instance %s: Unable to retrieve cloud specification for specified cloud. CloudList is valid = %s , RegionCapacityDescriptor is valid = %s, VMTemplateDetails is valid = %s", instanceName, clr.isPresent(), rcd != null, vmt.isPresent()));
         }
     }
 
@@ -96,8 +96,8 @@ public class GeneratorSpace {
 
     private void writeMetadata() {
         outputDocument.append("metadata:\n");
-        metadata.entrySet().stream().map(metadataEntry -> String.format("   %s: %s", metadataEntry.getKey(), metadataEntry.getValue())).collect(Collectors.joining("\n"));
-        outputDocument.append("\n");
+        outputDocument.append(metadata.entrySet().stream().map(metadataEntry -> String.format("   %s: %s", metadataEntry.getKey(), metadataEntry.getValue())).collect(Collectors.joining("\n")));
+        outputDocument.append("\n\n");
     }
 
     private void writeDescription() {
@@ -109,7 +109,7 @@ public class GeneratorSpace {
         outputDocument.append("   - tosca-normative-types:1.2\n" +
                 "   - iccs-normative-types:1.1\n" +
                 "   - resource-descriptions:1.0\n" +
-                "   - placement-constraints:1.0\n");
+                "   - placement-constraints:1.0\n\n");
     }
 
     private void writeDocumentStucture() {
