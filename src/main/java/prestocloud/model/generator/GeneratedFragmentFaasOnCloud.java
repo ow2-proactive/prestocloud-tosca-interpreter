@@ -41,19 +41,19 @@ public class GeneratedFragmentFaasOnCloud extends GeneratedNode {
             "            - @variables_network_%s\n";
 
     // prestocloud.datatypes.cloud
-    public String cloudType;
-    public String cloudName;
-    public String cloudRegions;
-    public Optional<String> cloudCredentialsUsername;
-    public Optional<String> cloudCredentialsPassword;
-    public Optional<String> cloudCredentialsSubscription;
-    public Optional<String> cloudCredentialsDomain;
-    public Optional<String> cloudInstance;
-    public Optional<String> cloudImage;
-    public Optional<String> cpuCapacity;
-    public Optional<String> memoryCapacity;
-    public Optional<String> diskCapacity;
-    public Optional<String> gpsCoordinate;
+    private String cloudType;
+    private String cloudName;
+    private String cloudRegions;
+    private Optional<String> cloudCredentialsUsername;
+    private Optional<String> cloudCredentialsPassword;
+    private Optional<String> cloudCredentialsSubscription;
+    private Optional<String> cloudCredentialsDomain;
+    private Optional<String> cloudInstance;
+    private Optional<String> cloudImage;
+    private Optional<String> cpuCapacity;
+    private Optional<String> memoryCapacity;
+    private Optional<String> diskCapacity;
+    private Optional<String> gpsCoordinate;
 
 
     @Override

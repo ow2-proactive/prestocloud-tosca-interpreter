@@ -5,13 +5,13 @@ import java.util.Optional;
 
 public abstract class GeneratedNode {
 
-    private static final String deploymentStructured = "   # Deployment for %s fragment\n" +
+    private static final String DEPLOYMENT_UNSTRUCT = "   # Deployment for %s fragment\n" +
             "   deployment_node_%s:\n" +
             "      type: prestocloud.nodes.%s.faas\n" +
             "      requirements:\n" +
             "         - host: processing_node_%s\n\n";
 
-    protected static final String fragmentUnstructured = "   %s:\n" +
+    protected static final String FRAGMENT_UNSTRUCTURED = "   %s:\n" +
             "      type: prestocloud.nodes.fragment.faas\n" +
             "      properties:\n" +
             "         id: %s\n" +
@@ -20,38 +20,38 @@ public abstract class GeneratedNode {
             "      requirements:\n" +
             "         - execute: deployment_node_%s\n";
 
-    public boolean isALoadBalancer;
-    public String computeId;
-    public Optional<String> computeName;
+    protected boolean isALoadBalancer;
+    protected String computeId;
+    protected Optional<String> computeName;
 
     // Host resource
-    public int numCpus;
-    public String memSize;
-    public Optional<String> diskSize;
-    public Optional<String> cpuFrequency;
-    public int price;
+    protected int numCpus;
+    protected String memSize;
+    protected Optional<String> diskSize;
+    protected Optional<String> cpuFrequency;
+    protected int price;
 
     // Compute Resource - Networks
-    public String networkId;
-    public String networkName;
-    public List<String> addresses;
+    protected String networkId;
+    protected String networkName;
+    protected List<String> addresses;
     // Processing - TOSCA type: prestocloud.nodes.proxy.faas
     // Nothing specific
 
     //Fragment FaaS - TOSCA type: prestocloud.nodes.fragment.faas
-    public String id;
-    public String fragmentName;
-    public boolean onLoadable;
-    public Optional<String> proxyFragment;
+    protected String id;
+    protected String fragmentName;
+    protected boolean onLoadable;
+    protected Optional<String> proxyFragment;
 
     public abstract String getStructureProcessingNode();
 
     public String getStructureDeploymentNode() {
-        return String.format(deploymentStructured, fragmentName, fragmentName, isALoadBalancer ? "proxy" : "agent", fragmentName);
+        return String.format(DEPLOYMENT_UNSTRUCT, fragmentName, fragmentName, isALoadBalancer ? "proxy" : "agent", fragmentName);
     }
 
     public String getStructureFragmentNode() {
-        String formattedText = String.format(fragmentUnstructured, fragmentName, id, fragmentName, onLoadable, fragmentName);
-        return (proxyFragment.isPresent()) ? String.format(formattedText + "         - proxy: processing_node_%s\n\n", proxyFragment.get()) : formattedText + "\n";
+        String formattedText = String.format(FRAGMENT_UNSTRUCTURED, fragmentName, id, fragmentName, onLoadable, fragmentName);
+        return (proxyFragment.isPresent()) ? String.format("%s         - proxy: processing_node_%s\n\n", formattedText, proxyFragment.get()) : formattedText + "\n";
     }
 }

@@ -49,19 +49,19 @@ public class GeneratedFragmentFaasOnEdge extends GeneratedNode {
     protected static final String CAP_SENSORSTEMPERATURE_UNSTRUCTURED = "               temperature: %s\n";
 
     // Computing resource - TOSCA Type: prestocloud.nodes.compute.edge, tosca.datatypes.Credential, tosca.datatypes.network.NetworkInfo, prestocloud.capabilities.container, prestocloud.capabilities.resource, prestocloud.capabilities.sensors, prestocloud.datatypes.edge
-    public String computeId;
-    public Optional<String> computeName;
-    public String edgeType;
-    public String edgeLocation;
-    public Optional<String> edgeGpsCoordinate;
-    public String edgeCredentialsUsername;
-    public Optional<String> edgeCredentialsPassword;
-    public Optional<String> edgeCredentialsPrivateKey;
+    private String computeId;
+    private Optional<String> computeName;
+    private String edgeType;
+    private String edgeLocation;
+    private Optional<String> edgeGpsCoordinate;
+    private String edgeCredentialsUsername;
+    private Optional<String> edgeCredentialsPassword;
+    private Optional<String> edgeCredentialsPrivateKey;
 
     // Sensors
-    public Optional<String> sensorsPropertiesCamera;
-    public Optional<String> sensorsPropertiesTemperature;
-    public Optional<String> sensorsPropertiesMicrophone;
+    private Optional<String> sensorsPropertiesCamera;
+    private Optional<String> sensorsPropertiesTemperature;
+    private Optional<String> sensorsPropertiesMicrophone;
     // Get the info structured
 
     public String getStructureProcessingNode() {
