@@ -1,5 +1,8 @@
 package prestocloud.workspace;
 
+import jdk.nashorn.api.scripting.JSObject;
+import net.minidev.json.JSONObject;
+import prestocloud.model.generator.CloudListRegistration;
 import prestocloud.model.generator.GeneratedNode;
 
 import java.util.Date;
@@ -12,7 +15,7 @@ public class GeneratorSpace {
     public static String DEFAULT_HEADER = "tosca_definitions_version: tosca_prestocloud_mapping_1_2\n";
     public static String DEFAULT_DESCRIPTION = "Instance level TOSCA file, generated on " + new Date();
     private Map<String, String> metadata;
-    private List<Object> cloudList;
+    private List<CloudListRegistration> cloudList;
     private List<GeneratedNode> fragments;
     private StringBuilder outputDocument;
 
@@ -22,6 +25,10 @@ public class GeneratorSpace {
 
     public void configureMetadata(Map<String, String> metadata) {
         this.metadata = metadata;
+    }
+
+    public void configurationCloudList(List<Object> ja) {
+        ja.forEach(o -> cloudList.add(new CloudListRegistration(((JSONObject) o))));
     }
 
     public void appendEdgeDeployedInstance(String instanceName) {
