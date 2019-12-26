@@ -23,10 +23,10 @@ public class GeneratedFragmentFaasOnEdge extends GeneratedNode {
     protected static final String NETWORK_UNSTRUCT = "            network:\n" +
             "            network_name: %s\n" +
             "            network_id: %s\n" +
-            "            addresses:" +
+            "            addresses:\n" +
             "               - @variables_network_%s\n";
     protected static final String CAP_RESOURCE_UNSTRUCT = "         capabilities:\n" +
-            "            resource:" +
+            "            resource:\n" +
             "               properties:\n" +
             "                  type: edge\n" +
             "                  edge:\n" +
@@ -37,7 +37,7 @@ public class GeneratedFragmentFaasOnEdge extends GeneratedNode {
     protected static final String CAP_PASWD_UNSTRUCT = "      " + EDGE_PASSWD_UNSTRUCT;
     protected static final String CAP_PRIVATEKEY_UNSTRUCT = "      " + EDGE_PRIVATEKEY_UNSTRUCT;
 
-    protected static final String CAP_HOST_UNSTRUCT = "            resource:\n" +
+    protected static final String CAP_HOST_UNSTRUCT = "            host:\n" +
             "               properties:\n" +
             "                  num_cpus: %s\n" +
             "                  mem_size: %s\n";

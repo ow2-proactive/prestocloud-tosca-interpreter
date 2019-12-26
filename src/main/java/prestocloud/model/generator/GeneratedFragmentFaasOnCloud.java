@@ -22,7 +22,7 @@ public class GeneratedFragmentFaasOnCloud extends GeneratedNode {
             "               cloud_instance: %s\n";
 
     protected static final String CAP_RES_UNSTRUCT = "         capabilities:\n" +
-            "            resources:\n" +
+            "            resource:\n" +
             "               properties:\n" +
             "                  type: cloud\n" +
             "                  cloud:\n" +
@@ -30,7 +30,7 @@ public class GeneratedFragmentFaasOnCloud extends GeneratedNode {
             "                     cloud_type: %s\n" +
             "                     cloud_region: %s\n" +
             "                     cloud_instance: %s\n";
-    protected static final String CAP_HOST_UNSTRUCT = "            resource:\n" +
+    protected static final String CAP_HOST_UNSTRUCT = "            host:\n" +
             "               properties:\n" +
             "                  num_cpus: %s\n" +
             "                  mem_size: %s\n";

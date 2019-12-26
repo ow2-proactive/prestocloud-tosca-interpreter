@@ -96,6 +96,9 @@ public class GeneratorSpace {
 
     private void writeMetadata() {
         outputDocument.append("metadata:\n");
+        outputDocument.append("   template_name: Definition of PrEstoCLoud allocated application\n" +
+                "   template_author: Activeeon\n" +
+                "   template_version: 1.0.0-SNAPSHOT\n");
         outputDocument.append(metadata.entrySet().stream().map(metadataEntry -> String.format("   %s: %s", metadataEntry.getKey(), metadataEntry.getValue())).collect(Collectors.joining("\n")));
         outputDocument.append("\n\n");
     }
