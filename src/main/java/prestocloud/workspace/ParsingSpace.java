@@ -1108,16 +1108,39 @@ public class ParsingSpace {
 
     public String generateInstanceLevelToscaTemplate(List<Object> cloudList) throws IllegalAccessException {
         if (cloudList != null) {
+            // Configuration
             GeneratorSpace gs = new GeneratorSpace();
             gs.configureMetadata(metadata);
             gs.configureEdgeResourceTemplateDetails(edgeResourceDetails);
             gs.configureVmTemplateDetailList(vmTemplatesDetails);
-            gs.configureRcdPerRegion(this.regionCapabilityDescriptorPerCloud);
+            gs.configureRcdPerRegion(regionCapabilityDescriptorPerCloud);
             gs.configurationCloudList(cloudList);
             // append
+            List<String> toBeAppended = dstmapping.getRunningVMs().stream()
+                    .map(vm -> new AbstractMap.SimpleImmutableEntry<>(vm, dstmapping.getVMLocation(vm)))
+                    .map(tupple -> namePerNode.get(tupple.getValue()) + " " + fragmentsPerVm.get(namePerVM.get(tupple.getKey()))).collect(Collectors.toList());
+            String[] splittedRecord;
+            String fragmentId;
+            boolean isALb;
+            String instanceType;
+            for (String record : toBeAppended) {
+                splittedRecord = record.split(" ");
+                //Structure of splitted record: <cloud> <region> <instanceName>
+                if (splittedRecord.length != 3) {
+                    continue;
+                }
+                isALb = balancingNodes.containsKey(fragmentsPerVm.get(splittedRecord[2]));
+                fragmentId = idPerFragment.get(fragmentsPerVm.get(splittedRecord[2]));
+                if (splittedRecord[0].equals("edge")) {
+                    gs.appendEdgeDeployedInstance(splittedRecord[2], fragmentId, splittedRecord[1], isALb);
+                } else {
+                    instanceType = getSelectedCloudVMType(selectedCloudVMTypes, fragmentsPerVm.get(splittedRecord[2]), splittedRecord[0] + " " + splittedRecord[1]);
+                    gs.appendCloudDeployedInstance(splittedRecord[2], fragmentId, splittedRecord[0], splittedRecord[1], instanceType, isALb);
+                }
+            }
             return gs.generate();
         } else {
-            throw new IllegalAccessException("No ADIAM environement detected. I won't generate an template of instance level TOSCA file");
+            throw new IllegalAccessException("No ADIAM environment detected. I won't generate an template of instance level TOSCA file");
         }
     }
 

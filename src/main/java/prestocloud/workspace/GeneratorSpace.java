@@ -50,23 +50,23 @@ public class GeneratorSpace {
         this.rcdPerRegion = rcdPerRegion;
     }
 
-    public void appendEdgeDeployedInstance(String instanceName, String instanceId, String edgeId, boolean isALb) {
+    public void appendEdgeDeployedInstance(String instanceName, String fragmentId, String edgeId, boolean isALb) {
         // Determining the right ertd
-        Optional<EdgeResourceTemplateDetails> ertd = edgeResourceDetails.parallelStream().filter(edgeResourceTemplateDetails -> edgeResourceTemplateDetails.id.equals(instanceId)).findAny();
+        Optional<EdgeResourceTemplateDetails> ertd = edgeResourceDetails.parallelStream().filter(edgeResourceTemplateDetails -> edgeResourceTemplateDetails.id.equals(edgeId)).findAny();
         if (ertd.isPresent()) {
-            GeneratedFragmentFaasOnEdge result = new GeneratedFragmentFaasOnEdge(instanceName, instanceId, edgeId, isALb, ertd.get());
+            GeneratedFragmentFaasOnEdge result = new GeneratedFragmentFaasOnEdge(instanceName, fragmentId, edgeId, isALb, ertd.get());
             fragments.add(result);
         } else {
             throw new IllegalStateException(String.format("Instance %s : Unable to retrieve the edge device specification for the specified Id.", instanceName));
         }
     }
 
-    public void appendCloudDeployedInstance(String instanceName, String instanceId, String cloud, String region, String instanceType, boolean isALb) {
+    public void appendCloudDeployedInstance(String instanceName, String fragmentId, String cloud, String region, String instanceType, boolean isALb) {
         Optional<CloudListRegistration> clr = cloudList.parallelStream().filter(cloudRegistration -> (cloudRegistration.getRegion().equals(region) && cloudRegistration.getInstanceType().equals(instanceType) && cloudRegistration.getCloudType().equals(cloud))).findAny();
         RegionCapacityDescriptor rcd = rcdPerRegion.get(String.format("%s %s", cloud, region));
         Optional<VMTemplateDetails> vmt = vmTemplateDetailsList.parallelStream().filter(vmTemplateDetails -> (vmTemplateDetails.cloud.equals(cloud) && vmTemplateDetails.region.equals(region) && vmTemplateDetails.getInstanceName().equals(instanceType))).findAny();
         if (clr.isPresent() && rcd != null && vmt.isPresent()) {
-            GeneratedFragmentFaasOnCloud result = new GeneratedFragmentFaasOnCloud(instanceName, instanceId, isALb, clr.get(), rcd, vmt.get());
+            GeneratedFragmentFaasOnCloud result = new GeneratedFragmentFaasOnCloud(instanceName, fragmentId, isALb, clr.get(), rcd, vmt.get());
             fragments.add(result);
         } else {
             // Something has gone wrong. What happened ?
