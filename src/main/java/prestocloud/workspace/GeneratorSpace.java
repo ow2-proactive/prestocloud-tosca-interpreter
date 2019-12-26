@@ -1,5 +1,7 @@
 package prestocloud.workspace;
 
+import prestocloud.model.generator.GeneratedNode;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -11,10 +13,11 @@ public class GeneratorSpace {
     public static String DEFAULT_DESCRIPTION = "Instance level TOSCA file, generated on " + new Date();
     private Map<String, String> metadata;
     private List<Object> cloudList;
-    private StringBuilder outPutDocument;
+    private List<GeneratedNode> fragments;
+    private StringBuilder outputDocument;
 
     public GeneratorSpace() {
-        outPutDocument = new StringBuilder();
+        outputDocument = new StringBuilder();
     }
 
     public void configureMetadata(Map<String, String> metadata) {
@@ -38,34 +41,55 @@ public class GeneratorSpace {
         writeDescription();
         writeImport();
         writeDocumentStucture();
-        return outPutDocument.toString();
+        writeProcessingNode();
+        writeDeploymentNode();
+        writeFaasNode();
+        return outputDocument.toString();
     }
 
     private void writeHeader() {
-        outPutDocument.append(DEFAULT_HEADER);
-        outPutDocument.append("\n");
+        outputDocument.append(DEFAULT_HEADER);
+        outputDocument.append("\n");
     }
 
     private void writeMetadata() {
-        outPutDocument.append("metadata:\n");
+        outputDocument.append("metadata:\n");
         metadata.entrySet().stream().map(metadataEntry -> String.format("   %s: %s", metadataEntry.getKey(), metadataEntry.getValue())).collect(Collectors.joining("\n"));
-        outPutDocument.append("\n");
+        outputDocument.append("\n");
     }
 
     private void writeDescription() {
-        outPutDocument.append("description: " + this.DEFAULT_DESCRIPTION + "\n");
+        outputDocument.append("description: " + this.DEFAULT_DESCRIPTION + "\n");
     }
 
     private void writeImport() {
-        outPutDocument.append("imports:\n");
-        outPutDocument.append("   - tosca-normative-types:1.2\n" +
+        outputDocument.append("imports:\n");
+        outputDocument.append("   - tosca-normative-types:1.2\n" +
                 "   - iccs-normative-types:1.1\n" +
                 "   - resource-descriptions:1.0\n" +
                 "   - placement-constraints:1.0\n");
     }
 
     private void writeDocumentStucture() {
-        outPutDocument.append("topology_template:\n   node_templates:\n\n");
+        outputDocument.append("topology_template:\n   node_templates:\n\n");
+    }
+
+    private void writeProcessingNode() {
+        for (GeneratedNode node : fragments) {
+            outputDocument.append(node.getStructureProcessingNode());
+        }
+    }
+
+    private void writeDeploymentNode() {
+        for (GeneratedNode node : fragments) {
+            outputDocument.append(node.getStructureDeploymentNode());
+        }
+    }
+
+    private void writeFaasNode() {
+        for (GeneratedNode node : fragments) {
+            outputDocument.append(node.getStructureFragmentNode());
+        }
     }
 
     private boolean checkConfiguration() {
