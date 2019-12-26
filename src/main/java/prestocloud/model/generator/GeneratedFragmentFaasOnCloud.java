@@ -1,5 +1,8 @@
 package prestocloud.model.generator;
 
+import prestocloud.btrplace.tosca.model.RegionCapacityDescriptor;
+import prestocloud.btrplace.tosca.model.VMTemplateDetails;
+
 import java.util.Optional;
 
 public class GeneratedFragmentFaasOnCloud extends GeneratedNode {
@@ -55,6 +58,45 @@ public class GeneratedFragmentFaasOnCloud extends GeneratedNode {
     private Optional<String> diskCapacity;
     private Optional<String> gpsCoordinate;
 
+    public GeneratedFragmentFaasOnCloud(String fragmentName, String fragmentId, boolean isALb, CloudListRegistration clr, RegionCapacityDescriptor rcd, VMTemplateDetails vmt) {
+        //General
+        this.isALoadBalancer = isALb;
+        this.computeId = String.format("%s:%s:%s", clr.getCloudType(), clr.getRegion(), clr.getInstanceType());
+        this.computeName = Optional.of(clr.getCloudName());
+
+        // Host Resource
+        this.cpuFrequency = Optional.empty();
+        this.diskSize = Optional.of(rcd.getDiskCapacity() + " MB");
+        this.numCpus = rcd.getCpuCapacity();
+        this.memSize = rcd.getMemoryCapacity() + " MB";
+        this.price = vmt.getPrice();
+
+        //Compute resource - Network
+        // We have no access to any cloud resource from here
+        this.networkId = clr.getSubnetId();
+        this.networkName = clr.getNetworkName();
+
+        // Fragment
+        this.id = fragmentId;
+        this.fragmentName = fragmentName;
+        this.onLoadable = false;
+        this.proxyFragment = Optional.empty();
+
+        // Cloud specific
+        cloudType = clr.getCloudType();
+        cloudName = clr.getCloudName();
+        cloudRegions = clr.getRegion();
+        cloudCredentialsUsername = Optional.of(clr.getAccessKey());
+        cloudCredentialsPassword = Optional.empty();
+        cloudCredentialsSubscription = Optional.empty();
+        cloudCredentialsDomain = Optional.empty();
+        cloudInstance = Optional.of(clr.getInstanceType());
+        cloudImage = Optional.of(clr.getImage());
+        cpuCapacity = (rcd.getCpuCapacity() == RegionCapacityDescriptor.INFINITY) ? Optional.empty() : Optional.of("" + rcd.getCpuCapacity());
+        memoryCapacity = Optional.empty();
+        diskCapacity = Optional.empty();
+        gpsCoordinate = Optional.of(vmt.getGeolocation());
+    }
 
     @Override
     public String getStructureProcessingNode() {

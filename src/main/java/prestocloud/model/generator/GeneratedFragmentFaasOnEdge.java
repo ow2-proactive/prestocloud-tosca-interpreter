@@ -1,5 +1,7 @@
 package prestocloud.model.generator;
 
+import prestocloud.btrplace.tosca.model.EdgeResourceTemplateDetails;
+
 import java.util.Optional;
 
 public class GeneratedFragmentFaasOnEdge extends GeneratedNode {
@@ -49,8 +51,6 @@ public class GeneratedFragmentFaasOnEdge extends GeneratedNode {
     protected static final String CAP_SENSORSTEMPERATURE_UNSTRUCTURED = "               temperature: %s\n";
 
     // Computing resource - TOSCA Type: prestocloud.nodes.compute.edge, tosca.datatypes.Credential, tosca.datatypes.network.NetworkInfo, prestocloud.capabilities.container, prestocloud.capabilities.resource, prestocloud.capabilities.sensors, prestocloud.datatypes.edge
-    private String computeId;
-    private Optional<String> computeName;
     private String edgeType;
     private String edgeLocation;
     private Optional<String> edgeGpsCoordinate;
@@ -63,6 +63,42 @@ public class GeneratedFragmentFaasOnEdge extends GeneratedNode {
     private Optional<String> sensorsPropertiesTemperature;
     private Optional<String> sensorsPropertiesMicrophone;
     // Get the info structured
+
+    public GeneratedFragmentFaasOnEdge(String fragmentName, String fragmentId, String edgeDeviceId, boolean isALb, EdgeResourceTemplateDetails ertd) {
+        //General
+        this.isALoadBalancer = isALb;
+        this.computeId = edgeDeviceId;
+        this.computeName = ertd.name;
+
+        // Host Resource
+        this.cpuFrequency = ertd.cpu_frequency;
+        this.diskSize = ertd.disk_size;
+        this.numCpus = Integer.parseInt(ertd.num_cpus);
+        this.memSize = ertd.mem_size;
+        this.price = ertd.price.isPresent() ? Double.parseDouble(ertd.price.get()) : 0;
+
+        //Compute resource - Network
+        // We have no access to any cloud resource from here
+        this.networkId = "@variables_EDGE_GW_IPV4";
+        this.networkName = "DEFAULT_EDGE_NETWORK";
+
+        // Fragment
+        this.id = fragmentId;
+        this.fragmentName = fragmentName;
+        this.onLoadable = false;
+        this.proxyFragment = Optional.empty();
+
+        // Computing resource, specific to edge
+        edgeType = ertd.edgeType;
+        edgeLocation = ertd.location;
+        edgeGpsCoordinate = ertd.gps_coordinate;
+        edgeCredentialsUsername = ertd.username;
+        edgeCredentialsPassword = ertd.password;
+        edgeCredentialsPrivateKey = ertd.privatekey;
+        sensorsPropertiesMicrophone = ertd.microphoneSensor;
+        sensorsPropertiesTemperature = ertd.temperatureSensor;
+        sensorsPropertiesCamera = ertd.cameraSensor;
+    }
 
     public String getStructureProcessingNode() {
         StringBuilder sb = new StringBuilder();

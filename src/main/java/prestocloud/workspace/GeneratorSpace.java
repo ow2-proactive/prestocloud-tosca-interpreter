@@ -1,25 +1,32 @@
 package prestocloud.workspace;
 
-import jdk.nashorn.api.scripting.JSObject;
 import net.minidev.json.JSONObject;
+import prestocloud.btrplace.tosca.model.EdgeResourceTemplateDetails;
+import prestocloud.btrplace.tosca.model.RegionCapacityDescriptor;
+import prestocloud.btrplace.tosca.model.VMTemplateDetails;
 import prestocloud.model.generator.CloudListRegistration;
+import prestocloud.model.generator.GeneratedFragmentFaasOnCloud;
+import prestocloud.model.generator.GeneratedFragmentFaasOnEdge;
 import prestocloud.model.generator.GeneratedNode;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class GeneratorSpace {
 
-    public static String DEFAULT_HEADER = "tosca_definitions_version: tosca_prestocloud_mapping_1_2\n";
-    public static String DEFAULT_DESCRIPTION = "Instance level TOSCA file, generated on " + new Date();
+    public static final String DEFAULT_HEADER = "tosca_definitions_version: tosca_prestocloud_mapping_1_2\n";
+    public static final String DEFAULT_DESCRIPTION = "Instance level TOSCA file, generated on " + new Date();
     private Map<String, String> metadata;
+    private List<EdgeResourceTemplateDetails> edgeResourceDetails;
+    private List<VMTemplateDetails> vmTemplateDetailsList;
     private List<CloudListRegistration> cloudList;
     private List<GeneratedNode> fragments;
+    private Map<String, RegionCapacityDescriptor> rcdPerRegion;
     private StringBuilder outputDocument;
 
     public GeneratorSpace() {
+        cloudList = new ArrayList<>();
+        fragments = new ArrayList<>();
         outputDocument = new StringBuilder();
     }
 
@@ -31,12 +38,40 @@ public class GeneratorSpace {
         ja.forEach(o -> cloudList.add(new CloudListRegistration(((JSONObject) o))));
     }
 
-    public void appendEdgeDeployedInstance(String instanceName) {
-
+    public void configureEdgeResourceTemplateDetails(List<EdgeResourceTemplateDetails> ertd) {
+        this.edgeResourceDetails = ertd;
     }
 
-    public void appendCloudDeployedInstance(String instanceName, String cloud) {
+    public void configureVmTemplateDetailList(List<VMTemplateDetails> vmtpllist) {
+        this.vmTemplateDetailsList = vmtpllist;
+    }
 
+    public void configureRcdPerRegion(Map rcdPerRegion) {
+        this.rcdPerRegion = rcdPerRegion;
+    }
+
+    public void appendEdgeDeployedInstance(String instanceName, String instanceId, String edgeId, boolean isALb) {
+        // Determining the right ertd
+        Optional<EdgeResourceTemplateDetails> ertd = edgeResourceDetails.parallelStream().filter(edgeResourceTemplateDetails -> edgeResourceTemplateDetails.id.equals(instanceId)).findAny();
+        if (ertd.isPresent()) {
+            GeneratedFragmentFaasOnEdge result = new GeneratedFragmentFaasOnEdge(instanceName, instanceId, edgeId, isALb, ertd.get());
+            fragments.add(result);
+        } else {
+            throw new IllegalStateException(String.format("Instance %s : Unable to retrieve the edge device specification for the specified Id.", instanceName));
+        }
+    }
+
+    public void appendCloudDeployedInstance(String instanceName, String instanceId, String cloud, String region, String instanceType, boolean isALb) {
+        Optional<CloudListRegistration> clr = cloudList.parallelStream().filter(cloudRegistration -> (cloudRegistration.getRegion().equals(region) && cloudRegistration.getInstanceType().equals(instanceType) && cloudRegistration.getCloudType().equals(cloud))).findAny();
+        RegionCapacityDescriptor rcd = rcdPerRegion.get(String.format("%s %s", cloud, region));
+        Optional<VMTemplateDetails> vmt = vmTemplateDetailsList.parallelStream().filter(vmTemplateDetails -> (vmTemplateDetails.cloud.equals(cloud) && vmTemplateDetails.region.equals(region) && vmTemplateDetails.getInstanceName().equals(instanceType))).findAny();
+        if (clr.isPresent() && rcd != null && vmt.isPresent()) {
+            GeneratedFragmentFaasOnCloud result = new GeneratedFragmentFaasOnCloud(instanceName, instanceId, isALb, clr.get(), rcd, vmt.get());
+            fragments.add(result);
+        } else {
+            // Something has gone wrong. What happened ?
+            throw new IllegalStateException(String.format("Instance %s: Unable to retrieve cloud specification from specified cloud. CloudList is valid = %s , RegionCapacityDescriptor is valid = %s, VMTemplateDetails = %s", instanceName, clr.isPresent(), rcd != null, vmt.isPresent()));
+        }
     }
 
     public String generate() {
@@ -66,7 +101,7 @@ public class GeneratorSpace {
     }
 
     private void writeDescription() {
-        outputDocument.append("description: " + this.DEFAULT_DESCRIPTION + "\n");
+        outputDocument.append("description: " + DEFAULT_DESCRIPTION + "\n");
     }
 
     private void writeImport() {
@@ -101,8 +136,11 @@ public class GeneratorSpace {
 
     private boolean checkConfiguration() {
         boolean result = true;
-        result &= !metadata.isEmpty();
         result &= (metadata != null && !metadata.isEmpty());
+        result &= (cloudList != null);
+        result &= (vmTemplateDetailsList != null && !vmTemplateDetailsList.isEmpty());
+        result &= (edgeResourceDetails != null && !edgeResourceDetails.isEmpty());
+        result &= (rcdPerRegion != null && !rcdPerRegion.isEmpty());
         return result;
     }
 

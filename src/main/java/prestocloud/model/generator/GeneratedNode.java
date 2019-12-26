@@ -1,6 +1,5 @@
 package prestocloud.model.generator;
 
-import java.util.List;
 import java.util.Optional;
 
 public abstract class GeneratedNode {
@@ -20,6 +19,7 @@ public abstract class GeneratedNode {
             "      requirements:\n" +
             "         - execute: deployment_node_%s\n";
 
+    // General
     protected boolean isALoadBalancer;
     protected String computeId;
     protected Optional<String> computeName;
@@ -29,12 +29,11 @@ public abstract class GeneratedNode {
     protected String memSize;
     protected Optional<String> diskSize;
     protected Optional<String> cpuFrequency;
-    protected int price;
+    protected double price;
 
     // Compute Resource - Networks
     protected String networkId;
     protected String networkName;
-    protected List<String> addresses;
     // Processing - TOSCA type: prestocloud.nodes.proxy.faas
     // Nothing specific
 

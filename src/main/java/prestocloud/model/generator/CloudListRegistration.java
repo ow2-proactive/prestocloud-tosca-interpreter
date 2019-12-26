@@ -19,19 +19,19 @@ public class CloudListRegistration {
         cloudType = jsonObjectFromCloudList.getAsString("CLOUD_TYPE");
         networkName = "network_" + jsonObjectFromCloudList.getAsString("CLOUD_NAME");
         subnetId = jsonObjectFromCloudList.getAsString("SUBNET_ID");
-        if (cloudType.equalsIgnoreCase("aws")) {
+        if (getCloudType().equalsIgnoreCase("aws")) {
             cloudType = "amazon";
             region = jsonObjectFromCloudList.getAsString("AWS_DEFAULT_REGION");
             accessKey = jsonObjectFromCloudList.getAsString("AWS_ACCESS_KEY_ID");
             image = jsonObjectFromCloudList.getAsString("AWS_GOLDEN_IMAGE");
             instanceType = jsonObjectFromCloudList.getAsString("AWS_INSTANCE_TYPE");
-        } else if (cloudType.equalsIgnoreCase("azure")) {
+        } else if (getCloudType().equalsIgnoreCase("azure")) {
             cloudType = "azure";
             region = jsonObjectFromCloudList.getAsString("AZ_LOCATION");
             accessKey = jsonObjectFromCloudList.getAsString("AZ_ACCESS_USER");
             image = jsonObjectFromCloudList.getAsString("AZ_GOLDEN_IMAGE");
             instanceType = jsonObjectFromCloudList.getAsString("AZ_SIZE");
-        } else if (cloudType.equalsIgnoreCase("openstack")) {
+        } else if (getCloudType().equalsIgnoreCase("openstack")) {
             cloudType = "openstack";
             region = jsonObjectFromCloudList.getAsString("OS_REGION_NAME");
             accessKey = jsonObjectFromCloudList.getAsString("OS_USERNAME");
@@ -68,5 +68,9 @@ public class CloudListRegistration {
 
     public String getSubnetId() {
         return subnetId;
+    }
+
+    public String getCloudType() {
+        return cloudType;
     }
 }

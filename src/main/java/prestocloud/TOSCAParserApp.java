@@ -181,7 +181,7 @@ public class TOSCAParserApp {
                 writeResult(ps.generateOutputMapping(), mappingFile);
                 logger.info("(22/22) Producing instance level TOSCA template");
                 try {
-                    writeResult(ps.generateInstanceLevelToscaTemplate(), instanceLevelToscaTemplate);
+                    writeResult(ps.generateInstanceLevelToscaTemplate(detectResourceAvailability()), instanceLevelToscaTemplate);
                 } catch (IllegalAccessException e) {
                     logger.info(e.getMessage());
                 }
