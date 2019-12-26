@@ -23,19 +23,19 @@ public class CloudListRegistration {
             cloudType = "amazon";
             region = jsonObjectFromCloudList.getAsString("AWS_DEFAULT_REGION");
             accessKey = jsonObjectFromCloudList.getAsString("AWS_ACCESS_KEY_ID");
-            image = jsonObjectFromCloudList.getAsString("GTW_AWS_IMAGE");
+            image = jsonObjectFromCloudList.getAsString("AWS_GOLDEN_IMAGE");
             instanceType = jsonObjectFromCloudList.getAsString("AWS_INSTANCE_TYPE");
         } else if (cloudType.equalsIgnoreCase("azure")) {
             cloudType = "azure";
             region = jsonObjectFromCloudList.getAsString("AZ_LOCATION");
             accessKey = jsonObjectFromCloudList.getAsString("AZ_ACCESS_USER");
-            image = jsonObjectFromCloudList.getAsString("AZ_IMAGE}");
+            image = jsonObjectFromCloudList.getAsString("AZ_GOLDEN_IMAGE");
             instanceType = jsonObjectFromCloudList.getAsString("AZ_SIZE");
         } else if (cloudType.equalsIgnoreCase("openstack")) {
             cloudType = "openstack";
             region = jsonObjectFromCloudList.getAsString("OS_REGION_NAME");
             accessKey = jsonObjectFromCloudList.getAsString("OS_USERNAME");
-            image = jsonObjectFromCloudList.getAsString("OS_IMAGE");
+            image = jsonObjectFromCloudList.getAsString("OS_GOLDEN_IMAGE");
             instanceType = jsonObjectFromCloudList.getAsString("OS_FLAVOR");
         } else {
             throw new IllegalArgumentException();
