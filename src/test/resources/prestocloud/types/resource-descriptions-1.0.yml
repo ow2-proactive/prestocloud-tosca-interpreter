@@ -23,7 +23,7 @@ node_types:
       id:
         type: string
         description: The id of the resource.
-        required: true
+        required: false
       type:
         type: string
         description: Indicates the type of the resource (cloud or edge).
@@ -133,7 +133,7 @@ data_types:
         required: true
         constraints:
           # Replace by fixed, mobile?
-          valid_values: [ raspberry, smartphone, camera, uav ]
+          valid_values: [ raspberry, nuc, smartphone, camera, uav ]
       edge_location:
         type: string
         description: The location of the edge device.

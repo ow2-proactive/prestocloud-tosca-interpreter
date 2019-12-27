@@ -1,0 +1,382 @@
+tosca_definitions_version: tosca_prestocloud_mapping_1_2
+
+metadata:
+  template_name: ICCS_normative_types
+  template_author: ICCS
+  template_version: 1.2
+
+description: ICCS normative types definition.
+
+imports:
+  - tosca-normative-types:1.2
+  - resource-descriptions:1.0
+
+node_types:
+
+  # Fragments
+  prestocloud.nodes.fragment.faas:
+   description: A TOSCA description of a FaaS fragment
+   derived_from: prestocloud.nodes.fragment
+   requirements:
+     - execute:
+        node: prestocloud.nodes.agent.faas
+        capability: prestocloud.capabilities.fragmentExecution.faas
+        relationship: prestocloud.relationships.executedBy.faas
+     - proxy:
+        node: prestocloud.nodes.proxy.faas
+        capability: prestocloud.capabilities.proxying.faas
+        relationship: prestocloud.relationships.proxiedBy.faas
+
+  prestocloud.nodes.fragment.jppf:
+   description: A TOSCA description of a JPPF fragment
+   derived_from: prestocloud.nodes.fragment
+   requirements:
+     - execute:
+        node: prestocloud.nodes.agent.jppf
+        capability: prestocloud.capabilities.fragmentExecution.jppf
+        relationship: prestocloud.relationships.executedBy.jppf
+     - master:
+        node: prestocloud.nodes.master.jppf
+        capability: prestocloud.capabilities.endpoint.jppf
+        relationship: prestocloud.relationships.connectsTo.jppf
+
+  prestocloud.nodes.fragment.loadBalanced:
+   description: A TOSCA description of a generic load-balanced fragment
+   derived_from: prestocloud.nodes.fragment
+   requirements:
+     - execute:
+        node: prestocloud.nodes.agent.loadBalanced
+        capability: prestocloud.capabilities.fragmentExecution.loadBalanced
+        relationship: prestocloud.relationships.executedBy.loadBalanced
+     - balanced_by:
+        node: prestocloud.nodes.proxy
+        capability: prestocloud.capabilities.proxying
+        relationship: prestocloud.relationships.proxiedBy
+
+  prestocloud.nodes.fragment:
+   description: A TOSCA description of an application fragment
+   derived_from: tosca.nodes.Root
+   properties:
+      id:
+       type: string
+       required: true
+      name:
+       type: string
+       required: false
+      scalable:
+       type: boolean
+       required: false
+      occurrences:
+        type: integer
+        required: false
+      docker_cloud:
+        type: prestocloud.datatype.docker
+        description: Parameter for the docker container to execute on cloud resources.
+        required: false
+      docker_edge:
+        type: prestocloud.datatype.docker
+        description: Parameter for the docker container to execute on edge devices.
+        required: false
+      optimization_variables:
+        type: prestocloud.datatype.optimizationVariables
+        description: The optimization variable values for the particular fragment.
+        required: false
+      health_check:
+        type: prestocloud.datatype.health_check
+        description: Parameters for the health check service.
+        required: false
+   requirements:
+     - execute:
+        node: prestocloud.nodes.agent
+        capability: prestocloud.capabilities.fragmentExecution
+        relationship: prestocloud.relationships.executedBy
+
+  # Agents
+  prestocloud.nodes.agent.faas:
+    description: A basic FaaS-agent node
+    derived_from: prestocloud.nodes.agent
+    properties:
+      ssh_pub_key:
+        type: string
+        description: Optional public SSH key to access the machine remotely.
+        required: false
+    capabilities:
+      execute:
+        type: prestocloud.capabilities.fragmentExecution.faas
+
+  prestocloud.nodes.agent.jppf:
+    description: A basic JPPF-agent node
+    derived_from: prestocloud.nodes.agent
+    capabilities:
+      execute:
+        type: prestocloud.capabilities.fragmentExecution.jppf
+
+  prestocloud.nodes.agent.loadBalanced:
+    description: A basic JPPF-agent node
+    derived_from: prestocloud.nodes.agent
+    capabilities:
+      execute:
+        type: prestocloud.capabilities.fragmentExecution.loadBalanced
+
+  prestocloud.nodes.agent:
+    description: A basic "agent" node
+    derived_from: tosca.nodes.Root
+    properties:
+      component_version:
+        type: version
+        required: false
+      ssh_pub_key:
+        description: Optional public key to access the machine remotely
+        type: string
+        required: false
+    capabilities:
+      execute:
+        type: prestocloud.capabilities.fragmentExecution
+    requirements:
+      - host:
+         node: prestocloud.nodes.compute
+         capability: tosca.capabilities.Container
+         relationship: tosca.relationships.HostedOn
+
+  # FaaS proxy
+  prestocloud.nodes.proxy.faas:
+    description: A lambda proxy for FaaS
+    derived_from: prestocloud.nodes.agent
+    properties:
+      component_version:
+        type: version
+        required: false
+    capabilities:
+      proxy:
+        type: prestocloud.capabilities.proxying.faas
+    requirements:
+      - host:
+         node: prestocloud.nodes.compute
+         capability: tosca.capabilities.Container
+         relationship: tosca.relationships.HostedOn
+
+#Load balancer
+  prestocloud.nodes.proxy:
+    description: A load Balancer for loadBalanced fragments.
+    derived_from: prestocloud.nodes.agent
+    properties:
+      component_version:
+        type: version
+        required: false
+    capabilities:
+      proxy:
+        type: prestocloud.capabilities.proxying
+    requirements:
+      - host:
+         node: prestocloud.nodes.compute
+         capability: tosca.capabilities.Container
+         relationship: tosca.relationships.HostedOn
+
+
+  # JPPF master
+  prestocloud.nodes.master.jppf:
+    description: A JPPF Master node
+    derived_from: prestocloud.nodes.agent
+    properties:
+      component_version:
+        type: version
+        required: false
+    capabilities:
+      distribute_jppf_fragments:
+        type: prestocloud.capabilities.endpoint.jppf
+    requirements:
+      - host:
+         node: prestocloud.nodes.compute
+         capability: tosca.capabilities.Container
+         relationship: tosca.relationships.HostedOn
+
+capability_types:
+
+  # Proxy / Load balancing capabilities
+  prestocloud.capabilities.proxying.faas:
+    description: Provide the ability to handle FaaS fragments
+    derived_from: prestocloud.capabilities.proxying
+    valid_source_types: [ prestocloud.nodes.agent.faas ]
+
+  prestocloud.capabilities.proxying:
+    description: Provide the ability to handle load-balanced fragments
+    derived_from: tosca.capabilities.Root
+    valid_source_types: [ prestocloud.nodes.agent ]
+
+  # JPPF Master endpoint capability
+  prestocloud.capabilities.endpoint.jppf:
+    description: Provide an endpoint on which JPPF agents may be connected
+    derived_from: tosca.capabilities.Root
+    properties:
+      protocol:
+        type: string
+        required: true
+        default: tcp
+      port:
+        type: tosca.datatypes.network.PortDef
+        required: false
+      secure:
+        type: boolean
+        required: false
+        default: false
+      ip_address:
+        type: string
+        required: false
+    valid_source_types: [ prestocloud.nodes.agent.jppf ]
+
+  # Fragment execution capabilities
+  prestocloud.capabilities.fragmentExecution.faas:
+    description: Capability to execute a FaaS fragment
+    derived_from: prestocloud.capabilities.fragmentExecution
+    properties:
+    valid_source_types: [ prestocloud.nodes.fragment.faas ]
+
+  prestocloud.capabilities.fragmentExecution.jppf:
+    description: Capability to execute a JPPF fragment
+    derived_from: prestocloud.capabilities.fragmentExecution
+    properties:
+    valid_source_types: [ prestocloud.nodes.fragment.jppf ]
+
+  prestocloud.capabilities.fragmentExecution.loadBalanced:
+    description: Capability to execute a JPPF fragment
+    derived_from: prestocloud.capabilities.fragmentExecution
+    properties:
+    valid_source_types: [ prestocloud.nodes.fragment.loadBalanced ]
+
+
+  prestocloud.capabilities.fragmentExecution:
+    description: Capability to execute a PrEstoCloud fragment
+    derived_from: tosca.capabilities.Root
+    properties:
+    valid_source_types: [ prestocloud.nodes.fragment ]
+
+relationship_types:
+
+  # Proxy / Load balancing relationships
+  prestocloud.relationships.proxiedBy.faas:
+    derived_from: prestocloud.relationships.proxiedBy
+    valid_target_types: [ prestocloud.nodes.agent.faas ]
+
+  prestocloud.relationships.proxiedBy:
+    derived_from: tosca.relationships.Root
+    valid_target_types: [ prestocloud.nodes.agent ]
+
+  # JPPF Master endpoint connection relationship
+  prestocloud.relationships.connectsTo.jppf:
+    derived_from: tosca.relationships.Root
+    valid_target_types: [ prestocloud.nodes.master.jppf ]
+    properties:
+      credential:
+        type: tosca.datatypes.Credential
+        required: false
+
+  # Fragment execution relationships
+  prestocloud.relationships.executedBy.faas:
+    derived_from: prestocloud.relationships.executedBy
+    valid_target_types: [ prestocloud.nodes.agent.faas ]
+
+  prestocloud.relationships.executedBy.jppf:
+    derived_from: prestocloud.relationships.executedBy
+    valid_target_types: [ prestocloud.nodes.agent.jppf ]
+
+
+  prestocloud.relationships.executedBy.loadBalanced:
+    derived_from: prestocloud.relationships.executedBy
+    valid_target_types: [ prestocloud.nodes.agent.loadBalanced ]
+
+  prestocloud.relationships.executedBy:
+    derived_from: tosca.relationships.Root
+    valid_target_types: [ prestocloud.nodes.agent ]
+
+data_types:
+
+  prestocloud.datatype.optimizationVariables:
+    derived_from: tosca.datatypes.Root
+    description: A simple datatype containing weights for the optimization variables of Cost, Distance and Friendliness.
+    properties:
+      cost:
+        type: integer
+        description: The weight of cost in determining the optimal host.
+        required: true
+        default: 1
+      distance:
+        type: integer
+        description: The weight of distance in determining the optimal host.
+        required: true
+        default: 1
+      friendliness:
+        type: map
+        description: A map of entries containing the name of the cloud provider, and the intended friendliness value for this provider.
+        required: true
+        entry_schema:
+          type: string
+
+  prestocloud.datatype.docker:
+    derived_from: tosca.datatypes.Root
+    description: Docker container parameters.
+    properties:
+      image:
+        type: string
+        description: The name of the cloud.
+        required: true
+      registry:
+        type: string
+        description: The name of the Docker registry to use, optional.
+        required: false
+      cmd:
+        type: string
+        description: An optional cmdline to execute.
+        required: false
+      variables:
+        type: map
+        description: The optional list of environmental variables to define.
+        required: false
+        entry_schema:
+          type: string
+      ports:
+        type: list
+        description: The list of ports to map to the host.
+        required: false
+        entry_schema:
+          type: prestocloud.datatype.docker.port
+
+  prestocloud.datatype.docker.port:
+    derived_from: tosca.datatypes.Root
+    description: A Docker port mapping description.
+    properties:
+      target:
+        type: integer
+        description: The target port of the container.
+        required: true
+        constraints:
+          - in_range: [ 1, 65535 ]
+      published:
+        type: integer
+        description: The port to map/publish on the host.
+        required: true
+        constraints:
+          - in_range: [ 1, 65535 ]
+      protocol:
+        type: string
+        required: true
+        default: TCP
+        constraints:
+          - valid_values: [ UDP, TCP, TCP_UDP ]
+
+  prestocloud.datatype.health_check:
+    derived_from: tosca.datatypes.Root
+    description: Collect health probes from url or cmdline to report in the consul server.
+    properties:
+      interval:
+        type: integer
+        description: The time interval to publish data in seconds (default 5 min.)
+        default: 300
+        required: true
+      url:
+        type: string
+        description: The URL to retrieve health data.
+        required: false
+      cmd:
+        type: string
+        description: A cmdline to retrieve health data.
+        required: false
