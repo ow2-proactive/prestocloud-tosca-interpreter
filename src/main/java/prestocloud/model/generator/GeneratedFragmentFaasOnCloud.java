@@ -66,9 +66,9 @@ public class GeneratedFragmentFaasOnCloud extends GeneratedNode {
 
         // Host Resource
         this.cpuFrequency = (vmt.cpuFreq != null) ? Optional.of(vmt.cpuFreq) : Optional.empty();
-        this.diskSize = (vmt.diskSize != null) ? Optional.of(vmt.diskSize) : Optional.empty(); //Optional.of(rcd.getDiskCapacity() + " MB");
+        this.diskSize = (vmt.diskSize != null) ? Optional.of(vmt.diskSize) : Optional.empty();
         this.numCpus = Integer.parseInt(vmt.getCpuNum());
-        this.memSize = vmt.getMem();//rcd.getMemoryCapacity() + " MB";
+        this.memSize = vmt.getMem();
         this.price = vmt.getPrice();
 
         //Compute resource - Network

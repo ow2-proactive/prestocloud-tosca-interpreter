@@ -55,10 +55,12 @@ import prestocloud.btrplace.tosca.ParsingUtils;
 import prestocloud.btrplace.tosca.model.EdgeResourceTemplateDetails;
 import prestocloud.component.ICSARRepositorySearchService;
 import prestocloud.tosca.model.ArchiveRoot;
+import prestocloud.tosca.parser.ParsingException;
 import prestocloud.tosca.parser.ParsingResult;
 import prestocloud.tosca.parser.ToscaParser;
 import prestocloud.tosca.repository.LocalRepositoryImpl;
-import prestocloud.workspace.ParsingSpace;
+import prestocloud.workspace.InstanceLevelParsingSpace;
+import prestocloud.workspace.TypeLevelParsingSpace;
 
 /**
  * @author ActiveEon Team
@@ -88,32 +90,54 @@ public class TOSCAParserApp {
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
         return args -> {
             // First argument must be the repository path (example: "src/main/resources/repository/" or "/mnt/glusterfs")
+            if (args.length == 8 && args[0].equals("type-level-interpreter")) {
 
-            if (args.length != 7) {
-                logger.error("Missing argument: the expected arguments are (i) the TOSCA types directory, (ii) the directory conatining the resource description file, (iii) the type level file to proceed, (iv) the management output file, (v) the instance level tosca template to be produce (vi) the file mapping node and deployed node and (vii) the edge status file.");
-               System.exit(1);
-            }
+                if (!Paths.get(args[1]).toFile().exists() || !Paths.get(args[2]).toFile().exists() || !Paths.get(args[3]).toFile().exists()) {
+                    logger.error("Either the repository directory or the specified file to be parsed is not found.");
+                    System.exit(1);
+                }
+                ((LocalRepositoryImpl) csarRepositorySearchService).setPath(args[1]);
 
-            if (!Paths.get(args[0]).toFile().exists() || !Paths.get(args[1]).toFile().exists() || !Paths.get(args[2]).toFile().exists()) {
-               logger.error("Either the repository directory or the specified file to be parsed is not found.");
-               System.exit(1);
-            }
-            ((LocalRepositoryImpl)csarRepositorySearchService).setPath(args[0]);
+                // Second argument must be the path of the file to parse (example: "src/test/resources/prestocloud/ICCS-example.yml")
+                boolean parsingSuccess = processTypeLevelToscaWithBtrPlace(args[2], args[3], args[4], args[5], args[6], args[7]);
 
-            // Second argument must be the path of the file to parse (example: "src/test/resources/prestocloud/ICCS-example.yml")
-            boolean parsingSuccess = processToscaWithBtrPlace(args[1], args[2], args[3], args[4], args[5], args[6]);
+                if (parsingSuccess) {
+                    logger.info("The parsing ended successfully");
+                    System.exit(0);
+                } else {
+                    logger.error("ERR: The parsing has failed.");
+                    System.exit(1);
+                }
 
-            if (parsingSuccess) {
-                logger.info("The parsing ended successfully");
-                System.exit(0);
+            } else if (args.length == 4 && args[0].equals("instance-level-interpreter")) {
+
+                if (!Paths.get(args[1]).toFile().exists() || !Paths.get(args[2]).toFile().exists()) {
+                    logger.error("Either the repository directory or the specified file to be parsed is not found.");
+                    System.exit(1);
+                }
+                ((LocalRepositoryImpl) csarRepositorySearchService).setPath(args[1]);
+
+                boolean parsingSuccess = processInstanceLevelTosca(args[2], args[3]);
+
+                if (parsingSuccess) {
+                    logger.info("The parsing ended successfully");
+                    System.exit(0);
+                } else {
+                    logger.error("ERR: The parsing has failed.");
+                    System.exit(1);
+                }
             } else {
-                logger.error("ERR: The parsing has failed.");
+                logger.error("Missing argument: the expected arguments are:\n" +
+                        " - (i) the mode type-level-interpreter, (ii) the TOSCA types directory, (iii) the directory containing the resource description file, (iv) the type level file to proceed, (v) the management output file, (vi) the instance level tosca template to be produce (vii) the file mapping node and deployed node and (viii) the edge status file.\n" +
+                        " - (i) the mode instance-level-interpreter, (ii) the TOSCA types directory, (iii) the instance-level TOSCA file, (iv) the outputfile");
                 System.exit(1);
             }
+
+
         };
     }
 
-    public boolean processToscaWithBtrPlace(String resourcesPath, String typeLevelTOSCAFile, String outputFile, String instanceLevelToscaTemplate, String mappingFile, String edgeStatusFile) {
+    public boolean processTypeLevelToscaWithBtrPlace(String resourcesPath, String typeLevelTOSCAFile, String outputFile, String instanceLevelToscaTemplate, String mappingFile, String edgeStatusFile) {
         try {
             logger.info("(1/23) Parsing the type-level TOSCA file");
             ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get(typeLevelTOSCAFile));
@@ -121,7 +145,7 @@ public class TOSCAParserApp {
             GetVMTemplatesDetailsResult vmTemplatesParsingResult = ParsingUtils.getVMTemplatesDetails(parser, resourcesPath);
             logger.info("(3/23) Parsing Edge resource TOSCA file");
             List<EdgeResourceTemplateDetails> edgeResourceTemplateDetails = ParsingUtils.getEdgeResourceTemplateDetails(parser, resourcesPath);
-            ParsingSpace ps = new ParsingSpace(parsingResult, vmTemplatesParsingResult, edgeResourceTemplateDetails, parser, resourcesPath);
+            TypeLevelParsingSpace ps = new TypeLevelParsingSpace(parsingResult, vmTemplatesParsingResult, edgeResourceTemplateDetails, parser, resourcesPath);
             logger.info("(4/23) Interpreting TOSCA specification");
             ps.retrieveResourceFromParsing();
             logger.info("(5/23) Identifying fragments related to precedence constraints ...");
@@ -190,6 +214,30 @@ public class TOSCAParserApp {
             }
         } catch (Exception e) {
             logger.error("Error while parsing the Type-level TOSCA document : {}", e.getMessage());
+            logger.error(" --> ", e);
+            return false;
+        }
+    }
+
+    public boolean processInstanceLevelTosca(String instanceLevelFile, String outputFile) {
+        try {
+            logger.info("(1/6) Parsing the instance-level TOSCA file");
+            ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get(instanceLevelFile));
+            logger.info("(2/6) Checking for parsing errors ...");
+            InstanceLevelParsingSpace ps = new InstanceLevelParsingSpace(parsingResult);
+            if (ps.isThereParsingError()) {
+                return false;
+            }
+            logger.info("(3/6) Collecting instance info");
+            ps.startParsing();
+            logger.info("(4/6) Classifying");
+            ps.classify();
+            logger.info("(5/6) Writing results");
+            writeResult(ps.getResult(), outputFile);
+            logger.info("(6/6) Done");
+            return true;
+        } catch (ParsingException | IOException e) {
+            logger.error("Error while parsing the Instance-level TOSCA document : {}", e.getMessage());
             logger.error(" --> ", e);
             return false;
         }

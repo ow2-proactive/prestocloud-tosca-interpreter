@@ -21,10 +21,10 @@ public class GeneratedFragmentFaasOnEdge extends GeneratedNode {
     protected static final String EDGE_PRIVATEKEY_UNSTRUCT = "                  privatekey: %s\n";
     protected static final String EDGE_GPSCOORDINATES_UNSTRUCT = "               gps_coordinates: %s\n";
     protected static final String NETWORK_UNSTRUCT = "            network:\n" +
-            "            network_name: %s\n" +
-            "            network_id: %s\n" +
-            "            addresses:\n" +
-            "               - @variables_network_%s\n";
+            "               network_name: %s\n" +
+            "               network_id: %s\n" +
+            "               addresses:\n" +
+            "                  - @variables_network_%s\n";
     protected static final String CAP_RESOURCE_UNSTRUCT = "         capabilities:\n" +
             "            resource:\n" +
             "               properties:\n" +

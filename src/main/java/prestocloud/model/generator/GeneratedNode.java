@@ -15,7 +15,7 @@ public abstract class GeneratedNode {
             "         properties:\n" +
             "            id: %s\n" +
             "            name: %s\n" +
-            "            onloadable: %s\n" +
+           // "            onloadable: %s\n" +
             "         requirements:\n" +
             "            - execute: deployment_node_%s\n";
 
@@ -50,7 +50,8 @@ public abstract class GeneratedNode {
     }
 
     public String getStructureFragmentNode() {
-        String formattedText = String.format(FRAGMENT_UNSTRUCTURED, fragmentName, id, fragmentName, onLoadable, fragmentName);
+        //String formattedText = String.format(FRAGMENT_UNSTRUCTURED, fragmentName, id, fragmentName, onLoadable, fragmentName);
+        String formattedText = String.format(FRAGMENT_UNSTRUCTURED, fragmentName, id, fragmentName, fragmentName);
         return (proxyFragment.isPresent()) ? String.format("%s         - proxy: processing_node_%s\n\n", formattedText, proxyFragment.get()) : formattedText + "\n";
     }
 }

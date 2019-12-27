@@ -110,7 +110,7 @@ public class GeneratorSpace {
     private void writeImport() {
         outputDocument.append("imports:\n");
         outputDocument.append("   - tosca-normative-types:1.2\n" +
-                "   - iccs-normative-types:1.1\n" +
+                "   - iccs-normative-types:1.2\n" +
                 "   - resource-descriptions:1.0\n" +
                 "   - placement-constraints:1.0\n\n");
     }
