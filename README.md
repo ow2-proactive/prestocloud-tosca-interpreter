@@ -75,7 +75,7 @@ Command usage example:
 java -jar target/prestocloud-tosca-1.0.0-SNAPSHOT.jar  src/main/resources/repository/ src/test/resources/prestocloud/resources/ simple_tosca_deployment_php_mariadb.yaml output.json mapping.json status.sample.json
 ```
 
-### Instance-level TOSCA generator
+### Instance-level TOSCA interpreter
 
 ```
 java -jar /target/prestocloud-tosca-1.0.0-SNAPSHOT.jar instance-level-interpreter <tosca_repository> <instance_level_tosca_file> <metamanagement_output_file>
