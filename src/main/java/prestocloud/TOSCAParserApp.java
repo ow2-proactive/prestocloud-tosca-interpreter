@@ -30,11 +30,14 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
 
 import lombok.extern.slf4j.Slf4j;
+import net.minidev.json.JSONArray;
+import net.minidev.json.JSONValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -52,10 +55,12 @@ import prestocloud.btrplace.tosca.ParsingUtils;
 import prestocloud.btrplace.tosca.model.EdgeResourceTemplateDetails;
 import prestocloud.component.ICSARRepositorySearchService;
 import prestocloud.tosca.model.ArchiveRoot;
+import prestocloud.tosca.parser.ParsingException;
 import prestocloud.tosca.parser.ParsingResult;
 import prestocloud.tosca.parser.ToscaParser;
 import prestocloud.tosca.repository.LocalRepositoryImpl;
-import prestocloud.workspace.ParsingSpace;
+import prestocloud.workspace.InstanceLevelParsingSpace;
+import prestocloud.workspace.TypeLevelParsingSpace;
 
 /**
  * @author ActiveEon Team
@@ -85,79 +90,107 @@ public class TOSCAParserApp {
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
         return args -> {
             // First argument must be the repository path (example: "src/main/resources/repository/" or "/mnt/glusterfs")
+            if (args.length == 8 && args[0].equals("type-level-interpreter")) {
 
-            if (args.length != 6) {
-               logger.error("Missing argument: the expected arguments are (i) the TOSCA types directory, (ii) the directory conatining the resource description file, (iii) the type level file to proceed, (iv) the management output file, (v) the file mapping node and deployed node and (vi) the edge status file.");
-               System.exit(1);
-            }
+                if (!Paths.get(args[1]).toFile().exists() || !Paths.get(args[2]).toFile().exists() || !Paths.get(args[3]).toFile().exists()) {
+                    logger.error("Either the repository directory or the specified file to be parsed is not found.");
+                    System.exit(1);
+                }
+                ((LocalRepositoryImpl) csarRepositorySearchService).setPath(args[1]);
 
-            if (!Paths.get(args[0]).toFile().exists() || !Paths.get(args[1]).toFile().exists() || !Paths.get(args[2]).toFile().exists()) {
-               logger.error("Either the repository directory or the specified file to be parsed is not found.");
-               System.exit(1);
-            }
-            ((LocalRepositoryImpl)csarRepositorySearchService).setPath(args[0]);
+                // Second argument must be the path of the file to parse (example: "src/test/resources/prestocloud/ICCS-example.yml")
+                boolean parsingSuccess = processTypeLevelToscaWithBtrPlace(args[2], args[3], args[4], args[5], args[6], args[7]);
 
-            // Second argument must be the path of the file to parse (example: "src/test/resources/prestocloud/ICCS-example.yml")
-            boolean parsingSuccess = processToscaWithBtrPlace(args[1], args[2], args[3], args[4], args[5]);
+                if (parsingSuccess) {
+                    logger.info("The parsing ended successfully");
+                    System.exit(0);
+                } else {
+                    logger.error("ERR: The parsing has failed.");
+                    System.exit(1);
+                }
 
-            if (parsingSuccess) {
-                logger.info("The parsing ended successfully");
-                System.exit(0);
+            } else if (args.length == 4 && args[0].equals("instance-level-interpreter")) {
+
+                if (!Paths.get(args[1]).toFile().exists() || !Paths.get(args[2]).toFile().exists()) {
+                    logger.error("Either the repository directory or the specified file to be parsed is not found.");
+                    System.exit(1);
+                }
+                ((LocalRepositoryImpl) csarRepositorySearchService).setPath(args[1]);
+
+                boolean parsingSuccess = processInstanceLevelTosca(args[2], args[3]);
+
+                if (parsingSuccess) {
+                    logger.info("The parsing ended successfully");
+                    System.exit(0);
+                } else {
+                    logger.error("ERR: The parsing has failed.");
+                    System.exit(1);
+                }
             } else {
-                logger.error("ERR: The parsing has failed.");
+                logger.error("Missing argument: the expected arguments are:\n" +
+                        " - (i) the mode type-level-interpreter, (ii) the TOSCA types directory, (iii) the directory containing the resource description file, (iv) the type level file to proceed, (v) the management output file, (vi) the instance level tosca template to be produce (vii) the file mapping node and deployed node and (viii) the edge status file.\n" +
+                        " - (i) the mode instance-level-interpreter, (ii) the TOSCA types directory, (iii) the instance-level TOSCA file, (iv) the outputfile");
                 System.exit(1);
             }
+
+
         };
     }
 
-    public boolean processToscaWithBtrPlace(String resourcesPath, String typeLevelTOSCAFile, String outputFile, String mappingFile, String edgeStatusFile) {
+    public boolean processTypeLevelToscaWithBtrPlace(String resourcesPath, String typeLevelTOSCAFile, String outputFile, String instanceLevelToscaTemplate, String mappingFile, String edgeStatusFile) {
         try {
-            logger.info("(1/22) Parsing the type-level TOSCA file");
+            logger.info("(1/23) Parsing the type-level TOSCA file");
             ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get(typeLevelTOSCAFile));
-            logger.info("(2/22) Parsing VM cloud resource TOSCA file");
+            logger.info("(2/23) Parsing VM cloud resource TOSCA file");
             GetVMTemplatesDetailsResult vmTemplatesParsingResult = ParsingUtils.getVMTemplatesDetails(parser, resourcesPath);
-            logger.info("(3/22) Parsing Edge resource TOSCA file");
+            logger.info("(3/23) Parsing Edge resource TOSCA file");
             List<EdgeResourceTemplateDetails> edgeResourceTemplateDetails = ParsingUtils.getEdgeResourceTemplateDetails(parser, resourcesPath);
-            ParsingSpace ps = new ParsingSpace(parsingResult, vmTemplatesParsingResult, edgeResourceTemplateDetails, parser, resourcesPath);
-            logger.info("(4/22) Interpreting TOSCA specification");
+            TypeLevelParsingSpace ps = new TypeLevelParsingSpace(parsingResult, vmTemplatesParsingResult, edgeResourceTemplateDetails, parser, resourcesPath);
+            logger.info("(4/23) Interpreting TOSCA specification");
             ps.retrieveResourceFromParsing();
-            logger.info("(5/22) Identifying fragments related to precedence constraints ...");
+            logger.info("(5/23) Identifying fragments related to precedence constraints ...");
             ps.classifyNodeAccordingToRelationships();
-            logger.info("(6/22) Determining the best suited cloud VM type for identified computing resources");
+            logger.info("(6/23) Determining the best suited cloud VM type for identified computing resources");
             ps.selectBestCloudVmType();
-            logger.info("(7/22) Preparing APSC context (Btrplace)");
+            logger.info("(7/23) Preparing APSC context (Btrplace)");
             ps.configureBtrPlace();
-            logger.info("(8/22) Creating btrplace resources (Vms & Edge)");
+            logger.info("(8/23) Creating btrplace resources (Vms & Edge)");
             ps.populateVmsInBtrPlaceModel();
-            logger.info("(9/22) Populating the model with regions from public and private cloud");
+            logger.info("(9/23) Populating the model with regions from public and private cloud");
             ps.populateNodesInBtrPlaceModel();
-            logger.info("(10/22) Configuration of regions computing capability");
+            logger.info("(10/23) Configuration of regions computing capability");
             ps.setCloudNodeToKeep();
             if (Paths.get(mappingFile).toFile().exists()) {
-                logger.info("(11/22) Loading mapping file : Interpreting the current fragment deployment");
+                logger.info("(11/23) Loading mapping file : Interpreting the current fragment deployment");
                 ps.loadExistingMapping(readFile(mappingFile));
             } else {
-                logger.info("(11/22) Loading mapping file : the file doesn't exist or is empty: Assuming a new fragment deployment");
+                logger.info("(11/23) Loading mapping file : the file doesn't exist or is empty: Assuming a new fragment deployment");
             }
-            logger.info("(12/22) Configuration of regions computing capability");
+            logger.info("(12/23) Configuration of regions computing capability");
             ps.setCapacity();
             if (Paths.get(edgeStatusFile).toFile().exists()) {
-                logger.info("(13/22) Loading data for edge devices availability");
+                logger.info("(13/23) Loading data for edge devices availability");
                 ps.loadRunningEdgeNode(readFile(edgeStatusFile));
             } else {
-                logger.info("(13/22) Skipping the load of data for edge devices availability: No file for edge device availability found.");
+                logger.info("(13/23) Skipping the load of data for edge devices availability: No file for edge device availability found.");
             }
-            logger.info("(14/22) Configuring constraints from the fragment specification");
+            logger.info("(14/23) Configuring constraints from the fragment specification");
             ps.configuringVmsResourcesRequirementConstraint();
-            logger.info("(15/22) Checking and defining the resource availability");
-            ps.detectResourceAvailability();
-            logger.info("(16/22) Defining fragment deployability");
+            logger.info("(15/23) Checking and defining the resource availability");
+            List<Object> availableResources = this.detectResourceAvailability();
+            if (availableResources != null) {
+                logger.info(" -- ADIAM environment detected. I'll check cloud availability");
+                ps.banUnreferencedCloudInCloudList(availableResources);
+            } else {
+                logger.info(" -- No ADIAM detected. Working standalone, and assume all clouds are available to use.");
+            }
+            logger.info("(16/23) Defining fragment deployability");
             ps.defineFragmentDeployability();
-            logger.info("(17/22) Enforcing policy constraint in APSC");
+            logger.info("(17/23) Enforcing policy constraint in APSC");
             ps.configurePlacementConstraint();
-            logger.info("(18/22) Retrieving cost-related information");
+            logger.info("(18/23) Retrieving cost-related information");
             ps.extractCost();
-            logger.info("(19/22) Solving ...");
+            logger.info("(19/23) Solving ...");
             if (!ps.performedBtrplaceSolving()) {
                 throw new IllegalStateException("No Btrplace reconfiguration plan was determined");
             } else {
@@ -166,15 +199,45 @@ public class TOSCAParserApp {
                     throw new IllegalStateException(String.format("Threshold cost limit has exceeded: Time (h): %s , Hourly cost of deployment (Eur/h): %s , Cost threshold (Eur): %s", tp, hcod, ct));
                 }
                 logger.info("Threshold cost limit is accepted: Time (h): {}, Hourly cost of deployment (Eur/h): {}, Cost threshold (Eur): {}", tp, hcod, ct);
-                logger.info("(20/22) Writing management plan output");
+                logger.info("(20/23) Writing management plan output");
                 writeResult(ps.generationJsonOutput(), outputFile);
-                logger.info("(21/22) Writing the mapping output");
+                logger.info("(21/23) Writing the mapping output");
                 writeResult(ps.generateOutputMapping(), mappingFile);
-                logger.info("(22/22) The type-level TOSCA processing has ended successfully");
+                logger.info("(22/23) Producing instance level TOSCA template");
+                try {
+                    writeResult(ps.generateInstanceLevelToscaTemplate(detectResourceAvailability()), instanceLevelToscaTemplate);
+                } catch (IllegalAccessException e) {
+                    logger.info(e.getMessage());
+                }
+                logger.info("(23/23) The type-level TOSCA processing has ended successfully");
                 return true;
             }
         } catch (Exception e) {
             logger.error("Error while parsing the Type-level TOSCA document : {}", e.getMessage());
+            logger.error(" --> ", e);
+            return false;
+        }
+    }
+
+    public boolean processInstanceLevelTosca(String instanceLevelFile, String outputFile) {
+        try {
+            logger.info("(1/6) Parsing the instance-level TOSCA file");
+            ParsingResult<ArchiveRoot> parsingResult = parser.parseFile(Paths.get(instanceLevelFile));
+            logger.info("(2/6) Checking for parsing errors ...");
+            InstanceLevelParsingSpace ps = new InstanceLevelParsingSpace(parsingResult);
+            if (ps.isThereParsingError()) {
+                return false;
+            }
+            logger.info("(3/6) Collecting instance info");
+            ps.startParsing();
+            logger.info("(4/6) Classifying");
+            ps.classify();
+            logger.info("(5/6) Writing results");
+            writeResult(ps.getResult(), outputFile);
+            logger.info("(6/6) Done");
+            return true;
+        } catch (ParsingException | IOException e) {
+            logger.error("Error while parsing the Instance-level TOSCA document : {}", e.getMessage());
             logger.error(" --> ", e);
             return false;
         }
@@ -204,5 +267,21 @@ public class TOSCAParserApp {
             logger.error("Unable to read the file {} : {}", path, e.getMessage());
             throw e;
         }
+    }
+
+    private List<Object> detectResourceAvailability() {
+        //We verify if we are running inside the main WF environement
+        String cloudList = System.getenv().getOrDefault("variables_CLOUD_LIST", null);
+        if (cloudList != null) {
+            //If the cloud resource is not detected as online, I'll add a banning constrain.
+            if (!JSONValue.isValidJson(cloudList)) {
+                throw new IllegalArgumentException("ADIAM CLOUD_LIST argument is not a valid JSON structure");
+            }
+            JSONArray ja = (JSONArray) JSONValue.parse(cloudList);
+            return new ArrayList<Object>(ja);
+        } else {
+            return null;
+        }
+        // Edge device availability is already tackled in loadRunningEdgeNode in ParsingSpace
     }
 }

@@ -39,16 +39,16 @@ import java.util.stream.Collectors;
 @Slf4j
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class)
-public class ParsingSpace {
+public class TypeLevelParsingSpace {
 
     private static final Pattern NETWORK_IP_PATTERN = Pattern.compile("(\\{ get_property: \\[([\\w,-]+),host,([\\w,]+),([\\w,]+),[\\d]+\\] \\})");
     private static final String TYPE_EXECUTE = "execute";
     private static final String TYPE_CLOUD = "cloud";
     private static final String PLACEMENT_EDGE = "edge ";
-    private  static final int SCHED_TIME_LIMIT = 10;
+    private static final int SCHED_TIME_LIMIT = 10;
     private static final int MAX_NMB_VMS = 100;
 
-    private Logger logger = LoggerFactory.getLogger(ParsingSpace.class);
+    private Logger logger = LoggerFactory.getLogger(TypeLevelParsingSpace.class);
     // TODO: use a valid reference location to compute distances ("Sophia Antipolis" for testing only, must be retrieved from fragment's properties or dependencies)
     String sophiaAntipolisUTM = "32T 342479mE 4831495mN";
 
@@ -106,10 +106,10 @@ public class ParsingSpace {
     private Mapping dstmapping;
     private Set<Action> actions;
 
-    public ParsingSpace(ParsingResult<ArchiveRoot> result, GetVMTemplatesDetailsResult getVMTemplatesDetailsResult, List<EdgeResourceTemplateDetails> edgeResourceTemplateDetails, ToscaParser parser, String resourcesPath) {
+    public TypeLevelParsingSpace(ParsingResult<ArchiveRoot> result, GetVMTemplatesDetailsResult getVMTemplatesDetailsResult, List<EdgeResourceTemplateDetails> edgeResourceTemplateDetails, ToscaParser parser, String resourcesPath) {
         this.parsingResult = result;
         this.parser = parser;
-        this.resourcesPath  = resourcesPath;
+        this.resourcesPath = resourcesPath;
         this.vmTemplatesDetails = getVMTemplatesDetailsResult.vmTemplatesDetails;
         this.regionsPerCloudPerCloudFile = getVMTemplatesDetailsResult.regionsPerCloudPerCloudFile;
         this.edgeResourceDetails = edgeResourceTemplateDetails;
@@ -654,22 +654,8 @@ public class ParsingSpace {
         }
     }
 
-    public void detectResourceAvailability() {
-        //We verify if we are running inside the main WF environement
-        String cloudList = System.getenv().getOrDefault("variables_CLOUD_LIST", null);
-        if (cloudList != null) {
-            logger.info(" -- ADIAM environment detected. I'll check cloud availability");
-            //If the cloud resource is not detected as online, I'll add a banning constrain.
-            banUnreferencedCloudInCloudList(cloudList);
-        }
-        // Edge device availability is already tackled in loadRunningEdgeNode
-    }
 
-    private void banUnreferencedCloudInCloudList(String cloudList) {
-        if (!JSONValue.isValidJson(cloudList)) {
-            throw new IllegalArgumentException();
-        }
-        JSONArray ja = (JSONArray) JSONValue.parse(cloudList);
+    public void banUnreferencedCloudInCloudList(List<Object> ja) {
         JSONObject cloud;
         String cloudName;
         String cloudType;
@@ -718,7 +704,6 @@ public class ParsingSpace {
         }
     }
 
-    // TODO: We need to discuss each constraint behaviour regarding allocated the multiplicity of allocated VMs
     public void configurePlacementConstraint() {
         // Apply placement constraints
         for (PlacementConstraint placementConstraint : placementConstraints) {
@@ -1119,6 +1104,44 @@ public class ParsingSpace {
 
     public double getCostThreshold() {
         return Double.parseDouble(this.metadata.get("CostThreshold"));
+    }
+
+    public String generateInstanceLevelToscaTemplate(List<Object> cloudList) throws IllegalAccessException {
+        if (cloudList != null) {
+            // Configuration
+            GeneratorSpace gs = new GeneratorSpace();
+            gs.configureMetadata(metadata);
+            gs.configureEdgeResourceTemplateDetails(edgeResourceDetails);
+            gs.configureVmTemplateDetailList(vmTemplatesDetails);
+            gs.configureRcdPerRegion(regionCapabilityDescriptorPerCloud);
+            gs.configurationCloudList(cloudList);
+            // append
+            List<String> toBeAppended = dstmapping.getRunningVMs().stream()
+                    .map(vm -> new AbstractMap.SimpleImmutableEntry<>(vm, dstmapping.getVMLocation(vm)))
+                    .map(tupple -> namePerNode.get(tupple.getValue()) + " " + namePerVM.get(tupple.getKey())).collect(Collectors.toList());
+            String[] splittedRecord;
+            String fragmentId;
+            boolean isALb;
+            String instanceType;
+            for (String record : toBeAppended) {
+                splittedRecord = record.split(" ");
+                //Structure of splitted record: <cloud> <region> <instanceName>
+                if (splittedRecord.length != 3) {
+                    continue;
+                }
+                isALb = balancingNodes.containsKey(fragmentsPerVm.get(splittedRecord[2]));
+                fragmentId = idPerFragment.get(fragmentsPerVm.get(splittedRecord[2]));
+                if (splittedRecord[0].equals("edge")) {
+                    gs.appendEdgeDeployedInstance(splittedRecord[2], fragmentId, splittedRecord[1], isALb);
+                } else {
+                    instanceType = getSelectedCloudVMType(selectedCloudVMTypes, fragmentsPerVm.get(splittedRecord[2]), splittedRecord[0] + " " + splittedRecord[1]);
+                    gs.appendCloudDeployedInstance(splittedRecord[2], fragmentId, splittedRecord[0], splittedRecord[1], instanceType, isALb);
+                }
+            }
+            return gs.generate();
+        } else {
+            throw new IllegalAccessException("No ADIAM environment detected. I won't generate an template of instance level TOSCA file");
+        }
     }
 
     private static class OutputField {

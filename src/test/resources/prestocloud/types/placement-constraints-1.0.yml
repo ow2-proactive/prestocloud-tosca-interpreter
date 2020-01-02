@@ -9,7 +9,7 @@ description: Placement constraints definition for BtrPlace
 
 imports:
   - tosca-normative-types:1.2
-  - iccs-normative-types:1.1
+  - iccs-normative-types:1.2
   - resource-descriptions:1.0
 
 policy_types:
@@ -197,15 +197,16 @@ policy_types:
   prestocloud.placement.Precedence:
     derived_from: tosca.policies.Placement
     description: >
-      A constraint to force a given VM (in the "preceding" property) to be deployed before all other VMs in the list.
+      A constraint to force a given VM (first VM of the list) to be deployed before all other VMs in the list.
       This allows to constraint the deployment order of the VMs.
       If the 'strict' property is set (default to false), then all the VMs in the list will have inter dependencies and
       the VMs will all be deployed sequentially.
     metadata:
       arguments: an ordered set of VMs
     properties:
-      preceding:
-        type: string
-        description: The name/identifier of the preceding VM.
-        required: true
+      strict:
+        type: boolean
+        description: Enable the 'strict' mode of the constraint.
+        required: false
+        default: false
     targets: [ prestocloud.nodes.fragment ]
