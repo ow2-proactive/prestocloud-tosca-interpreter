@@ -61,7 +61,7 @@ public class GeneratedFragmentFaasOnCloud extends GeneratedNode {
     public GeneratedFragmentFaasOnCloud(String fragmentName, String fragmentId, boolean isALb, CloudListRegistration clr, RegionCapacityDescriptor rcd, VMTemplateDetails vmt) {
         //General
         this.isALoadBalancer = isALb;
-        this.computeId = String.format("%s:%s:%s", clr.getCloudType(), clr.getRegion(), clr.getInstanceType());
+        this.computeId = String.format("%s:%s", clr.getCloudType(), clr.getRegion());
         this.computeName = Optional.of(clr.getCloudName());
 
         // Host Resource
@@ -90,7 +90,7 @@ public class GeneratedFragmentFaasOnCloud extends GeneratedNode {
         cloudCredentialsPassword = Optional.empty();
         cloudCredentialsSubscription = Optional.empty();
         cloudCredentialsDomain = Optional.empty();
-        cloudInstance = Optional.of(clr.getInstanceType());
+        cloudInstance = Optional.ofNullable(vmt.instanceName);
         cloudImage = Optional.of(clr.getImage());
         cpuCapacity = (rcd.getCpuCapacity() == RegionCapacityDescriptor.INFINITY) ? Optional.empty() : Optional.of("" + rcd.getCpuCapacity());
         memoryCapacity = Optional.empty();

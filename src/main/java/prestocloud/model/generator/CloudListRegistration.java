@@ -8,7 +8,6 @@ public class CloudListRegistration {
     private String cloudType;
     private String accessKey;
     private String image;
-    private String instanceType;
     private String region;
 
     private String networkName;
@@ -24,26 +23,19 @@ public class CloudListRegistration {
             region = jsonObjectFromCloudList.getAsString("AWS_DEFAULT_REGION");
             accessKey = jsonObjectFromCloudList.getAsString("AWS_ACCESS_KEY_ID");
             image = jsonObjectFromCloudList.getAsString("AWS_GOLDEN_IMAGE");
-            instanceType = jsonObjectFromCloudList.getAsString("AWS_INSTANCE_TYPE");
         } else if (getCloudType().equalsIgnoreCase("azure")) {
             cloudType = "azure";
             region = jsonObjectFromCloudList.getAsString("AZ_LOCATION");
             accessKey = jsonObjectFromCloudList.getAsString("AZ_ACCESS_USER");
             image = jsonObjectFromCloudList.getAsString("AZ_GOLDEN_IMAGE");
-            instanceType = jsonObjectFromCloudList.getAsString("AZ_SIZE");
         } else if (getCloudType().equalsIgnoreCase("openstack")) {
             cloudType = "openstack";
             region = jsonObjectFromCloudList.getAsString("OS_REGION_NAME");
             accessKey = jsonObjectFromCloudList.getAsString("OS_USERNAME");
             image = jsonObjectFromCloudList.getAsString("OS_GOLDEN_IMAGE");
-            instanceType = jsonObjectFromCloudList.getAsString("OS_FLAVOR");
         } else {
             throw new IllegalArgumentException();
         }
-    }
-
-    public String getInstanceType() {
-        return instanceType;
     }
 
     public String getCloudName() {
