@@ -56,11 +56,11 @@ The argument are the followings:
 
 - *tosca_resource*: Refering to the directory containing tosca file defining cloud and edge resource to be schedulled. A valid file containing cloud resource and edge resource definition has to be mandatorily specified. `src/test/resources/prestocloud/resources/` is provided as an example.
 
-- *type_level_tosca_file*: Identifying the tosca file to be parsed and interpreted into an ADIAM's reconfiguration plan. This parameter must refer to a valid TOSCA file
+- *type_level_tosca_file*: Identifying the tosca file to be parsed and interpreted into an ADIAM's reconfiguration plan. This parameter must refer to a valid TOSCA file.
 
 - *reconfiguration_deployment_file*: Pointing to the ADIAM reconfiguration file to be created. This file is to be consumed later by the [ADIAM main workflow](https://gitlab.com/prestocloud-project/adiam-workflows).
 
-- *instance_level_tosca_file*: Providing the instance level TOSCA file to be produced. The file has not to necessarily exist. The produced file contains macro to be substituted by the ADIAM before being able to be interpreted.
+- *instance_level_tosca_file*: Providing the instance level TOSCA file to be produced when executed in teh ADIAM environment (i.e. the variable environment `variables_CLOUD_LIST` is set). The file has not to necessarily exist. The produced file contains macro to be substituted by the ADIAM before being able to be interpreted.
 
 - *mapping*: Containing the scheme of an already existing deployment. Can refer to a non-existing file for initial deployment.
 
@@ -72,7 +72,7 @@ The argument are the followings:
 
 Command usage example:
 ```
-java -jar target/prestocloud-tosca-1.0.0-SNAPSHOT.jar  src/main/resources/repository/ src/test/resources/prestocloud/resources/ simple_tosca_deployment_php_mariadb.yaml output.json mapping.json status.sample.json
+java -jar target/prestocloud-tosca-1.0.0-SNAPSHOT.jar  src/main/resources/repository/ src/test/resources/prestocloud/resources/ simple_tosca_deployment_php_mariadb.yaml output.json instance_level_tosca.yml mapping.json status.sample.json
 ```
 
 ### Instance-level TOSCA interpreter
