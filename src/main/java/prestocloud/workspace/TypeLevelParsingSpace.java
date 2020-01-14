@@ -888,27 +888,28 @@ public class TypeLevelParsingSpace {
         jo.put(OutputField.ACTION_TYPE, selectedVMType);
         jo.put(OutputField.ACTION_NODE, this.hostingNodePerFragment.get(fragmentsPerVm.get(vmName)));
         jo.put(OutputField.ACTION_SCALABLE, this.scalablePerfragments.getOrDefault(fragmentsPerVm.get(vmName), false));
-        if (balancedNodes.containsKey(fragmentsPerVm.get(vmName))) {
-            jo.put(OutputField.ACTION_LOADBALANCED_BY, vmsPerFragment.get(balancedNodes.get(fragmentsPerVm.get(vmName))).stream().findFirst().orElse(""));
-        }
         if (this.sshKeys.containsKey(fragmentsPerVm.get(vmName))) {
             if (this.sshKeys.get(fragmentsPerVm.get(vmName)).hasKey()) {
                 jo.put(OutputField.ACTION_SSH_KEY, this.sshKeys.get(fragmentsPerVm.get(vmName)).getPublicKey());
             }
-       }
+        }
 
-       // Docker command is optional because 'proxy', 'master', and 'balanced_by' nodes don't have one
-       Optional<Docker> docker;
-       if (cloud.equals("edge")) {
-           docker = dockersEdge.stream().filter(d -> d.getFragmentName().equalsIgnoreCase(fragmentsPerVm.get(vmName))).findFirst();
-       } else {
-           docker = dockersCloud.stream().filter(d -> d.getFragmentName().equalsIgnoreCase(fragmentsPerVm.get(vmName))).findFirst();
-       }
+        // Docker command is optional because 'proxy', 'master', and 'balanced_by' nodes don't have one
+        Optional<Docker> docker;
+        if (cloud.equals("edge")) {
+            docker = dockersEdge.stream().filter(d -> d.getFragmentName().equalsIgnoreCase(fragmentsPerVm.get(vmName))).findFirst();
+        } else {
+            docker = dockersCloud.stream().filter(d -> d.getFragmentName().equalsIgnoreCase(fragmentsPerVm.get(vmName))).findFirst();
+        }
         docker.ifPresent(dck -> jo.put(OutputField.ACTION_DOCKER, replaceHostPropertyValuesToMacros(dck.printCmdline())));
         docker.ifPresent(dck -> jo.put(OutputField.ACTION_PORTS, dck.getAllExposedPorts()));
-
-       ja.add(jo);
-   }
+        if (balancedNodes.containsKey(fragmentsPerVm.get(vmName))) {
+            jo.put(OutputField.ACTION_LOADBALANCED_BY, vmsPerFragment.get(balancedNodes.get(fragmentsPerVm.get(vmName))).stream().findFirst().orElse(""));
+        } else {
+            docker.ifPresent(dck -> jo.put(OutputField.ACTION_PUBLICPORTS, dck.getAllPubliclyExposedPorts()));
+        }
+        ja.add(jo);
+    }
 
     private void generationMigrateVMOutput(Action action, JSONArray ja) {
         // Retrieve VM/fragment name
@@ -935,9 +936,6 @@ public class TypeLevelParsingSpace {
         jo.put(OutputField.ACTION_TYPE, selectedVMType);
         jo.put(OutputField.ACTION_NODE, this.hostingNodePerFragment.get(fragmentsPerVm.get(vmName)));
         jo.put(OutputField.ACTION_SCALABLE, this.scalablePerfragments.getOrDefault(fragmentsPerVm.get(vmName), false));
-        if (balancedNodes.containsKey(fragmentsPerVm.get(vmName))) {
-            jo.put(OutputField.ACTION_LOADBALANCED_BY, vmsPerFragment.get(balancedNodes.get(fragmentsPerVm.get(vmName))).stream().findFirst().orElse(""));
-        }
         if (this.sshKeys.containsKey(fragmentsPerVm.get(vmName))) {
             if (this.sshKeys.get(fragmentsPerVm.get(vmName)).hasKey()) {
                 jo.put(OutputField.ACTION_SSH_KEY, this.sshKeys.get(fragmentsPerVm.get(vmName)).getPublicKey());
@@ -952,7 +950,12 @@ public class TypeLevelParsingSpace {
             docker = dockersCloud.stream().filter(d -> d.getFragmentName().equalsIgnoreCase(fragmentsPerVm.get(vmName))).findFirst();
         }
         docker.ifPresent(dck -> jo.put(OutputField.ACTION_DOCKER, replaceHostPropertyValuesToMacros(dck.printCmdline())));
-
+        docker.ifPresent(dck -> jo.put(OutputField.ACTION_PORTS, dck.getAllExposedPorts()));
+        if (balancedNodes.containsKey(fragmentsPerVm.get(vmName))) {
+            jo.put(OutputField.ACTION_LOADBALANCED_BY, vmsPerFragment.get(balancedNodes.get(fragmentsPerVm.get(vmName))).stream().findFirst().orElse(""));
+        } else {
+            docker.ifPresent(dck -> jo.put(OutputField.ACTION_PUBLICPORTS, dck.getAllPubliclyExposedPorts()));
+        }
         ja.add(jo);
     }
 
@@ -1162,6 +1165,7 @@ public class TypeLevelParsingSpace {
         public static final String ACTION_DOCKER = "docker";
         public static final String ACTION_NODE = "node";
         public static final String ACTION_PORTS = "ports";
+        public static final String ACTION_PUBLICPORTS = "publicports";
         public static final String ACTION_SCALABLE = "scalable";
         public static final String ACTION_LOADBALANCED_BY = "balanced_by";
     }

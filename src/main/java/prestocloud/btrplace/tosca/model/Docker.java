@@ -28,10 +28,7 @@ package prestocloud.btrplace.tosca.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -58,6 +55,7 @@ public class Docker {
 
     public static final String EMPTY_STRING = "";
     private static final Pattern registryIdentifier = Pattern.compile("^(\\S+)\\/(\\S+)$");
+    private static final List<String> AUTHORIZED_PUBLICLY_EXPOSED_PORTS = Arrays.asList("80", "443", "8080", "8888", "4433");
 
     public Docker(String fragmentName) {
         this.fragmentName = fragmentName;
@@ -136,7 +134,7 @@ public class Docker {
         if (cmd == null) {
             return EMPTY_STRING;
         } else if (cmd.length() == 0) {
-            return  EMPTY_STRING;
+            return EMPTY_STRING;
         } else {
             return " " + cmd;
         }
@@ -144,6 +142,10 @@ public class Docker {
 
     public String getAllExposedPorts() {
         return this.mappingList.stream().map(dockerNetworkMapping -> dockerNetworkMapping.getPublicPort()).collect(Collectors.joining(";"));
+    }
+
+    public String getAllPubliclyExposedPorts() {
+        return this.mappingList.stream().map(d -> d.getPublicPort()).filter(d -> AUTHORIZED_PUBLICLY_EXPOSED_PORTS.contains(d)).collect(Collectors.joining(";"));
     }
 
 }
