@@ -1,0 +1,567 @@
+tosca_definitions_version: tosca_prestocloud_mapping_1_2
+
+metadata:
+  template_name: Amazon cloud descriptions
+  template_author: ActiveEon
+  template_version: 1.0.0-SNAPSHOT
+
+description: Cloud descriptions for Amazon EC2.
+
+imports:
+  - tosca-normative-types:1.2
+  - resource-descriptions:1.0
+
+dsl_definitions:
+
+  amazon_ca-central-1: &amazon_ca-central-1
+    cloud_name: amazon_public5
+    cloud_type: amazon
+    cloud_region: ca-central-1
+    gps_coordinates: "13V 338569mE 6773905mN"
+
+topology_template:
+
+  node_templates:
+
+    c5_large_ca_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type C5 High-CPU Large (c5.large) in region ca-central-1.
+      properties:
+        name: c5.large
+        type: cloud
+        cloud: *amazon_ca-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c5.large
+            type: cloud
+            cloud: *amazon_ca-central-1
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: 4.0 GB
+            price: 0.093000
+
+    c5_xlarge_ca_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type C5 High-CPU Extra Large (c5.xlarge) in region ca-central-1.
+      properties:
+        name: c5.xlarge
+        type: cloud
+        cloud: *amazon_ca-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c5.xlarge
+            type: cloud
+            cloud: *amazon_ca-central-1
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: 8.0 GB
+            price: 0.186000
+
+    c5_2xlarge_ca_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type C5 High-CPU Double Extra Large (c5.2xlarge) in region ca-central-1.
+      properties:
+        name: c5.2xlarge
+        type: cloud
+        cloud: *amazon_ca-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c5.2xlarge
+            type: cloud
+            cloud: *amazon_ca-central-1
+        host:
+          properties:
+            num_cpus: 8
+            mem_size: 16.0 GB
+            price: 0.372000
+
+    c5_4xlarge_ca_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type C5 High-CPU Quadruple Extra Large (c5.4xlarge) in region ca-central-1.
+      properties:
+        name: c5.4xlarge
+        type: cloud
+        cloud: *amazon_ca-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c5.4xlarge
+            type: cloud
+            cloud: *amazon_ca-central-1
+        host:
+          properties:
+            num_cpus: 16
+            mem_size: 32.0 GB
+            price: 0.744000
+
+    c5_9xlarge_ca_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type C5 High-CPU 9xlarge (c5.9xlarge) in region ca-central-1.
+      properties:
+        name: c5.9xlarge
+        type: cloud
+        cloud: *amazon_ca-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c5.9xlarge
+            type: cloud
+            cloud: *amazon_ca-central-1
+        host:
+          properties:
+            num_cpus: 36
+            mem_size: 72.0 GB
+            price: 1.674000
+
+    c5_18xlarge_ca_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type C5 High-CPU 18xlarge (c5.18xlarge) in region ca-central-1.
+      properties:
+        name: c5.18xlarge
+        type: cloud
+        cloud: *amazon_ca-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c5.18xlarge
+            type: cloud
+            cloud: *amazon_ca-central-1
+        host:
+          properties:
+            num_cpus: 72
+            mem_size: 144.0 GB
+            price: 3.348000
+
+    c4_large_ca_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type C4 High-CPU Large (c4.large) in region ca-central-1.
+      properties:
+        name: c4.large
+        type: cloud
+        cloud: *amazon_ca-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c4.large
+            type: cloud
+            cloud: *amazon_ca-central-1
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: 3.75 GB
+            price: 0.110000
+
+    c4_xlarge_ca_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type C4 High-CPU Extra Large (c4.xlarge) in region ca-central-1.
+      properties:
+        name: c4.xlarge
+        type: cloud
+        cloud: *amazon_ca-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c4.xlarge
+            type: cloud
+            cloud: *amazon_ca-central-1
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: 7.5 GB
+            price: 0.218000
+
+    c4_2xlarge_ca_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type C4 High-CPU Double Extra Large (c4.2xlarge) in region ca-central-1.
+      properties:
+        name: c4.2xlarge
+        type: cloud
+        cloud: *amazon_ca-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c4.2xlarge
+            type: cloud
+            cloud: *amazon_ca-central-1
+        host:
+          properties:
+            num_cpus: 8
+            mem_size: 15.0 GB
+            price: 0.438000
+
+    c4_4xlarge_ca_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type C4 High-CPU Quadruple Extra Large (c4.4xlarge) in region ca-central-1.
+      properties:
+        name: c4.4xlarge
+        type: cloud
+        cloud: *amazon_ca-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c4.4xlarge
+            type: cloud
+            cloud: *amazon_ca-central-1
+        host:
+          properties:
+            num_cpus: 16
+            mem_size: 30.0 GB
+            price: 0.876000
+
+    c4_8xlarge_ca_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type C4 High-CPU Eight Extra Large (c4.8xlarge) in region ca-central-1.
+      properties:
+        name: c4.8xlarge
+        type: cloud
+        cloud: *amazon_ca-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c4.8xlarge
+            type: cloud
+            cloud: *amazon_ca-central-1
+        host:
+          properties:
+            num_cpus: 36
+            mem_size: 60.0 GB
+            price: 1.750000
+
+    r4_large_ca_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type R4 High-Memory Large (r4.large) in region ca-central-1.
+      properties:
+        name: r4.large
+        type: cloud
+        cloud: *amazon_ca-central-1
+      capabilities:
+        resource:
+          properties:
+            name: r4.large
+            type: cloud
+            cloud: *amazon_ca-central-1
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: 15.25 GB
+            price: 0.146000
+
+    r4_xlarge_ca_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type R4 High-Memory Extra Large (r4.xlarge) in region ca-central-1.
+      properties:
+        name: r4.xlarge
+        type: cloud
+        cloud: *amazon_ca-central-1
+      capabilities:
+        resource:
+          properties:
+            name: r4.xlarge
+            type: cloud
+            cloud: *amazon_ca-central-1
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: 30.5 GB
+            price: 0.292000
+
+    r4_2xlarge_ca_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type R4 High-Memory Double Extra Large (r4.2xlarge) in region ca-central-1.
+      properties:
+        name: r4.2xlarge
+        type: cloud
+        cloud: *amazon_ca-central-1
+      capabilities:
+        resource:
+          properties:
+            name: r4.2xlarge
+            type: cloud
+            cloud: *amazon_ca-central-1
+        host:
+          properties:
+            num_cpus: 8
+            mem_size: 61.0 GB
+            price: 0.584000
+
+    r4_4xlarge_ca_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type R4 High-Memory Quadruple Extra Large (r4.4xlarge) in region ca-central-1.
+      properties:
+        name: r4.4xlarge
+        type: cloud
+        cloud: *amazon_ca-central-1
+      capabilities:
+        resource:
+          properties:
+            name: r4.4xlarge
+            type: cloud
+            cloud: *amazon_ca-central-1
+        host:
+          properties:
+            num_cpus: 16
+            mem_size: 122.0 GB
+            price: 1.168000
+
+    r4_8xlarge_ca_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type R4 High-Memory Eight Extra Large (r4.8xlarge) in region ca-central-1.
+      properties:
+        name: r4.8xlarge
+        type: cloud
+        cloud: *amazon_ca-central-1
+      capabilities:
+        resource:
+          properties:
+            name: r4.8xlarge
+            type: cloud
+            cloud: *amazon_ca-central-1
+        host:
+          properties:
+            num_cpus: 32
+            mem_size: 244.0 GB
+            price: 2.336000
+
+    r4_16xlarge_ca_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type R4 High-Memory 16xlarge (r4.16xlarge) in region ca-central-1.
+      properties:
+        name: r4.16xlarge
+        type: cloud
+        cloud: *amazon_ca-central-1
+      capabilities:
+        resource:
+          properties:
+            name: r4.16xlarge
+            type: cloud
+            cloud: *amazon_ca-central-1
+        host:
+          properties:
+            num_cpus: 64
+            mem_size: 488.0 GB
+            price: 4.672000
+
+    d2_xlarge_ca_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type D2 Extra Large (d2.xlarge) in region ca-central-1.
+      properties:
+        name: d2.xlarge
+        type: cloud
+        cloud: *amazon_ca-central-1
+      capabilities:
+        resource:
+          properties:
+            name: d2.xlarge
+            type: cloud
+            cloud: *amazon_ca-central-1
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: 30.5 GB
+            disk_size: 6000 GB
+            price: 0.759000
+
+    d2_2xlarge_ca_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type D2 Double Extra Large (d2.2xlarge) in region ca-central-1.
+      properties:
+        name: d2.2xlarge
+        type: cloud
+        cloud: *amazon_ca-central-1
+      capabilities:
+        resource:
+          properties:
+            name: d2.2xlarge
+            type: cloud
+            cloud: *amazon_ca-central-1
+        host:
+          properties:
+            num_cpus: 8
+            mem_size: 61.0 GB
+            disk_size: 12000 GB
+            price: 1.518000
+
+    d2_4xlarge_ca_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type D2 Quadruple Extra Large (d2.4xlarge) in region ca-central-1.
+      properties:
+        name: d2.4xlarge
+        type: cloud
+        cloud: *amazon_ca-central-1
+      capabilities:
+        resource:
+          properties:
+            name: d2.4xlarge
+            type: cloud
+            cloud: *amazon_ca-central-1
+        host:
+          properties:
+            num_cpus: 16
+            mem_size: 122.0 GB
+            disk_size: 24000 GB
+            price: 3.036000
+
+    d2_8xlarge_ca_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type D2 Eight Extra Large (d2.8xlarge) in region ca-central-1.
+      properties:
+        name: d2.8xlarge
+        type: cloud
+        cloud: *amazon_ca-central-1
+      capabilities:
+        resource:
+          properties:
+            name: d2.8xlarge
+            type: cloud
+            cloud: *amazon_ca-central-1
+        host:
+          properties:
+            num_cpus: 36
+            mem_size: 244.0 GB
+            disk_size: 48000 GB
+            price: 6.072000
+
+    x1_16xlarge_ca_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type X1 Extra High-Memory 16xlarge (x1.16xlarge) in region ca-central-1.
+      properties:
+        name: x1.16xlarge
+        type: cloud
+        cloud: *amazon_ca-central-1
+      capabilities:
+        resource:
+          properties:
+            name: x1.16xlarge
+            type: cloud
+            cloud: *amazon_ca-central-1
+        host:
+          properties:
+            num_cpus: 64
+            mem_size: 976.0 GB
+            disk_size: 1920 GB
+            price: 7.336000
+
+    x1_32xlarge_ca_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type X1 Extra High-Memory 32xlarge (x1.32xlarge) in region ca-central-1.
+      properties:
+        name: x1.32xlarge
+        type: cloud
+        cloud: *amazon_ca-central-1
+      capabilities:
+        resource:
+          properties:
+            name: x1.32xlarge
+            type: cloud
+            cloud: *amazon_ca-central-1
+        host:
+          properties:
+            num_cpus: 128
+            mem_size: 1952.0 GB
+            disk_size: 3840 GB
+            price: 14.672000
+
+    i3_large_ca_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type I3 High I/O Large (i3.large) in region ca-central-1.
+      properties:
+        name: i3.large
+        type: cloud
+        cloud: *amazon_ca-central-1
+      capabilities:
+        resource:
+          properties:
+            name: i3.large
+            type: cloud
+            cloud: *amazon_ca-central-1
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: 15.25 GB
+            disk_size: 475 GB
+            price: 0.172000
+
+    i3_xlarge_ca_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type I3 High I/O Extra Large (i3.xlarge) in region ca-central-1.
+      properties:
+        name: i3.xlarge
+        type: cloud
+        cloud: *amazon_ca-central-1
+      capabilities:
+        resource:
+          properties:
+            name: i3.xlarge
+            type: cloud
+            cloud: *amazon_ca-central-1
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: 30.5 GB
+            disk_size: 950 GB
+            price: 0.344000
+
+    i3_2xlarge_ca_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type I3 High I/O Double Extra Large (i3.2xlarge) in region ca-central-1.
+      properties:
+        name: i3.2xlarge
+        type: cloud
+        cloud: *amazon_ca-central-1
+      capabilities:
+        resource:
+          properties:
+            name: i3.2xlarge
+            type: cloud
+            cloud: *amazon_ca-central-1
+        host:
+          properties:
+            num_cpus: 8
+            mem_size: 61.0 GB
+            disk_size: 1900 GB
+            price: 0.688000
+
+    i3_4xlarge_ca_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type I3 High I/O Quadruple Extra Large (i3.4xlarge) in region ca-central-1.
+      properties:
+        name: i3.4xlarge
+        type: cloud
+        cloud: *amazon_ca-central-1
+      capabilities:
+        resource:
+          properties:
+            name: i3.4xlarge
+            type: cloud
+            cloud: *amazon_ca-central-1
+        host:
+          properties:
+            num_cpus: 16
+            mem_size: 122.0 GB
+            disk_size: 3800 GB
+            price: 1.376000
+
+    i3_8xlarge_ca_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type I3 High I/O Eight Extra Large (i3.8xlarge) in region ca-central-1.
+      properties:
+        name: i3.8xlarge
+        type: cloud
+        cloud: *amazon_ca-central-1
+      capabilities:
+        resource:
+          properties:
+            name: i3.8xlarge
+            type: cloud
+            cloud: *amazon_ca-central-1
+        host:
+          properties:
+            num_cpus: 32
+            mem_size: 244.0 GB
+            disk_size: 7600 GB
+            price: 2.752000

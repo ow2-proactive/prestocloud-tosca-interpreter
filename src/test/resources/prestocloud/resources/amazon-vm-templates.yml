@@ -66,6 +66,13 @@ dsl_definitions:
     cloud_type: amazon
     cloud_region: eu-west-3
     gps_coordinates: "30U 699327mE 5710155mN"
+
+  amazon_ap-northeast-1: &amazon_ap-northeast-1
+    cloud_name: amazon_public7
+    cloud_type: amazon
+    cloud_region: ap-northeast-1
+    gps_coordinates: "39S 346638mE 3950406mN"
+
 topology_template:
 
   node_templates:
@@ -13638,3 +13645,1543 @@ topology_template:
             mem_size: 244.0 GB
             disk_size: 7600 GB
             price: 2.896000
+
+    t3_nano_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type t3.nano in region ap-northeast-1.
+      properties:
+        name: t3.nano
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: t3.nano
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: "0.5 GB"
+            disk_size: 7600 GB
+            price: 0.0068
+
+    t3_micro_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type t3.micro in region ap-northeast-1.
+      properties:
+        name: t3.micro
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: t3.micro
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: "1 GB"
+            disk_size: 7600 GB
+            price: 0.0136
+
+    t3_small_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type t3.small in region ap-northeast-1.
+      properties:
+        name: t3.small
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: t3.small
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: "2 GB"
+            disk_size: 7600 GB
+            price: 0.0272
+
+    t3_medium_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type t3.medium in region ap-northeast-1.
+      properties:
+        name: t3.medium
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: t3.medium
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: "4 GB"
+            disk_size: 7600 GB
+            price: 0.0544
+
+    t3_large_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type t3.large in region ap-northeast-1.
+      properties:
+        name: t3.large
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: t3.large
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: "8 GB"
+            disk_size: 7600 GB
+            price: 0.1088
+
+    t3_xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type t3.xlarge in region ap-northeast-1.
+      properties:
+        name: t3.xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: t3.xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: "16 GB"
+            disk_size: 7600 GB
+            price: 0.2176
+
+    t3_2xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type t3.2xlarge in region ap-northeast-1.
+      properties:
+        name: t3.2xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: t3.2xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 8
+            mem_size: "32 GB"
+            disk_size: 7600 GB
+            price: 0.4352
+
+    t3a_nano_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type t3a.nano in region ap-northeast-1.
+      properties:
+        name: t3a.nano
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: t3a.nano
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: "0.5 GB"
+            disk_size: 7600 GB
+            price: 0.0061
+
+    t3a_micro_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type t3a.micro in region ap-northeast-1.
+      properties:
+        name: t3a.micro
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: t3a.micro
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: "1 GB"
+            disk_size: 7600 GB
+            price: 0.0122
+
+    t3a_small_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type t3a.small in region ap-northeast-1.
+      properties:
+        name: t3a.small
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: t3a.small
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: "2 GB"
+            disk_size: 7600 GB
+            price: 0.0245
+
+    t3a_medium_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type t3a.medium in region ap-northeast-1.
+      properties:
+        name: t3a.medium
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: t3a.medium
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: "4 GB"
+            disk_size: 7600 GB
+            price: 0.049
+
+    t3a_large_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type t3a.large in region ap-northeast-1.
+      properties:
+        name: t3a.large
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: t3a.large
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: "8 GB"
+            disk_size: 7600 GB
+            price: 0.0979
+
+    t3a_xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type t3a.xlarge in region ap-northeast-1.
+      properties:
+        name: t3a.xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: t3a.xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: "16 GB"
+            disk_size: 7600 GB
+            price: 0.1958
+
+    t3a_2xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type t3a.2xlarge in region ap-northeast-1.
+      properties:
+        name: t3a.2xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: t3a.2xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 8
+            mem_size: "32 GB"
+            disk_size: 7600 GB
+            price: 0.3917
+
+    t2_nano_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type t2.nano in region ap-northeast-1.
+      properties:
+        name: t2.nano
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: t2.nano
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 1
+            mem_size: "0.5 GB"
+            disk_size: 7600 GB
+            price: 0.0076
+
+    t2_micro_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type t2.micro in region ap-northeast-1.
+      properties:
+        name: t2.micro
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: t2.micro
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 1
+            mem_size: "1 GB"
+            disk_size: 7600 GB
+            price: 0.0152
+
+    t2_small_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type t2.small in region ap-northeast-1.
+      properties:
+        name: t2.small
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: t2.small
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 1
+            mem_size: "2 GB"
+            disk_size: 7600 GB
+            price: 0.0304
+
+    t2_medium_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type t2.medium in region ap-northeast-1.
+      properties:
+        name: t2.medium
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: t2.medium
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: "4 GB"
+            disk_size: 7600 GB
+            price: 0.0608
+
+    t2_large_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type t2.large in region ap-northeast-1.
+      properties:
+        name: t2.large
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: t2.large
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: "8 GB"
+            disk_size: 7600 GB
+            price: 0.1216
+
+    t2_xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type t2.xlarge in region ap-northeast-1.
+      properties:
+        name: t2.xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: t2.xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: "16 GB"
+            disk_size: 7600 GB
+            price: 0.2432
+
+    t2_2xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type t2.2xlarge in region ap-northeast-1.
+      properties:
+        name: t2.2xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: t2.2xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 8
+            mem_size: "32 GB"
+            disk_size: 7600 GB
+            price: 0.4864
+
+    m5_large_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5.large in region ap-northeast-1.
+      properties:
+        name: m5.large
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5.large
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: "8 GB"
+            disk_size: 7600 GB
+            price: 0.124
+
+    m5_xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5.xlarge in region ap-northeast-1.
+      properties:
+        name: m5.xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5.xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: "16 GB"
+            disk_size: 7600 GB
+            price: 0.248
+
+    m5_2xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5.2xlarge in region ap-northeast-1.
+      properties:
+        name: m5.2xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5.2xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 8
+            mem_size: "32 GB"
+            disk_size: 7600 GB
+            price: 0.496
+
+    m5_4xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5.4xlarge in region ap-northeast-1.
+      properties:
+        name: m5.4xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5.4xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 16
+            mem_size: "64 GB"
+            disk_size: 7600 GB
+            price: 0.992
+
+    m5_8xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5.8xlarge in region ap-northeast-1.
+      properties:
+        name: m5.8xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5.8xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 32
+            mem_size: "128 GB"
+            disk_size: 7600 GB
+            price: 1.984
+
+    m5_12xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5.12xlarge in region ap-northeast-1.
+      properties:
+        name: m5.12xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5.12xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 48
+            mem_size: "192 GB"
+            disk_size: 7600 GB
+            price: 2.976
+
+    m5_16xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5.16xlarge in region ap-northeast-1.
+      properties:
+        name: m5.16xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5.16xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 64
+            mem_size: "256 GB"
+            disk_size: 7600 GB
+            price: 3.968
+
+    m5_24xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5.24xlarge in region ap-northeast-1.
+      properties:
+        name: m5.24xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5.24xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 96
+            mem_size: "384 GB"
+            disk_size: 7600 GB
+            price: 5.952
+
+    m5_metal_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5.metal in region ap-northeast-1.
+      properties:
+        name: m5.metal
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5.metal
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 96
+            mem_size: "384 GB"
+            disk_size: 7600 GB
+            price: 5.952
+
+    m5a_large_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5a.large in region ap-northeast-1.
+      properties:
+        name: m5a.large
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5a.large
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: "8 GB"
+            disk_size: 7600 GB
+            price: 0.112
+
+    m5a_xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5a.xlarge in region ap-northeast-1.
+      properties:
+        name: m5a.xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5a.xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: "16 GB"
+            disk_size: 7600 GB
+            price: 0.224
+
+    m5a_2xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5a.2xlarge in region ap-northeast-1.
+      properties:
+        name: m5a.2xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5a.2xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 8
+            mem_size: "32 GB"
+            disk_size: 7600 GB
+            price: 0.448
+
+    m5a_4xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5a.4xlarge in region ap-northeast-1.
+      properties:
+        name: m5a.4xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5a.4xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 16
+            mem_size: "64 GB"
+            disk_size: 7600 GB
+            price: 0.896
+
+    m5a_8xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5a.8xlarge in region ap-northeast-1.
+      properties:
+        name: m5a.8xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5a.8xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 32
+            mem_size: "128 GB"
+            disk_size: 7600 GB
+            price: 1.792
+
+    m5a_12xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5a.12xlarge in region ap-northeast-1.
+      properties:
+        name: m5a.12xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5a.12xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 48
+            mem_size: "192 GB"
+            disk_size: 7600 GB
+            price: 2.688
+
+    m5a_16xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5a.16xlarge in region ap-northeast-1.
+      properties:
+        name: m5a.16xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5a.16xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 64
+            mem_size: "256 GB"
+            disk_size: 7600 GB
+            price: 3.584
+
+    m5a_24xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5a.24xlarge in region ap-northeast-1.
+      properties:
+        name: m5a.24xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5a.24xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 96
+            mem_size: "384 GB"
+            disk_size: 7600 GB
+            price: 5.376
+
+    m5ad_large_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5ad.large in region ap-northeast-1.
+      properties:
+        name: m5ad.large
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5ad.large
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: "8 GB"
+            disk_size: 7600 GB
+            price: 0.134
+
+    m5ad_xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5ad.xlarge in region ap-northeast-1.
+      properties:
+        name: m5ad.xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5ad.xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: "16 GB"
+            disk_size: 7600 GB
+            price: 0.268
+
+    m5ad_2xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5ad.2xlarge in region ap-northeast-1.
+      properties:
+        name: m5ad.2xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5ad.2xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 8
+            mem_size: "32 GB"
+            disk_size: 7600 GB
+            price: 0.536
+
+    m5ad_4xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5ad.4xlarge in region ap-northeast-1.
+      properties:
+        name: m5ad.4xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5ad.4xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 16
+            mem_size: "64 GB"
+            disk_size: 7600 GB
+            price: 1.072
+
+    m5ad_8xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5ad.8xlarge in region ap-northeast-1.
+      properties:
+        name: m5ad.8xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5ad.8xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 32
+            mem_size: "128 GB"
+            disk_size: 7600 GB
+            price: 2.144
+
+    m5ad_12xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5ad.12xlarge in region ap-northeast-1.
+      properties:
+        name: m5ad.12xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5ad.12xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 48
+            mem_size: "192 GB"
+            disk_size: 7600 GB
+            price: 3.216
+
+    m5ad_16xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5ad.16xlarge in region ap-northeast-1.
+      properties:
+        name: m5ad.16xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5ad.16xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 64
+            mem_size: "256 GB"
+            disk_size: 7600 GB
+            price: 4.288
+
+    m5ad_24xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5ad.24xlarge in region ap-northeast-1.
+      properties:
+        name: m5ad.24xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5ad.24xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 96
+            mem_size: "384 GB"
+            disk_size: 7600 GB
+            price: 6.432
+
+    m5d_large_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5d.large in region ap-northeast-1.
+      properties:
+        name: m5d.large
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5d.large
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: "8 GB"
+            disk_size: 7600 GB
+            price: 0.146
+
+    m5d_xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5d.xlarge in region ap-northeast-1.
+      properties:
+        name: m5d.xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5d.xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: "16 GB"
+            disk_size: 7600 GB
+            price: 0.292
+
+    m5d_2xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5d.2xlarge in region ap-northeast-1.
+      properties:
+        name: m5d.2xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5d.2xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 8
+            mem_size: "32 GB"
+            disk_size: 7600 GB
+            price: 0.584
+
+    m5d_4xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5d.4xlarge in region ap-northeast-1.
+      properties:
+        name: m5d.4xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5d.4xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 16
+            mem_size: "64 GB"
+            disk_size: 7600 GB
+            price: 1.168
+
+    m5d_8xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5d.8xlarge in region ap-northeast-1.
+      properties:
+        name: m5d.8xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5d.8xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 32
+            mem_size: "128 GB"
+            disk_size: 7600 GB
+            price: 2.336
+
+    m5d_12xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5d.12xlarge in region ap-northeast-1.
+      properties:
+        name: m5d.12xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5d.12xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 48
+            mem_size: "192 GB"
+            disk_size: 7600 GB
+            price: 3.504
+
+    m5d_16xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5d.16xlarge in region ap-northeast-1.
+      properties:
+        name: m5d.16xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5d.16xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 64
+            mem_size: "256 GB"
+            disk_size: 7600 GB
+            price: 4.672
+
+    m5d_24xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5d.24xlarge in region ap-northeast-1.
+      properties:
+        name: m5d.24xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5d.24xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 96
+            mem_size: "384 GB"
+            disk_size: 7600 GB
+            price: 7.008
+
+    m5d_metal_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5d.metal in region ap-northeast-1.
+      properties:
+        name: m5d.metal
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5d.metal
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 96
+            mem_size: "384 GB"
+            disk_size: 7600 GB
+            price: 7.008
+
+    m5dn_large_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5dn.large in region ap-northeast-1.
+      properties:
+        name: m5dn.large
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5dn.large
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: "8 GB"
+            disk_size: 7600 GB
+            price: 0.175
+
+    m5dn_xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5dn.xlarge in region ap-northeast-1.
+      properties:
+        name: m5dn.xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5dn.xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: "16 GB"
+            disk_size: 7600 GB
+            price: 0.35
+
+    m5dn_2xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5dn.2xlarge in region ap-northeast-1.
+      properties:
+        name: m5dn.2xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5dn.2xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 8
+            mem_size: "32 GB"
+            disk_size: 7600 GB
+            price: 0.7
+
+    m5dn_4xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5dn.4xlarge in region ap-northeast-1.
+      properties:
+        name: m5dn.4xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5dn.4xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 16
+            mem_size: "64 GB"
+            disk_size: 7600 GB
+            price: 1.4
+
+    m5dn_8xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5dn.8xlarge in region ap-northeast-1.
+      properties:
+        name: m5dn.8xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5dn.8xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 32
+            mem_size: "128 GB"
+            disk_size: 7600 GB
+            price: 2.8
+
+    m5dn_12xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5dn.12xlarge in region ap-northeast-1.
+      properties:
+        name: m5dn.12xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5dn.12xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 48
+            mem_size: "192 GB"
+            disk_size: 7600 GB
+            price: 4.2
+
+    m5dn_16xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5dn.16xlarge in region ap-northeast-1.
+      properties:
+        name: m5dn.16xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5dn.16xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 64
+            mem_size: "256 GB"
+            disk_size: 7600 GB
+            price: 5.6
+
+    m5dn_24xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5dn.24xlarge in region ap-northeast-1.
+      properties:
+        name: m5dn.24xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5dn.24xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 96
+            mem_size: "384 GB"
+            disk_size: 7600 GB
+            price: 8.4
+
+    m5n_large_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5n.large in region ap-northeast-1.
+      properties:
+        name: m5n.large
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5n.large
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: "8 GB"
+            disk_size: 7600 GB
+            price: 0.153
+
+    m5n_xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5n.xlarge in region ap-northeast-1.
+      properties:
+        name: m5n.xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5n.xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: "16 GB"
+            disk_size: 7600 GB
+            price: 0.306
+
+    m5n_2xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5n.2xlarge in region ap-northeast-1.
+      properties:
+        name: m5n.2xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5n.2xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 8
+            mem_size: "32 GB"
+            disk_size: 7600 GB
+            price: 0.612
+
+    m5n_4xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5n.4xlarge in region ap-northeast-1.
+      properties:
+        name: m5n.4xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5n.4xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 16
+            mem_size: "64 GB"
+            disk_size: 7600 GB
+            price: 1.224
+
+    m5n_8xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5n.8xlarge in region ap-northeast-1.
+      properties:
+        name: m5n.8xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5n.8xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 32
+            mem_size: "128 GB"
+            disk_size: 7600 GB
+            price: 2.448
+
+    m5n_12xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5n.12xlarge in region ap-northeast-1.
+      properties:
+        name: m5n.12xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5n.12xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 48
+            mem_size: "192 GB"
+            disk_size: 7600 GB
+            price: 3.672
+
+    m5n_16xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5n.16xlarge in region ap-northeast-1.
+      properties:
+        name: m5n.16xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5n.16xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 64
+            mem_size: "256 GB"
+            disk_size: 7600 GB
+            price: 4.896
+
+    m5n_24xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m5n.24xlarge in region ap-northeast-1.
+      properties:
+        name: m5n.24xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m5n.24xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 96
+            mem_size: "384 GB"
+            disk_size: 7600 GB
+            price: 7.344
+
+    m4_large_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m4.large in region ap-northeast-1.
+      properties:
+        name: m4.large
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m4.large
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: "8 GB"
+            disk_size: 7600 GB
+            price: 0.129
+
+    m4_xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m4.xlarge in region ap-northeast-1.
+      properties:
+        name: m4.xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m4.xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: "16 GB"
+            disk_size: 7600 GB
+            price: 0.258
+
+    m4_2xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m4.2xlarge in region ap-northeast-1.
+      properties:
+        name: m4.2xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m4.2xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 8
+            mem_size: "32 GB"
+            disk_size: 7600 GB
+            price: 0.516
+
+    m4_4xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m4.4xlarge in region ap-northeast-1.
+      properties:
+        name: m4.4xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m4.4xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 16
+            mem_size: "64 GB"
+            disk_size: 7600 GB
+            price: 1.032
+
+    m4_10xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m4.10xlarge in region ap-northeast-1.
+      properties:
+        name: m4.10xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m4.10xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 40
+            mem_size: "160 GB"
+            disk_size: 7600 GB
+            price: 2.58
+
+    m4_16xlarge_ap_north_east_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type m4.16xlarge in region ap-northeast-1.
+      properties:
+        name: m4.16xlarge
+        type: cloud
+        cloud: *amazon_ap-northeast-1
+      capabilities:
+        resource:
+          properties:
+            name: m4.16xlarge
+            type: cloud
+            cloud: *amazon_ap-northeast-1
+        host:
+          properties:
+            num_cpus: 64
+            mem_size: "256 GB"
+            disk_size: 7600 GB
+            price: 4.128

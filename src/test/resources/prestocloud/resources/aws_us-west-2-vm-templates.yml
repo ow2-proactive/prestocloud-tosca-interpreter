@@ -1,0 +1,1999 @@
+tosca_definitions_version: tosca_prestocloud_mapping_1_2
+
+metadata:
+  template_name: Amazon cloud descriptions
+  template_author: ActiveEon
+  template_version: 1.0.0-SNAPSHOT
+
+description: Cloud descriptions for Amazon EC2.
+
+imports:
+  - tosca-normative-types:1.2
+  - resource-descriptions:1.0
+
+dsl_definitions:
+
+  amazon_us-west-2: &amazon_us-west-2
+    cloud_name: amazon_public4
+    cloud_type: amazon
+    cloud_region: us-west-2
+    gps_coordinates: "10T 681478mE 4872060mN"
+
+
+topology_template:
+
+  node_templates:
+
+    m1_small_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type M1 General Purpose Small (m1.small) in region us-west-2.
+      properties:
+        name: m1.small
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: m1.small
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 1
+            mem_size: 1.7 GB
+            disk_size: 160 GB
+            price: 0.044000
+
+    m1_medium_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type M1 General Purpose Medium (m1.medium) in region us-west-2.
+      properties:
+        name: m1.medium
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: m1.medium
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 1
+            mem_size: 3.75 GB
+            disk_size: 410 GB
+            price: 0.087000
+
+    m1_large_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type M1 General Purpose Large (m1.large) in region us-west-2.
+      properties:
+        name: m1.large
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: m1.large
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: 7.5 GB
+            disk_size: 840 GB
+            price: 0.175000
+
+    m1_xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type M1 General Purpose Extra Large (m1.xlarge) in region us-west-2.
+      properties:
+        name: m1.xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: m1.xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: 15.0 GB
+            disk_size: 1680 GB
+            price: 0.350000
+
+    c1_medium_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type C1 High-CPU Medium (c1.medium) in region us-west-2.
+      properties:
+        name: c1.medium
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: c1.medium
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: 1.7 GB
+            disk_size: 350 GB
+            price: 0.130000
+
+    c1_xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type C1 High-CPU Extra Large (c1.xlarge) in region us-west-2.
+      properties:
+        name: c1.xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: c1.xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 8
+            mem_size: 7.0 GB
+            disk_size: 1680 GB
+            price: 0.520000
+
+    cc2_8xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type Cluster Compute Eight Extra Large (cc2.8xlarge) in region us-west-2.
+      properties:
+        name: cc2.8xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: cc2.8xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 32
+            mem_size: 60.5 GB
+            disk_size: 3360 GB
+            price: 2.000000
+
+    m2_xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type M2 High Memory Extra Large (m2.xlarge) in region us-west-2.
+      properties:
+        name: m2.xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: m2.xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: 17.1 GB
+            disk_size: 420 GB
+            price: 0.245000
+
+    m2_2xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type M2 High Memory Double Extra Large (m2.2xlarge) in region us-west-2.
+      properties:
+        name: m2.2xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: m2.2xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: 34.2 GB
+            disk_size: 850 GB
+            price: 0.490000
+
+    m2_4xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type M2 High Memory Quadruple Extra Large (m2.4xlarge) in region us-west-2.
+      properties:
+        name: m2.4xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: m2.4xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 8
+            mem_size: 68.4 GB
+            disk_size: 1680 GB
+            price: 0.980000
+
+    hs1_8xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type High Storage Eight Extra Large (hs1.8xlarge) in region us-west-2.
+      properties:
+        name: hs1.8xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: hs1.8xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 16
+            mem_size: 117.0 GB
+            disk_size: 48000 GB
+            price: 4.600000
+
+    t1_micro_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type T1 Micro (t1.micro) in region us-west-2.
+      properties:
+        name: t1.micro
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: t1.micro
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 1
+            mem_size: 0.613 GB
+            price: 0.020000
+
+    t2_nano_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type T2 Nano (t2.nano) in region us-west-2.
+      properties:
+        name: t2.nano
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: t2.nano
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 1
+            mem_size: 0.5 GB
+            price: 0.005800
+
+    t2_micro_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type T2 Micro (t2.micro) in region us-west-2.
+      properties:
+        name: t2.micro
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: t2.micro
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 1
+            mem_size: 1.0 GB
+            price: 0.011600
+
+    t2_small_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type T2 Small (t2.small) in region us-west-2.
+      properties:
+        name: t2.small
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: t2.small
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 1
+            mem_size: 2.0 GB
+            price: 0.023000
+
+    t2_medium_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type T2 Medium (t2.medium) in region us-west-2.
+      properties:
+        name: t2.medium
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: t2.medium
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: 4.0 GB
+            price: 0.046400
+
+    t2_large_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type T2 Large (t2.large) in region us-west-2.
+      properties:
+        name: t2.large
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: t2.large
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: 8.0 GB
+            price: 0.092800
+
+    t2_xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type T2 Extra Large (t2.xlarge) in region us-west-2.
+      properties:
+        name: t2.xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: t2.xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: 16.0 GB
+            price: 0.185600
+
+    t2_2xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type T2 Double Extra Large (t2.2xlarge) in region us-west-2.
+      properties:
+        name: t2.2xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: t2.2xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 8
+            mem_size: 32.0 GB
+            price: 0.371200
+
+    m5_large_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type M5 General Purpose Large (m5.large) in region us-west-2.
+      properties:
+        name: m5.large
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: m5.large
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: 8.0 GB
+            price: 0.096000
+
+    m5_xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type M5 General Purpose Extra Large (m5.xlarge) in region us-west-2.
+      properties:
+        name: m5.xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: m5.xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: 16.0 GB
+            price: 0.192000
+
+    m5_2xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type M5 General Purpose Double Extra Large (m5.2xlarge) in region us-west-2.
+      properties:
+        name: m5.2xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: m5.2xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 8
+            mem_size: 32.0 GB
+            price: 0.384000
+
+    m5_4xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type M5 General Purpose Quadruple Extra Large (m5.4xlarge) in region us-west-2.
+      properties:
+        name: m5.4xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: m5.4xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 16
+            mem_size: 64.0 GB
+            price: 0.768000
+
+    m5_12xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type M5 General Purpose 12xlarge (m5.12xlarge) in region us-west-2.
+      properties:
+        name: m5.12xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: m5.12xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 48
+            mem_size: 192.0 GB
+            price: 2.304000
+
+    m5_24xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type M5 General Purpose 24xlarge (m5.24xlarge) in region us-west-2.
+      properties:
+        name: m5.24xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: m5.24xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 96
+            mem_size: 384.0 GB
+            price: 4.608000
+
+    m4_large_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type M4 General Purpose Large (m4.large) in region us-west-2.
+      properties:
+        name: m4.large
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: m4.large
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: 8.0 GB
+            price: 0.100000
+
+    m4_xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type M4 General Purpose Extra Large (m4.xlarge) in region us-west-2.
+      properties:
+        name: m4.xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: m4.xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: 16.0 GB
+            price: 0.200000
+
+    m4_2xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type M4 General Purpose Double Extra Large (m4.2xlarge) in region us-west-2.
+      properties:
+        name: m4.2xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: m4.2xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 8
+            mem_size: 32.0 GB
+            price: 0.400000
+
+    m4_4xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type M4 General Purpose Quadruple Extra Large (m4.4xlarge) in region us-west-2.
+      properties:
+        name: m4.4xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: m4.4xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 16
+            mem_size: 64.0 GB
+            price: 0.800000
+
+    m4_10xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type M4 General Purpose Deca Extra Large (m4.10xlarge) in region us-west-2.
+      properties:
+        name: m4.10xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: m4.10xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 40
+            mem_size: 160.0 GB
+            price: 2.000000
+
+    m4_16xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type M4 General Purpose 16xlarge (m4.16xlarge) in region us-west-2.
+      properties:
+        name: m4.16xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: m4.16xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 64
+            mem_size: 256.0 GB
+            price: 3.200000
+
+    c5_large_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type C5 High-CPU Large (c5.large) in region us-west-2.
+      properties:
+        name: c5.large
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: c5.large
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: 4.0 GB
+            price: 0.085000
+
+    c5_xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type C5 High-CPU Extra Large (c5.xlarge) in region us-west-2.
+      properties:
+        name: c5.xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: c5.xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: 8.0 GB
+            price: 0.170000
+
+    c5_2xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type C5 High-CPU Double Extra Large (c5.2xlarge) in region us-west-2.
+      properties:
+        name: c5.2xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: c5.2xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 8
+            mem_size: 16.0 GB
+            price: 0.340000
+
+    c5_4xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type C5 High-CPU Quadruple Extra Large (c5.4xlarge) in region us-west-2.
+      properties:
+        name: c5.4xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: c5.4xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 16
+            mem_size: 32.0 GB
+            price: 0.680000
+
+    c5_9xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type C5 High-CPU 9xlarge (c5.9xlarge) in region us-west-2.
+      properties:
+        name: c5.9xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: c5.9xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 36
+            mem_size: 72.0 GB
+            price: 1.530000
+
+    c5_18xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type C5 High-CPU 18xlarge (c5.18xlarge) in region us-west-2.
+      properties:
+        name: c5.18xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: c5.18xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 72
+            mem_size: 144.0 GB
+            price: 3.060000
+
+    c4_large_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type C4 High-CPU Large (c4.large) in region us-west-2.
+      properties:
+        name: c4.large
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: c4.large
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: 3.75 GB
+            price: 0.100000
+
+    c4_xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type C4 High-CPU Extra Large (c4.xlarge) in region us-west-2.
+      properties:
+        name: c4.xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: c4.xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: 7.5 GB
+            price: 0.199000
+
+    c4_2xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type C4 High-CPU Double Extra Large (c4.2xlarge) in region us-west-2.
+      properties:
+        name: c4.2xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: c4.2xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 8
+            mem_size: 15.0 GB
+            price: 0.398000
+
+    c4_4xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type C4 High-CPU Quadruple Extra Large (c4.4xlarge) in region us-west-2.
+      properties:
+        name: c4.4xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: c4.4xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 16
+            mem_size: 30.0 GB
+            price: 0.796000
+
+    c4_8xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type C4 High-CPU Eight Extra Large (c4.8xlarge) in region us-west-2.
+      properties:
+        name: c4.8xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: c4.8xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 36
+            mem_size: 60.0 GB
+            price: 1.591000
+
+    r4_large_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type R4 High-Memory Large (r4.large) in region us-west-2.
+      properties:
+        name: r4.large
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: r4.large
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: 15.25 GB
+            price: 0.133000
+
+    r4_xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type R4 High-Memory Extra Large (r4.xlarge) in region us-west-2.
+      properties:
+        name: r4.xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: r4.xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: 30.5 GB
+            price: 0.266000
+
+    r4_2xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type R4 High-Memory Double Extra Large (r4.2xlarge) in region us-west-2.
+      properties:
+        name: r4.2xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: r4.2xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 8
+            mem_size: 61.0 GB
+            price: 0.532000
+
+    r4_4xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type R4 High-Memory Quadruple Extra Large (r4.4xlarge) in region us-west-2.
+      properties:
+        name: r4.4xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: r4.4xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 16
+            mem_size: 122.0 GB
+            price: 1.064000
+
+    r4_8xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type R4 High-Memory Eight Extra Large (r4.8xlarge) in region us-west-2.
+      properties:
+        name: r4.8xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: r4.8xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 32
+            mem_size: 244.0 GB
+            price: 2.128000
+
+    r4_16xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type R4 High-Memory 16xlarge (r4.16xlarge) in region us-west-2.
+      properties:
+        name: r4.16xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: r4.16xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 64
+            mem_size: 488.0 GB
+            price: 4.256000
+
+    p3_2xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type P3 Double Extra Large (p3.2xlarge) in region us-west-2.
+      properties:
+        name: p3.2xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: p3.2xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 8
+            mem_size: 61.0 GB
+            price: 3.060000
+
+    p3_8xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type P3 Eight Extra Large (p3.8xlarge) in region us-west-2.
+      properties:
+        name: p3.8xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: p3.8xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 32
+            mem_size: 244.0 GB
+            price: 12.240000
+
+    p3_16xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type P3 16xlarge (p3.16xlarge) in region us-west-2.
+      properties:
+        name: p3.16xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: p3.16xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 64
+            mem_size: 488.0 GB
+            price: 24.480000
+
+    p2_xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type General Purpose GPU Extra Large (p2.xlarge) in region us-west-2.
+      properties:
+        name: p2.xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: p2.xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: 61.0 GB
+            price: 0.900000
+
+    p2_8xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type General Purpose GPU Eight Extra Large (p2.8xlarge) in region us-west-2.
+      properties:
+        name: p2.8xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: p2.8xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 32
+            mem_size: 488.0 GB
+            price: 7.200000
+
+    p2_16xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type General Purpose GPU 16xlarge (p2.16xlarge) in region us-west-2.
+      properties:
+        name: p2.16xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: p2.16xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 64
+            mem_size: 732.0 GB
+            price: 14.400000
+
+    g3_4xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type G3 Quadruple Extra Large (g3.4xlarge) in region us-west-2.
+      properties:
+        name: g3.4xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: g3.4xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 16
+            mem_size: 122.0 GB
+            price: 1.140000
+
+    g3_8xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type G3 Eight Extra Large (g3.8xlarge) in region us-west-2.
+      properties:
+        name: g3.8xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: g3.8xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 32
+            mem_size: 244.0 GB
+            price: 2.280000
+
+    g3_16xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type G3 16xlarge (g3.16xlarge) in region us-west-2.
+      properties:
+        name: g3.16xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: g3.16xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 64
+            mem_size: 488.0 GB
+            price: 4.560000
+
+    h1_2xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type H1 Double Extra Large (h1.2xlarge) in region us-west-2.
+      properties:
+        name: h1.2xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: h1.2xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 8
+            mem_size: 32.0 GB
+            disk_size: 2000 GB
+            price: 0.550000
+
+    h1_4xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type H1 Quadruple Extra Large (h1.4xlarge) in region us-west-2.
+      properties:
+        name: h1.4xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: h1.4xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 16
+            mem_size: 64.0 GB
+            disk_size: 4000 GB
+            price: 1.100000
+
+    h1_8xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type H1 Eight Extra Large (h1.8xlarge) in region us-west-2.
+      properties:
+        name: h1.8xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: h1.8xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 32
+            mem_size: 128.0 GB
+            disk_size: 8000 GB
+            price: 2.200000
+
+    h1_16xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type H1 16xlarge (h1.16xlarge) in region us-west-2.
+      properties:
+        name: h1.16xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: h1.16xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 64
+            mem_size: 256.0 GB
+            disk_size: 16000 GB
+            price: 4.400000
+
+    d2_xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type D2 Extra Large (d2.xlarge) in region us-west-2.
+      properties:
+        name: d2.xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: d2.xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: 30.5 GB
+            disk_size: 6000 GB
+            price: 0.690000
+
+    d2_2xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type D2 Double Extra Large (d2.2xlarge) in region us-west-2.
+      properties:
+        name: d2.2xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: d2.2xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 8
+            mem_size: 61.0 GB
+            disk_size: 12000 GB
+            price: 1.380000
+
+    d2_4xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type D2 Quadruple Extra Large (d2.4xlarge) in region us-west-2.
+      properties:
+        name: d2.4xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: d2.4xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 16
+            mem_size: 122.0 GB
+            disk_size: 24000 GB
+            price: 2.760000
+
+    d2_8xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type D2 Eight Extra Large (d2.8xlarge) in region us-west-2.
+      properties:
+        name: d2.8xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: d2.8xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 36
+            mem_size: 244.0 GB
+            disk_size: 48000 GB
+            price: 5.520000
+
+    m3_medium_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type M3 General Purpose Medium (m3.medium) in region us-west-2.
+      properties:
+        name: m3.medium
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: m3.medium
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 1
+            mem_size: 3.75 GB
+            disk_size: 4 GB
+            price: 0.067000
+
+    m3_large_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type M3 General Purpose Large (m3.large) in region us-west-2.
+      properties:
+        name: m3.large
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: m3.large
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: 7.5 GB
+            disk_size: 32 GB
+            price: 0.133000
+
+    m3_xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type M3 General Purpose Extra Large (m3.xlarge) in region us-west-2.
+      properties:
+        name: m3.xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: m3.xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: 15.0 GB
+            disk_size: 80 GB
+            price: 0.266000
+
+    m3_2xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type M3 General Purpose Double Extra Large (m3.2xlarge) in region us-west-2.
+      properties:
+        name: m3.2xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: m3.2xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 8
+            mem_size: 30.0 GB
+            disk_size: 160 GB
+            price: 0.532000
+
+    c3_large_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type C3 High-CPU Large (c3.large) in region us-west-2.
+      properties:
+        name: c3.large
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: c3.large
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: 3.75 GB
+            disk_size: 32 GB
+            price: 0.105000
+
+    c3_xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type C3 High-CPU Extra Large (c3.xlarge) in region us-west-2.
+      properties:
+        name: c3.xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: c3.xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: 7.5 GB
+            disk_size: 80 GB
+            price: 0.210000
+
+    c3_2xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type C3 High-CPU Double Extra Large (c3.2xlarge) in region us-west-2.
+      properties:
+        name: c3.2xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: c3.2xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 8
+            mem_size: 15.0 GB
+            disk_size: 160 GB
+            price: 0.420000
+
+    c3_4xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type C3 High-CPU Quadruple Extra Large (c3.4xlarge) in region us-west-2.
+      properties:
+        name: c3.4xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: c3.4xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 16
+            mem_size: 30.0 GB
+            disk_size: 320 GB
+            price: 0.840000
+
+    c3_8xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type C3 High-CPU Eight Extra Large (c3.8xlarge) in region us-west-2.
+      properties:
+        name: c3.8xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: c3.8xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 32
+            mem_size: 60.0 GB
+            disk_size: 640 GB
+            price: 1.680000
+
+    g2_2xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type G2 Double Extra Large (g2.2xlarge) in region us-west-2.
+      properties:
+        name: g2.2xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: g2.2xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 8
+            mem_size: 15.0 GB
+            disk_size: 60 GB
+            price: 0.650000
+
+    g2_8xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type G2 Eight Extra Large (g2.8xlarge) in region us-west-2.
+      properties:
+        name: g2.8xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: g2.8xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 32
+            mem_size: 60.0 GB
+            disk_size: 240 GB
+            price: 2.600000
+
+    cr1_8xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type High Memory Cluster Eight Extra Large (cr1.8xlarge) in region us-west-2.
+      properties:
+        name: cr1.8xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: cr1.8xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 32
+            mem_size: 244.0 GB
+            disk_size: 240 GB
+            price: 3.500000
+
+    x1_16xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type X1 Extra High-Memory 16xlarge (x1.16xlarge) in region us-west-2.
+      properties:
+        name: x1.16xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: x1.16xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 64
+            mem_size: 976.0 GB
+            disk_size: 1920 GB
+            price: 6.669000
+
+    x1_32xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type X1 Extra High-Memory 32xlarge (x1.32xlarge) in region us-west-2.
+      properties:
+        name: x1.32xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: x1.32xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 128
+            mem_size: 1952.0 GB
+            disk_size: 3840 GB
+            price: 13.338000
+
+    x1e_xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type X1E Extra Large (x1e.xlarge) in region us-west-2.
+      properties:
+        name: x1e.xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: x1e.xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: 122.0 GB
+            disk_size: 120 GB
+            price: 0.834000
+
+    x1e_2xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type X1E Double Extra Large (x1e.2xlarge) in region us-west-2.
+      properties:
+        name: x1e.2xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: x1e.2xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 8
+            mem_size: 244.0 GB
+            disk_size: 240 GB
+            price: 1.668000
+
+    x1e_4xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type X1E Quadruple Extra Large (x1e.4xlarge) in region us-west-2.
+      properties:
+        name: x1e.4xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: x1e.4xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 16
+            mem_size: 488.0 GB
+            disk_size: 480 GB
+            price: 3.336000
+
+    x1e_8xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type X1E Eight Extra Large (x1e.8xlarge) in region us-west-2.
+      properties:
+        name: x1e.8xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: x1e.8xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 32
+            mem_size: 976.0 GB
+            disk_size: 960 GB
+            price: 6.672000
+
+    x1e_16xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type X1E 16xlarge (x1e.16xlarge) in region us-west-2.
+      properties:
+        name: x1e.16xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: x1e.16xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 64
+            mem_size: 1952.0 GB
+            disk_size: 1920 GB
+            price: 13.344000
+
+    x1e_32xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type X1E 32xlarge (x1e.32xlarge) in region us-west-2.
+      properties:
+        name: x1e.32xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: x1e.32xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 128
+            mem_size: 3904.0 GB
+            disk_size: 3840 GB
+            price: 26.688000
+
+    r3_large_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type R3 High-Memory Large (r3.large) in region us-west-2.
+      properties:
+        name: r3.large
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: r3.large
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: 15.25 GB
+            disk_size: 32 GB
+            price: 0.166000
+
+    r3_xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type R3 High-Memory Extra Large (r3.xlarge) in region us-west-2.
+      properties:
+        name: r3.xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: r3.xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: 30.5 GB
+            disk_size: 80 GB
+            price: 0.333000
+
+    r3_2xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type R3 High-Memory Double Extra Large (r3.2xlarge) in region us-west-2.
+      properties:
+        name: r3.2xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: r3.2xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 8
+            mem_size: 61.0 GB
+            disk_size: 160 GB
+            price: 0.665000
+
+    r3_4xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type R3 High-Memory Quadruple Extra Large (r3.4xlarge) in region us-west-2.
+      properties:
+        name: r3.4xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: r3.4xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 16
+            mem_size: 122.0 GB
+            disk_size: 320 GB
+            price: 1.330000
+
+    r3_8xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type R3 High-Memory Eight Extra Large (r3.8xlarge) in region us-west-2.
+      properties:
+        name: r3.8xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: r3.8xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 32
+            mem_size: 244.0 GB
+            disk_size: 640 GB
+            price: 2.660000
+
+    i2_xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type I2 Extra Large (i2.xlarge) in region us-west-2.
+      properties:
+        name: i2.xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: i2.xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: 30.5 GB
+            disk_size: 800 GB
+            price: 0.853000
+
+    i2_2xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type I2 Double Extra Large (i2.2xlarge) in region us-west-2.
+      properties:
+        name: i2.2xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: i2.2xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 8
+            mem_size: 61.0 GB
+            disk_size: 1600 GB
+            price: 1.705000
+
+    i2_4xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type I2 Quadruple Extra Large (i2.4xlarge) in region us-west-2.
+      properties:
+        name: i2.4xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: i2.4xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 16
+            mem_size: 122.0 GB
+            disk_size: 3200 GB
+            price: 3.410000
+
+    i2_8xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type I2 Eight Extra Large (i2.8xlarge) in region us-west-2.
+      properties:
+        name: i2.8xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: i2.8xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 32
+            mem_size: 244.0 GB
+            disk_size: 6400 GB
+            price: 6.820000
+
+    f1_2xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type F1 Double Extra Large (f1.2xlarge) in region us-west-2.
+      properties:
+        name: f1.2xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: f1.2xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 8
+            mem_size: 122.0 GB
+            disk_size: 470 GB
+            price: 1.650000
+
+    f1_16xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type F1 16xlarge (f1.16xlarge) in region us-west-2.
+      properties:
+        name: f1.16xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: f1.16xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 64
+            mem_size: 976.0 GB
+            disk_size: 3760 GB
+            price: 13.200000
+
+    i3_large_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type I3 High I/O Large (i3.large) in region us-west-2.
+      properties:
+        name: i3.large
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: i3.large
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: 15.25 GB
+            disk_size: 475 GB
+            price: 0.156000
+
+    i3_xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type I3 High I/O Extra Large (i3.xlarge) in region us-west-2.
+      properties:
+        name: i3.xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: i3.xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: 30.5 GB
+            disk_size: 950 GB
+            price: 0.312000
+
+    i3_2xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type I3 High I/O Double Extra Large (i3.2xlarge) in region us-west-2.
+      properties:
+        name: i3.2xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: i3.2xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 8
+            mem_size: 61.0 GB
+            disk_size: 1900 GB
+            price: 0.624000
+
+    i3_4xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type I3 High I/O Quadruple Extra Large (i3.4xlarge) in region us-west-2.
+      properties:
+        name: i3.4xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: i3.4xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 16
+            mem_size: 122.0 GB
+            disk_size: 3800 GB
+            price: 1.248000
+
+    i3_8xlarge_us_west_2:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type I3 High I/O Eight Extra Large (i3.8xlarge) in region us-west-2.
+      properties:
+        name: i3.8xlarge
+        type: cloud
+        cloud: *amazon_us-west-2
+      capabilities:
+        resource:
+          properties:
+            name: i3.8xlarge
+            type: cloud
+            cloud: *amazon_us-west-2
+        host:
+          properties:
+            num_cpus: 32
+            mem_size: 244.0 GB
+            disk_size: 7600 GB
+            price: 2.496000
