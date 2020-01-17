@@ -137,24 +137,24 @@ topology_template:
             mem_size: 16.0 GB
             price: 0.211200
 
-    t2_2xlarge_eu_west_2:
-      type: prestocloud.nodes.compute.cloud.amazon
-      description: PrEstoCloud Amazon compute node of type T2 Double Extra Large (t2.2xlarge) in region eu-west-2.
-      properties:
-        name: t2.2xlarge
-        type: cloud
-        cloud: *amazon_eu-west-2
-      capabilities:
-        resource:
-          properties:
-            name: t2.2xlarge
-            type: cloud
-            cloud: *amazon_eu-west-2
-        host:
-          properties:
-            num_cpus: 8
-            mem_size: 32.0 GB
-            price: 0.422400
+    #    t2_2xlarge_eu_west_2:
+    #      type: prestocloud.nodes.compute.cloud.amazon
+    #      description: PrEstoCloud Amazon compute node of type T2 Double Extra Large (t2.2xlarge) in region eu-west-2.
+    #      properties:
+    #        name: t2.2xlarge
+    #        type: cloud
+    #        cloud: *amazon_eu-west-2
+    #      capabilities:
+    #        resource:
+    #          properties:
+    #            name: t2.2xlarge
+    #            type: cloud
+    #            cloud: *amazon_eu-west-2
+    #        host:
+    #          properties:
+    #            num_cpus: 8
+    #            mem_size: 32.0 GB
+    #            price: 0.422400
 
     m5_large_eu_west_2:
       type: prestocloud.nodes.compute.cloud.amazon

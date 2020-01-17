@@ -137,24 +137,24 @@ topology_template:
             mem_size: 16 GB
             price: 0.1824
 
-    t3_2xlarge_eu_central_1:
-      type: prestocloud.nodes.compute.cloud.amazon
-      description: PrEstoCloud Amazon compute node of type t3.2xlarge in region us-east-1.
-      properties:
-        name: t3.2xlarge
-        type: cloud
-        cloud: *amazon_eu-central-1
-      capabilities:
-        resource:
-          properties:
-            name: t3.2xlarge
-            type: cloud
-            cloud: *amazon_eu-central-1
-        host:
-          properties:
-            num_cpus: 8
-            mem_size: 32 GB
-            price: 0.3648
+    #    t3_2xlarge_eu_central_1:
+    #      type: prestocloud.nodes.compute.cloud.amazon
+    #      description: PrEstoCloud Amazon compute node of type t3.2xlarge in region us-east-1.
+    #      properties:
+    #        name: t3.2xlarge
+    #        type: cloud
+    #        cloud: *amazon_eu-central-1
+    #      capabilities:
+    #        resource:
+    #          properties:
+    #            name: t3.2xlarge
+    #            type: cloud
+    #            cloud: *amazon_eu-central-1
+    #        host:
+    #          properties:
+    #            num_cpus: 8
+    #            mem_size: 32 GB
+    #            price: 0.3648
 
     t3a_nano_eu_central_1:
       type: prestocloud.nodes.compute.cloud.amazon
@@ -270,24 +270,24 @@ topology_template:
             mem_size: 16 GB
             price: 0.1632
 
-    t3a_2xlarge_eu_central_1:
-      type: prestocloud.nodes.compute.cloud.amazon
-      description: PrEstoCloud Amazon compute node of type t3a.2xlarge in region us-east-1.
-      properties:
-        name: t3a.2xlarge
-        type: cloud
-        cloud: *amazon_eu-central-1
-      capabilities:
-        resource:
-          properties:
-            name: t3a.2xlarge
-            type: cloud
-            cloud: *amazon_eu-central-1
-        host:
-          properties:
-            num_cpus: 8
-            mem_size: 32 GB
-            price: 0.3264
+    #    t3a_2xlarge_eu_central_1:
+    #      type: prestocloud.nodes.compute.cloud.amazon
+    #      description: PrEstoCloud Amazon compute node of type t3a.2xlarge in region us-east-1.
+    #      properties:
+    #        name: t3a.2xlarge
+    #        type: cloud
+    #        cloud: *amazon_eu-central-1
+    #      capabilities:
+    #        resource:
+    #          properties:
+    #            name: t3a.2xlarge
+    #            type: cloud
+    #            cloud: *amazon_eu-central-1
+    #        host:
+    #          properties:
+    #            num_cpus: 8
+    #            mem_size: 32 GB
+    #            price: 0.3264
 
     t2_nano_eu_central_1:
       type: prestocloud.nodes.compute.cloud.amazon
@@ -403,24 +403,24 @@ topology_template:
             mem_size: 16 GB
             price: 0.2016
 
-    t2_2xlarge_eu_central_1:
-      type: prestocloud.nodes.compute.cloud.amazon
-      description: PrEstoCloud Amazon compute node of type t2.2xlarge in region us-east-1.
-      properties:
-        name: t2.2xlarge
-        type: cloud
-        cloud: *amazon_eu-central-1
-      capabilities:
-        resource:
-          properties:
-            name: t2.2xlarge
-            type: cloud
-            cloud: *amazon_eu-central-1
-        host:
-          properties:
-            num_cpus: 8
-            mem_size: 32 GB
-            price: 0.4032
+    #    t2_2xlarge_eu_central_1:
+    #      type: prestocloud.nodes.compute.cloud.amazon
+    #      description: PrEstoCloud Amazon compute node of type t2.2xlarge in region us-east-1.
+    #      properties:
+    #        name: t2.2xlarge
+    #        type: cloud
+    #        cloud: *amazon_eu-central-1
+    #      capabilities:
+    #        resource:
+    #          properties:
+    #            name: t2.2xlarge
+    #            type: cloud
+    #            cloud: *amazon_eu-central-1
+    #        host:
+    #          properties:
+    #            num_cpus: 8
+    #            mem_size: 32 GB
+    #            price: 0.4032
 
     m5_large_eu_central_1:
       type: prestocloud.nodes.compute.cloud.amazon
@@ -1485,3 +1485,573 @@ topology_template:
             num_cpus: 64
             mem_size: 256 GB
             price: 3.552
+
+    c5_large_eu_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type c5.large in region eu-central-1.
+      properties:
+        name: c5.large
+        type: cloud
+        cloud: *amazon_eu-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c5.large
+            type: cloud
+            cloud: *amazon_eu-central-1
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: "4 GB"
+            price: 0.097
+
+    c5_xlarge_eu_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type c5.xlarge in region eu-central-1.
+      properties:
+        name: c5.xlarge
+        type: cloud
+        cloud: *amazon_eu-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c5.xlarge
+            type: cloud
+            cloud: *amazon_eu-central-1
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: "8 GB"
+            price: 0.194
+
+    c5_2xlarge_eu_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type c5.2xlarge in region eu-central-1.
+      properties:
+        name: c5.2xlarge
+        type: cloud
+        cloud: *amazon_eu-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c5.2xlarge
+            type: cloud
+            cloud: *amazon_eu-central-1
+        host:
+          properties:
+            num_cpus: 8
+            mem_size: "16 GB"
+            price: 0.388
+
+    c5_4xlarge_eu_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type c5.4xlarge in region eu-central-1.
+      properties:
+        name: c5.4xlarge
+        type: cloud
+        cloud: *amazon_eu-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c5.4xlarge
+            type: cloud
+            cloud: *amazon_eu-central-1
+        host:
+          properties:
+            num_cpus: 16
+            mem_size: "32 GB"
+            price: 0.776
+
+    c5_9xlarge_eu_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type c5.9xlarge in region eu-central-1.
+      properties:
+        name: c5.9xlarge
+        type: cloud
+        cloud: *amazon_eu-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c5.9xlarge
+            type: cloud
+            cloud: *amazon_eu-central-1
+        host:
+          properties:
+            num_cpus: 36
+            mem_size: "72 GB"
+            price: 1.746
+
+    c5_12xlarge_eu_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type c5.12xlarge in region eu-central-1.
+      properties:
+        name: c5.12xlarge
+        type: cloud
+        cloud: *amazon_eu-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c5.12xlarge
+            type: cloud
+            cloud: *amazon_eu-central-1
+        host:
+          properties:
+            num_cpus: 48
+            mem_size: "96 GB"
+            price: 2.328
+
+    c5_18xlarge_eu_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type c5.18xlarge in region eu-central-1.
+      properties:
+        name: c5.18xlarge
+        type: cloud
+        cloud: *amazon_eu-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c5.18xlarge
+            type: cloud
+            cloud: *amazon_eu-central-1
+        host:
+          properties:
+            num_cpus: 72
+            mem_size: "144 GB"
+            price: 3.492
+
+    c5_24xlarge_eu_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type c5.24xlarge in region eu-central-1.
+      properties:
+        name: c5.24xlarge
+        type: cloud
+        cloud: *amazon_eu-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c5.24xlarge
+            type: cloud
+            cloud: *amazon_eu-central-1
+        host:
+          properties:
+            num_cpus: 96
+            mem_size: "192 GB"
+            price: 4.656
+
+    c5_metal_eu_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type c5.metal in region eu-central-1.
+      properties:
+        name: c5.metal
+        type: cloud
+        cloud: *amazon_eu-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c5.metal
+            type: cloud
+            cloud: *amazon_eu-central-1
+        host:
+          properties:
+            num_cpus: 96
+            mem_size: "192 GB"
+            price: 4.656
+
+    c5d_large_eu_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type c5d.large in region eu-central-1.
+      properties:
+        name: c5d.large
+        type: cloud
+        cloud: *amazon_eu-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c5d.large
+            type: cloud
+            cloud: *amazon_eu-central-1
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: "4 GB"
+            price: 0.111
+
+    c5d_xlarge_eu_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type c5d.xlarge in region eu-central-1.
+      properties:
+        name: c5d.xlarge
+        type: cloud
+        cloud: *amazon_eu-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c5d.xlarge
+            type: cloud
+            cloud: *amazon_eu-central-1
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: "8 GB"
+            price: 0.222
+
+    c5d_2xlarge_eu_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type c5d.2xlarge in region eu-central-1.
+      properties:
+        name: c5d.2xlarge
+        type: cloud
+        cloud: *amazon_eu-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c5d.2xlarge
+            type: cloud
+            cloud: *amazon_eu-central-1
+        host:
+          properties:
+            num_cpus: 8
+            mem_size: "16 GB"
+            price: 0.444
+
+    c5d_4xlarge_eu_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type c5d.4xlarge in region eu-central-1.
+      properties:
+        name: c5d.4xlarge
+        type: cloud
+        cloud: *amazon_eu-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c5d.4xlarge
+            type: cloud
+            cloud: *amazon_eu-central-1
+        host:
+          properties:
+            num_cpus: 16
+            mem_size: "32 GB"
+            price: 0.888
+
+    c5d_9xlarge_eu_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type c5d.9xlarge in region eu-central-1.
+      properties:
+        name: c5d.9xlarge
+        type: cloud
+        cloud: *amazon_eu-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c5d.9xlarge
+            type: cloud
+            cloud: *amazon_eu-central-1
+        host:
+          properties:
+            num_cpus: 36
+            mem_size: "72 GB"
+            price: 1.998
+
+    c5d_12xlarge_eu_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type c5d.12xlarge in region eu-central-1.
+      properties:
+        name: c5d.12xlarge
+        type: cloud
+        cloud: *amazon_eu-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c5d.12xlarge
+            type: cloud
+            cloud: *amazon_eu-central-1
+        host:
+          properties:
+            num_cpus: 48
+            mem_size: "96 GB"
+            price: 2.664
+
+    c5d_18xlarge_eu_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type c5d.18xlarge in region eu-central-1.
+      properties:
+        name: c5d.18xlarge
+        type: cloud
+        cloud: *amazon_eu-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c5d.18xlarge
+            type: cloud
+            cloud: *amazon_eu-central-1
+        host:
+          properties:
+            num_cpus: 72
+            mem_size: "144 GB"
+            price: 3.996
+
+    c5d_24xlarge_eu_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type c5d.24xlarge in region eu-central-1.
+      properties:
+        name: c5d.24xlarge
+        type: cloud
+        cloud: *amazon_eu-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c5d.24xlarge
+            type: cloud
+            cloud: *amazon_eu-central-1
+        host:
+          properties:
+            num_cpus: 96
+            mem_size: "192 GB"
+            price: 5.328
+
+    c5d_metal_eu_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type c5d.metal in region eu-central-1.
+      properties:
+        name: c5d.metal
+        type: cloud
+        cloud: *amazon_eu-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c5d.metal
+            type: cloud
+            cloud: *amazon_eu-central-1
+        host:
+          properties:
+            num_cpus: 96
+            mem_size: "192 GB"
+            price: 5.328
+
+    c5n_large_eu_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type c5n.large in region eu-central-1.
+      properties:
+        name: c5n.large
+        type: cloud
+        cloud: *amazon_eu-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c5n.large
+            type: cloud
+            cloud: *amazon_eu-central-1
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: "5.25 GB"
+            price: 0.123
+
+    c5n_xlarge_eu_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type c5n.xlarge in region eu-central-1.
+      properties:
+        name: c5n.xlarge
+        type: cloud
+        cloud: *amazon_eu-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c5n.xlarge
+            type: cloud
+            cloud: *amazon_eu-central-1
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: "10.5 GB"
+            price: 0.246
+
+    c5n_2xlarge_eu_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type c5n.2xlarge in region eu-central-1.
+      properties:
+        name: c5n.2xlarge
+        type: cloud
+        cloud: *amazon_eu-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c5n.2xlarge
+            type: cloud
+            cloud: *amazon_eu-central-1
+        host:
+          properties:
+            num_cpus: 8
+            mem_size: "21 GB"
+            price: 0.492
+
+    c5n_4xlarge_eu_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type c5n.4xlarge in region eu-central-1.
+      properties:
+        name: c5n.4xlarge
+        type: cloud
+        cloud: *amazon_eu-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c5n.4xlarge
+            type: cloud
+            cloud: *amazon_eu-central-1
+        host:
+          properties:
+            num_cpus: 16
+            mem_size: "42 GB"
+            price: 0.984
+
+    c5n_9xlarge_eu_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type c5n.9xlarge in region eu-central-1.
+      properties:
+        name: c5n.9xlarge
+        type: cloud
+        cloud: *amazon_eu-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c5n.9xlarge
+            type: cloud
+            cloud: *amazon_eu-central-1
+        host:
+          properties:
+            num_cpus: 36
+            mem_size: "96 GB"
+            price: 2.214
+
+    c5n_18xlarge_eu_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type c5n.18xlarge in region eu-central-1.
+      properties:
+        name: c5n.18xlarge
+        type: cloud
+        cloud: *amazon_eu-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c5n.18xlarge
+            type: cloud
+            cloud: *amazon_eu-central-1
+        host:
+          properties:
+            num_cpus: 72
+            mem_size: "192 GB"
+            price: 4.428
+
+    c5n_metal_eu_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type c5n.metal in region eu-central-1.
+      properties:
+        name: c5n.metal
+        type: cloud
+        cloud: *amazon_eu-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c5n.metal
+            type: cloud
+            cloud: *amazon_eu-central-1
+        host:
+          properties:
+            num_cpus: 72
+            mem_size: "192 GB"
+            price: 4.428
+
+    c4_large_eu_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type c4.large in region eu-central-1.
+      properties:
+        name: c4.large
+        type: cloud
+        cloud: *amazon_eu-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c4.large
+            type: cloud
+            cloud: *amazon_eu-central-1
+        host:
+          properties:
+            num_cpus: 2
+            mem_size: "3.75 GB"
+            price: 0.114
+
+    c4_xlarge_eu_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type c4.xlarge in region eu-central-1.
+      properties:
+        name: c4.xlarge
+        type: cloud
+        cloud: *amazon_eu-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c4.xlarge
+            type: cloud
+            cloud: *amazon_eu-central-1
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: "7.5 GB"
+            price: 0.227
+
+    c4_2xlarge_eu_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type c4.2xlarge in region eu-central-1.
+      properties:
+        name: c4.2xlarge
+        type: cloud
+        cloud: *amazon_eu-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c4.2xlarge
+            type: cloud
+            cloud: *amazon_eu-central-1
+        host:
+          properties:
+            num_cpus: 8
+            mem_size: "15 GB"
+            price: 0.454
+
+    c4_4xlarge_eu_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type c4.4xlarge in region eu-central-1.
+      properties:
+        name: c4.4xlarge
+        type: cloud
+        cloud: *amazon_eu-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c4.4xlarge
+            type: cloud
+            cloud: *amazon_eu-central-1
+        host:
+          properties:
+            num_cpus: 16
+            mem_size: "30 GB"
+            price: 0.909
+
+    c4_8xlarge_eu_central_1:
+      type: prestocloud.nodes.compute.cloud.amazon
+      description: PrEstoCloud Amazon compute node of type c4.8xlarge in region eu-central-1.
+      properties:
+        name: c4.8xlarge
+        type: cloud
+        cloud: *amazon_eu-central-1
+      capabilities:
+        resource:
+          properties:
+            name: c4.8xlarge
+            type: cloud
+            cloud: *amazon_eu-central-1
+        host:
+          properties:
+            num_cpus: 36
+            mem_size: "60 GB"
+            price: 1.817
