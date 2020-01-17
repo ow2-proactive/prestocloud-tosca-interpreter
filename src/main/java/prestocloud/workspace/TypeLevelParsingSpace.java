@@ -1027,7 +1027,7 @@ public class TypeLevelParsingSpace {
     private String getSelectedCloudVMType(Map<String, Map<String, Map<String, Map<String, String>>>> selectedCloudVMTypes, String fragmentName, String nodeName) {
         Map<String, Map<String, Map<String, String>>> tmp = selectedCloudVMTypes.get(fragmentName);
         if (tmp != null) {
-            Optional<Map<String, String>> tmp2 = tmp.get(TYPE_EXECUTE).values().stream().findFirst();
+            Optional<Map<String, String>> tmp2 = Optional.ofNullable(tmp.get(TYPE_EXECUTE).get(hostingNodePerFragment.get(fragmentName)));
             if (tmp2.isPresent()) {
                 return tmp2.get().get(nodeName);
             } else {
