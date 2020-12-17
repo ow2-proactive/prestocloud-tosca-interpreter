@@ -34,7 +34,7 @@ In the context of the PrEstoCloud architecture, this component implements both:
 
 ## Building the project
 
-The project use maven to retrieve the build dependencies, perform the compilation and the package the outcome.
+The project uses maven to retrieve the build dependencies, perform the compilation and the package the outcome.
 
 1. Perform the compilation with `$ mvn package -Dmaven.test.skip=true`
 

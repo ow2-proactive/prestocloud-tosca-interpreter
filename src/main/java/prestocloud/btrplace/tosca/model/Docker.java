@@ -55,7 +55,7 @@ public class Docker {
 
     public static final String EMPTY_STRING = "";
     private static final Pattern registryIdentifier = Pattern.compile("^(\\S+)\\/(\\S+)$");
-    private static final List<String> AUTHORIZED_PUBLICLY_EXPOSED_PORTS = Arrays.asList("80", "443", "8080", "8888", "4433");
+    private static final List<String> AUTHORIZED_PUBLICLY_EXPOSED_PORTS = Arrays.asList("80", "443", "8080", "8282", "8888", "4433");
 
     public Docker(String fragmentName) {
         this.fragmentName = fragmentName;

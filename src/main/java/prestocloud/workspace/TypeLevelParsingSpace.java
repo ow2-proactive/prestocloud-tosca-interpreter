@@ -359,15 +359,10 @@ public class TypeLevelParsingSpace {
         if (!JSONValue.isValidJson(edgeGwNodeFileContent)) {
             throw new IllegalArgumentException("The provided mapping is not valid. I leave.");
         }
-        JSONObject jo = (JSONObject) JSONValue.parse(edgeGwNodeFileContent);
-        JSONObject resobject = (JSONObject) jo.get("resobject");
-        JSONArray nodesArray = (JSONArray) resobject.get("nodes");
-        JSONObject nodeJson;
-        String nodeName;
+        JSONArray rawRmOutput = (JSONArray) JSONValue.parse(edgeGwNodeFileContent);
+        List<String> availableNodeSource = rawRmOutput.stream().map(o -> ((JSONObject) o)).filter(jo -> jo.getAsString("nodeSourceStatus").equals("deployed")).map(jo -> jo.getAsString("nodeSourceName")).collect(Collectors.toList());
         List<String> referencedEdgeDevice = this.edgeResourceDetails.stream().map(edgeResourceTemplateDetails -> edgeResourceTemplateDetails.id).collect(Collectors.toList());
-        for(Object node : nodesArray) {
-            nodeJson = (JSONObject) node;
-            nodeName = (String)  nodeJson.get("nodeid");
+        for (String nodeName : availableNodeSource) {
             if (!referencedEdgeDevice.contains(nodeName)) {
                 logger.info("{} has not recognized as a known resource, I skip it.", nodeName);
                 continue;
@@ -906,7 +901,9 @@ public class TypeLevelParsingSpace {
         if (balancedNodes.containsKey(fragmentsPerVm.get(vmName))) {
             jo.put(OutputField.ACTION_LOADBALANCED_BY, vmsPerFragment.get(balancedNodes.get(fragmentsPerVm.get(vmName))).stream().findFirst().orElse(""));
         } else {
-            docker.ifPresent(dck -> jo.put(OutputField.ACTION_PUBLICPORTS, dck.getAllPubliclyExposedPorts()));
+            if (balancingNodes.containsValue(fragmentsPerVm.get(vmName))) {
+                docker.ifPresent(dck -> jo.put(OutputField.ACTION_PUBLICPORTS, dck.getAllPubliclyExposedPorts()));
+            }
         }
         ja.add(jo);
     }
