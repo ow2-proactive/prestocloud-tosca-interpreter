@@ -118,9 +118,11 @@ public class TypeLevelParsingSpace {
     public boolean retrieveResourceFromParsing() {
         // Retrieving main data from the parsed TOSCA.
         metadata = ParsingUtils.getMetadata(parsingResult);
-        supportedCloudsResourceFiles = ParsingUtils.getListOfCloudsFromMetadata(metadata);
+        Set<String> allClouds = new HashSet<>();
+        this.regionsPerCloudPerCloudFile.keySet().stream().forEach(s -> allClouds.add(s));
+        supportedCloudsResourceFiles = ParsingUtils.getListOfCloudsFromMetadata(metadata,allClouds);
         if (supportedCloudsResourceFiles.isEmpty()) {
-            this.regionsPerCloudPerCloudFile.keySet().stream().forEach(s -> supportedCloudsResourceFiles.add(s));
+            this.supportedCloudsResourceFiles = allClouds;
         }
         Optional<Set<String>> cloudListFromRegion = this.regionsPerCloudPerCloudFile.values().stream().map(Map::keySet).reduce((strings, strings2) -> {
             Set<String> result = new HashSet<>();
