@@ -64,10 +64,26 @@ The argument are the followings:
 
 - *mapping*: Containing the scheme of an already existing deployment. Can refer to a non-existing file for initial deployment.
 
-- *edge_status_file*: Mandatorily referring to a file containing an output of the [edge-gateway](https://gitlab.com/prestocloud-project/edge-gateway/tree/master) API call to topology endpoint. An example file should have the following content:
+- *edge_status_file*: Mandatorily referring to a file containing an output of the [ProActive Resources Manager](https://github.com/ow2-proactive/scheduling) API call to topology endpoint. An example file should have the following content:
 ```
-{"rescode":"SUCCESS","message":null,"resobject":{"peers":[],"nodes":[]}}
-
+[
+  {
+    "timeStamp": 0,
+    "counter": 1,
+    "firstCounter": 1,
+    "nodeSourceName": "edgeDevice",
+    "nodeSourceDescription": "Infrastructure: Default Infrastructure Manager, Policy: Static Policy user access type [ALL], provider access type [ME]",
+    "additionalInformation": {},
+    "nodeSourceAdmin": "rm",
+    "nodeSourceStatus": "deployed",
+    "sourceDescription": "Infrastructure: Default Infrastructure Manager, Policy: Static Policy user access type [ALL], provider access type [ME]",
+    "sourceName": "edgeDevice",
+    "key": "edgeDevice",
+    "rmurl": null,
+    "eventType": null,
+    "timeStampFormatted": "1/1/70 1:00 AM"
+  }
+]
 ```
 
 Command usage example:
