@@ -1,0 +1,202 @@
+tosca_definitions_version: tosca_prestocloud_mapping_1_2
+
+metadata:
+   template_name: ICCS generated types definition
+   template_author: ICCS
+   template_version: 1.0.0-SNAPSHOT
+   graphHexID: 41f3e2dfcc
+   graphInstanceHexID: 1a0264747b
+   CostThreshold: 1000
+   TimePeriod: 720
+   ProviderName_0: ovh
+   ProviderRequired_0: false
+   ProviderExcluded_0: true
+   MetricToMinimize: Cost
+
+description: Types Description
+
+imports:
+   - tosca-normative-types:1.2
+   - iccs-normative-types:1.1
+   - resource-descriptions:1.0
+   - placement-constraints:1.0
+
+node_types:
+   #Processing node selection:
+   processing_node_sentiment_analysis_fragments_Analyzer_LB_0:
+      description: A TOSCA representation of a processing node
+      derived_from: prestocloud.nodes.proxy
+      requirements:
+         - host:
+            capability: tosca.capabilities.Container
+            node: prestocloud.nodes.compute
+            relationship: tosca.relationships.HostedOn
+            node_filter:
+               capabilities:
+                  - host:
+                     properties:
+                        - num_cpus: { in_range: [ 2, 4 ] }
+                        - mem_size: { in_range: [ 4 MB, 16 MB ] }
+                        - storage_size: { in_range: [ 10 GB, 50 GB ] }
+                  - os:
+                     properties:
+                        - architecture: { valid_values: [ x86_64, i386 ] }
+                        - type: { equal: linux }
+                        - distribution: { equal: ubuntu }
+                  - resource:
+                     properties:
+                        - type: { equal: cloud }
+
+   processing_node_sentiment_analysis_fragments_WebServer_1:
+      description: A TOSCA representation of a processing node
+      derived_from: prestocloud.nodes.agent
+      requirements:
+         - host:
+            capability: tosca.capabilities.Container
+            node: prestocloud.nodes.compute
+            relationship: tosca.relationships.HostedOn
+            node_filter:
+               capabilities:
+                  - host:
+                     properties:
+                        - num_cpus: { in_range: [ 4, 8 ] }
+                        - mem_size: { in_range: [ 256 MB, 1024 MB ] }
+                        - storage_size: { in_range: [ 32 GB, 128 GB ] }
+                  - os:
+                     properties:
+                        - architecture: { valid_values: [ x86_64, i386 ] }
+                        - type: { equal: linux }
+                        - distribution: { equal: ubuntu }
+                  - resource:
+                     properties:
+                        - type: { equal: cloud }
+
+   processing_node_sentiment_analysis_fragments_Analyzer_2:
+      description: A TOSCA representation of a processing node
+      derived_from: prestocloud.nodes.agent.loadBalanced
+      requirements:
+         - host:
+            capability: tosca.capabilities.Container
+            node: prestocloud.nodes.compute
+            relationship: tosca.relationships.HostedOn
+            node_filter:
+               capabilities:
+                  - host:
+                     properties:
+                        - num_cpus: { in_range: [ 8, 16 ] }
+                        - mem_size: { in_range: [ 1024 MB, 4096 MB ] }
+                        - storage_size: { in_range: [ 1 GB, 4 GB ] }
+                  - os:
+                     properties:
+                        - architecture: { valid_values: [ x86_64, i386 ] }
+                        - type: { equal: linux }
+                        - distribution: { equal: ubuntu }
+                  - resource:
+                     properties:
+                        - type: { equal: cloud }
+         - host:
+            capability: tosca.capabilities.Container
+            node: prestocloud.nodes.compute
+            relationship: tosca.relationships.HostedOn
+            node_filter:
+               capabilities:
+                  - host:
+                     properties:
+                        - num_cpus: { in_range: [ 8, 16 ] }
+                        - mem_size: { in_range: [ 1024 MB, 4096 MB ] }
+                        - storage_size: { in_range: [ 1 GB, 4 GB ] }
+                  - os:
+                     properties:
+                        - architecture: { valid_values: [ arm64, armel, armhf, x86_64, i386 ] }
+                        - type: { equal: linux }
+                        - distribution: { valid_values: [ raspbian, ubuntu ] }
+                  - resource:
+                     properties:
+                        - type: { equal: edge }
+
+
+topology_template:
+   policies:
+      - precedence_policy_group_0:
+         type: prestocloud.placement.Precedence
+         targets: [ sentiment_analysis_fragments_Analyzer,sentiment_analysis_fragments_WebServer ]
+
+   node_templates:
+      deployment_node_sentiment_analysis_fragments_Analyzer_LB:
+         type: processing_node_sentiment_analysis_fragments_Analyzer_LB_0
+
+      sentiment_analysis_fragments_Analyzer_LB:
+         type: prestocloud.nodes.fragment
+         properties:
+            id: 41f3e2dfcc:1a0264747b:4c80fe012e
+            name: sentiment_analysis_fragments_Analyzer_LB
+            scalable: false
+            occurrences: 1
+            docker_cloud:
+               image: "traefik:latest"
+               registry: "hub.docker.com"
+               ports:
+                  - target: 11111
+                    published: 11111
+                    protocol: TCP
+                  - target: 11198
+                    published: 11198
+                    protocol: TCP
+            optimization_variables:
+               cost: 1
+               distance: 1
+               friendliness: { }
+         requirements:
+            - execute: deployment_node_sentiment_analysis_fragments_Analyzer_LB
+
+      deployment_node_sentiment_analysis_fragments_WebServer:
+         type: processing_node_sentiment_analysis_fragments_WebServer_1
+
+      sentiment_analysis_fragments_WebServer:
+         type: prestocloud.nodes.fragment
+         properties:
+            id: 41f3e2dfcc:1a0264747b:sentiment_analysis_fragments.WebServer
+            name: sentiment_analysis_fragments.WebServer
+            scalable: false
+            occurrences: 1
+            docker_cloud:
+               image: "webserver:latest"
+               registry: "prestocloud.test.eu"
+               variables: { "CONCURRENT_CONNECTIONS": "25" }
+            optimization_variables:
+               cost: 1
+               distance: 1
+               friendliness: { }
+            health_check:
+               interval: 1
+               cmd: "cat /proc/meminfo"
+         requirements:
+            - execute: deployment_node_sentiment_analysis_fragments_WebServer
+
+      deployment_node_sentiment_analysis_fragments_Analyzer:
+         type: processing_node_sentiment_analysis_fragments_Analyzer_2
+
+      sentiment_analysis_fragments_Analyzer:
+         type: prestocloud.nodes.fragment.loadBalanced
+         properties:
+            id: 41f3e2dfcc:1a0264747b:sentiment_analysis_fragments.Analyzer
+            name: sentiment_analysis_fragments.Analyzer
+            scalable: true
+            occurrences: 5
+            docker_edge:
+               image: "sentiment_analyzer_edge:latest"
+               registry: "edge.prestocloud.test.eu"
+               variables: { "SEGMENT_LENGTH_KB": "2", "ANALYZE_IMAGES": "FALSE" }
+            docker_cloud:
+               image: "sentiment_analyzer_cloud:latest"
+               registry: "prestocloud.test.eu"
+               variables: { "SEGMENT_LENGTH_KB": "10", "ANALYZE_IMAGES": "TRUE" }
+            optimization_variables:
+               cost: 5
+               distance: 2
+               friendliness: { }
+         requirements:
+            - execute: deployment_node_sentiment_analysis_fragments_Analyzer
+            - balanced_by: deployment_node_sentiment_analysis_fragments_Analyzer_LB
+
+
