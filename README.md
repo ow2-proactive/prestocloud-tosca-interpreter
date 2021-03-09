@@ -1,6 +1,6 @@
-# TOSCA Parser
+# TOSCA Interpreter
 
-This repository contains the TOSCA parser. This component is in charge of parsing both type-level TOSCA and instance-level TOSCA:
+This repository contains the TOSCA interpreter. This component is in charge of interpreting both type-level TOSCA and instance-level TOSCA:
 
 - Type-level TOSCA interpretation
 
@@ -34,7 +34,7 @@ In the context of the PrEstoCloud architecture, this component implements both:
 
 ## Building the project
 
-The project use maven to retrieve the build dependencies, perform the compilation and the package the outcome.
+The project uses maven to retrieve the build dependencies, perform the compilation and the package the outcome.
 
 1. Perform the compilation with `$ mvn package -Dmaven.test.skip=true`
 
@@ -64,10 +64,26 @@ The argument are the followings:
 
 - *mapping*: Containing the scheme of an already existing deployment. Can refer to a non-existing file for initial deployment.
 
-- *edge_status_file*: Mandatorily referring to a file containing an output of the [edge-gateway](https://gitlab.com/prestocloud-project/edge-gateway/tree/master) API call to topology endpoint. An example file should have the following content:
+- *edge_status_file*: Mandatorily referring to a file containing an output of the [ProActive Resources Manager](https://github.com/ow2-proactive/scheduling) API call to topology endpoint. An example file should have the following content:
 ```
-{"rescode":"SUCCESS","message":null,"resobject":{"peers":[],"nodes":[]}}
-
+[
+  {
+    "timeStamp": 0,
+    "counter": 1,
+    "firstCounter": 1,
+    "nodeSourceName": "edgeDevice",
+    "nodeSourceDescription": "Infrastructure: Default Infrastructure Manager, Policy: Static Policy user access type [ALL], provider access type [ME]",
+    "additionalInformation": {},
+    "nodeSourceAdmin": "rm",
+    "nodeSourceStatus": "deployed",
+    "sourceDescription": "Infrastructure: Default Infrastructure Manager, Policy: Static Policy user access type [ALL], provider access type [ME]",
+    "sourceName": "edgeDevice",
+    "key": "edgeDevice",
+    "rmurl": null,
+    "eventType": null,
+    "timeStampFormatted": "1/1/70 1:00 AM"
+  }
+]
 ```
 
 Command usage example:
@@ -95,7 +111,7 @@ java -jar /target/prestocloud-tosca-1.0.0-SNAPSHOT.jar instance-level-interprete
 
 ## Installing in the ADIAM platform
 
-This parser is designed to be installed inside the ADIAM platform, and called from the [main workflow](https://gitlab.com/prestocloud-project/adiam-workflows).
+This interpreter is designed to be installed inside the ADIAM platform, and called from the [main workflow](https://gitlab.com/prestocloud-project/adiam-workflows).
 
 To proceed so, the package has to be uploaded on the server operating the ProActive instance loaded with the ADIAM workflow, to the following path:
 ```

@@ -1,0 +1,332 @@
+tosca_definitions_version: tosca_prestocloud_mapping_1_2
+
+metadata:
+   template_name: ICCS generated types definition
+   template_author: ICCS
+   template_version: 1.0.0-SNAPSHOT
+   graphHexID: 62e48a11ec
+   graphInstanceHexID: a8e333a416
+   CostThreshold: 1500
+   TimePeriod: 360
+   ProviderName_0: ovh
+   ProviderRequired_0: false
+   ProviderExcluded_0: true
+   MetricToMinimize: Cost
+
+description: Types Description
+
+imports:
+   - tosca-normative-types:1.2
+   - iccs-normative-types:1.1
+   - resource-descriptions:1.0
+   - placement-constraints:1.0
+
+node_types:
+   #Processing node selection:
+   processing_node_LambdaProxy_0:
+      description: A TOSCA representation of a processing node
+      derived_from: prestocloud.nodes.proxy.faas
+      requirements:
+         - host:
+            capability: tosca.capabilities.Container
+            node: prestocloud.nodes.compute
+            relationship: tosca.relationships.HostedOn
+            node_filter:
+               capabilities:
+                  - host:
+                     properties:
+                        - num_cpus: { in_range: [ 2, 4 ] }
+                        - mem_size: { in_range: [ 2048 MB, 16384 MB ] }
+                        - storage_size: { in_range: [ 10 GB, 50 GB ] }
+                  - os:
+                     properties:
+                        - architecture: { valid_values: [ x86_64, i386 ] }
+                        - type: { equal: linux }
+                        - distribution: { equal: ubuntu }
+                  - resource:
+                     properties:
+                        - type: { equal: cloud }
+
+   processing_node_image_audio_processing_Database_1:
+      description: A TOSCA representation of a processing node
+      derived_from: prestocloud.nodes.agent
+      requirements:
+         - host:
+            capability: tosca.capabilities.Container
+            node: prestocloud.nodes.compute
+            relationship: tosca.relationships.HostedOn
+            node_filter:
+               capabilities:
+                  - host:
+                     properties:
+                        - num_cpus: { in_range: [ 2, 4 ] }
+                        - mem_size: { in_range: [ 1024 MB, 4096 MB ] }
+                        - storage_size: { in_range: [ 128 GB, 1024 GB ] }
+                  - os:
+                     properties:
+                        - architecture: { valid_values: [ x86_64, i386 ] }
+                        - type: { equal: linux }
+                        - distribution: { equal: ubuntu }
+                  - resource:
+                     properties:
+                        - type: { equal: cloud }
+
+   processing_node_image_audio_processing_WebServer_2:
+      description: A TOSCA representation of a processing node
+      derived_from: prestocloud.nodes.agent
+      requirements:
+         - host:
+            capability: tosca.capabilities.Container
+            node: prestocloud.nodes.compute
+            relationship: tosca.relationships.HostedOn
+            node_filter:
+               capabilities:
+                  - host:
+                     properties:
+                        - num_cpus: { in_range: [ 4, 8 ] }
+                        - mem_size: { in_range: [ 4096 MB, 16384 MB ] }
+                        - storage_size: { in_range: [ 4 GB, 32 GB ] }
+                  - os:
+                     properties:
+                        - architecture: { valid_values: [ x86_64, i386 ] }
+                        - type: { equal: linux }
+                        - distribution: { equal: ubuntu }
+                  - resource:
+                     properties:
+                        - type: { equal: cloud }
+
+   processing_node_image_audio_processing_MelodySplitter_3:
+      description: A TOSCA representation of a processing node
+      derived_from: prestocloud.nodes.agent.faas
+      requirements:
+         - host:
+            capability: tosca.capabilities.Container
+            node: prestocloud.nodes.compute
+            relationship: tosca.relationships.HostedOn
+            node_filter:
+               capabilities:
+                  - host:
+                     properties:
+                        - num_cpus: { in_range: [ 2, 4 ] }
+                        - mem_size: { in_range: [ 1024 MB, 4096 MB ] }
+                        - storage_size: { in_range: [ 4 GB, 32 GB ] }
+                  - os:
+                     properties:
+                        - architecture: { valid_values: [ x86_64, i386 ] }
+                        - type: { equal: linux }
+                        - distribution: { equal: ubuntu }
+                  - resource:
+                     properties:
+                        - type: { equal: cloud }
+         - host:
+            capability: tosca.capabilities.Container
+            node: prestocloud.nodes.compute
+            relationship: tosca.relationships.HostedOn
+            node_filter:
+               capabilities:
+                  - host:
+                     properties:
+                        - num_cpus: { in_range: [ 2, 4 ] }
+                        - mem_size: { in_range: [ 1024 MB, 4096 MB ] }
+                        - storage_size: { in_range: [ 4 GB, 32 GB ] }
+                  - os:
+                     properties:
+                        - architecture: { valid_values: [ arm64, armel, armhf, x86_64, i386 ] }
+                        - type: { equal: linux }
+                        - distribution: { valid_values: [ raspbian, ubuntu ] }
+                  - resource:
+                     properties:
+                        - type: { equal: edge }
+
+   processing_node_image_audio_processing_PictureColorization_4:
+      description: A TOSCA representation of a processing node
+      derived_from: prestocloud.nodes.agent.faas
+      requirements:
+         - host:
+            capability: tosca.capabilities.Container
+            node: prestocloud.nodes.compute
+            relationship: tosca.relationships.HostedOn
+            node_filter:
+               capabilities:
+                  - host:
+                     properties:
+                        - num_cpus: { in_range: [ 2, 4 ] }
+                        - mem_size: { in_range: [ 1024 MB, 4096 MB ] }
+                        - storage_size: { in_range: [ 4 GB, 32 GB ] }
+                  - os:
+                     properties:
+                        - architecture: { valid_values: [ x86_64, i386 ] }
+                        - type: { equal: linux }
+                        - distribution: { equal: ubuntu }
+                  - resource:
+                     properties:
+                        - type: { equal: cloud }
+         - host:
+            capability: tosca.capabilities.Container
+            node: prestocloud.nodes.compute
+            relationship: tosca.relationships.HostedOn
+            node_filter:
+               capabilities:
+                  - host:
+                     properties:
+                        - num_cpus: { in_range: [ 2, 4 ] }
+                        - mem_size: { in_range: [ 1024 MB, 4096 MB ] }
+                        - storage_size: { in_range: [ 4 GB, 32 GB ] }
+                  - os:
+                     properties:
+                        - architecture: { valid_values: [ arm64, armel, armhf, x86_64, i386 ] }
+                        - type: { equal: linux }
+                        - distribution: { valid_values: [ raspbian, ubuntu ] }
+                  - resource:
+                     properties:
+                        - type: { equal: edge }
+
+
+topology_template:
+   policies:
+      - anti_affinity_group_0:
+         type: prestocloud.placement.Spread
+         targets: [ image_audio_processing_Database,image_audio_processing_PictureColorization ]
+
+      - anti_affinity_group_1:
+         type: prestocloud.placement.Spread
+         targets: [ image_audio_processing_Database,image_audio_processing_MelodySplitter ]
+
+      - anti_affinity_group_2:
+         type: prestocloud.placement.Spread
+         targets: [ image_audio_processing_Database,image_audio_processing_WebServer ]
+
+      - precedence_policy_group_0:
+         type: prestocloud.placement.Precedence
+         targets: [ image_audio_processing_Database,image_audio_processing_WebServer ]
+
+      - precedence_policy_group_1:
+         type: prestocloud.placement.Precedence
+         targets: [ image_audio_processing_WebServer,image_audio_processing_MelodySplitter ]
+
+      - precedence_policy_group_2:
+         type: prestocloud.placement.Precedence
+         targets: [ image_audio_processing_WebServer,image_audio_processing_PictureColorization ]
+
+   node_templates:
+      deployment_node_LambdaProxy:
+         type: processing_node_LambdaProxy_0
+
+      LambdaProxy:
+         type: prestocloud.nodes.fragment
+         properties:
+            id: 62e48a11ec:a8e333a416:cb2d3a3b98
+            name: LambdaProxy
+            scalable: false
+            occurrences: 1
+            docker_cloud:
+               image: "traefik:latest"
+               registry: "hub.docker.com"
+               ports:
+                  - target: 11111
+                    published: 11111
+                    protocol: TCP
+                  - target: 11198
+                    published: 11198
+                    protocol: TCP
+            optimization_variables:
+               cost: 1
+               distance: 1
+               friendliness: { }
+         requirements:
+            - execute: deployment_node_LambdaProxy
+
+      deployment_node_image_audio_processing_Database:
+         type: processing_node_image_audio_processing_Database_1
+
+      image_audio_processing_Database:
+         type: prestocloud.nodes.fragment
+         properties:
+            id: 62e48a11ec:a8e333a416:image_audio_processing.Database
+            name: image_audio_processing.Database
+            scalable: false
+            occurrences: 1
+            docker_cloud:
+               image: ""
+            optimization_variables:
+               cost: 2
+               distance: 4
+               friendliness: { }
+         requirements:
+            - execute: deployment_node_image_audio_processing_Database
+
+      deployment_node_image_audio_processing_WebServer:
+         type: processing_node_image_audio_processing_WebServer_2
+
+      image_audio_processing_WebServer:
+         type: prestocloud.nodes.fragment
+         properties:
+            id: 62e48a11ec:a8e333a416:image_audio_processing.WebServer
+            name: image_audio_processing.WebServer
+            scalable: false
+            occurrences: 1
+            docker_cloud:
+               image: "web_server:latest"
+               registry: "prestocloud.test.eu"
+               variables: { "CONCURRENT_CONNECTIONS": "150" }
+            optimization_variables:
+               cost: 2
+               distance: 4
+               friendliness: { }
+            health_check:
+               interval: 1
+               cmd: "cat /proc/meminfo"
+         requirements:
+            - execute: deployment_node_image_audio_processing_WebServer
+
+      deployment_node_image_audio_processing_MelodySplitter:
+         type: processing_node_image_audio_processing_MelodySplitter_3
+
+      image_audio_processing_MelodySplitter:
+         type: prestocloud.nodes.fragment.faas
+         properties:
+            id: 62e48a11ec:a8e333a416:image_audio_processing.MelodySplitter
+            name: image_audio_processing.MelodySplitter
+            scalable: true
+            occurrences: 1
+            docker_edge:
+               image: "sound_splitter_edge:latest"
+               registry: "edge.prestocloud.test.eu"
+               variables: { "NUMBER_OF_TRACKS": "3", "MODEL_PRECISION": "85" }
+            docker_cloud:
+               image: "sound_splitter_cloud:latest"
+               registry: "prestocloud.test.eu"
+               variables: { "NUMBER_OF_TRACKS": "3", "MODEL_PRECISION": "100" }
+            optimization_variables:
+               cost: 2
+               distance: 4
+               friendliness: { }
+         requirements:
+            - execute: deployment_node_image_audio_processing_MelodySplitter
+            - proxy: deployment_node_LambdaProxy
+
+      deployment_node_image_audio_processing_PictureColorization:
+         type: processing_node_image_audio_processing_PictureColorization_4
+
+      image_audio_processing_PictureColorization:
+         type: prestocloud.nodes.fragment.faas
+         properties:
+            id: 62e48a11ec:a8e333a416:image_audio_processing.PictureColorization
+            name: image_audio_processing.PictureColorization
+            scalable: true
+            occurrences: 1
+            docker_edge:
+               image: "picture_colorization_edge:latest"
+               registry: "prestocloud.edge.test.eu"
+            docker_cloud:
+               image: "picture_colorization_cloud:latest"
+               registry: "prestocloud.test.eu"
+            optimization_variables:
+               cost: 2
+               distance: 4
+               friendliness: { "aws": "2", "gce": "0", "azure": "1" }
+         requirements:
+            - execute: deployment_node_image_audio_processing_PictureColorization
+            - proxy: deployment_node_LambdaProxy
+
+

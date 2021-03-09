@@ -597,7 +597,7 @@ public class ParsingUtils {
         return metadata;
     }
 
-    public static Set<String> getListOfCloudsFromMetadata(Map<String, String> metadata) {
+    public static Set<String> getListOfCloudsFromMetadata(Map<String, String> metadata, Set<String> allClouds) {
         Set<String> clouds = new HashSet<>();
         Set<String> oppositeClouds = new HashSet<>();
         for (Map.Entry<String, String> entry : metadata.entrySet()) {
@@ -623,7 +623,7 @@ public class ParsingUtils {
                 }
             }
         }
-        return (clouds.size() > 0) ? clouds : oppositeClouds;
+        return (clouds.size() > 0) ? clouds : allClouds.stream().filter( c -> !oppositeClouds.contains(c)).collect(Collectors.toSet());
     }
 
     /**
