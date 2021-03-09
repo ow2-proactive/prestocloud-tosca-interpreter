@@ -1,6 +1,6 @@
-# TOSCA Parser
+# TOSCA Interpreter
 
-This repository contains the TOSCA parser. This component is in charge of parsing both type-level TOSCA and instance-level TOSCA:
+This repository contains the TOSCA interpreter. This component is in charge of interpreting both type-level TOSCA and instance-level TOSCA:
 
 - Type-level TOSCA interpretation
 
@@ -111,7 +111,7 @@ java -jar /target/prestocloud-tosca-1.0.0-SNAPSHOT.jar instance-level-interprete
 
 ## Installing in the ADIAM platform
 
-This parser is designed to be installed inside the ADIAM platform, and called from the [main workflow](https://gitlab.com/prestocloud-project/adiam-workflows).
+This interpreter is designed to be installed inside the ADIAM platform, and called from the [main workflow](https://gitlab.com/prestocloud-project/adiam-workflows).
 
 To proceed so, the package has to be uploaded on the server operating the ProActive instance loaded with the ADIAM workflow, to the following path:
 ```
