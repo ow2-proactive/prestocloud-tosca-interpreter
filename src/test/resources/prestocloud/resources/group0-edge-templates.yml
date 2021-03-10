@@ -25,9 +25,9 @@ topology_template:
 
     rpi2:
       type: prestocloud.nodes.compute.edge
-      description: An example of Raspberry 2
+      description: An example of Raspberry 2B
       properties:
-        id: "local"
+        id: "local0"
         name: rpi2
         type: edge
         edge: *raspberry_pi
@@ -45,4 +45,102 @@ topology_template:
             price: 0
         sensors:
           properties:
-            camera: "/dev/video0"
+            camera: "/dev/video/camera0"
+            
+    rpi4:
+      type: prestocloud.nodes.compute.edge
+      description: An example of Raspberry 4B
+      properties:
+        id: "local1"
+        name: rpi4
+        type: edge
+        edge: *raspberry_pi
+      capabilities:
+        resource:
+          properties:
+            name: rpi4
+            type: edge
+            edge: *raspberry_pi
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: 4 GB
+            disk_size: 8 GB
+            price: 0
+        sensors:
+          properties:
+            microphone: "/dev/snd/mic0"
+
+            
+    rpi42:
+      type: prestocloud.nodes.compute.edge
+      description: An other example of Raspberry 4B
+      properties:
+        id: "local2"
+        name: rpi42
+        type: edge
+        edge: *raspberry_pi
+      capabilities:
+        resource:
+          properties:
+            name: rpi42
+            type: edge
+            edge: *raspberry_pi
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: 4 GB
+            disk_size: 8 GB
+            price: 0
+        sensors:
+          properties:
+            camera: "/dev/video/camera0"
+
+            
+    rpi43:
+      type: prestocloud.nodes.compute.edge
+      description: An other example of Raspberry 4B
+      properties:
+        id: "local3"
+        name: rpi43
+        type: edge
+        edge: *raspberry_pi
+      capabilities:
+        resource:
+          properties:
+            name: rpi43
+            type: edge
+            edge: *raspberry_pi
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: 4 GB
+            disk_size: 8 GB
+            price: 0
+        sensors:
+          properties:
+            camera: "/dev/video/camera0"
+
+    rpi44:
+      type: prestocloud.nodes.compute.edge
+      description: An other example of Raspberry 4B
+      properties:
+        id: "local4"
+        name: rpi44
+        type: edge
+        edge: *raspberry_pi
+      capabilities:
+        resource:
+          properties:
+            name: rpi44
+            type: edge
+            edge: *raspberry_pi
+        host:
+          properties:
+            num_cpus: 4
+            mem_size: 4 GB
+            disk_size: 8 GB
+            price: 0
+        sensors:
+          properties:
+            camera: "/dev/video/camera0"
