@@ -6,7 +6,7 @@ metadata:
    template_version: 1.0.0-SNAPSHOT
    graphHexID: 41f3e2dfcc
    graphInstanceHexID: 1a0264747b
-   CostThreshold: 1000
+   CostThreshold: 2000
    TimePeriod: 720
    ProviderName_0: ovh
    ProviderRequired_0: false

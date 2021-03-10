@@ -1,0 +1,429 @@
+tosca_definitions_version: tosca_prestocloud_mapping_1_2
+
+metadata:
+   template_name: IMU generated types definition
+   template_author: IMU
+   template_version: 1.0.0-SNAPSHOT
+   CostThreshold: 1000
+   TimePeriod: 720
+   ProviderName_0: aws_ca-central-1
+   ProviderRequired_0: false
+   ProviderExcluded_0: true
+   MetricToMinimize: Cost
+
+description: Types Description
+
+imports:
+   - tosca-normative-types:1.2
+   - iccs-normative-types:1.1
+   - resource-descriptions:1.0
+   - placement-constraints:1.0
+
+node_types:
+   #Processing node selection:
+   processing_node_LambdaProxy_0:
+      description: A TOSCA representation of a processing node
+      derived_from: prestocloud.nodes.proxy.faas
+      requirements:
+         - host:
+            capability: tosca.capabilities.Container
+            node: prestocloud.nodes.compute
+            relationship: tosca.relationships.HostedOn
+            node_filter:
+               capabilities:
+                  - host:
+                     properties:
+                        - num_cpus: { in_range: [ 2, 4 ] }
+                        - mem_size: { in_range: [ 2048 MB, 4096 MB] }
+                        - storage_size: { in_range: [ 10 GB, 50 GB ] }
+                  - os:
+                     properties:
+                        - architecture: { valid_values: [ x86_64, i386 ] }
+                        - type: { equal: linux }
+                        - distribution: { equal: ubuntu }
+                  - resource:
+                     properties:
+                        - type: { equal: cloud }
+
+   processing_node_imu_fragments_MultimediaManager_1:
+      description: A TOSCA representation of a processing node
+      derived_from: prestocloud.nodes.agent
+      requirements:
+         - host:
+            capability: tosca.capabilities.Container
+            node: prestocloud.nodes.compute
+            relationship: tosca.relationships.HostedOn
+            node_filter:
+               capabilities:
+                  - host:
+                     properties:
+                        - num_cpus: { in_range: [ 2, 4 ] }
+                        - mem_size: { in_range: [ 2048 MB, 4096 MB ] }
+                        - storage_size: { in_range: [ 128 GB, 1024 GB ] }
+                  - os:
+                     properties:
+                        - architecture: { valid_values: [ x86_64, i386 ] }
+                        - type: { equal: linux }
+                        - distribution: { equal: ubuntu }
+                  - resource:
+                     properties:
+                        - type: { equal: cloud }
+
+   processing_node_imu_fragments_VideoTranscoder_2:
+      description: A TOSCA representation of a processing node
+      derived_from: prestocloud.nodes.agent
+      requirements:
+         - host:
+            capability: tosca.capabilities.Container
+            node: prestocloud.nodes.compute
+            relationship: tosca.relationships.HostedOn
+            node_filter:
+               capabilities:
+                  - host:
+                     properties:
+                        - num_cpus: { in_range: [ 2, 4 ] }
+                        - mem_size: { in_range: [ 2048 MB, 4096 MB ] }
+                        - storage_size: { in_range: [ 4 GB, 32 GB ] }
+                  - os:
+                     properties:
+                        - architecture: { valid_values: [ x86_64, i386 ] }
+                        - type: { equal: linux }
+                        - distribution: { equal: ubuntu }
+                  - resource:
+                     properties:
+                        - type: { equal: cloud }
+         - host:
+            capability: tosca.capabilities.Container
+            node: prestocloud.nodes.compute
+            relationship: tosca.relationships.HostedOn
+            node_filter:
+               capabilities:
+                  - host:
+                     properties:
+                        - num_cpus: { in_range: [ 2, 4 ] }
+                        - mem_size: { in_range: [ 2048 MB, 4096 MB ] }
+                        - storage_size: { in_range: [ 4 GB, 32 GB ] }
+                  - os:
+                     properties:
+                        - architecture: { valid_values: [ arm64, armel, armhf ] }
+                        - type: { equal: linux }
+                        - distribution: { equal: raspbian }
+                  - resource:
+                     properties:
+                        - type: { equal: edge }
+
+   processing_node_imu_fragments_AudioCaptor_3:
+      description: A TOSCA representation of a processing node
+      derived_from: prestocloud.nodes.agent
+      requirements:
+         - host:
+            capability: tosca.capabilities.Container
+            node: prestocloud.nodes.compute
+            relationship: tosca.relationships.HostedOn
+            node_filter:
+               capabilities:
+                  - host:
+                     properties:
+                        - num_cpus: { in_range: [ 1, 4 ] }
+                        - mem_size: { in_range: [ 1024 MB, 4096 MB ] }
+                        - storage_size: { in_range: [ 4 GB, 32 GB ] }
+                  - os:
+                     properties:
+                        - architecture: { valid_values: [ arm64, armel, armhf ] }
+                        - type: { equal: linux }
+                        - distribution: { equal: raspbian }
+                  - resource:
+                     properties:
+                        - type: { equal: edge }
+                  - sensors:
+                     properties:
+                        - microphone: { equal: "/dev/snd/mic0" }
+
+   processing_node_imu_fragments_FaceDetector_4:
+      description: A TOSCA representation of a processing node
+      derived_from: prestocloud.nodes.agent.faas
+      requirements:
+         - host:
+            capability: tosca.capabilities.Container
+            node: prestocloud.nodes.compute
+            relationship: tosca.relationships.HostedOn
+            node_filter:
+               capabilities:
+                  - host:
+                     properties:
+                        - num_cpus: { in_range: [ 1, 2 ] }
+                        - mem_size: { in_range: [ 1024 MB, 2048 MB ] }
+                        - storage_size: { in_range: [ 4 GB, 32 GB ] }
+                  - os:
+                     properties:
+                        - architecture: { valid_values: [ x86_64, i386 ] }
+                        - type: { equal: linux }
+                        - distribution: { equal: ubuntu }
+                  - resource:
+                     properties:
+                        - type: { equal: cloud }
+         - host:
+            capability: tosca.capabilities.Container
+            node: prestocloud.nodes.compute
+            relationship: tosca.relationships.HostedOn
+            node_filter:
+               capabilities:
+                  - host:
+                     properties:
+                        - num_cpus: { in_range: [ 1, 4 ] }
+                        - mem_size: { in_range: [ 1024 MB, 4096 MB ] }
+                        - storage_size: { in_range: [ 4 GB, 32 GB ] }
+                  - os:
+                     properties:
+                        - architecture: { valid_values: [ arm64, armel, armhf ] }
+                        - type: { equal: linux }
+                        - distribution: { equal: raspbian }
+                  - resource:
+                     properties:
+                        - type: { equal: edge }
+
+   processing_node_imu_fragments_PercussionDetector_5:
+      description: A TOSCA representation of a processing node
+      derived_from: prestocloud.nodes.agent.faas
+      requirements:
+         - host:
+            capability: tosca.capabilities.Container
+            node: prestocloud.nodes.compute
+            relationship: tosca.relationships.HostedOn
+            node_filter:
+               capabilities:
+                  - host:
+                     properties:
+                        - num_cpus: { in_range: [ 1, 4 ] }
+                        - mem_size: { in_range: [ 1024 MB, 4096 MB ] }
+                        - storage_size: { in_range: [ 4 GB, 32 GB ] }
+                  - os:
+                     properties:
+                        - architecture: { valid_values: [ arm64, armel, armhf ] }
+                        - type: { equal: linux }
+                        - distribution: { equal: raspbian }
+                  - resource:
+                     properties:
+                        - type: { equal: edge }
+
+   processing_node_imu_fragments_VideoStreamer_6:
+      description: A TOSCA representation of a processing node
+      derived_from: prestocloud.nodes.agent.faas
+      requirements:
+         - host:
+            capability: tosca.capabilities.Container
+            node: prestocloud.nodes.compute
+            relationship: tosca.relationships.HostedOn
+            node_filter:
+               capabilities:
+                  - host:
+                     properties:
+                        - num_cpus: { in_range: [ 1, 4 ] }
+                        - mem_size: { in_range: [ 1024 MB, 4096 MB ] }
+                        - storage_size: { in_range: [ 4 GB, 32 GB ] }
+                  - os:
+                     properties:
+                        - architecture: { valid_values: [ arm64, armel, armhf ] }
+                        - type: { equal: linux }
+                        - distribution: { equal: raspbian }
+                  - resource:
+                     properties:
+                        - type: { equal: edge }
+                  - sensors:
+                     properties:
+                        - video_camera: { equal: "/dev/video/camera0" }
+
+
+topology_template:
+   policies:
+#      - collocation_policy_group_0:
+#         type: prestocloud.placement.Gather
+#         targets: [ imu_fragments_VideoStreamer, imu_fragments_VideoTranscoder ]
+
+#      - collocation_policy_group_1:
+#         type: prestocloud.placement.Gather
+#         targets: [ imu_fragments_PercussionDetector, imu_fragments_AudioCaptor ]
+
+      - precedence_policy_group_0:
+         type: prestocloud.placement.Precedence
+         targets: [ imu_fragments_VideoStreamer,imu_fragments_VideoTranscoder,imu_fragments_FaceDetector,imu_fragments_MultimediaManager,imu_fragments_AudioCaptor,imu_fragments_PercussionDetector ]
+
+   node_templates:
+      deployment_node_LambdaProxy:
+         type: processing_node_LambdaProxy_0
+
+      LambdaProxy:
+         type: prestocloud.nodes.fragment
+         properties:
+            id: 6
+            name: LambdaProxy
+            scalable: false
+            occurrences: 1
+            docker_cloud:
+               image: "traefik:latest"
+               registry: "hub.docker.com"
+               ports:
+                  - target: 11111
+                    published: 11111
+                    protocol: TCP
+                  - target: 11198
+                    published: 11198
+                    protocol: TCP
+            optimization_variables:
+               cost: 1
+               distance: 1
+               friendliness: { }
+         requirements:
+            - execute: deployment_node_LambdaProxy
+
+      deployment_node_imu_fragments_MultimediaManager:
+         type: processing_node_imu_fragments_MultimediaManager_1
+
+      imu_fragments_MultimediaManager:
+         type: prestocloud.nodes.fragment
+         properties:
+            id: 0
+            name: imu_fragments.MultimediaManager
+            scalable: false
+            occurrences: 1
+            docker_cloud:
+               image: "multimedia_manager:latest"
+               registry: "prestocloud.test.eu"
+               variables: { "VIDEO_TRANSCODER_SERVICE": "{ get_property: [deployment_node_LambdaProxy,host,network,addresses,1] }", "FACE_DETECTOR_SERVICE": "{ get_property: [deployment_node_LambdaProxy,host,network,addresses,1] }", "RUNNING_THREADS": "2" }
+            optimization_variables:
+               cost: 5
+               distance: 4
+               friendliness: { "aws": "5", "gce": "0", "azure": "1" }
+         requirements:
+            - execute: deployment_node_imu_fragments_MultimediaManager
+
+      deployment_node_imu_fragments_VideoTranscoder:
+         type: processing_node_imu_fragments_VideoTranscoder_2
+
+      imu_fragments_VideoTranscoder:
+         type: prestocloud.nodes.fragment
+         properties:
+            id: 1
+            name: imu_fragments.VideoTranscoder
+            scalable: true
+            occurrences: 1
+            docker_edge:
+               image: "video_transcoder_edge:latest"
+               registry: "prestocloud.edge.test.eu"
+               ports:
+                  - target: 10000
+                    published: 10000
+                    protocol: TCP_UDP            
+            docker_cloud:
+               image: "video_transcoder_cloud:latest"
+               registry: "prestocloud.test.eu"
+               ports:
+                  - target: 10000
+                    published: 10000
+                    protocol: TCP_UDP            
+            optimization_variables:
+               cost: 2
+               distance: 8
+               friendliness: { "aws": "5", "gce": "0", "azure": "1" }
+         requirements:
+            - execute: deployment_node_imu_fragments_VideoTranscoder
+
+      deployment_node_imu_fragments_AudioCaptor:
+         type: processing_node_imu_fragments_AudioCaptor_3
+
+      imu_fragments_AudioCaptor:
+         type: prestocloud.nodes.fragment
+         properties:
+            id: 2
+            name: imu_fragments.AudioCaptor
+            scalable: false
+            occurrences: 1
+            docker_edge:
+               image: "audiocaptor:latest"
+               registry: "prestocloud.test.eu"
+               variables: { "SAMPLING_RATE": "22 kHZ" }
+            optimization_variables:
+               cost: 1
+               distance: 1
+               friendliness: { }
+            health_check:
+               interval: 1
+               cmd: "cat /proc/meminfo"
+         requirements:
+            - execute: deployment_node_imu_fragments_AudioCaptor
+
+      deployment_node_imu_fragments_FaceDetector:
+         type: processing_node_imu_fragments_FaceDetector_4
+
+      imu_fragments_FaceDetector:
+         type: prestocloud.nodes.fragment.faas
+         properties:
+            id: 3
+            name: imu_fragments.FaceDetector
+            scalable: true
+            occurrences: 1
+            docker_edge:
+               image: "face_detector_edge:latest"
+               registry: "local.prestocloud.test.eu"
+               variables: { "PRECISION": "50", "ITERATIONS": "10" }
+            docker_cloud:
+               image: "face_detector_cloud:latest"
+               registry: "prestocloud.test.eu"
+               variables: { "PRECISION": "100", "ITERATIONS": "2" }
+            optimization_variables:
+               cost: 1
+               distance: 1
+               friendliness: { "aws": "5", "gce": "0", "azure": "1" }
+            health_check:
+               interval: 1
+               cmd: "curl health.prestocloud.test.eu FaceDetector"
+         requirements:
+            - execute: deployment_node_imu_fragments_FaceDetector
+            - proxy: deployment_node_LambdaProxy
+
+      deployment_node_imu_fragments_PercussionDetector:
+         type: processing_node_imu_fragments_PercussionDetector_5
+
+      imu_fragments_PercussionDetector:
+         type: prestocloud.nodes.fragment.faas
+         properties:
+            id: 4
+            name: imu_fragments.PercussionDetector
+            scalable: true
+            occurrences: 1
+            docker_edge:
+               image: "percussion_detector_edge:latest"
+               registry: "prestocloud.test.eu"
+            docker_cloud:
+               image: "percussion_detector_cloud:latest"
+               registry: "prestocloud.test.eu"
+            optimization_variables:
+               cost: 1
+               distance: 1
+               friendliness: { }
+         requirements:
+            - execute: deployment_node_imu_fragments_PercussionDetector
+            - proxy: deployment_node_LambdaProxy
+
+      deployment_node_imu_fragments_VideoStreamer:
+         type: processing_node_imu_fragments_VideoStreamer_6
+
+      imu_fragments_VideoStreamer:
+         type: prestocloud.nodes.fragment.faas
+         properties:
+            id: 5
+            name: imu_fragments.VideoStreamer
+            scalable: true
+            occurrences: 3
+            docker_edge:
+               image: "video_streamer:latest"
+               registry: "prestocloud.test.eu"
+               variables: { "VIDEO_TRANSCODER_SERVICE": "{ get_property: [deployment_node_LambdaProxy,host,network,addresses,1] }", "VIDEO_RESOLUTION": "HD1080p" }
+            optimization_variables:
+               cost: 1
+               distance: 1
+               friendliness: { }
+         requirements:
+            - execute: deployment_node_imu_fragments_VideoStreamer
+            - proxy: deployment_node_LambdaProxy
+
